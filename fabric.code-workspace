@@ -22,7 +22,10 @@
             "bin": true,
             "build": true,
             "run" : true,
-            "src" : true
+            "src" : true,
+            "*.iml":true,
+            "*.ipr":true,
+            "*.iws":true
         },
         "files.associations": {
 			//"*.toml": "properties",
