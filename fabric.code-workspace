@@ -1,0 +1,38 @@
+{
+    "folders": [
+        {
+            "path": "."
+        },
+        {
+            "path": "run"
+        },
+        {
+            "path": "build/libs"
+        },
+        {
+            "path": "src"
+        }
+    ],
+    "settings": {
+        "files.exclude": {
+            ".gradle": true,
+            ".settings": true,
+            ".project": true,
+            ".classpath": true,
+            "bin": true,
+            "build": true,
+            "run" : true,
+            "src" : true
+        },
+        "files.associations": {
+			//"*.toml": "properties",
+        }, //"disabled", default:"interactive", "automatic"
+        "java.configuration.updateBuildConfiguration": "automatic",
+        "java.dependency.packagePresentation": "hierarchical",
+        "java.codeGeneration.generateComments": true,
+        "java.maven.downloadSources": true,
+        "java.referencesCodeLens.enabled": true,
+        "java.trace.server": "messages",
+        "java.dependency.syncWithFolderExplorer": true
+    }
+}
