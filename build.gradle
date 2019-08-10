@@ -100,14 +100,18 @@ task incrementVersion{
 task updateFabric {
     doFirst {
         // Get fabric versions/webpage
-        def (loader) = "https://maven.fabricmc.net/net/fabricmc/fabric-loader/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
-		def (api) = "https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
-		def (yarn) = "https://maven.fabricmc.net/net/fabricmc/yarn/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
-		def loom = "https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml".toURL().text =~ "<version>.*</version>" 
+		def fabricWeb ="https://maven.fabricmc.net/net/fabricmc/"
+		def fabricData="maven-metadata.xml"
+        def (loader) = "${fabricWeb}fabric-loader/${fabricData}".toURL().text      	  =~ "<release>.*</release>"
+		def (api)    = "${fabricWeb}fabric-api/fabric-api/${fabricData}".toURL().text =~ "<release>.*</release>"
+		def (yarn)   = "${fabricWeb}yarn/${fabricData}".toURL().text				  =~ "<release>.*</release>"
+		def loom 	 = "${fabricWeb}fabric-loom/${fabricData}".toURL().text           =~ "<version>.*</version>" 
+		// Filter results
 		loader = loader.replaceAll("<[/]*release>", "")
-		api = api.replaceAll("<[/]*release>", "")
-		yarn = yarn.replaceAll("<[/]*release>", "")
-		loom = loom[( (int) loom.size())-1].replaceAll("<[/]*version>", "")
+		api    = api.replaceAll("<[/]*release>", "")
+		yarn   = yarn.replaceAll("<[/]*release>", "")
+		loom   = loom[( (int) loom.size())-1].replaceAll("<[/]*version>", "")
+		// Print results
 		println "yarn   = ${yarn}"
 		println "loader = ${loader}"
 		println "api    = ${api}"
