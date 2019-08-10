@@ -1,0 +1,19 @@
+repositories {
+    jcenter()
+    maven {
+        name = 'Fabric'
+        url = 'http://maven.fabricmc.net'
+    }
+    maven { 
+        name = 'CurseForge'
+        url 'https://minecraft.curseforge.com/api/maven'
+    }
+    maven {
+        name = 'Cotton (Snapshot)'
+        url = 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
+    }
+    maven {
+        name = 'Cotton'
+        url = 'http://server.bbkr.space:8081/artifactory/libs-release'
+    }
+}

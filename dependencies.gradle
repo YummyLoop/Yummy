@@ -1,0 +1,10 @@
+dependencies {
+	// Minecraft
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // Fabric
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    // Others
+	modCompile "me.shedaniel:RoughlyEnoughItems:2.9.7+build.143"
+}
