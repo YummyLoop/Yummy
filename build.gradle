@@ -56,6 +56,14 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 
 jar {
 	from "LICENSE"
+	manifest {
+        attributes([
+            "Title"     : "${project.archives_base_name}",
+            "Version"   : "${version}",
+            "Author"    : "${project.mod_author}",
+            "Timestamp" : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+        ])
+    }
 }
 
 // configure the maven publication
