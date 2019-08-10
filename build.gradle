@@ -6,7 +6,7 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-archivesBaseName = project.archives_base_name
+archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
 
@@ -78,3 +78,48 @@ publishing {
 		// mavenLocal()
 	}
 }
+
+
+/* 
+ * Tasks
+*/
+File configFile = file('gradle.properties')
+
+task incrementVersion{ 
+    doFirst {
+        int lastdot = version.lastIndexOf('.')+1
+        int minor=version.substring(lastdot).toInteger()+1
+        String major=version.substring(0,lastdot)
+        // Replace the mod version by the new one (+1)
+        configFile.setText(configFile.getText()
+         .replaceFirst("mod_version =.*", "mod_version = "+major+minor+"")
+        )
+    }
+}
+
+task updateFabric {
+    doFirst {
+        // Get fabric versions/webpage
+        def (loader) = "https://maven.fabricmc.net/net/fabricmc/fabric-loader/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
+		def (api) = "https://maven.fabricmc.net/net/fabricmc/fabric-api/fabric-api/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
+		def (yarn) = "https://maven.fabricmc.net/net/fabricmc/yarn/maven-metadata.xml".toURL().text =~ "<release>.*</release>"
+		def loom = "https://maven.fabricmc.net/net/fabricmc/fabric-loom/maven-metadata.xml".toURL().text =~ "<version>.*</version>" 
+		loader = loader.replaceAll("<[/]*release>", "")
+		api = api.replaceAll("<[/]*release>", "")
+		yarn = yarn.replaceAll("<[/]*release>", "")
+		loom = loom[( (int) loom.size())-1].replaceAll("<[/]*version>", "")
+		println "yarn   = ${yarn}"
+		println "loader = ${loader}"
+		println "api    = ${api}"
+		println "loom   = ${loom}"
+
+        // Update versions to the latest
+        configFile.setText(configFile.getText()
+           .replaceFirst("yarn_mappings=.*", "yarn_mappings=${yarn}")
+		   .replaceFirst("loader_version=.*", "loader_version=${loader}")
+		   .replaceFirst("fabric_version=.*", "fabric_version=${api}")
+        )
+    }
+}
+
+defaultTasks 'incrementVersion', 'build'
