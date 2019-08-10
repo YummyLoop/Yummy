@@ -80,32 +80,32 @@ publishing {
 }
 
 
-/* 
+/*
  * Tasks
 */
 File configFile = file('gradle.properties')
 
-task incrementVersion{ 
-    doFirst {
-        int lastdot = version.lastIndexOf('.')+1
-        int minor=version.substring(lastdot).toInteger()+1
-        String major=version.substring(0,lastdot)
-        // Replace the mod version by the new one (+1)
-        configFile.setText(configFile.getText()
-         .replaceFirst("mod_version =.*", "mod_version = "+major+minor+"")
-        )
-    }
+task incrementVersion{
+	doFirst {
+		int lastdot = version.lastIndexOf('.')+1
+		int minor=version.substring(lastdot).toInteger()+1
+		String major=version.substring(0,lastdot)
+		// Replace the mod version by the new one (+1)
+		configFile.setText(configFile.getText()
+		 .replaceFirst("mod_version =.*", "mod_version = "+major+minor+"")
+		)
+	}
 }
 
 task updateFabric {
-    doFirst {
-        // Get fabric versions/webpage
+	doFirst {
+		// Get fabric versions/webpage
 		def fabricWeb ="https://maven.fabricmc.net/net/fabricmc/"
 		def fabricData="maven-metadata.xml"
-        def (loader) = "${fabricWeb}fabric-loader/${fabricData}".toURL().text      	  =~ "<release>.*</release>"
+		def (loader) = "${fabricWeb}fabric-loader/${fabricData}".toURL().text      	  =~ "<release>.*</release>"
 		def (api)    = "${fabricWeb}fabric-api/fabric-api/${fabricData}".toURL().text =~ "<release>.*</release>"
 		def (yarn)   = "${fabricWeb}yarn/${fabricData}".toURL().text				  =~ "<release>.*</release>"
-		def loom 	 = "${fabricWeb}fabric-loom/${fabricData}".toURL().text           =~ "<version>.*</version>" 
+		def loom 	 = "${fabricWeb}fabric-loom/${fabricData}".toURL().text           =~ "<version>.*</version>"
 		// Filter results
 		loader = loader.replaceAll("<[/]*release>", "")
 		api    = api.replaceAll("<[/]*release>", "")
@@ -117,13 +117,13 @@ task updateFabric {
 		println "api    = ${api}"
 		println "loom   = ${loom}"
 
-        // Update versions to the latest
-        configFile.setText(configFile.getText()
-           .replaceFirst("yarn_mappings=.*", "yarn_mappings=${yarn}")
+		// Update versions to the latest
+		configFile.setText(configFile.getText()
+		   .replaceFirst("yarn_mappings=.*", "yarn_mappings=${yarn}")
 		   .replaceFirst("loader_version=.*", "loader_version=${loader}")
 		   .replaceFirst("fabric_version=.*", "fabric_version=${api}")
-        )
-    }
+		)
+	}
 }
 
 defaultTasks 'incrementVersion', 'build'
