@@ -66,7 +66,7 @@ public abstract class ItemGroup {
 }
 
 /* Example
-    // New ItemGroup
+    // New Fabric ItemGroup
     FabricItemGroupBuilder ola = ItemGroup.init("tutorial", "other");
     // New Item
     net.minecraft.item.Item a = new Item("tutorial", "fabric_item", ItemGroup.MISC);
