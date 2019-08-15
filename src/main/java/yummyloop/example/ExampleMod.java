@@ -12,8 +12,9 @@ public class ExampleMod implements ModInitializer {
 		// However, some things (like resources) may still be uninitialized.
 		// Proceed with mild caution.
 		
-		new Item("tutorial", "fabric_item", ItemGroup.MISC);
-
+		ItemGroup a = new ItemGroup("tutorial", "hello");
+		new Item("tutorial", "fabric_item", a);
+		
 		System.out.println("Hello Fabric world!");
 	}
 }

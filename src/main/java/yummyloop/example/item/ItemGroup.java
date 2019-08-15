@@ -14,8 +14,10 @@ import net.minecraft.item.ItemConvertible;
  * ItemGroup defaults to MISC <p>
  * <b>Note:</b> ItemGroup can be set as null for no ItemGroup
  */
-public abstract class ItemGroup {
+public class ItemGroup {
     private static final Item defaultItem = Items.APPLE;
+    private net.minecraft.item.ItemGroup mcItemGroup = null;
+    private FabricItemGroupBuilder fabricItemGroup = null;
     // Minecraft ItemGroups
     public static final net.minecraft.item.ItemGroup BUILDING_BLOCKS = net.minecraft.item.ItemGroup.BUILDING_BLOCKS;
     public static final net.minecraft.item.ItemGroup DECORATIONS = net.minecraft.item.ItemGroup.DECORATIONS;
@@ -27,42 +29,24 @@ public abstract class ItemGroup {
     public static final net.minecraft.item.ItemGroup COMBAT = net.minecraft.item.ItemGroup.COMBAT;
     public static final net.minecraft.item.ItemGroup BREWING = net.minecraft.item.ItemGroup.BREWING;
 
-    /**
-    * Create&Build a new ItemGroup
-    */
-    public static net.minecraft.item.ItemGroup create(String modid, String name) {
-        return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItem)).build();
+    public ItemGroup(String modid, String name){
+        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItem));
     }
 
-    /**
-    * Create&Build a new ItemGroup
-    */
-    public static net.minecraft.item.ItemGroup create(String modid, String name, ItemConvertible item) {
-        return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item)).build();
+    public ItemGroup(String modid, String name, ItemConvertible item){
+        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item));
+    }
+   
+    public ItemGroup(String modid, String name, ItemConvertible item, Consumer<List<ItemStack>> itemStacks) {
+        this(modid, name, item);
+        this.fabricItemGroup.appendItems(itemStacks);
     }
 
-    /**
-    * Create&Build a new ItemGroup
-    */    
-    public static net.minecraft.item.ItemGroup create(String modid, String name, ItemConvertible item, Consumer<List<ItemStack>> itemStacks) {
-        return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item)).appendItems(itemStacks).build();
-    }
-
-    /**
-    * Create a new FabricGroup <p>
-    * <b>Note:</b> .buid() is required to build the ItemGroup
-    */    
-    public static FabricItemGroupBuilder init(String modid, String name) {
-        return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItem));
-    }
-
-    /**
-    * Create a new FabricGroup <p>
-    * <b>Note:</b> .buid() is required to build the ItemGroup
-    */        
-    public static FabricItemGroupBuilder init(String modid, String name, Consumer<List<ItemStack>> itemStacks) {
-        final Item defaultItem = Items.APPLE;
-        return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItem)).appendItems(itemStacks);
+    public net.minecraft.item.ItemGroup getGroup() {
+        if (this.mcItemGroup == null) {
+            this.mcItemGroup = this.fabricItemGroup.build();
+        }
+        return this.mcItemGroup;
     }
 }
 

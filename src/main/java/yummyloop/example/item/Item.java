@@ -2,7 +2,7 @@ package yummyloop.example.item;
 
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
-import net.minecraft.item.ItemGroup;
+import yummyloop.example.item.ItemGroup;
 //import net.minecraft.item.Item;
 
 public class Item extends net.minecraft.item.Item {
@@ -16,15 +16,15 @@ public class Item extends net.minecraft.item.Item {
     }
 
     public Item(int maxDamage, int maxCount, net.minecraft.item.Item recipeRemainder, ItemGroup group, net.minecraft.util.Rarity rarity, net.minecraft.item.FoodComponent foodComponent) {
-        super(new net.minecraft.item.Item.Settings().maxDamage(maxDamage).maxCount(maxCount).recipeRemainder(recipeRemainder).group(group).rarity(rarity).food(foodComponent));
+        super(new net.minecraft.item.Item.Settings().maxDamage(maxDamage).maxCount(maxCount).recipeRemainder(recipeRemainder).group(group.getGroup()).rarity(rarity).food(foodComponent));
     }
  
     public Item(int maxDamage, int maxCount, ItemGroup group) {
-        super(new net.minecraft.item.Item.Settings().maxDamage(maxDamage).maxCount(maxCount).group(group));
+        super(new net.minecraft.item.Item.Settings().maxDamage(maxDamage).maxCount(maxCount).group(group.getGroup()));
     }
 
     public Item(ItemGroup group) {
-        super(new net.minecraft.item.Item.Settings().group(group));
+        super(new net.minecraft.item.Item.Settings().group(group.getGroup()));
     }
 
     public Item(String modid, String itemName){
@@ -33,7 +33,7 @@ public class Item extends net.minecraft.item.Item {
     }
 
     public Item(String modid, String itemName, ItemGroup group) {
-        super(new net.minecraft.item.Item.Settings().group(group));
+        super(new net.minecraft.item.Item.Settings().group(group.getGroup()));
         register(modid, itemName);
     }
 
