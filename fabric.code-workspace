@@ -3,7 +3,7 @@
         /*{
             "path": "."
         },*/
-        {
+        /*{
             "path": "run"
         },
         {
@@ -11,21 +11,35 @@
         },
         {
             "path": "src"
-        },
+        },*/
         {
               "path": "."
         }
     ],
+    
     "settings": {
+        "files.watcherExclude": {
+            "**/.git/objects/**": true,
+            "**/.git/subtree-cache/**": true,
+            "**/node_modules/*/**": true,
+            "run/**": true,
+            "bin/**": true,
+            "build/**": true
+          },
         "files.exclude": {
             ".gradle": true,
             ".settings": true,
             ".project": true,
             ".classpath": true,
             "bin": true,
-            "build": true,
+            "build/c*": true,
+            "build/g*": true,
+            "build/lo*": true,
+            "build/r*": true,
+            "build/t*": true,
+            //"build": true,
             "run" : true,
-            "src" : true,
+            //"src" : true,
             "*.iml":true,
             "*.ipr":true,
             "*.iws":true,
