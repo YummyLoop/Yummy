@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemConvertible;
 
 /**
  * ItemGroup defaults to MISC <p>
@@ -36,14 +37,14 @@ public abstract class ItemGroup {
     /**
     * Create&Build a new ItemGroup
     */
-    public static net.minecraft.item.ItemGroup create(String modid, String name, Item item) {
+    public static net.minecraft.item.ItemGroup create(String modid, String name, ItemConvertible item) {
         return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item)).build();
     }
 
     /**
     * Create&Build a new ItemGroup
     */    
-    public static net.minecraft.item.ItemGroup create(String modid, String name, Item item, Consumer<List<ItemStack>> itemStacks) {
+    public static net.minecraft.item.ItemGroup create(String modid, String name, ItemConvertible item, Consumer<List<ItemStack>> itemStacks) {
         return FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item)).appendItems(itemStacks).build();
     }
 
