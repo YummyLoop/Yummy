@@ -51,17 +51,15 @@ public class ItemGroup {
 }
 
 /* Example
-    // New Fabric ItemGroup
-    FabricItemGroupBuilder ola = ItemGroup.init("tutorial", "other");
     // New Item
-    net.minecraft.item.Item a = new Item("tutorial", "fabric_item", ItemGroup.MISC);
+    Item a = new Item("tutorial", "fabric_item", ItemGroup.MISC);
     // New Custom ItemStack
     ItemStack b = new ItemStack(a);
     b.getOrCreateTag().putInt("CustomModelData", 1);
     b.setCustomName(new LiteralText("Hello"));
     
-    // Append Ttems(Stacks) to the ItemGroup 
-    ola.appendItems(stacks ->
+    // New manual/custom Fabric ItemGroup
+    ItemGroup helloGroup = new ItemGroup("tutorial", "hello", Items.APPLE, stacks ->
     {
         stacks.add(new ItemStack(Blocks.BONE_BLOCK));
         stacks.add(new ItemStack(Items.APPLE));
@@ -69,6 +67,4 @@ public class ItemGroup {
         stacks.add(new ItemStack(Items.IRON_SHOVEL));
         stacks.add(b);
     });
-    // Build the ItemGroup
-    ola.build();
 */
