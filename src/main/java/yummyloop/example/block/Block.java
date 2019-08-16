@@ -2,24 +2,14 @@ package yummyloop.example.block;
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Material;
-import net.minecraft.block.MaterialColor;
-import net.minecraft.util.DyeColor;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class Block extends net.minecraft.block.Block {
 
-    public static class Settings{
-        public static FabricBlockSettings of(Material material) {
-            return FabricBlockSettings.of(material, material.getColor());
-        }
-    
-        public static FabricBlockSettings of(Material material, MaterialColor color) {
-            return FabricBlockSettings.of(material, color);
-        }
-
-        public static FabricBlockSettings of(Material material, DyeColor color) {
-            return FabricBlockSettings.of(material, color.getMaterialColor());
+    public static class Settings extends FabricBlockSettings{
+        protected Settings(Block base) {
+            super(base);
         }
     }
 
@@ -38,6 +28,11 @@ public class Block extends net.minecraft.block.Block {
 
     public Block(String modid, String itemName, Material material){
         this(Settings.of(material));
+        register(modid, itemName);
+    }
+
+    public Block(String modid, String itemName, FabricBlockSettings settings){
+        this(settings);
         register(modid, itemName);
     }
 
