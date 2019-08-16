@@ -16,6 +16,9 @@ public class ExampleMod implements ModInitializer {
         Item i = new Item("tutorial", "fabric_item", a);
         i.addTooltip("item.tutorial.fabric_item.tooltip");
 
+        Item b = new Item(a);
+        b.register("tutorial", "fabric_item1");
+
         System.out.println("Hello Fabric world!");
     }
 }

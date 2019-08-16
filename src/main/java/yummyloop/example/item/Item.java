@@ -15,13 +15,19 @@ import yummyloop.example.item.ItemGroup;
 
 public class Item extends net.minecraft.item.Item {
     private List<Text> tooltip = new ArrayList<Text>();
-           
-    public Item(net.minecraft.item.Item.Settings itemSettings) {
+
+    public static class Settings extends net.minecraft.item.Item.Settings{}
+    
+    public Item(net.minecraft.item.Item.Settings itemSettings){
+        super(itemSettings);
+    }
+
+    public Item(Item.Settings itemSettings){
         super(itemSettings);
     }
 
     public Item() {
-        super(new net.minecraft.item.Item.Settings().group(ItemGroup.MISC));
+        super(new Settings().group(ItemGroup.MISC));
     }
 
     public Item(String modid, String itemName){
@@ -30,7 +36,7 @@ public class Item extends net.minecraft.item.Item {
     }
 
     public Item(ItemGroup group) {
-        super(new net.minecraft.item.Item.Settings().group(group.getGroup()));
+        super(new Settings().group(group.getGroup()));
     }
 
     public Item(String modid, String itemName, ItemGroup group) {
@@ -39,12 +45,12 @@ public class Item extends net.minecraft.item.Item {
     }
     
     public Item(String modid, String itemName, ItemGroup group, int maxCount) {
-        super(new net.minecraft.item.Item.Settings().group(group.getGroup()).maxCount(maxCount));
+        super(new Settings().group(group.getGroup()).maxCount(maxCount));
         register(modid, itemName);
     }
 
     public Item(int maxDamage, int maxCount, net.minecraft.item.Item recipeRemainder, ItemGroup group, net.minecraft.util.Rarity rarity, net.minecraft.item.FoodComponent foodComponent) {
-        super(new net.minecraft.item.Item.Settings().maxDamage(maxDamage).maxCount(maxCount).recipeRemainder(recipeRemainder).group(group.getGroup()).rarity(rarity).food(foodComponent));
+        super(new Settings().maxDamage(maxDamage).maxCount(maxCount).recipeRemainder(recipeRemainder).group(group.getGroup()).rarity(rarity).food(foodComponent));
     }
 
     // End of constructors 
