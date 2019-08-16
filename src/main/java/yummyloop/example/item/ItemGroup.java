@@ -15,7 +15,7 @@ import net.minecraft.item.ItemConvertible;
  * <b>Note:</b> ItemGroup can be set as null for no ItemGroup
  */
 public class ItemGroup {
-    private static final Item defaultItem = Items.APPLE;
+    private static final Item defaultItemToIcon = Items.APPLE;
     private net.minecraft.item.ItemGroup mcItemGroup = null;
     private FabricItemGroupBuilder fabricItemGroup = null;
     // Minecraft ItemGroups
@@ -30,15 +30,15 @@ public class ItemGroup {
     public static final net.minecraft.item.ItemGroup BREWING = net.minecraft.item.ItemGroup.BREWING;
 
     public ItemGroup(String modid, String name){
-        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItem));
+        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(defaultItemToIcon));
     }
 
-    public ItemGroup(String modid, String name, ItemConvertible item){
-        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(item));
+    public ItemGroup(String modid, String name, ItemConvertible itemToIcon){
+        this.fabricItemGroup = FabricItemGroupBuilder.create(new Identifier(modid, name)).icon(() -> new ItemStack(itemToIcon));
     }
    
-    public ItemGroup(String modid, String name, ItemConvertible item, Consumer<List<ItemStack>> itemStacks) {
-        this(modid, name, item);
+    public ItemGroup(String modid, String name, ItemConvertible itemToIcon, Consumer<List<ItemStack>> itemStacks) {
+        this(modid, name, itemToIcon);
         this.fabricItemGroup.appendItems(itemStacks);
     }
 
