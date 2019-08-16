@@ -13,8 +13,9 @@ public class ExampleMod implements ModInitializer {
         // Proceed with mild caution.
         
         ItemGroup a = new ItemGroup("tutorial", "hello");
-        new Item("tutorial", "fabric_item", a);
-        
+        Item i = new Item("tutorial", "fabric_item", a);
+        i.addTooltip("item.tutorial.fabric_item.tooltip");
+
         System.out.println("Hello Fabric world!");
     }
 }

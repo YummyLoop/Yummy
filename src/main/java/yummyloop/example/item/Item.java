@@ -1,11 +1,20 @@
 package yummyloop.example.item;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.minecraft.client.item.TooltipContext;
+import net.minecraft.item.ItemStack;
+import net.minecraft.text.Text;
+import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
+import net.minecraft.world.World;
 import yummyloop.example.item.ItemGroup;
 //import net.minecraft.item.Item;
 
 public class Item extends net.minecraft.item.Item {
+    private List<Text> tooltip = new ArrayList<Text>();
            
     public Item(net.minecraft.item.Item.Settings itemSettings) {
         super(itemSettings);
@@ -42,5 +51,18 @@ public class Item extends net.minecraft.item.Item {
     public boolean register (String modid, String itemName) {
         Registry.register(Registry.ITEM, new Identifier(modid, itemName), this);
         return true;
+    }
+
+    @Override
+    public void appendTooltip(ItemStack itemStack, World world, List<Text> tooltip, TooltipContext tooltipContext) {
+        tooltip.addAll(this.tooltip);
+    }
+
+    /**
+     * Appends a tooltip to the item
+     * @param tooltip example: item.tutorial.fabric_item.tooltip
+     */
+    public void addTooltip(String tooltip){
+        this.tooltip.add(new TranslatableText(tooltip));
     }
 }
