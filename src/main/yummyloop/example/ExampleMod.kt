@@ -1,4 +1,4 @@
-package yummyloop
+package yummyloop.example
 
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
@@ -32,7 +32,7 @@ class ExampleMod : ModInitializer {
         val cc : Config = Config("a/b/Hello.json")
         cc.add("Hello")
         cc.add(arrayOf ("sa","sb","sc"))
-        cc.add("End");
+        cc.add("End")
         if (!cc.load()) {cc.save()}
         println(cc.toJson())
         val test : Array<String> = cc.get(1)
