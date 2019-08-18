@@ -35,6 +35,7 @@
             "build/c*": true,
             "build/g*": true,
             "build/lo*": true,
+            "build/k*": true,
             "build/r*": true,
             "build/t*": true,
             //"build": true,

@@ -1,10 +1,18 @@
 dependencies {
-	// Minecraft
-	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    // Minecraft
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
     // Fabric
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}"
+    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
+    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+    /** Kotlin 
+     * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm )
+     * ( https://maven.fabricmc.net/net/fabricmc/fabric-language-kotlin/ ) */
+	modCompile "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
+    compileOnly "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
+    //modCompile "net.fabricmc:fabric-language-kotlin:1.3.30-SNAPSHOT"
+
     // Others
-	modCompile "me.shedaniel:RoughlyEnoughItems:2.9.7+build.143"
+    modCompile "me.shedaniel:RoughlyEnoughItems:2.9.7+build.143"
 }

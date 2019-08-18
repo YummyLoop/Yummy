@@ -19,7 +19,10 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "yummyloop.example.ExampleMod"
+      {
+        "adapter": "kotlin",
+        "value": "yummyloop.ExampleMod"
+      }
     ]
   },
   "mixins": [
@@ -27,6 +30,7 @@
   ],
 
   "depends": {
+    "fabric-language-kotlin": ">=1.3.30",
     "fabricloader": ">=0.4.0",
     "fabric": "*"
   },

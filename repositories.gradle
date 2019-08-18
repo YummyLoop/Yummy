@@ -1,10 +1,13 @@
 repositories {
-    jcenter()
     maven {
         name = 'Fabric'
         url = 'http://maven.fabricmc.net'
     }
-    maven { 
+    maven {
+        name = "Kotlin X"
+        url = "https://kotlin.bintray.com/kotlinx"
+    }
+    maven {
         name = 'CurseForge'
         url 'https://minecraft.curseforge.com/api/maven'
     }
@@ -16,4 +19,7 @@ repositories {
         name = 'Cotton'
         url = 'http://server.bbkr.space:8081/artifactory/libs-release'
     }
+    mavenLocal()
+    mavenCentral()
+    jcenter()
 }
