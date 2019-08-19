@@ -37,32 +37,31 @@ public class Block extends net.minecraft.block.Block {
     }
 
     // End of constructors 
-    public boolean register (String modid, String itemName) {
+    public void register (String modid, String itemName) {
         Registry.register(Registry.BLOCK, new Identifier(modid, itemName), this);
-        return true;
     }
 }
 
-/**Settings list:
- * of ... Material material &/| MaterialColor color | DyeColor color
- *  breakByHand(boolean breakByHand)
- *  breakByTool(Tag<Item> tag, int miningLevel)
- *  breakByTool(Tag<Item> tag)
- *  materialColor(MaterialColor color)
- *  materialColor(DyeColor color)
- *  collidable(boolean collidable)
- *  noCollision()
- *  sounds(BlockSoundGroup group)
- *  ticksRandomly()
- *  lightLevel(int lightLevel)
- *  hardness(float hardness)
- *  resistance(float resistance)
- *  strength(float hardness, float resistance)
- *  breakInstantly()
- *  dropsNothing()
- *  dropsLike(Block block)
- *  drops(Identifier dropTableId)
- *  friction(float friction)
- *  slipperiness(float value)
- *  dynamicBounds()
+/*Settings list:
+  of ... Material material &/| MaterialColor color | DyeColor color
+   breakByHand(boolean breakByHand)
+   breakByTool(Tag<Item> tag, int miningLevel)
+   breakByTool(Tag<Item> tag)
+   materialColor(MaterialColor color)
+   materialColor(DyeColor color)
+   collidable(boolean collidable)
+   noCollision()
+   sounds(BlockSoundGroup group)
+   ticksRandomly()
+   lightLevel(int lightLevel)
+   hardness(float hardness)
+   resistance(float resistance)
+   strength(float hardness, float resistance)
+   breakInstantly()
+   dropsNothing()
+   dropsLike(Block block)
+   drops(Identifier dropTableId)
+   friction(float friction)
+   slipperiness(float value)
+   dynamicBounds()
  */

@@ -10,11 +10,10 @@ import net.minecraft.text.TranslatableText;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
-import yummyloop.example.item.ItemGroup;
 //import net.minecraft.item.Item;
 
 public class Item extends net.minecraft.item.Item {
-    private List<Text> tooltip = new ArrayList<Text>();
+    private final List<Text> tooltip = new ArrayList<>();
 
     public static class Settings extends net.minecraft.item.Item.Settings{}
     
@@ -54,9 +53,8 @@ public class Item extends net.minecraft.item.Item {
     }
 
     // End of constructors 
-    public boolean register (String modid, String itemName) {
+    public void register (String modid, String itemName) {
         Registry.register(Registry.ITEM, new Identifier(modid, itemName), this);
-        return true;
     }
 
     @Override

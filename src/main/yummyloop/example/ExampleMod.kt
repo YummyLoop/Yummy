@@ -21,15 +21,15 @@ class ExampleMod : ModInitializer {
         logger.info("**************************")
 
 
-        val itemGroup : ItemGroup = ItemGroup("tutorial", "hello")
-        val itemX : Item = Item("tutorial", "fabric_item", itemGroup)
+        val itemGroup = ItemGroup("tutorial", "hello")
+        val itemX = Item("tutorial", "fabric_item", itemGroup)
 
         itemX.addTooltip("item.tutorial.fabric_item.tooltip")
 
-        val blockA : Block = Block("tutorial", "example_block", Block.Settings.of(Material.METAL).lightLevel(10))
-        val blockItemA : BlockItem = BlockItem("tutorial", "example_block", blockA, itemGroup)
+        val blockA = Block("tutorial", "example_block", Block.Settings.of(Material.METAL).lightLevel(10))
+        val blockItemA = BlockItem("tutorial", "example_block", blockA, itemGroup)
 
-        val cc : Config = Config("a/b/Hello.json")
+        val cc = Config("a/b/Hello.json")
         cc.add("Hello")
         cc.add(arrayOf ("sa","sb","sc"))
         cc.add("End")

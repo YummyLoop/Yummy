@@ -17,7 +17,7 @@ import net.minecraft.item.ItemConvertible;
 public class ItemGroup {
     private static final Item defaultItemToIcon = Items.APPLE;
     private net.minecraft.item.ItemGroup mcItemGroup = null;
-    private FabricItemGroupBuilder fabricItemGroup = null;
+    private final FabricItemGroupBuilder fabricItemGroup;
     // Minecraft ItemGroups
     public static final net.minecraft.item.ItemGroup BUILDING_BLOCKS = net.minecraft.item.ItemGroup.BUILDING_BLOCKS;
     public static final net.minecraft.item.ItemGroup DECORATIONS = net.minecraft.item.ItemGroup.DECORATIONS;

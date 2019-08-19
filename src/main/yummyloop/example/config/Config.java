@@ -3,7 +3,7 @@ package yummyloop.example.config;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -20,8 +20,8 @@ import net.fabricmc.loader.api.FabricLoader;
 
 public class Config {
     private final Path path;
-    private List<Object> list = new ArrayList<Object>();
-    private List<Class<? extends Object>> classList = new ArrayList<Class<? extends Object>>();
+    private final List<Object> list = new ArrayList<>();
+    private final List<Class<?>> classList = new ArrayList<>();
     
     public Config(String file){
         this.path = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(file);
@@ -30,7 +30,7 @@ public class Config {
 
     private boolean save(List<Object> list){
         try {
-            BufferedWriter writer = Files.newBufferedWriter(path, Charset.forName("UTF-8"));
+            BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
             writer.write(this.toJson(list));
             writer.close();
         } catch (IOException e) {
@@ -68,7 +68,7 @@ public class Config {
         return gson.fromJson(string, c);
     }
 
-    private List<Object> fromJson(String json) throws JsonParseException, JsonSyntaxException {
+    private List<Object> fromJson(String json) throws JsonParseException {
         Gson gson = new Gson();
         Type type = new TypeToken<List<Object>>(){
             private static final long serialVersionUID = 1L;
@@ -80,7 +80,7 @@ public class Config {
         final boolean debug = false;
         String fileText = "";
         String line;
-        List<Object> tempList = new ArrayList<Object>();
+        List<Object> tempList;
         Object tempObj;
         // Try to read file
         try {
@@ -138,7 +138,7 @@ public class Config {
 }
 
 // look at : //@SerializedName("w") replace var name with w
-/** Example:
+/* Example:
  *  Config cc = new Config("a/b/Hello.json");
         cc.add("Hello");
         cc.add(new String[]{"sa","sb","sc"});
@@ -147,4 +147,3 @@ public class Config {
         System.out.println(cc.toJson());
         System.out.println( ((String[]) cc.get(1))[0] );
 */
- 

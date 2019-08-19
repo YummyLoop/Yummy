@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 import yummyloop.example.block.Block;
 
 public class BlockItem extends net.minecraft.item.BlockItem {
-    private List<Text> tooltip = new ArrayList<Text>();
+    private final List<Text> tooltip = new ArrayList<>();
     public BlockItem(Block block){
         super(block, new Item.Settings().group(ItemGroup.MISC));
     }
@@ -58,9 +58,8 @@ public class BlockItem extends net.minecraft.item.BlockItem {
     }
 
     // End of constructors
-    public boolean register (String modid, String itemName) {
+    public void register (String modid, String itemName) {
         Registry.register(Registry.ITEM, new Identifier(modid, itemName), this);
-        return true;
     }
 
     @Override
