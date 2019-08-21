@@ -7,7 +7,7 @@ plugins {
 apply from: 'repositories.gradle'
 apply from: 'dependencies.gradle'
 
-//libsDirName = "${rootDir}/folder"
+// Output location of 'gradle build'
 libsDirName = "${project.outDir}"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -22,10 +22,12 @@ group = project.maven_group
 
 minecraft {
 }
+
 sourceSets {
     main.kotlin.srcDirs += 'src/main'
     main.java.srcDirs += 'src/main'
 }
+
 processResources {
 	inputs.property "version", project.version
 
@@ -87,6 +89,18 @@ publishing {
 	}
 }
 
+// Intellij IDEA config
+// see https://docs.gradle.org/current/dsl/org.gradle.plugins.ide.idea.model.IdeaModule.html
+idea {
+	module {
+		//extra dirs that should be excluded by IDEA
+		excludeDirs += file('gradle')
+		excludeDirs += file('run')
+
+		//SDK for the IDEA project
+		jdkName = '1.8'
+	}
+}
 
 /*
  * Tasks
