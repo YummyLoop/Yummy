@@ -7,6 +7,8 @@ plugins {
 apply from: 'repositories.gradle'
 apply from: 'dependencies.gradle'
 
+//libsDirName = "${rootDir}/folder"
+libsDirName = "${project.outDir}"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 compileKotlin {
@@ -20,7 +22,10 @@ group = project.maven_group
 
 minecraft {
 }
-
+sourceSets {
+    main.kotlin.srcDirs += 'src/main'
+    main.java.srcDirs += 'src/main'
+}
 processResources {
 	inputs.property "version", project.version
 
