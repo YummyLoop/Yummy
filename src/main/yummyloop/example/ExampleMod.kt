@@ -10,6 +10,7 @@ import yummyloop.example.config.Config
 import yummyloop.example.item.BlockItem
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
+import yummyloop.example.item.Items
 
 class ExampleMod : ModInitializer {
 
@@ -19,8 +20,14 @@ class ExampleMod : ModInitializer {
         logger.info("**************************")
         logger.info("      Hello World !       ")
         logger.info("**************************")
+        logger.debug("logger debug") // shows nothing
+        logger.error("logger error")
+        logger.trace("logger trace") // shows nothing
+        logger.warn("logger warn")
+        logger.fatal("logger fatal")
 
 
+        Items()
         val itemGroup = ItemGroup("tutorial", "hello")
         val itemX = Item("tutorial", "fabric_item", itemGroup)
 
@@ -37,6 +44,6 @@ class ExampleMod : ModInitializer {
         println(cc.toJson())
         val test : Array<String> = cc.get(1)
         println( test[0] )
-        
+
     }
 }
