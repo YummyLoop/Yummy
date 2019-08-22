@@ -21,7 +21,7 @@ class ExampleMod : ModInitializer {
         logger.warn("logger warn")
         logger.fatal("logger fatal")
 
-        Items()
+        Items
 
         val cc = Config("a/b/Hello.json")
         cc.add("Hello")
