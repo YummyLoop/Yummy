@@ -67,7 +67,6 @@ public class Config {
     }
 
     public boolean load(){
-        final boolean debug = false;
         String fileText = "";
         String line;
         List tempList;
