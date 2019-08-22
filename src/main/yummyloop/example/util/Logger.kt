@@ -8,6 +8,10 @@ import org.apache.logging.log4j.core.config.Configurator
 // see https://logging.apache.org/log4j/log4j-2.4/faq.html
 class Logger(private val name: String) {
 
+    constructor(name: String, level : String) : this(name){
+        setLevel(level)
+    }
+
     private val log: Logger = LogManager.getFormatterLogger(name)
 
     fun setLevel(level : String){
