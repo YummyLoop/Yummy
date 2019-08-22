@@ -3,16 +3,20 @@ dependencies {
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     // Fabric
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
-    modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     /** Kotlin 
      * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm )
      * ( https://maven.fabricmc.net/net/fabricmc/fabric-language-kotlin/ ) */
-	modCompile "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
+	modApi "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
     compileOnly "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
     //modCompile "net.fabricmc:fabric-language-kotlin:1.3.30-SNAPSHOT"
 
     // Others
-    modCompile "me.shedaniel:RoughlyEnoughItems:2.9.8+build.150"
+    modRuntime("me.shedaniel:RoughlyEnoughItems:2.9.8+build.150"){
+        exclude module: "ModMenu"
+    }
+    // http://maven.modmuss50.me/io/github/prospector/modmenu/
+    modRuntime("io.github.prospector:modmenu:1.7.9+build.118")
 }

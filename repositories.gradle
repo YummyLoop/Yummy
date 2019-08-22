@@ -4,12 +4,16 @@ repositories {
         url = 'http://maven.fabricmc.net'
     }
     maven {
-        name = "Kotlin X"
+        name = 'Kotlin X'
         url = "https://kotlin.bintray.com/kotlinx"
     }
     maven {
         name = 'CurseForge'
         url 'https://minecraft.curseforge.com/api/maven'
+    }
+    maven {
+        name = 'Modmuss50'
+        url 'http://maven.modmuss50.me'
     }
     maven {
         name = 'Cotton (Snapshot)'
