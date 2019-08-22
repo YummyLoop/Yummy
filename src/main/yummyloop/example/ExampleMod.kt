@@ -2,12 +2,7 @@ package yummyloop.example
 
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
-import net.minecraft.block.Material
-import yummyloop.example.block.Block
 import yummyloop.example.config.Config
-import yummyloop.example.item.BlockItem
-import yummyloop.example.item.Item
-import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
 import yummyloop.example.util.Logger
 
