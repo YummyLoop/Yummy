@@ -29,8 +29,7 @@ object Items {
 
     init {
         this.itemX.addTooltip("item.tutorial.fabric_item.tooltip")
-        block_entity = BlockEntityType.Builder.create(Supplier<BlockE> { BlockE() }, blockA).build(null)
-        val DEMO_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY, "modid:demo" , block_entity);
+        block_entity = Registry.register(Registry.BLOCK_ENTITY, "modid:demo" ,  BlockEntityType.Builder.create(Supplier<BlockE> { BlockE() }, blockA).build(null));
 
     }
 
