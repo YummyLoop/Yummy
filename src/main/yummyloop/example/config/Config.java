@@ -1,5 +1,12 @@
 package yummyloop.example.config;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
+import net.fabricmc.loader.api.FabricLoader;
+import yummyloop.example.util.Logger;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -8,21 +15,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.reflect.Type;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonParseException;
-import com.google.gson.JsonSyntaxException;
-import com.google.common.reflect.TypeToken;
-
-import net.fabricmc.loader.api.FabricLoader;
 
 public class Config {
     private final Path path;
     private final List<Object> list = new ArrayList<>();
     private final List<Class<?>> classList = new ArrayList<>();
-    
+    private final Logger logger = new Logger(this.getClass().toString(), "OFF");
+
     public Config(String file){
         this.path = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(file);
         this.path.toFile().getParentFile().mkdirs();
@@ -34,7 +33,7 @@ public class Config {
             writer.write(this.toJson(list));
             writer.close();
         } catch (IOException e) {
-            //System.out.println("Could not create file");
+            logger.warn("Could not create file");
             return false;
         }
         return true;
@@ -53,11 +52,6 @@ public class Config {
         return this.toJson(this.list);
     }
 
-    private String toJson(List<Object> list){
-        Gson gson = new GsonBuilder().setPrettyPrinting().create();
-        return gson.toJson(list);
-    }
-
     public String toJson(Object obj){
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         return gson.toJson(obj);
@@ -68,19 +62,15 @@ public class Config {
         return gson.fromJson(string, c);
     }
 
-    private List<Object> fromJson(String json) throws JsonParseException {
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<Object>>(){
-            private static final long serialVersionUID = 1L;
-        }.getType();
-        return gson.fromJson(json, type);
+    private List fromJson(String json) throws JsonParseException {
+        return this.fromJson(json, this.list.getClass() );
     }
 
     public boolean load(){
         final boolean debug = false;
         String fileText = "";
         String line;
-        List<Object> tempList;
+        List tempList;
         Object tempObj;
         // Try to read file
         try {
@@ -91,22 +81,22 @@ public class Config {
             }
             file.close();
         } catch (IOException e) {
-            if (debug) System.out.println("Could not read file");
+            logger.warn("Could not read file");
             return false;
         }
 
         // Try to parse file to json
         try {
-            tempList=this.fromJson(fileText);
+            tempList= this.fromJson(fileText);
         } catch (JsonParseException e) {
             System.out.println(fileText);
-            if (debug) System.out.println("Could not parse json");
+            logger.warn("Could not parse json");
             return false;
         }
 
         // Don't load if the lists have different sizes
         if (this.list.size() != tempList.size()) {
-            if (debug) System.out.println("Wrong json size");
+            logger.warn("Wrong json size");
             return false;
         }
 
@@ -116,7 +106,7 @@ public class Config {
             try {
                 this.list.set(i, fromJson(toJson(tempObj), this.classList.get(i)));
             } catch (Exception e) {
-                if (debug) System.out.println("Wrong format " + i + " | " + this.classList.get(i));
+                logger.warn("Wrong format " + i + " | " + this.classList.get(i));
                 return false;
             }
         }
