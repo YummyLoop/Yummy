@@ -15,12 +15,11 @@ class ExampleMod : ModInitializer {
         logger.info("**************************")
         logger.info("      Hello World !       ")
         logger.info("**************************")
-        logger.debug("logger debug") // shows nothing
+        logger.debug("logger debug")
         logger.error("logger error")
-        logger.trace("logger trace") // shows nothing
+        logger.trace("logger trace")
         logger.warn("logger warn")
         logger.fatal("logger fatal")
-        logger.trace("logger trace") // shows nothing
 
         Items()
 
