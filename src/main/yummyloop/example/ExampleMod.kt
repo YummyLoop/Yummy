@@ -28,13 +28,6 @@ class ExampleMod : ModInitializer {
         logger.trace("logger trace") // shows nothing
 
         Items()
-        val itemGroup = ItemGroup("tutorial", "hello")
-        val itemX = Item("tutorial", "fabric_item", itemGroup)
-
-        itemX.addTooltip("item.tutorial.fabric_item.tooltip")
-
-        val blockA = Block("tutorial", "example_block", Block.Settings.of(Material.METAL).lightLevel(10))
-        val blockItemA = BlockItem("tutorial", "example_block", blockA, itemGroup)
 
         val cc = Config("a/b/Hello.json")
         cc.add("Hello")
@@ -47,21 +40,3 @@ class ExampleMod : ModInitializer {
 
     }
 }
-/*
-    // import org.apache.logging.log4j.core.LoggerContext;
-    // import org.apache.logging.log4j.core.config.Configuration;
-    // import org.apache.logging.log4j.core.config.LoggerConfig;
-
-    LoggerContext context = (LoggerContext) LogManager.getContext(false);
-    Configuration config = context.getConfiguration();
-    LoggerConfig rootConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME);
-    rootConfig.setLevel(Level.DEBUG);
-
-    // You could also specify the actual logger name as below
-    // and it will return the LoggerConfig used by the Logger.
-    LoggerConfig loggerConfig = config.getLoggerConfig("com.apache.test");
-    loggerConfig.setLevel(Level.TRACE);
-
-    // This causes all Loggers to refetch information from their LoggerConfig.
-    context.updateLoggers();
- */
