@@ -2,19 +2,27 @@ package yummyloop.example.block.entity
 
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.util.registry.Registry
-import yummyloop.example.block.Block
-import java.util.function.Supplier
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.util.registry.Registry
+import yummyloop.example.item.Items
+import java.util.Arrays.asList
+import java.util.function.Supplier
 
-lateinit var block_entity : BlockEntityType<TestEntity>
-class TestEntity(block : Block) : BlockEntity(block_entity) {
+class TestEntity : BlockEntity(type) {
+    companion object Register {
+        private var blocks = asList(Items.blockA)
+        private val supplier = Supplier { TestEntity() }
+        private const val name = "tutorial:example_block_entity"
+
+        val type: BlockEntityType<TestEntity> = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)
+        val block_entity: BlockEntityType<TestEntity> = Registry.register(Registry.BLOCK_ENTITY, name, type)
+    }
 
     var number = 7
 
     init {
-        println("Hello???")
-        block_entity = Registry.register(Registry.BLOCK_ENTITY, "modid:demo" ,  BlockEntityType.Builder.create(Supplier<TestEntity> { TestEntity(block) }, block).build(null));
+        println("Hello??? init")
+        markDirty()
     }
 
     override fun toTag(tag: CompoundTag): CompoundTag {
@@ -22,6 +30,7 @@ class TestEntity(block : Block) : BlockEntity(block_entity) {
 
         // Save the current value of the number to the tag
         number++
+        println(number)
         tag.putInt("number", number)
 
         return tag
@@ -30,5 +39,6 @@ class TestEntity(block : Block) : BlockEntity(block_entity) {
     override fun fromTag(tag: CompoundTag) {
         super.fromTag(tag)
         number = tag.getInt("number")
+        println(number)
     }
 }

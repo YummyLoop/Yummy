@@ -40,6 +40,26 @@ public class Block extends net.minecraft.block.Block {
     public void register (String modid, String itemName) {
         Registry.register(Registry.BLOCK, new Identifier(modid, itemName), this);
     }
+/* Stuff for block entities should extend BlockWithEntity
+    public BlockEntity createBlockEntity(BlockView blockView) {
+        System.out.println("Created entity");
+        return new TestEntity();
+    }
+
+    @Override
+    public boolean activate(BlockState blockState_1, World world_1, BlockPos blockPos_1, PlayerEntity playerEntity_1, Hand hand_1, BlockHitResult blockHitResult_1) {
+        BlockEntity blockEntity_1 = world_1.getBlockEntity(blockPos_1);
+        if (blockEntity_1 instanceof TestEntity) {
+            TestEntity campfireBlockEntity_1 = (TestEntity)blockEntity_1;
+            campfireBlockEntity_1.setNumber(11);
+            System.out.println("HAS entity");
+        }
+
+        return true;
+    }
+    public BlockRenderType getRenderType(BlockState blockState_1) {
+        return BlockRenderType.MODEL;
+    }*/
 }
 
 /*Settings list:
