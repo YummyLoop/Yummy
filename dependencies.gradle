@@ -11,7 +11,6 @@ dependencies {
      * ( https://maven.fabricmc.net/net/fabricmc/fabric-language-kotlin/ ) */
 	modApi "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
     compileOnly "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
-    //modCompile "net.fabricmc:fabric-language-kotlin:1.3.30-SNAPSHOT"
 
     // Others
     modRuntime("me.shedaniel:RoughlyEnoughItems:2.9.8+build.150"){
