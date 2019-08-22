@@ -18,17 +18,8 @@ object Items {
    @JvmField val blockItemA = BlockItem("tutorial", "example_block", blockA, groupA)
 
 
-    lateinit var block_entity : BlockEntityType<BlockE>
-    class BlockE: BlockEntity(block_entity) {
-        init {
-            println("Hello???")
-        }
-    }
-
     init {
         this.itemX.addTooltip("item.tutorial.fabric_item.tooltip")
-        block_entity = Registry.register(Registry.BLOCK_ENTITY, "modid:demo" ,  BlockEntityType.Builder.create(Supplier<BlockE> { BlockE() }, blockA).build(null));
-
     }
 
 }
