@@ -19,9 +19,9 @@ class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(
     constructor(modId : String, itemName : String) :
             this(modId, itemName, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, group : ItemGroup) :
-            this(modId, itemName, Settings().group(group.group))
+            this(modId, itemName, Settings().group(group.getGroup()))
     constructor(modId : String, itemName : String, group : ItemGroup, maxCount : Int) :
-            this(modId, itemName, Settings().group(group.group).maxCount(maxCount))
+            this(modId, itemName, Settings().group(group.getGroup()).maxCount(maxCount))
 
     private fun register (modId : String, itemName : String) {
         Registry.register(Registry.ITEM, Identifier(modId, itemName), this);
