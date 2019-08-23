@@ -23,14 +23,16 @@ class ExampleMod : ModInitializer {
 
         Items
 
-        val cc = Config("a/b/Hello.json")
+        val cc = Config("a/b/Hello.jsonc")
         cc.add("Hello")
+        val i1 = "Hello World !"
+        cc.add(yummyloop.example.test.java())
         cc.add(arrayOf ("sa","sb","sc"))
         cc.add("End")
         if (!cc.load()) {cc.save()}
         println(cc.toJson())
-        val test : Array<String> = cc.get(1)
-        println( test[0] )
+        //val test : Array<String> = cc.get(1)
+        //println( test[0] )
 
     }
 }

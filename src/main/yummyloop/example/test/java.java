@@ -1,20 +1,26 @@
 package yummyloop.example.test;
 
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.util.registry.Registry;
-import yummyloop.example.item.Items;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
 public class java {
-    public static BlockEntityType<DemoBlockEntity> DEMO_BLOCK_ENTITY;
+    public static String comm = "Hello world!";
 
-    public class DemoBlockEntity extends BlockEntity {
-        public DemoBlockEntity() {
-            super(DEMO_BLOCK_ENTITY);
-        }
+    Comment a = new Comment("Hello");
+    private int aa=2;
+    int bb= 3;
+    @SerializedName("__Comment")
+    String comment = "Hello world!";
+
+    public java(){
+        int a = 1;
     }
 
-    java(){
-        DEMO_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY, "modid:demo", BlockEntityType.Builder.create(DemoBlockEntity::new, Items.blockA).build(null));
+    class Comment {
+        @SerializedName("__Comment")
+        String c;
+        Comment(String message){
+            this.c = message;
+        }
     }
 }

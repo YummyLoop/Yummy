@@ -30,7 +30,9 @@ public class Config {
     private boolean save(List<Object> list){
         try {
             BufferedWriter writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-            writer.write(this.toJson(list));
+            String formattedOutput = (this.toJson(list));
+                   // .replaceAll("\"__Comment\": \"(.*)\"","/*$1*/");
+            writer.write(formattedOutput);
             writer.close();
         } catch (IOException e) {
             logger.warn("Could not create file");
@@ -60,6 +62,7 @@ public class Config {
     private <T> T fromJson (String string, Class<T> c) throws JsonSyntaxException{
         Gson gson = new GsonBuilder().setLenient().create();
         return gson.fromJson(string, c);
+        //return gson.fromJson(string.replaceAll("/\\*(.*)\\*/","\"__Comment\": \"$1\""), c);
     }
 
     private List fromJson(String json) throws JsonParseException {
@@ -93,6 +96,9 @@ public class Config {
             return false;
         }
 
+        // If did not read anything (file is empty)
+        if (tempList == null) return false;
+
         // Don't load if the lists have different sizes
         if (this.list.size() != tempList.size()) {
             logger.warn("Wrong json size");
@@ -117,7 +123,7 @@ public class Config {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> T get (int index) throws IndexOutOfBoundsException{
+    public <T> T get (int index) throws IndexOutOfBoundsException, ClassCastException{
         return (T) this.classList.get(index).cast(this.list.get(index));
     }
 
