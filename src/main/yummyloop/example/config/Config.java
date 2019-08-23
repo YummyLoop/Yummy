@@ -88,7 +88,7 @@ public class Config {
         try {
             tempList= this.fromJson(fileText);
         } catch (JsonParseException e) {
-            System.out.println(fileText);
+            //System.out.println(fileText);
             logger.warn("Could not parse json");
             return false;
         }
