@@ -29,7 +29,7 @@ class ItemGroup(modId : String, name : String, itemToIcon: ItemConvertible) {
     }
 
     private fun create (modId : String, name : String, itemToIcon: ItemConvertible){
-        this.fabricItemGroup = FabricItemGroupBuilder.create(Identifier(modId, name)).icon{ItemStack(defaultItemToIcon)}
+        this.fabricItemGroup = FabricItemGroupBuilder.create(Identifier(modId, name)).icon{ItemStack(itemToIcon)}
     }
 
     fun getGroup() : VanillaItemGroup? {
