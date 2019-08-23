@@ -58,7 +58,7 @@ public class Config {
     }
 
     private <T> T fromJson (String string, Class<T> c) throws JsonSyntaxException{
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().setLenient().create();
         return gson.fromJson(string, c);
     }
 
