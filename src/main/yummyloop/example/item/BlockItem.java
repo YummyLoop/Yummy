@@ -22,10 +22,6 @@ public class BlockItem extends net.minecraft.item.BlockItem {
         super(block, itemSettings);
     }
 
-    public BlockItem(Block block, net.minecraft.item.Item.Settings itemSettings) {
-        super(block, itemSettings);
-    }
-
     public BlockItem(String modid, String itemName){
         this(new Block(modid, itemName));
         register(modid, itemName);
