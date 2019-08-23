@@ -10,19 +10,18 @@ import net.minecraft.world.World
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class Item(settings : Settings) : VanillaItem(settings) {
+class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(settings) {
     private val tooltip = ArrayList<Text>();
 
-    private constructor(group : VanillaItemGroup) :
-            this(Settings().group(group))
-    private constructor(group : ItemGroup) :
-            this(Settings().group(group.group))
-    constructor(modId : String, itemName: String) :
-            this(ItemGroup.MISC){ register(modId, itemName) }
+    init {
+        register(modId, itemName)
+    }
+    constructor(modId : String, itemName : String) :
+            this(modId, itemName, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, group : ItemGroup) :
-            this(group){ register(modId, itemName) }
+            this(modId, itemName, Settings().group(group.group))
     constructor(modId : String, itemName : String, group : ItemGroup, maxCount : Int) :
-            this(Settings().group(group.group).maxCount(maxCount)){ register(modId, itemName) }
+            this(modId, itemName, Settings().group(group.group).maxCount(maxCount))
 
     private fun register (modId : String, itemName : String) {
         Registry.register(Registry.ITEM, Identifier(modId, itemName), this);
