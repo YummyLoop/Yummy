@@ -12,6 +12,15 @@ dependencies {
 	modApi "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
     compileOnly "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
 
+    /** Kotlin optional
+     * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization )
+     * ( https://plugins.gradle.org/plugin/org.jetbrains.dokka )
+     */
+    //compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0"
+    //include "org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.12.0"
+    //compile "org.jetbrains.kotlinx:kotlinx-serialization-runtime-configparser:0.12.0"
+    //include "org.jetbrains.kotlinx:kotlinx-serialization-runtime-configparser:0.12.0"
+
     // Others
     // https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
     modRuntime("me.shedaniel:RoughlyEnoughItems:2.9.8+build.150"){

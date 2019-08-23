@@ -1,5 +1,7 @@
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.40'
+	id 'kotlin' version '1.3.50'
+	id 'kotlinx-serialization' version '1.3.50'
+	id 'org.jetbrains.dokka' version '0.9.18'
 	id 'fabric-loom' version '0.2.5-SNAPSHOT'
 	id 'idea'
 	id 'maven-publish'
