@@ -15,7 +15,7 @@ import yummyloop.example.block.Block;
 public class BlockItem extends net.minecraft.item.BlockItem {
     private final List<Text> tooltip = new ArrayList<>();
     public BlockItem(Block block){
-        super(block, new Item.Settings().group(ItemGroup.MISC));
+        super(block, new Item.Settings().group(net.minecraft.item.ItemGroup.MISC));
     }
 
     public BlockItem(Block block, Item.Settings itemSettings){
