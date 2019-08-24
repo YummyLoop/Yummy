@@ -1,4 +1,4 @@
-package yummyloop.example.item;
+package yummyloop.example.item
 
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.ItemStack
@@ -11,7 +11,7 @@ import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(settings) {
-    private val tooltip = ArrayList<Text>();
+    private val tooltip = ArrayList<Text>()
 
     init {
         register(modId, itemName)
@@ -24,11 +24,11 @@ class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(
             this(modId, itemName, Settings().group(group.getGroup()).maxCount(maxCount))
 
     private fun register (modId : String, itemName : String) {
-        Registry.register(Registry.ITEM, Identifier(modId, itemName), this);
+        Registry.register(Registry.ITEM, Identifier(modId, itemName), this)
     }
 
     override fun appendTooltip(itemStack: ItemStack?, world: World?, tooltip: MutableList<Text>?, tooltipContext: TooltipContext?) {
-        tooltip?.addAll(this.tooltip);
+        tooltip?.addAll(this.tooltip)
     }
 
     /**
@@ -36,6 +36,6 @@ class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(
      * @param tooltip example: item.tutorial.fabric_item.tooltip
      */
     fun addTooltip(tooltip : String){
-        this.tooltip.add(TranslatableText(tooltip));
+        this.tooltip.add(TranslatableText(tooltip))
     }
 }
