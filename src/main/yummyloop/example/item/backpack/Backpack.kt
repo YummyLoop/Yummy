@@ -4,6 +4,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.client.network.ClientDummyContainerProvider
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
@@ -33,11 +34,11 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
             }
 
             //var chestInventory = player.enderChestInventory
-            val chestInventory = Inv(itemStack, inventory)
+            val chestInventory = BasicInventory(*inventory.toTypedArray())
 
             val provider = ClientDummyContainerProvider(
                 { int_1, playerInventory, playerEntity ->
-                    Cont(int_1, playerInventory, chestInventory)
+                    Cont2(int_1, playerInventory, chestInventory)
                 }, itemStack.name)
             player.openContainer(provider)
 
