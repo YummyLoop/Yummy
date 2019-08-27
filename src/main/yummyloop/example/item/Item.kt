@@ -10,7 +10,7 @@ import net.minecraft.world.World
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(settings) {
+open class Item(modId : String, itemName: String, settings : Settings) : VanillaItem(settings) {
     private val tooltip = ArrayList<Text>()
 
     init {
