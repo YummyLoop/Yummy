@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.util.Hand
 import net.minecraft.world.World
 import yummyloop.example.item.Items
 import net.minecraft.item.Items as VanillaItems
@@ -26,17 +27,16 @@ class Cont(containerType_1 : ContainerType<*>, int_1 : Int, playerInventory_1 : 
     override fun canInsertIntoSlot(itemStack_1: ItemStack?, slot_1: Slot?): Boolean {
         return itemStack_1?.item != Items.backpack
     }
-
+*/
     override fun onSlotClick(int_1: Int, int_2: Int, slotActionType_1: SlotActionType?, player: PlayerEntity?): ItemStack {
-        val stack = player?.inventory?.cursorStack
-        val item = stack?.item
-        return if (item == Items.backpack || stack == ItemStack.EMPTY) {
-            ItemStack.EMPTY
+        return if(int_1 > 0 && this.getSlot(int_1).stack == player?.getStackInHand(Hand.MAIN_HAND)) {
+            ItemStack.EMPTY;
         } else {
             super.onSlotClick(int_1, int_2, slotActionType_1, player)
         }
     }
 
+/*
     override fun transferSlot(player: PlayerEntity?, int_1: Int): ItemStack {
         return if (player?.inventory?.cursorStack?.item == Items.backpack) {
             ItemStack.EMPTY
