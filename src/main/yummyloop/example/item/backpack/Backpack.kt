@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.*
@@ -42,7 +43,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
 
             val provider = ClientDummyContainerProvider(
                 { int_1, playerInventory, playerEntity ->
-                    GenericContainer.createGeneric9x6(int_1, playerInventory, chestInventory)
+                    Cont(int_1, playerInventory, chestInventory)
                 }, itemStack.name)
             player.openContainer(provider)
 
@@ -65,7 +66,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     }
 
     override fun getMaxUseTime(itemStack_1: ItemStack?): Int {
-        return 5
+        return 500
     }
 
     override fun onStoppedUsing(itemStack_1: ItemStack?, world_1: World?, livingEntity_1: LivingEntity?, int_1: Int) {
