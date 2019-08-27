@@ -73,7 +73,7 @@ class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInv
 
     private fun getStackList(inventory : Inventory): DefaultedList<ItemStack>? {
         val list : DefaultedList<ItemStack> = DefaultedList.of()
-        for ( i in 0..inventory.invSize){
+        for ( i in 0 until inventory.invSize){
             list.add(inventory.getInvStack(i))
         }
         return list
