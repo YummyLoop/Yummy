@@ -1,19 +1,11 @@
 package yummyloop.example.item.backpack
 
-import net.minecraft.client.network.packet.GuiSlotUpdateS2CPacket
-import net.minecraft.container.Slot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.nbt.Tag
-import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.DefaultedList
-import net.minecraft.util.Hand
-import yummyloop.example.item.Items
-import kotlin.properties.Delegates
-import net.minecraft.item.Items as VanillaItems
 
 class Inv(private val itemStack : ItemStack, contents: DefaultedList<ItemStack>) : BasicInventory(*(contents.toTypedArray())) {
     init {

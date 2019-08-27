@@ -2,15 +2,12 @@ package yummyloop.example.item.backpack
 
 import net.minecraft.block.BlockState
 import net.minecraft.client.network.ClientDummyContainerProvider
-import net.minecraft.container.GenericContainer
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
-import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.text.TranslatableText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
