@@ -7,7 +7,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -27,8 +26,6 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
         val itemStack = player.activeItem
 
         return if (itemStack.count <= 1) {
-            //val newItemStack = itemStack.copy()
-            //itemStack=ItemStack.EMPTY
             val inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
             val compoundTag = itemStack.getSubTag("Items")
             if (compoundTag != null){
@@ -78,23 +75,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
         return false
     }
 
-    // End of usage settings
-
     override fun canMine(blockState_1: BlockState?, world_1: World?, blockPos_1: BlockPos?, playerEntity_1: PlayerEntity?): Boolean {
         return true // gets stuck if false
     }
-    // Experimental
-    fun serializeInventory(compoundTag_1: CompoundTag, inventory : DefaultedList<ItemStack>): CompoundTag {
-        Inventories.toTag(compoundTag_1, inventory, false)
-        //println(compoundTag_1.toString())
-        return compoundTag_1
-    }
-
-    fun deserializeInventory(compoundTag_1: CompoundTag, inventory : DefaultedList<ItemStack>) {
-        if (compoundTag_1.containsKey("Items", 9)) {
-            Inventories.fromTag(compoundTag_1, inventory)
-        }
-    }
-
-
 }
