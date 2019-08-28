@@ -98,10 +98,15 @@ idea {
 		//extra dirs that should be excluded by IDEA
 		excludeDirs += file('gradle')
 		excludeDirs += file('run')
+		excludeDirs += file('out')
 
 		//SDK for the IDEA project
 		jdkName = '1.8'
 	}
+}
+// Gradle Wrapper location
+task wrapper(type: Wrapper, overwrite: true) {
+	jarFile = file('.gradle/wrapper/wrapper.jar')
 }
 
 /*
