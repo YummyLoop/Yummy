@@ -9,8 +9,8 @@ dependencies {
     /** Kotlin 
      * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm )
      * ( https://maven.fabricmc.net/net/fabricmc/fabric-language-kotlin/ ) */
-	modApi "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
-    compileOnly "net.fabricmc:fabric-language-kotlin:1.3.40+build.1"
+	modApi "net.fabricmc:fabric-language-kotlin:1.3.50+build.1"
+    compileOnly "net.fabricmc:fabric-language-kotlin:1.3.50+build.1"
 
     /** Kotlin optional
      * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization )
@@ -23,7 +23,7 @@ dependencies {
 
     // Others
     // https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
-    modRuntime("me.shedaniel:RoughlyEnoughItems:2.9.8+build.150"){
+    modRuntime("me.shedaniel:RoughlyEnoughItems:3.1-pre+build.4"){
         exclude module: "ModMenu"
     }
     // http://maven.modmuss50.me/io/github/prospector/modmenu/
