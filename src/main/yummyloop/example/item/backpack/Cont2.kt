@@ -31,7 +31,7 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
             this.inventory?.setInvStack(c,i)
         }
     }
-
+/*
     init { // Look at GenericContainer.java
         checkContainerSize(inventory, this.rows* 9)
         inventory?.onInvOpen(playerInventory.player)
@@ -54,6 +54,8 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
             this.addSlot(Slot(playerInventory, c, 8 + c * 18, 161 + twiceInventorySize))
         }
     }
+
+ */
 
     override fun canUse(playerEntity_1: PlayerEntity): Boolean {
         return this.inventory.canPlayerUseInv(playerEntity_1)
