@@ -24,7 +24,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     override fun use(world: World?, player: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack?> {
         if (world == null || player == null || hand == null) return TypedActionResult(ActionResult.PASS, player?.getStackInHand(hand))
         player.setCurrentHand(hand)
-        val itemStack = player.activeItem
+        val itemStack = player.getStackInHand(hand)
 
         return if (itemStack.count <= 1) {
             val inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
@@ -37,7 +37,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
             val chestInventory = BasicInventory(*inventory.toTypedArray())
 
             val provider = ClientDummyContainerProvider(
-                { int_1, playerInventory, playerEntity ->
+                { int_1, playerInventory, _ ->
                     Cont2(int_1, playerInventory, chestInventory)
                 }, itemStack.name)
             player.openContainer(provider)
@@ -61,7 +61,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     }
 
     override fun getMaxUseTime(itemStack_1: ItemStack?): Int {
-        return 500
+        return 20
     }
 
     override fun onStoppedUsing(itemStack_1: ItemStack?, world_1: World?, livingEntity_1: LivingEntity?, int_1: Int) {

@@ -1,22 +1,20 @@
 package yummyloop.example.item.backpack
 
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
-import net.minecraft.container.Container
-import net.minecraft.container.ContainerType
-import net.minecraft.container.Slot
-import net.minecraft.container.SlotActionType
+import net.minecraft.client.network.ClientDummyContainerProvider
+import net.minecraft.container.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.text.LiteralText
 import net.minecraft.util.DefaultedList
 
 class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInventory : PlayerInventory, private val inventory : Inventory, private val rows : Int) :
         Container(containerType , int_1) {
-    private val stack: ItemStack =  playerInventory.player.mainHandStack
+    private val stack: ItemStack =  playerInventory.player.activeItem
 
     constructor(int_1 : Int, playerInventory_1 : PlayerInventory, inventory_1 : Inventory) :
             this(ContainerType.GENERIC_9X6, int_1, playerInventory_1, inventory_1, 6)
@@ -61,14 +59,48 @@ class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInv
         return this.inventory.canPlayerUseInv(playerEntity_1)
     }
 
-    override fun close(playerEntity_1: PlayerEntity) {
-        super.close(playerEntity_1)
+    override fun close(player: PlayerEntity) {
+        println(stack.name)
         stack.removeSubTag("Items")
         val compoundTag = Inventories.toTag(CompoundTag(), this.getStackList(this.inventory), false)
         if (!compoundTag.isEmpty) {
             stack.putSubTag("Items", compoundTag)
         }
-        this.inventory.onInvClose(playerEntity_1)
+        super.close(player)
+        this.inventory.onInvClose(player)
+    }
+
+    // See ShulkerBoxContainer
+    override fun transferSlot(player: PlayerEntity?, slotNum: Int): ItemStack {
+        var itemStackCopy = ItemStack.EMPTY
+        val activeSlot = this.slotList[slotNum] as Slot
+        if (activeSlot.hasStack()) {// Slot is not empty
+            val itemStack = activeSlot.stack
+            itemStackCopy = itemStack.copy()
+
+            if (slotNum < this.inventory.invSize) {// index is not out of bounds ?
+                if (!this.insertItem(itemStack, this.inventory.invSize, this.slotList.size, true)) {// if cannot insert item
+                    return ItemStack.EMPTY
+                }
+            } else if (!this.insertItem(itemStack, 0, this.inventory.invSize, false)) {// if cannon insert item
+                return ItemStack.EMPTY
+            }
+
+            if (itemStack.isEmpty) {// Slot has stack but stack is empty
+                activeSlot.stack = ItemStack.EMPTY
+            } else {
+                activeSlot.markDirty()
+            }
+        }
+        return itemStackCopy
+    }
+
+    override fun onSlotClick(int_1: Int, int_2: Int, slotActionType: SlotActionType?, player: PlayerEntity?): ItemStack {
+        return if (int_1 == (((this.rows + 3) * 9)+ player?.inventory?.selectedSlot!!) && int_1>0) {// If its the selected slot
+            ItemStack.EMPTY
+        } else {
+            super.onSlotClick(int_1, int_2, slotActionType, player)
+        }
     }
 
     private fun getStackList(inventory : Inventory): DefaultedList<ItemStack>? {
@@ -77,25 +109,6 @@ class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInv
             list.add(inventory.getInvStack(i))
         }
         return list
-    }
-
-    fun getInventory(): Inventory {
-        return this.inventory
-    }
-
-    @Environment(EnvType.CLIENT)
-    fun getRows(): Int {
-        return this.rows
-    }
-
-    override fun onSlotClick(int_1: Int, int_2: Int, slotActionType: SlotActionType?, player: PlayerEntity?): ItemStack {
-        //return if(int_1 > 0 && this.getSlot(int_1).stack == player?.getStackInHand(Hand.MAIN_HAND)) {
-        //return if (int_1 > 0 && this.getSlot(int_1).stack.item is Backpack) {
-        return if (int_1 >= ((this.rows + 3) * 9) ) {// If its the HotBar
-            ItemStack.EMPTY
-        } else {
-            super.onSlotClick(int_1, int_2, slotActionType, player)
-        }
     }
 
     private class BoxSlot(inventory_1: Inventory, int_1: Int, int_2: Int, int_3: Int) : Slot(inventory_1, int_1, int_2, int_3) {
@@ -109,7 +122,7 @@ class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInv
         }
 
         override fun canTakeItems(playerEntity_1: PlayerEntity?): Boolean {
-            return this.stack.item !is Backpack // gets stuck when this changes for some reason
+            return this.stack.item !is Backpack
             //return false
         }
     }
