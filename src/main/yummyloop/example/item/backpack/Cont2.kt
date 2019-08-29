@@ -18,7 +18,11 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
 
     private val playerInventory : PlayerInventory = player.inventory
     private val stack: ItemStack =  player.activeItem
-    private val hand = Hand.MAIN_HAND // Todo : fix hand
+    private val hand : Hand? = if (player.getStackInHand(Hand.MAIN_HAND).item is Backpack){
+        Hand.MAIN_HAND
+    }else{
+        Hand.OFF_HAND
+    }
 
     init {
         val inventoryList = DefaultedList.ofSize(54, ItemStack.EMPTY);
