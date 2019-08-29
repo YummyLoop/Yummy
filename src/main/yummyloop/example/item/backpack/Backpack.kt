@@ -34,7 +34,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
         if (world.isClient) return TypedActionResult(ActionResult.PASS, player.getStackInHand(hand))
 
-        player.setCurrentHand(hand)
+        //player.setCurrentHand(hand)
         val itemStack = player.getStackInHand(hand)
 
         return if (itemStack.count == 1) {

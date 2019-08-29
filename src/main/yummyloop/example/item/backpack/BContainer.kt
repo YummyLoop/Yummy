@@ -17,23 +17,24 @@ class BContainer(containerType : ContainerType<*>?, syncId : Int, private val pl
     constructor(syncId : Int, player : PlayerEntity, buf: PacketByteBuf) : this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(54), buf)
 
     private val playerInventory : PlayerInventory = player.inventory
-    private val stack: ItemStack =  player.activeItem
     private val hand : Hand? = if (player.getStackInHand(Hand.MAIN_HAND).item is Backpack){
         Hand.MAIN_HAND
     }else{
         Hand.OFF_HAND
     }
+    private val stack: ItemStack =  player.getStackInHand(hand)//player.activeItem
 
     init {
         val inventoryList = DefaultedList.ofSize(54, ItemStack.EMPTY);
         val compoundTag = stack.getSubTag("Items")
         if (compoundTag != null){
             Inventories.fromTag(compoundTag, inventoryList)
+
+            for ((c, i) in inventoryList.withIndex()){
+                this.inventory?.setInvStack(c,i)
+            }
         }
         //this.inventory =  BasicInventory(*inventoryList.toTypedArray())
-        for ((c, i) in inventoryList.withIndex()){
-            this.inventory?.setInvStack(c,i)
-        }
     }
 /*
     init { // Look at GenericContainer.java
