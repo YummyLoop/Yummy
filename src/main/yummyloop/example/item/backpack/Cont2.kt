@@ -60,7 +60,7 @@ class Cont2(containerType : ContainerType<*>, int_1 : Int, private val playerInv
     }
 
     override fun close(player: PlayerEntity) {
-        println(stack.name)
+        //println(stack.name)
         stack.removeSubTag("Items")
         val compoundTag = Inventories.toTag(CompoundTag(), this.getStackList(this.inventory), false)
         if (!compoundTag.isEmpty) {
