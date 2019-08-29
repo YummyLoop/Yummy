@@ -24,11 +24,11 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
 
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
-        val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Cont2(syncId, player, buf) }
+        val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
         val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
 
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                ContainerScreen54(Cont2(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
+                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
     }
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {

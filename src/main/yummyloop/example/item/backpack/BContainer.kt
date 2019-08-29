@@ -12,7 +12,7 @@ import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.PacketByteBuf
 
-class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player : PlayerEntity, inventory : Inventory?, private val buf: PacketByteBuf) :
+class BContainer(containerType : ContainerType<*>?, syncId : Int, private val player : PlayerEntity, inventory : Inventory?, private val buf: PacketByteBuf) :
         GenericContainer(containerType, syncId, player.inventory, inventory, 6) {
     constructor(syncId : Int, player : PlayerEntity, buf: PacketByteBuf) : this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(54), buf)
 
