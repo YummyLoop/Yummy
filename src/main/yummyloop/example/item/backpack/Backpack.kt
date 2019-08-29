@@ -28,7 +28,7 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
         val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
 
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                ContainerScreen54(Cont2(syncId, player, buf), player.inventory, LiteralText("Hello")) // Todo: fix name
+                ContainerScreen54(Cont2(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
     }
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
@@ -40,7 +40,6 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
         return if (itemStack.count == 1) {
             ContainerProviderRegistry.INSTANCE.openContainer(containerId, player) { buf ->
                 buf.writeString(itemStack.name.string)
-                buf.writeInt(54)
             }
 
             TypedActionResult(ActionResult.SUCCESS, itemStack)
