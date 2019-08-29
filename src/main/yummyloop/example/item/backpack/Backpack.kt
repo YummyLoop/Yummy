@@ -1,13 +1,14 @@
 package yummyloop.example.item.backpack
 
+import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
+import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
-import net.minecraft.client.network.ClientDummyContainerProvider
+import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.BasicInventory
-import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
@@ -21,26 +22,26 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     constructor(modId : String, itemName : String, group : ItemGroup) :
             this(modId, itemName, Settings().group(group.getGroup()))
 
-    override fun use(world: World?, player: PlayerEntity?, hand: Hand?): TypedActionResult<ItemStack?> {
-        if (world == null || player == null || hand == null) return TypedActionResult(ActionResult.PASS, player?.getStackInHand(hand))
+    companion object{
+        val containerId = Identifier("tutorial", "backpack1")
+        val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Cont2(syncId, player, buf) }
+        val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
+
+        open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
+                ContainerScreen54(Cont2(syncId, player, buf), player.inventory, LiteralText("Hello")) // Todo: fix name
+    }
+
+    override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
+        if (world.isClient) return TypedActionResult(ActionResult.PASS, player.getStackInHand(hand))
+
         player.setCurrentHand(hand)
         val itemStack = player.getStackInHand(hand)
 
-        return if (itemStack.count <= 1) {
-            val inventory = DefaultedList.ofSize(54, ItemStack.EMPTY);
-            val compoundTag = itemStack.getSubTag("Items")
-            if (compoundTag != null){
-                Inventories.fromTag(compoundTag, inventory)
+        return if (itemStack.count == 1) {
+            ContainerProviderRegistry.INSTANCE.openContainer(containerId, player) { buf ->
+                buf.writeString(itemStack.name.string)
+                buf.writeInt(54)
             }
-
-            //var chestInventory = player.enderChestInventory
-            val chestInventory = BasicInventory(*inventory.toTypedArray())
-
-            val provider = ClientDummyContainerProvider(
-                { int_1, playerInventory, _ ->
-                    Cont2(int_1, playerInventory, chestInventory)
-                }, itemStack.name)
-            player.openContainer(provider)
 
             TypedActionResult(ActionResult.SUCCESS, itemStack)
         } else {
