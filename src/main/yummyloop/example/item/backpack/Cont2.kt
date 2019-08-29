@@ -35,36 +35,23 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
     init { // Look at GenericContainer.java
         checkContainerSize(inventory, this.rows* 9)
         inventory?.onInvOpen(playerInventory.player)
-        val int_3 = (this.rows - 4) * 18
+        val twiceInventorySize = (this.rows - 4) * 18
 
-        var int_8: Int = 0
-        var column: Int
         // Inventory size
-        while (int_8 < this.rows) {
-            column = 0
-            while (column < 9) {
-                this.addSlot(BoxSlot(this.inventory, column + int_8 * 9, 8 + column * 18, 18 + int_8 * 18))
-                ++column
+        for (r in 0 until this.rows) {
+            for (c in 0 until 9) {
+                this.addSlot(BoxSlot(this.inventory, c + r * 9, 8 + c * 18, 18 + r * 18))
             }
-            ++int_8
         }
-
-        int_8 = 0
         // Player inventory
-        while (int_8 < 3) {
-            column = 0
-            while (column < 9) {
-                this.addSlot(Slot(playerInventory, column + int_8 * 9 + 9, 8 + column * 18, 103 + int_8 * 18 + int_3))
-                ++column
+        for (r in 0 until 3) {
+            for (c in 0 until 9) {
+                this.addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * 18, 103 + r * 18 + twiceInventorySize))
             }
-            ++int_8
         }
-
         // Hot Bar
-        int_8 = 0
-        while (int_8 < 9) {
-            this.addSlot(Slot(playerInventory, int_8, 8 + int_8 * 18, 161 + int_3))
-            ++int_8
+        for (c in 0 until 9) {
+            this.addSlot(Slot(playerInventory, c, 8 + c * 18, 161 + twiceInventorySize))
         }
     }
 
@@ -86,7 +73,7 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
     // See ShulkerBoxContainer
     override fun transferSlot(player: PlayerEntity?, slotNum: Int): ItemStack {
         var itemStackCopy = ItemStack.EMPTY
-        val activeSlot = this.slotList[slotNum] as Slot
+        val activeSlot = this.slotList[slotNum]
         if (activeSlot.hasStack()) {// Slot is not empty
             val itemStack = activeSlot.stack
             itemStackCopy = itemStack.copy()
@@ -108,8 +95,8 @@ class Cont2(containerType : ContainerType<*>?, syncId : Int, private val player 
         return itemStackCopy
     }
 
-    override fun onSlotClick(int_1: Int, int_2: Int, slotActionType: SlotActionType?, player: PlayerEntity?): ItemStack {
-        return if (int_1 > 0 && this.getSlot(int_1).stack == player?.getStackInHand(hand)){
+    override fun onSlotClick(int_1: Int, int_2: Int, slotActionType: SlotActionType, player: PlayerEntity): ItemStack {
+        return if (int_1 > 0 && this.getSlot(int_1).stack == player.getStackInHand(hand)){
             ItemStack.EMPTY
         } else {
             super.onSlotClick(int_1, int_2, slotActionType, player)
