@@ -12,17 +12,16 @@ import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.PacketByteBuf
 
-class BContainer(containerType : ContainerType<*>?,
-                 syncId : Int,
-     private val player : PlayerEntity,
-                 inventory : Inventory?,
-     private val buf: PacketByteBuf) :
-        GenericContainer(containerType, syncId, player.inventory, inventory, 6) {
+class BContainer(containerType: ContainerType<*>?,
+                 syncId: Int,
+                 player: PlayerEntity,
+                 inventory: Inventory) :
+        GenericContainer(containerType, syncId, player.inventory, inventory, (inventory.invSize).div(9)) {
 
     constructor(syncId : Int, player : PlayerEntity, buf: PacketByteBuf) :
-            this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(54), buf)
+            this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(buf.readInt()*9))
 
-    private val playerInventory : PlayerInventory = player.inventory
+    // Get the hand
     private val hand : Hand? = if (player.getStackInHand(Hand.MAIN_HAND).item is Backpack && player.getStackInHand(Hand.MAIN_HAND).count == 1){
         Hand.MAIN_HAND
     }else{
@@ -31,7 +30,7 @@ class BContainer(containerType : ContainerType<*>?,
     private val stack: ItemStack =  player.getStackInHand(hand)
 
     init {
-        val inventoryList = DefaultedList.ofSize(54, ItemStack.EMPTY);
+        val inventoryList = DefaultedList.ofSize(this.inventory.invSize, ItemStack.EMPTY);
         val compoundTag = stack.getSubTag("Items")
         if (compoundTag != null){
             Inventories.fromTag(compoundTag, inventoryList)

@@ -16,12 +16,12 @@ import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class Backpack(modId: String, name: String, settings : Settings) :
+class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
         Item(modId, name, settings){
-    constructor(modId : String, itemName : String) :
-            this(modId, itemName, Settings().group(VanillaItemGroup.MISC))
-    constructor(modId : String, itemName : String, group : ItemGroup) :
-            this(modId, itemName, Settings().group(group.getGroup()))
+    constructor(modId : String, itemName : String, rows : Int) :
+            this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
+    constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
+            this(modId, itemName, rows, Settings().group(group.getGroup()))
 
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
@@ -46,7 +46,9 @@ class Backpack(modId: String, name: String, settings : Settings) :
                 }
             }
             // Open inventory
+            if (this.rows < 1 || this.rows > 6) this.rows = 6
             ContainerProviderRegistry.INSTANCE.openContainer(containerId, player) { buf ->
+                buf.writeInt(this.rows)
                 buf.writeString(itemStack.name.string)
             }
 
