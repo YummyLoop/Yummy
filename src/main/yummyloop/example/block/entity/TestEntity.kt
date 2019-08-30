@@ -10,7 +10,7 @@ import java.util.function.Supplier
 
 class TestEntity : BlockEntity(type) {
     companion object Register {
-        private var blocks = asList(Items.blockA)
+        private var blocks = listOf(Items.blockA)
         private val supplier = Supplier { TestEntity() }
         private const val name = "tutorial:example_block_entity"
 
