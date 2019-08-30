@@ -16,7 +16,8 @@ import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class Backpack(modId: String, name: String, settings : Settings) : Item(modId, name, settings){
+class Backpack(modId: String, name: String, settings : Settings) :
+        Item(modId, name, settings){
     constructor(modId : String, itemName : String) :
             this(modId, itemName, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, group : ItemGroup) :
@@ -34,10 +35,17 @@ class Backpack(modId: String, name: String, settings : Settings) : Item(modId, n
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
         if (world.isClient) return TypedActionResult(ActionResult.PASS, player.getStackInHand(hand))
 
-        //player.setCurrentHand(hand)
         val itemStack = player.getStackInHand(hand)
 
         return if (itemStack.count == 1) {
+
+            // Fix name swap // minecraft tries to use items in both hands
+            if (hand == Hand.OFF_HAND && player.getStackInHand(Hand.MAIN_HAND).item is Backpack) {
+                if (player.getStackInHand(Hand.MAIN_HAND).count == 1) {
+                    return TypedActionResult(ActionResult.FAIL, itemStack)
+                }
+            }
+            // Open inventory
             ContainerProviderRegistry.INSTANCE.openContainer(containerId, player) { buf ->
                 buf.writeString(itemStack.name.string)
             }
