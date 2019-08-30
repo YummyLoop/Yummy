@@ -28,13 +28,12 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
         val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
-
-        @Environment(EnvType.CLIENT)
-        object client{
-            val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
-            open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                    ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
-        }
+    }
+    @Environment(EnvType.CLIENT)
+    object Client{
+        val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
+        open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
+                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
     }
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {

@@ -23,6 +23,12 @@
         "adapter": "kotlin",
         "value": "yummyloop.example.ExampleMod"
       }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "yummyloop.example.ExampleModClient"
+      }
     ]
   },
   "mixins": [
