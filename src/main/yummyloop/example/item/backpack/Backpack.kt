@@ -1,5 +1,7 @@
 package yummyloop.example.item.backpack
 
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
@@ -26,10 +28,13 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
         val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
-        val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
 
-        open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
+        @Environment(EnvType.CLIENT)
+        object client{
+            val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
+            open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
+                    ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
+        }
     }
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
