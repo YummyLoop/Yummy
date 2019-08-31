@@ -15,7 +15,7 @@ object Items {
    @JvmField val blockItemA = BlockItem("tutorial", "example_block", blockA, groupA)
 
     val backpack = Backpack("example", "ring", 6, groupA)
-    val itemP = Item("example", "portal", groupA)
+    //val itemP = Item("example", "portal", groupA)
 
     init {
         this.itemX.addTooltip("item.tutorial.fabric_item.tooltip")
