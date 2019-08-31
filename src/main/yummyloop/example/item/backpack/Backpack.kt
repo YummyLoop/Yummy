@@ -25,6 +25,10 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
             this(modId, itemName, rows, Settings().group(group.getGroup()))
 
+    init {
+        this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }
+    }
+
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
         val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
@@ -56,6 +60,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
                 buf.writeString(itemStack.name.string)
             }
 
+            player.setCurrentHand(hand)
             TypedActionResult(ActionResult.SUCCESS, itemStack)
         } else {
             TypedActionResult(ActionResult.FAIL, itemStack)
@@ -75,7 +80,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     }
 
     override fun getMaxUseTime(itemStack_1: ItemStack?): Int {
-        return 20
+        return 0
     }
 
     override fun onStoppedUsing(itemStack_1: ItemStack?, world_1: World?, livingEntity_1: LivingEntity?, int_1: Int) {
