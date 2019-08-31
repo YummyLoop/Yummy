@@ -1,8 +1,8 @@
 {
 	"credit": "Made by YummyLoop",
 	"textures": {
-		"0": "example:item/portal",
-		"particle": "minecraft:block/obsidian"
+		"0": "minecraft:block/nether_portal",
+		"particle": "minecraft:block/nether_portal"
 	},
 	"elements": [
 		{
@@ -27,8 +27,7 @@
 			"scale": [0.3, 0.3, 0.3]
 		},
 		"gui": {
-			"rotation": [90, 0, 0],
-			"scale": [1.1, 1.1, 1.1]
+			"rotation": [90, 0, 0]
 		}
 	}
 }
