@@ -13,6 +13,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import yummyloop.example.block.Block
 import net.minecraft.item.BlockItem as VanillaBlockItem
+import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class BlockItem : VanillaBlockItem {
     private val tooltip = ArrayList<Text>()
@@ -25,7 +26,7 @@ class BlockItem : VanillaBlockItem {
 
     // ModId, Name
     constructor(modId: String, itemName: String) :
-            this(modId, itemName, Settings().group(net.minecraft.item.ItemGroup.MISC), Block.Settings.of(Material.AIR))
+            this(modId, itemName, Settings().group(VanillaItemGroup.MISC), Block.of(Material.AIR))
 
     // ModId, Name, ItemSettings, Block
     constructor(modId: String, itemName: String, itemSettings: Settings, block: Block) :
