@@ -2,24 +2,29 @@ package yummyloop.example.item.backpack
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
+import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.Items as VanillaItems
 import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
+import yummyloop.example.item.Items
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings){
+        Item(modId, name, settings), DyeableItem {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -35,6 +40,16 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     }
     @Environment(EnvType.CLIENT)
     object Client{
+        val colorProvider = ColorProviderRegistry.ITEM.register(
+                ItemColorProvider { itemStack, layer ->
+                    if(layer != 1){
+                        0
+                    }else{
+                        (itemStack.item as DyeableItem).getColor(itemStack)
+                    }
+                },
+                Items.backpack
+        )
         val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
                 ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
