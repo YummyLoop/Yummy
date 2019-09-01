@@ -1,0 +1,47 @@
+{
+	"parent": "builtin/entity",
+	"credit": "Made by YummyLoop",
+	"textures": {
+		"particle": "minecraft:block/obsidian"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, 0],
+			"scale": [0.05, 0.05, 0.05]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, 0],
+			"scale": [0.05, 0.05, 0.05]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, 0],
+			"scale": [0.05, 0.05, 0.05]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, 0],
+			"scale": [0.05, 0.05, 0.05]
+		},
+		"ground": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, 0],
+			"scale": [0.05, 0.05, 0.05]
+		},
+		"gui": {
+			"rotation": [0, 125, -90],
+			"translation": [-3.5, 0, 0],
+			"scale": [0.5, 1, 0.5]
+		},
+		"fixed": {
+			"rotation": [0, 90, -90],
+			"translation": [0, -0.2, -0.5],
+			"scale": [0.05, 0.05, 0.05]
+		}
+	},
+	"overrides": [
+		{ "predicate": {"using": 1}, "model": "example:item/portal"}
+	]
+}

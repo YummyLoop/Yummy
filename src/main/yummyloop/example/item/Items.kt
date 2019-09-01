@@ -12,9 +12,10 @@ object Items {
    @JvmField val itemX = Item("tutorial", "fabric_item", groupA)
 
    @JvmField val blockA = Block("tutorial", "example_block", Block.Settings.of(Material.METAL).lightLevel(10))
-   @JvmField val blockItemA = BlockItem("tutorial", "example_block", blockA, groupA)
+   @JvmField val blockItemA = BlockItem("tutorial", "example_block", blockA)
 
     val backpack = Backpack("example", "ring", 6, groupA)
+    val backpack2 = Backpack("example", "ring2", 5, groupA)
     //val itemP = Item("example", "portal", groupA)
 
     init {
