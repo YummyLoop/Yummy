@@ -1,37 +1,37 @@
-package yummyloop.example.block;
+package yummyloop.example.block.entity;
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings;
 import net.minecraft.block.Material;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
-public class Block extends net.minecraft.block.Block {
+public class BlockE extends net.minecraft.block.Block {
 
     public static class Settings extends FabricBlockSettings{
-        protected Settings(Block base) {
+        protected Settings(BlockE base) {
             super(base);
         }
     }
 
-    public Block(FabricBlockSettings settings){
+    public BlockE(FabricBlockSettings settings){
         super(settings.build());
     }
 
-    public Block() {
+    public BlockE() {
         this(Settings.of(Material.AIR));
     }
 
-    public Block(String modid, String itemName){
+    public BlockE(String modid, String itemName){
         this();
         register(modid, itemName);
     }
 
-    public Block(String modid, String itemName, Material material){
+    public BlockE(String modid, String itemName, Material material){
         this(Settings.of(material));
         register(modid, itemName);
     }
 
-    public Block(String modid, String itemName, FabricBlockSettings settings){
+    public BlockE(String modid, String itemName, FabricBlockSettings settings){
         this(settings);
         register(modid, itemName);
     }
