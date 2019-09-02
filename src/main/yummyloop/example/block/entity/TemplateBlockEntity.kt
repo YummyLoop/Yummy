@@ -8,9 +8,9 @@ import net.minecraft.util.registry.Registry
 import yummyloop.example.item.Items
 import java.util.function.Supplier
 
-class TestEntity : BlockEntity(type) {
+class TemplateBlockEntity : BlockEntity(type) {
     companion object Register {
-        private val supplier = Supplier { TestEntity() } // Supplier
+        private val supplier = Supplier { TemplateBlockEntity() } // Supplier
         private var blocks = listOf(Items.blockA)   // List of blocks to apply the entity to
         private val id = Identifier("tutorial", "example_block_entity")
 
