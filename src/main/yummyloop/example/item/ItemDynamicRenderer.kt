@@ -10,6 +10,8 @@ import net.minecraft.item.Items as VanillaItems
 
 @Environment(EnvType.CLIENT)
 object ItemDynamicRenderer {
+    //val list =
+
     fun render(stack: ItemStack, info: CallbackInfo){
         // Todo: Add custom item renders here
         when (stack.item){

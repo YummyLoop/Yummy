@@ -15,7 +15,6 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import yummyloop.example.block.BlockWithEntity
 import net.minecraft.block.BlockState
-import net.minecraft.block.BlockRenderLayer
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.entity.EntityContext
@@ -29,9 +28,12 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
 
     //-------------------------------------------------
     //Block entity stuff
-    @Environment(EnvType.CLIENT)
-    object Client{
-        private val rederer = BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
+
+    companion object {
+        @Environment(EnvType.CLIENT)
+        fun client() {
+            BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
+        }
     }
 
     override fun createBlockEntity(blockView: BlockView): BlockEntity? {

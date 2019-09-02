@@ -8,6 +8,7 @@ import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
+import net.minecraft.client.render.entity.model.ShieldEntityModel
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
@@ -36,24 +37,38 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
     companion object{
         val containerId = Identifier("tutorial", "backpack1")
-        val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
-    }
-    @Environment(EnvType.CLIENT)
-    object Client{ // Needs to be initialized in the ClientModInitializer
-        val colorProvider = ColorProviderRegistry.ITEM.register(
-                ItemColorProvider { itemStack, layer ->
-                    if(layer != 1){
-                        0
-                    }else{
-                        (itemStack.item as DyeableItem).getColor(itemStack)
-                    }
-                },
-                Items.backpack
-        )
-        val screen = ScreenProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> Screen(syncId, player, buf) }
+        init {
+            ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
+        }
+
+        @Environment(EnvType.CLIENT)
+        fun client() { // Needs to be initialized in the ClientModInitializer
+            ColorProviderRegistry.ITEM.register(
+                    ItemColorProvider { itemStack, layer ->
+                        if(layer != 1){
+                            0
+                        }else{
+                            (itemStack.item as DyeableItem).getColor(itemStack)
+                        }
+                    },
+                    Items.backpack
+            )
+
+            ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {
+                syncId, _, player, buf -> Screen(syncId, player, buf)
+            }
+        }
+
+        @Environment(EnvType.CLIENT)
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
                 ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
+
+        @Environment(EnvType.CLIENT)
+        fun render(stack: ItemStack){
+            ShieldEntityModel().renderItem()
+        }
     }
+
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
         if (world.isClient) return TypedActionResult(ActionResult.PASS, player.getStackInHand(hand))
