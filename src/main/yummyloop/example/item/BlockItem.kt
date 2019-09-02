@@ -12,6 +12,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import yummyloop.example.block.Block
+import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.BlockItem as VanillaBlockItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
@@ -29,13 +30,13 @@ class BlockItem : VanillaBlockItem {
             this(modId, itemName, Settings().group(VanillaItemGroup.MISC), Block.of(Material.AIR))
 
     // ModId, Name, ItemSettings, Block
-    constructor(modId: String, itemName: String, itemSettings: Settings, block: Block) :
+    constructor(modId: String, itemName: String, itemSettings: Settings, block: VanillaBlock) :
             super(block, itemSettings) {
         register(modId, itemName)
     }
 
     // ModId, Name, Block
-    constructor(modId: String, itemName: String, block: Block) :
+    constructor(modId: String, itemName: String, block: VanillaBlock) :
             this(modId, itemName, Settings().group(net.minecraft.item.ItemGroup.MISC), block)
 
     // Register name
