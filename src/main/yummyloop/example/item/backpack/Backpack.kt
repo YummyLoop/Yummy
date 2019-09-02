@@ -39,7 +39,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         val provider = ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
     }
     @Environment(EnvType.CLIENT)
-    object Client{
+    object Client{ // Needs to be initialized in the ClientModInitializer
         val colorProvider = ColorProviderRegistry.ITEM.register(
                 ItemColorProvider { itemStack, layer ->
                     if(layer != 1){
