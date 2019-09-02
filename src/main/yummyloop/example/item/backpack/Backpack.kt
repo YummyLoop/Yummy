@@ -54,8 +54,6 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
             ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {
                 syncId, _, player, buf -> Screen(syncId, player, buf)
             }
-
-            ItemDynamicRenderer.list.add(Items.backpack2)
         }
 
         @Environment(EnvType.CLIENT)
