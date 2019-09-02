@@ -36,10 +36,6 @@ class TemplateBlockEntityRenderer :
 
         model.method_17070(0F, 0F, 0.0625f)
         GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f)
-        GlStateManager.popMatrix()
-
-
-        /*GlStateManager.pushMatrix();
 
         // Calculate the current offset in the y value
         val offset = sin((blockEntity.world!!.time + partialTicks) / 8.0) / 4.0
@@ -53,8 +49,8 @@ class TemplateBlockEntityRenderer :
         GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (light and 0xFFFF).toFloat(), (light shr 16 and 0xFFFF).toFloat())
 
         MinecraftClient.getInstance().itemRenderer.renderItem(stack, ModelTransformation.Type.GROUND);
+        //end of jukebox
 
-        // Mandatory call after GL calls
-        GlStateManager.popMatrix();*/
+        GlStateManager.popMatrix()
     }
 }

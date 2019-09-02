@@ -16,6 +16,9 @@ import net.minecraft.world.World
 import yummyloop.example.block.BlockWithEntity
 import net.minecraft.block.BlockState
 import net.minecraft.block.BlockRenderLayer
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.block.Block as VanillaBlock
+import net.minecraft.entity.EntityContext
 
 class TemplateBlockWithEntity constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
         BlockWithEntity(modId, itemName, settings) {
@@ -51,8 +54,7 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
        return BlockRenderType.MODEL
     }
 
-    override fun getRenderLayer(): BlockRenderLayer {
-        return BlockRenderLayer.TRANSLUCENT
+    override fun getOutlineShape(blockState_1: BlockState?, blockView_1: BlockView?, blockPos_1: BlockPos?, entityContext_1: EntityContext?): VoxelShape {
+        return VanillaBlock.createCuboidShape(1.0, 0.0, 1.0, 15.0, 20.0, 15.0)
     }
-
 }
