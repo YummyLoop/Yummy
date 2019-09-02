@@ -2,24 +2,21 @@ package yummyloop.example.item
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.client.render.entity.model.ShieldEntityModel
 import net.minecraft.item.ItemStack
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
-import yummyloop.example.item.backpack.Backpack
-import net.minecraft.item.Items as VanillaItems
 
-@Environment(EnvType.CLIENT)
 object ItemDynamicRenderer {
-    //val list =
+    val list = mutableListOf<Any>()
 
+    @Environment(EnvType.CLIENT)
     fun render(stack: ItemStack, info: CallbackInfo){
-        // Todo: Add custom item renders here
-        when (stack.item){
-            is Backpack ->  ShieldEntityModel().renderItem()
-            else -> {
-                return
-            }
+        val i : Int = list.indexOf(stack.item)
+        if(i > -1) { // -1 if not found
+            (list[i] as Rend).render(stack)
+        } else {
+            return
         }
+
         //BlockEntityRenderDispatcher.INSTANCE.renderEntity(EnderChestBlockEntity())
         info.cancel()
     }

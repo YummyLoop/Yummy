@@ -14,18 +14,15 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
-import net.minecraft.item.Items as VanillaItems
 import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import yummyloop.example.item.Item
-import yummyloop.example.item.ItemGroup
-import yummyloop.example.item.Items
+import yummyloop.example.item.*
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem {
+        Item(modId, name, settings), DyeableItem, Rend {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -35,7 +32,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }
     }
 
-    companion object{
+    companion object {
         val containerId = Identifier("tutorial", "backpack1")
         init {
             ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
@@ -57,18 +54,21 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
             ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {
                 syncId, _, player, buf -> Screen(syncId, player, buf)
             }
+
+            ItemDynamicRenderer.list.add(Items.backpack2)
         }
 
         @Environment(EnvType.CLIENT)
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
                 ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
-
-        @Environment(EnvType.CLIENT)
-        fun render(stack: ItemStack){
-            ShieldEntityModel().renderItem()
-        }
     }
 
+    @Environment(EnvType.CLIENT)
+    override fun render(stack: ItemStack){
+        ShieldEntityModel().renderItem()
+    }
+
+    //---------------------------------------------------------
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {
         if (world.isClient) return TypedActionResult(ActionResult.PASS, player.getStackInHand(hand))
