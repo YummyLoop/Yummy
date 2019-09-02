@@ -9,11 +9,11 @@
     "Me!"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://?",
+    "sources": "https://git?"
   },
 
-  "license": "CC0-1.0",
+  "license": "?",
   "icon": "assets/example/icon.png",
 
   "environment": "*",
