@@ -30,4 +30,25 @@ interface CustomItemDynamicRenderer {
     fun bindTexture(id : Identifier?){
         MinecraftClient.getInstance().textureManager.bindTexture(id)
     }
+
+    @Environment(EnvType.CLIENT)
+    fun rgb(red : Float, green: Float, blue : Float, alpha: Float){
+        GlStateManager.color4f(red, green, blue,alpha)
+    }
+    @Environment(EnvType.CLIENT)
+    fun rgb(rgb : Triple<Float, Float, Float>, alpha: Float){
+        GlStateManager.color4f(rgb.first, rgb.second, rgb.third,alpha)
+    }
+
+    fun toRGB(color : Int) : Triple<Float, Float, Float>{
+        val red = (color shr 16 and 255).toFloat() / 255.0f
+        val green = (color shr 8 and 255).toFloat() / 255.0f
+        val blue = (color and 255).toFloat() / 255.0f
+        return Triple(red, green, blue)
+    }
+
+    @Environment(EnvType.CLIENT)
+    fun clearCurrentColor(){
+        GlStateManager.clearCurrentColor()
+    }
 }

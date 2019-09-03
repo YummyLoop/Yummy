@@ -72,18 +72,20 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     override fun render(stack: ItemStack){
         val banner = BannerBlockEntity()
         val model = ShieldEntityModel()
-        if (stack.getSubTag("BlockEntityTag") != null) {
+        if (stack.getSubTag("BlockEntityTag") != null) {// Banner
             banner.deserialize(stack, ShieldItem.getColor(stack))
             bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
         } else {
+            rgb(toRGB(getColor(stack)), 1F)
             bindTexture(TextureCache.DEFAULT_SHIELD)
+            clearCurrentColor()
         }
         GlStateManager.pushMatrix()
         GlStateManager.scalef(1.0f, -1.0f, -1.0f)
         model.renderItem()
-        //if (stack.hasEnchantmentGlint()) {
+        if (stack.hasEnchantmentGlint()) {
             renderEnchantmentGlint(Runnable { model.renderItem() })
-        //}
+        }
 
         GlStateManager.popMatrix()
     }
