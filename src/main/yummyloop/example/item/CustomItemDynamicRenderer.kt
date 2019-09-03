@@ -8,6 +8,11 @@ import net.minecraft.client.render.item.ItemRenderer
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 
+/* Requires :
+ * "parent": "builtin/entity"
+ * in the model.json
+ * and enableRender()
+ */
 interface CustomItemDynamicRenderer {
     @Environment(EnvType.CLIENT)
     fun render(stack: ItemStack)

@@ -47,9 +47,9 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
         @Environment(EnvType.CLIENT)
         fun client(vararg items : VanillaItem) { // Needs to be initialized in the ClientModInitializer
-            ColorProviderRegistry.ITEM.register(
+            ColorProviderRegistry.ITEM.register(// Only works for "parent": "item/generated" / that is flat textures
                     ItemColorProvider { itemStack, layer ->
-                        if(layer != 1){
+                        if(layer != 0){
                             0
                         }else{
                             (itemStack.item as DyeableItem).getColor(itemStack)
