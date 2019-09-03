@@ -8,17 +8,16 @@ import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BannerBlockEntity
+import net.minecraft.client.MinecraftClient
 import net.minecraft.client.color.item.ItemColorProvider
+import net.minecraft.client.color.item.ItemColors
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.client.render.item.ItemRenderer.renderGlint
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.texture.TextureCache
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.DyeableItem
-import net.minecraft.item.ItemStack
-import net.minecraft.item.ItemUsageContext
-import net.minecraft.item.ShieldItem
+import net.minecraft.item.*
 import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
@@ -52,7 +51,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
             ColorProviderRegistry.ITEM.register(// Only works for "parent": "item/generated" / that is flat textures
                     ItemColorProvider { itemStack, layer ->
                         if(layer != 0){
-                            0
+                            -1
                         }else{
                             (itemStack.item as DyeableItem).getColor(itemStack)
                         }

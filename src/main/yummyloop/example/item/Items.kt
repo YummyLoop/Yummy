@@ -15,8 +15,8 @@ object Items {
    @JvmField val blockA = TemplateBlockWithEntity("tutorial", "example_blockrender", Block.of(Material.METAL).lightLevel(10))
    @JvmField val blockItemA = BlockItem("tutorial", "example_blockrender", blockA)
 
-    val backpack = Backpack("example", "ring", 6, groupA)
-    val backpack2 = Backpack("example", "ring2", 5, groupA)
+    @JvmField val backpack = Backpack("example", "ring", 6, groupA)
+    @JvmField val backpack2 = Backpack("example", "ring2", 5, groupA)
     //val itemP = Item("example", "portal", groupA)
 
     init {
