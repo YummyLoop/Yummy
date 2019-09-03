@@ -20,9 +20,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import yummyloop.example.item.*
 import net.minecraft.item.ItemGroup as VanillaItemGroup
+import net.minecraft.item.Item as VanillaItem
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem, Rend {
+        Item(modId, name, settings), DyeableItem, CustomItemDynamicRenderer {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -39,7 +40,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         }
 
         @Environment(EnvType.CLIENT)
-        fun client() { // Needs to be initialized in the ClientModInitializer
+        fun client(vararg items : VanillaItem) { // Needs to be initialized in the ClientModInitializer
             ColorProviderRegistry.ITEM.register(
                     ItemColorProvider { itemStack, layer ->
                         if(layer != 1){
@@ -48,7 +49,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
                             (itemStack.item as DyeableItem).getColor(itemStack)
                         }
                     },
-                    Items.backpack
+                    *items
             )
 
             ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {

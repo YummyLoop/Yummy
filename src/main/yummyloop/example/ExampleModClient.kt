@@ -9,7 +9,7 @@ import yummyloop.example.item.backpack.Backpack
 class ExampleModClient : ClientModInitializer {
     override fun onInitializeClient() {
         // Init Backpack client
-        Backpack.client()
+        Backpack.client(Items.backpack)
         TemplateBlockWithEntity.client()
     }
 }

@@ -12,7 +12,7 @@ object ItemDynamicRenderer {
     fun render(stack: ItemStack, info: CallbackInfo){
         val i : Int = list.indexOf(stack.item)
         if(i > -1) { // -1 if not found
-            (list[i] as Rend).render(stack)
+            (list[i] as CustomItemDynamicRenderer).render(stack)
         } else {
             return
         }
