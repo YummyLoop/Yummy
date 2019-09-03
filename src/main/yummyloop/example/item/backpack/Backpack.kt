@@ -25,6 +25,7 @@ import net.minecraft.world.World
 import yummyloop.example.item.CustomItemDynamicRenderer
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
+import yummyloop.example.item.Model1
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
@@ -71,17 +72,19 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     @Environment(EnvType.CLIENT)
     override fun render(stack: ItemStack){
         val banner = BannerBlockEntity()
-        val model = ShieldEntityModel()
+        //val model = ShieldEntityModel()
+        val model = Model1()
         if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
             banner.deserialize(stack, ShieldItem.getColor(stack))
             bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
         } else {
             rgb(toRGB(getColor(stack)), 1F)
-            bindTexture(TextureCache.DEFAULT_SHIELD)
+            //bindTexture(TextureCache.DEFAULT_SHIELD)
+            bindTexture(Identifier("example","textures/item/ring32x32.png"))
             clearCurrentColor()
         }
         GlStateManager.pushMatrix()
-        GlStateManager.scalef(1.0f, -1.0f, -1.0f)
+        //GlStateManager.scalef(1.0f, -1.0f, -1.0f)
         model.renderItem()
         if (stack.hasEnchantmentGlint()) {
             renderEnchantmentGlint(Runnable { model.renderItem() })
