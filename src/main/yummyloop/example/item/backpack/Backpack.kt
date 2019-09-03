@@ -10,6 +10,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
+import net.minecraft.client.render.item.ItemRenderer.renderGlint
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.texture.TextureCache
 import net.minecraft.entity.LivingEntity
@@ -71,24 +72,23 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
     @Environment(EnvType.CLIENT)
     override fun render(stack: ItemStack, bakedModel : BakedModel){
-        val banner = BannerBlockEntity()
+        //val banner = BannerBlockEntity()
         //val model = ShieldEntityModel()
-        val model = Model1()
-        if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
-            banner.deserialize(stack, ShieldItem.getColor(stack))
-            bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
-        } else {
-            rgb(toRGB(getColor(stack)), 1F)
-            //bindTexture(TextureCache.DEFAULT_SHIELD)
-            bindTexture(Identifier("example","textures/item/ring32x32.png"))
-            clearCurrentColor()
-        }
+        //val model = Model1()
+        //if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
+        //    banner.deserialize(stack, ShieldItem.getColor(stack))
+        //    bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
+        //}
         GlStateManager.pushMatrix()
+
         //GlStateManager.scalef(1.0f, -1.0f, -1.0f)
-        model.renderItem()
-        if (stack.hasEnchantmentGlint()) {
-            renderEnchantmentGlint(Runnable { model.renderItem() })
-        }
+        //model.renderItem()
+
+        renderItem(stack, bakedModel, getColor(stack))
+        /*if (stack.hasEnchantmentGlint()) {
+            //renderGlint(this.textureManager, { this.renderModelWithTint(bakedModel, -8372020) }, 8)
+            //renderEnchantmentGlint(Runnable { model.renderItem() })
+        }*/
 
         GlStateManager.popMatrix()
     }
