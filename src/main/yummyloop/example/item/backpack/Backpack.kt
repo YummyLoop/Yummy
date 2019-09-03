@@ -72,7 +72,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     override fun render(stack: ItemStack){
         val banner = BannerBlockEntity()
         val model = ShieldEntityModel()
-        if (stack.getSubTag("BlockEntityTag") != null) {// Banner
+        if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
             banner.deserialize(stack, ShieldItem.getColor(stack))
             bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
         } else {
