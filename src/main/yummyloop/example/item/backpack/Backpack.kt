@@ -1,26 +1,32 @@
 package yummyloop.example.item.backpack
 
+import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
+import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.client.render.entity.model.ShieldEntityModel
+import net.minecraft.client.texture.TextureCache
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
+import net.minecraft.item.ShieldItem
 import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import yummyloop.example.item.*
-import net.minecraft.item.ItemGroup as VanillaItemGroup
+import yummyloop.example.item.CustomItemDynamicRenderer
+import yummyloop.example.item.Item
+import yummyloop.example.item.ItemGroup
 import net.minecraft.item.Item as VanillaItem
+import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
         Item(modId, name, settings), DyeableItem, CustomItemDynamicRenderer {
@@ -64,7 +70,22 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
     @Environment(EnvType.CLIENT)
     override fun render(stack: ItemStack){
-        ShieldEntityModel().renderItem()
+        val banner = BannerBlockEntity()
+        val model = ShieldEntityModel()
+        if (stack.getSubTag("BlockEntityTag") != null) {
+            banner.deserialize(stack, ShieldItem.getColor(stack))
+            bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
+        } else {
+            bindTexture(TextureCache.DEFAULT_SHIELD)
+        }
+        GlStateManager.pushMatrix()
+        GlStateManager.scalef(1.0f, -1.0f, -1.0f)
+        model.renderItem()
+        //if (stack.hasEnchantmentGlint()) {
+            renderEnchantmentGlint(Runnable { model.renderItem() })
+        //}
+
+        GlStateManager.popMatrix()
     }
 
     //---------------------------------------------------------
