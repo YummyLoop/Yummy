@@ -1,5 +1,4 @@
 {
-	"parent": "builtin/entity",
 	"credit": "Made by YummyLoop",
 	"textures": {
 		"layer0": "example:item/ring",

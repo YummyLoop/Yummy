@@ -2,17 +2,18 @@ package yummyloop.example.item
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.minecraft.client.render.model.BakedModel
 import net.minecraft.item.ItemStack
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 
-object ItemDynamicRenderer {
+object ItemRenderer {
     val list = mutableListOf<Any>()
 
     @Environment(EnvType.CLIENT)
-    fun render(stack: ItemStack, info: CallbackInfo){
+    fun render(stack: ItemStack, bakedModel: BakedModel, info: CallbackInfo){
         val i : Int = list.indexOf(stack.item)
         if(i > -1) { // -1 if not found
-            (list[i] as CustomItemDynamicRenderer).render(stack)
+            (list[i] as CustomItemRenderer).render(stack, bakedModel)
         } else {
             return
         }

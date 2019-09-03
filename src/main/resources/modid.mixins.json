@@ -6,7 +6,7 @@
   ],
   "client": [
     "ExampleMixin",
-    "ItemDynamicRenderer"
+    "ItemRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

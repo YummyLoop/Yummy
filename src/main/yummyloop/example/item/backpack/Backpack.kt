@@ -10,7 +10,7 @@ import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BannerBlockEntity
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
-import net.minecraft.client.render.entity.model.ShieldEntityModel
+import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.texture.TextureCache
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -22,7 +22,7 @@ import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import yummyloop.example.item.CustomItemDynamicRenderer
+import yummyloop.example.item.CustomItemRenderer
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Model1
@@ -30,7 +30,7 @@ import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem, CustomItemDynamicRenderer {
+        Item(modId, name, settings), DyeableItem, CustomItemRenderer {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -70,7 +70,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     }
 
     @Environment(EnvType.CLIENT)
-    override fun render(stack: ItemStack){
+    override fun render(stack: ItemStack, bakedModel : BakedModel){
         val banner = BannerBlockEntity()
         //val model = ShieldEntityModel()
         val model = Model1()
