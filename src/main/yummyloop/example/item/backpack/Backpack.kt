@@ -1,36 +1,29 @@
 package yummyloop.example.item.backpack
 
-import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BannerBlockEntity
-import net.minecraft.client.MinecraftClient
 import net.minecraft.client.color.item.ItemColorProvider
-import net.minecraft.client.color.item.ItemColors
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
-import net.minecraft.client.render.item.ItemRenderer.renderGlint
-import net.minecraft.client.render.model.BakedModel
-import net.minecraft.client.texture.TextureCache
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.item.*
+import net.minecraft.item.DyeableItem
+import net.minecraft.item.ItemStack
+import net.minecraft.item.ItemUsageContext
 import net.minecraft.text.LiteralText
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import yummyloop.example.item.CustomItemRenderer
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
-import yummyloop.example.item.Model1
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem, CustomItemRenderer {
+        Item(modId, name, settings), DyeableItem/*, BuiltInItemModel*/ {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -69,10 +62,11 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
                 ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
     }
 
+    /*
     @Environment(EnvType.CLIENT)
     override fun render(stack: ItemStack, bakedModel : BakedModel){
         //val banner = BannerBlockEntity()
-        //val model = ShieldEntityModel()
+        val model = ShieldEntityModel()
         //val model = Model1()
         //if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
         //    banner.deserialize(stack, ShieldItem.getColor(stack))
@@ -81,9 +75,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         GlStateManager.pushMatrix()
 
         //GlStateManager.scalef(1.0f, -1.0f, -1.0f)
-        //model.renderItem()
-
-        renderItem(stack, bakedModel, getColor(stack))
+        model.renderItem()
         /*if (stack.hasEnchantmentGlint()) {
             //renderGlint(this.textureManager, { this.renderModelWithTint(bakedModel, -8372020) }, 8)
             //renderEnchantmentGlint(Runnable { model.renderItem() })
@@ -91,7 +83,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
         GlStateManager.popMatrix()
     }
-
+*/
     //---------------------------------------------------------
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {

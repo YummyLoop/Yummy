@@ -21,7 +21,6 @@ object Items {
 
     init {
         this.itemX.addTooltip("item.tutorial.fabric_item.tooltip")
-        backpack2.enableRender()
     }
 
 }
