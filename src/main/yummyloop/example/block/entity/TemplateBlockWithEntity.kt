@@ -1,26 +1,25 @@
 package yummyloop.example.block.entity
 
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.minecraft.block.BlockRenderType
+import net.minecraft.block.BlockState
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.EntityContext
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
+import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import yummyloop.example.block.BlockWithEntity
-import net.minecraft.block.BlockState
-import net.minecraft.util.shape.VoxelShape
+import yummyloop.example.item.backpack.HasClient
 import net.minecraft.block.Block as VanillaBlock
-import net.minecraft.entity.EntityContext
 
 class TemplateBlockWithEntity constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
-        BlockWithEntity(modId, itemName, settings) {
+        BlockWithEntity(modId, itemName, settings), HasClient {
 
     // ModId, ItemName
     constructor(modId: String, itemName: String) :
@@ -28,10 +27,12 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
 
     //-------------------------------------------------
     //Block entity stuff
-
     companion object {
-        @Environment(EnvType.CLIENT)
-        fun client() {
+        var clientIni = false
+    }
+    override val client = {
+        if (!clientIni){
+            clientIni=true
             BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
         }
     }

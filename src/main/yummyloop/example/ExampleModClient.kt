@@ -1,14 +1,17 @@
 package yummyloop.example
 
 import net.fabricmc.api.ClientModInitializer
-import yummyloop.example.block.entity.TemplateBlockWithEntity
 import yummyloop.example.item.Items
-import yummyloop.example.item.backpack.Backpack
+import yummyloop.example.item.backpack.HasClient
 
 class ExampleModClient : ClientModInitializer {
     override fun onInitializeClient() {
-        // Init Backpack client
-        Backpack.client(Items.backpack2)
-        TemplateBlockWithEntity.client()
+        // Init items
+        for (i in Items.itemList) {
+            if (i.value is HasClient) {
+                (i.value as HasClient).client()
+            }
+        }
+        Items.blockA.client()
     }
 }

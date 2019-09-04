@@ -2,11 +2,9 @@ package yummyloop.example.item.backpack
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.block.BlockState
-import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -19,11 +17,10 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import yummyloop.example.item.Item
 import yummyloop.example.item.ItemGroup
-import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem/*, BuiltInItemModel*/ {
+        Item(modId, name, settings), DyeableItem , HasClient/*, BuiltInItemModel*/ {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -35,12 +32,16 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
 
     companion object {
         val containerId = Identifier("tutorial", "backpack1")
+        var clientIni = false
         init {
             ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
         }
+    }
 
-        @Environment(EnvType.CLIENT)
-        fun client(vararg items : VanillaItem) { // Needs to be initialized in the ClientModInitializer
+    override val client = { // Needs to be initialized in the ClientModInitializer
+        if (!clientIni) {
+            clientIni=true
+            /*
             ColorProviderRegistry.ITEM.register(// Only works for "parent": "item/generated" / that is flat textures
                     ItemColorProvider { itemStack, layer ->
                         if(layer != 0){
@@ -49,18 +50,17 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
                             (itemStack.item as DyeableItem).getColor(itemStack)
                         }
                     },
-                    *items
-            )
-
+                    Items.itemList["backpack"]
+            )*/
             ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {
                 syncId, _, player, buf -> Screen(syncId, player, buf)
             }
         }
-
-        @Environment(EnvType.CLIENT)
-        open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
     }
+
+    @Environment(EnvType.CLIENT)
+    open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
+            ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
 
     /*
     @Environment(EnvType.CLIENT)
