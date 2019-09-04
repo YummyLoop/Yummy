@@ -32,11 +32,14 @@ abstract class ItemRenderer {
 
     @Inject(at = [At("HEAD")], method = ["renderQuads"], cancellable = true)
     private fun onRenderQuads(bufferBuilder: BufferBuilder, bakedQuads: List<BakedQuad>, color0: Int, stack: ItemStack, info: CallbackInfo) {
-        var initialColor = color0
+        val initialColor: Int
 
         if(stack.item is DyeableItem) {
             initialColor = (stack.item as DyeableItem).getColor(stack)
+        } else {
+            return
         }
+
         val notEmpty = initialColor == -1 && !stack.isEmpty
 
         for (bakedQuad in bakedQuads) {
