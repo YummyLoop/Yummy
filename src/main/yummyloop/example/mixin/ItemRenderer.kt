@@ -7,6 +7,7 @@ import net.minecraft.client.render.model.BakedQuad
 import net.minecraft.item.DyeableItem
 import net.minecraft.client.render.item.ItemRenderer as VanillaItemRenderer
 import net.minecraft.item.ItemStack
+import net.minecraft.resource.SynchronousResourceReloadListener
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.injection.At
@@ -15,7 +16,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
 import yummyloop.example.item.BuiltInItemModel
 
 @Mixin(VanillaItemRenderer::class)
-abstract class ItemRenderer {
+abstract class ItemRenderer : SynchronousResourceReloadListener {
     @Shadow
     private var colorMap: ItemColors? = null
 
