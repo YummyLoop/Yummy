@@ -6,6 +6,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
 import yummyloop.example.item.backpack.HasClient
 import java.util.function.Supplier
@@ -16,7 +17,7 @@ class TemplateBlockEntity : BlockEntity(type){
         private var blocks = listOf(Items.blockA)   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
         init {
-            val id = Identifier("tutorial", "example_block_entity")
+            val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())
             Registry.register(Registry.BLOCK_ENTITY, id, type)
         }
 

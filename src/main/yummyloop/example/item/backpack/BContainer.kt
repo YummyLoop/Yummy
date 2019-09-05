@@ -5,9 +5,11 @@ import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
-import net.minecraft.container.*
+import net.minecraft.container.ContainerType
+import net.minecraft.container.GenericContainer
+import net.minecraft.container.Slot
+import net.minecraft.container.SlotActionType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
@@ -18,6 +20,7 @@ import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
+import yummyloop.example.ExampleMod
 
 class BContainer(
         containerType: ContainerType<*>?,
@@ -36,7 +39,7 @@ class BContainer(
             this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(buf.readInt()*9))
 
     companion object Register : HasClient {
-        val id = Identifier("tutorial", "backpack1")
+        val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())
         init {
             ContainerProviderRegistry.INSTANCE.registerFactory(id) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
         }

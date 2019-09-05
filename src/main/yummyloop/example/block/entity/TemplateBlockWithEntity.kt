@@ -1,7 +1,6 @@
 package yummyloop.example.block.entity
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings
-import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
 import net.minecraft.block.Material
@@ -15,7 +14,6 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import yummyloop.example.block.BlockWithEntity
-import yummyloop.example.item.backpack.HasClient
 import net.minecraft.block.Block as VanillaBlock
 
 class TemplateBlockWithEntity constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
@@ -35,8 +33,7 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
     override fun activate(blockState: BlockState, world: World, blockPos: BlockPos, player: PlayerEntity, hand: Hand, blockHitResult: BlockHitResult): Boolean {
         val blockEntity = world.getBlockEntity(blockPos)
         if (blockEntity is TemplateBlockEntity) {
-            val currentBlockEntity = blockEntity as TemplateBlockEntity?
-            currentBlockEntity!!.number = 11
+            blockEntity.number = 11
             println("HAS entity")
         }
 

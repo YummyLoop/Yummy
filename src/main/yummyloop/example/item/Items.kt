@@ -6,6 +6,7 @@ import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.container.Container
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemConvertible
+import yummyloop.example.ExampleMod
 import yummyloop.example.block.Block
 import yummyloop.example.block.entity.TemplateBlockEntity
 import yummyloop.example.block.entity.TemplateBlockWithEntity
@@ -20,17 +21,17 @@ object Items {
     @JvmField val containerList = mutableMapOf<String, Any>()
     @JvmField val blockEntityList = mutableMapOf<String, Any>()
 
-   @JvmField val blockA = TemplateBlockWithEntity("tutorial", "example_blockrender", Block.of(Material.METAL).lightLevel(10))
+   @JvmField val blockA = TemplateBlockWithEntity(ExampleMod.id, "example_blockrender", Block.of(Material.METAL).lightLevel(10))
 
     init {
-        groupList["groupA"] = ItemGroup("tutorial", "hello1", Vanilla.ANVIL)
+        groupList["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
 
-        itemList["itemX"] = Item("tutorial", "fabric_item", groupList["groupA"]!!)
-        itemList["backpack"] = Backpack("example", "ring", 6, groupList["groupA"]!!)
-        itemList["backpack2"] = Backpack("example", "ring2", 5, groupList["groupA"]!!)
-        itemList["blockItemA"] = BlockItem("tutorial", "example_blockrender", blockA)
+        itemList["itemX"] = Item(ExampleMod.id, "fabric_item", groupList["groupA"]!!)
+        itemList["backpack"] = Backpack(ExampleMod.id, "ring", 6, groupList["groupA"]!!)
+        itemList["backpack2"] = Backpack(ExampleMod.id, "ring2", 5, groupList["groupA"]!!)
+        itemList["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", blockA)
 
-        (itemList["itemX"] as Item).addTooltip("item.tutorial.fabric_item.tooltip")
+        (itemList["itemX"] as Item).addTooltip("item.example.fabric_item.tooltip")
 
 
         containerList["backpack"] = BContainer

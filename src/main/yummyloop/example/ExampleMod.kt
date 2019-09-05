@@ -7,7 +7,9 @@ import yummyloop.example.item.Items
 import yummyloop.example.util.Logger
 
 class ExampleMod : ModInitializer {
-
+    companion object {
+        const val id : String = "example"
+    }
     private val logger: Logger = Logger("LoggerTest")
 
     override fun onInitialize() = runBlocking {
