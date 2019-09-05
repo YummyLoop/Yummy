@@ -38,7 +38,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         }
     }
 
-    override val client = { // Needs to be initialized in the ClientModInitializer
+    override fun client () { // Needs to be initialized in the ClientModInitializer
         if (!clientIni) {
             clientIni=true
             /*

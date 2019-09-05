@@ -30,7 +30,7 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
     companion object {
         var clientIni = false
     }
-    override val client = {
+    override fun client () {
         if (!clientIni){
             clientIni=true
             BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
