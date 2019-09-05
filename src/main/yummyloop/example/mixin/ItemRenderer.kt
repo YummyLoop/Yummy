@@ -23,6 +23,9 @@ abstract class ItemRenderer : SynchronousResourceReloadListener {
     @Shadow
     abstract fun renderQuad(bufferBuilder_1: BufferBuilder, bakedQuad_1: BakedQuad, int_1: Int)
 
+    @Shadow
+    abstract fun renderModel(bakedModel_1: BakedModel, int_1: Int, itemStack_1: ItemStack)
+
     @Inject(at = [At("HEAD")], method = ["renderItemAndGlow"], cancellable = true)
     private fun onRender(stack: ItemStack, bakedModel: BakedModel, info: CallbackInfo) {
         if (stack.item is BuiltInItemModel){
@@ -31,26 +34,17 @@ abstract class ItemRenderer : SynchronousResourceReloadListener {
         }
     }
 
-    @Inject(at = [At("HEAD")], method = ["renderQuads"], cancellable = true)
-    private fun onRenderQuads(bufferBuilder: BufferBuilder, bakedQuads: List<BakedQuad>, color0: Int, stack: ItemStack, info: CallbackInfo) {
-        val initialColor: Int
+    @Inject(at = [At("HEAD")], method = ["renderItemModel"], cancellable = true)
+    private fun onRenderItemModel(bakedModel : BakedModel, stack : ItemStack, info: CallbackInfo) {
+        val color: Int
 
         if(stack.item is DyeableItem) {
-            initialColor = (stack.item as DyeableItem).getColor(stack)
+            color = (stack.item as DyeableItem).getColor(stack)
         } else {
             return
         }
 
-        val notEmpty = initialColor == -1 && !stack.isEmpty
-
-        for (bakedQuad in bakedQuads) {
-            var color = initialColor
-            if (notEmpty && bakedQuad.hasColor()) {
-                color = this.colorMap!!.getColorMultiplier(stack, bakedQuad.colorIndex)
-                color = color or -16777216
-            }
-            this.renderQuad(bufferBuilder, bakedQuad, color)
-        }
+        this.renderModel(bakedModel, color, stack)
 
         info.cancel()
     }
