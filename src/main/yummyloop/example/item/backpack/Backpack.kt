@@ -20,7 +20,7 @@ import yummyloop.example.item.ItemGroup
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem , HasClient, RenderHand/*, BuiltInItemModel*/ {
+        Item(modId, name, settings), DyeableItem , RenderHand/*, BuiltInItemModel*/ {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
@@ -29,38 +29,6 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
     init {
         this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }
     }
-
-    companion object {
-        val containerId = Identifier("tutorial", "backpack1")
-        var clientIni = false
-        init {
-            ContainerProviderRegistry.INSTANCE.registerFactory(containerId) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
-        }
-    }
-
-    override fun client () { // Needs to be initialized in the ClientModInitializer
-        if (!clientIni) {
-            clientIni=true
-            /*
-            ColorProviderRegistry.ITEM.register(// Only works for "parent": "item/generated" / that is flat textures
-                    ItemColorProvider { itemStack, layer ->
-                        if(layer != 0){
-                            -1
-                        }else{
-                            (itemStack.item as DyeableItem).getColor(itemStack)
-                        }
-                    },
-                    Items.itemList["backpack"]
-            )*/
-            ScreenProviderRegistry.INSTANCE.registerFactory(containerId) {
-                syncId, _, player, buf -> Screen(syncId, player, buf)
-            }
-        }
-    }
-
-    @Environment(EnvType.CLIENT)
-    open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-            ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
 
     /*
     @Environment(EnvType.CLIENT)
@@ -101,7 +69,7 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
             }
             // Open inventory
             if (this.rows < 1 || this.rows > 6) this.rows = 6
-            ContainerProviderRegistry.INSTANCE.openContainer(containerId, player) { buf ->
+            ContainerProviderRegistry.INSTANCE.openContainer(BContainer.id, player) { buf ->
                 buf.writeInt(this.rows)
                 buf.writeString(itemStack.name.string)
             }

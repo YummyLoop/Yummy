@@ -12,7 +12,6 @@ import java.util.function.Supplier
 
 class TemplateBlockEntity : BlockEntity(type){
     companion object Register : HasClient  {
-        var clientIni = false
         private val supplier = Supplier { TemplateBlockEntity() } // Supplier
         private var blocks = listOf(Items.blockA)   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
@@ -21,6 +20,7 @@ class TemplateBlockEntity : BlockEntity(type){
             Registry.register(Registry.BLOCK_ENTITY, id, type)
         }
 
+        private var clientIni = false
         override fun client () {
             if (!clientIni){
                 clientIni=true
