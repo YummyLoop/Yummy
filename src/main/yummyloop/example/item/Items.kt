@@ -1,6 +1,7 @@
 package yummyloop.example.item
 
 import net.minecraft.block.Material
+import net.minecraft.item.ItemConvertible
 import yummyloop.example.block.Block
 import yummyloop.example.block.entity.TemplateBlockWithEntity
 import yummyloop.example.item.backpack.Backpack
@@ -8,7 +9,7 @@ import net.minecraft.item.Items as Vanilla
 import net.minecraft.item.Item as VanillaItem
 
 object Items {
-    @JvmField val itemList = mutableMapOf<String, VanillaItem>()
+    @JvmField val itemList = mutableMapOf<String, ItemConvertible>()
     @JvmField val groupList = mutableMapOf<String, ItemGroup>()
 
    @JvmField val blockA = TemplateBlockWithEntity("tutorial", "example_blockrender", Block.of(Material.METAL).lightLevel(10))
