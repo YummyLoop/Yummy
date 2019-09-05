@@ -19,7 +19,7 @@ import yummyloop.example.item.backpack.HasClient
 import net.minecraft.block.Block as VanillaBlock
 
 class TemplateBlockWithEntity constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
-        BlockWithEntity(modId, itemName, settings), HasClient {
+        BlockWithEntity(modId, itemName, settings) {
 
     // ModId, ItemName
     constructor(modId: String, itemName: String) :
@@ -27,16 +27,6 @@ class TemplateBlockWithEntity constructor(modId: String, itemName: String, setti
 
     //-------------------------------------------------
     //Block entity stuff
-    companion object {
-        var clientIni = false
-    }
-    override fun client () {
-        if (!clientIni){
-            clientIni=true
-            BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
-        }
-    }
-
     override fun createBlockEntity(blockView: BlockView): BlockEntity? {
         println("Created entity")
         return TemplateBlockEntity()

@@ -1,6 +1,7 @@
 package yummyloop.example
 
 import net.fabricmc.api.ClientModInitializer
+import yummyloop.example.block.entity.TemplateBlockEntity
 import yummyloop.example.item.Items
 import yummyloop.example.item.backpack.HasClient
 
@@ -12,6 +13,6 @@ class ExampleModClient : ClientModInitializer {
                 (i.value as HasClient).client()
             }
         }
-        Items.blockA.client()
+        TemplateBlockEntity.client()
     }
 }
