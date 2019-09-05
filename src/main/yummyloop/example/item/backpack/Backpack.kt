@@ -20,7 +20,7 @@ import yummyloop.example.item.ItemGroup
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem , HasClient/*, BuiltInItemModel*/ {
+        Item(modId, name, settings), DyeableItem , HasClient, RenderHand/*, BuiltInItemModel*/ {
     constructor(modId : String, itemName : String, rows : Int) :
             this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
     constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :

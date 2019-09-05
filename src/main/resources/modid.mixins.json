@@ -6,7 +6,8 @@
   ],
   "client": [
     "ExampleMixin",
-    "ItemRenderer"
+    "ItemRenderer",
+    "FirstPersonRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
