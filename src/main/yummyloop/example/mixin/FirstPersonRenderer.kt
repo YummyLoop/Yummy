@@ -37,7 +37,7 @@ abstract class FirstPersonRenderer {
             val mainHand = hand == Hand.MAIN_HAND
             val arm = if (mainHand) playerEntity.mainArm else playerEntity.mainArm.opposite
 
-            if (mainHand && !playerEntity.isInvisible) {
+            if (!playerEntity.isInvisible) {
                 GlStateManager.pushMatrix()
                 this.renderArmHoldingItem(handSwapProgress, handSwingProgress, arm)
                 GlStateManager.popMatrix()
