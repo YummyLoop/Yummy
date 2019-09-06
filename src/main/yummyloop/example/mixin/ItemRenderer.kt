@@ -34,6 +34,7 @@ abstract class ItemRenderer : SynchronousResourceReloadListener {
         }
     }
 
+    /* //Redundant implementation minecraft already does it with tintindex
     @Inject(at = [At("HEAD")], method = ["renderItemModel"], cancellable = true)
     private fun onRenderItemModel(bakedModel : BakedModel, stack : ItemStack, info: CallbackInfo) {
         val color: Int
@@ -47,5 +48,5 @@ abstract class ItemRenderer : SynchronousResourceReloadListener {
         this.renderModel(bakedModel, color, stack)
 
         info.cancel()
-    }
+    }*/
 }

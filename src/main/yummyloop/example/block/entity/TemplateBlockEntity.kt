@@ -14,7 +14,7 @@ import java.util.function.Supplier
 class TemplateBlockEntity : BlockEntity(type){
     companion object Register : HasClient  {
         private val supplier = Supplier { TemplateBlockEntity() } // Supplier
-        private var blocks = listOf(Items.blockA)   // List of blocks to apply the entity to
+        private var blocks = listOf(Items.blocks["blockA"]!!)   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
         init {
             val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())

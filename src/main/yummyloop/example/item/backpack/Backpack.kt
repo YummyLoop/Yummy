@@ -30,28 +30,6 @@ class Backpack(modId: String, name: String, var rows : Int, settings : Settings)
         this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }
     }
 
-    /*
-    @Environment(EnvType.CLIENT)
-    override fun render(stack: ItemStack, bakedModel : BakedModel){
-        //val banner = BannerBlockEntity()
-        val model = ShieldEntityModel()
-        //val model = Model1()
-        //if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
-        //    banner.deserialize(stack, ShieldItem.getColor(stack))
-        //    bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
-        //}
-        GlStateManager.pushMatrix()
-
-        //GlStateManager.scalef(1.0f, -1.0f, -1.0f)
-        model.renderItem()
-        /*if (stack.hasEnchantmentGlint()) {
-            //renderGlint(this.textureManager, { this.renderModelWithTint(bakedModel, -8372020) }, 8)
-            //renderEnchantmentGlint(Runnable { model.renderItem() })
-        }*/
-
-        GlStateManager.popMatrix()
-    }
-*/
     //---------------------------------------------------------
 
     override fun use(world: World, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack?> {

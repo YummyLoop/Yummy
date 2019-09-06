@@ -46,3 +46,26 @@ interface BuiltInItemModel {
         GlStateManager.clearCurrentColor()
     }
 }
+
+/*
+@Environment(EnvType.CLIENT)
+override fun render(stack: ItemStack, bakedModel : BakedModel){
+    //val banner = BannerBlockEntity()
+    val model = ShieldEntityModel()
+    //val model = Model1()
+    //if (stack.getSubTag("BlockEntityTag") != null) {// Banner ... not done yet
+    //    banner.deserialize(stack, ShieldItem.getColor(stack))
+    //    bindTexture(TextureCache.SHIELD.get(banner.patternCacheKey, banner.patterns, banner.patternColors))
+    //}
+    GlStateManager.pushMatrix()
+
+    //GlStateManager.scalef(1.0f, -1.0f, -1.0f)
+    model.renderItem()
+    /*if (stack.hasEnchantmentGlint()) {
+        //renderGlint(this.textureManager, { this.renderModelWithTint(bakedModel, -8372020) }, 8)
+        //renderEnchantmentGlint(Runnable { model.renderItem() })
+    }*/
+
+    GlStateManager.popMatrix()
+}
+*/
