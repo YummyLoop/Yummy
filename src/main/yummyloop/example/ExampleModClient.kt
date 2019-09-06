@@ -34,7 +34,7 @@ class ExampleModClient : ClientModInitializer {
     }
 
     private fun registerDyeableItem (item : ItemConvertible){
-        ColorProviderRegistry.ITEM.register(// json model require a "tintindex" while 2d uses the texture layer
+        ColorProviderRegistry.ITEM.register(// json model requires a "tintindex" while 2d uses the texture layer
                 ItemColorProvider { itemStack, layer ->
                     if(layer != 0){
                         -1
