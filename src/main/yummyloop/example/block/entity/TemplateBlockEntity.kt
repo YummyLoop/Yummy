@@ -1,8 +1,17 @@
 package yummyloop.example.block.entity
 
+import com.mojang.blaze3d.platform.GLX
+import com.mojang.blaze3d.platform.GlStateManager
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.render.block.entity.BellModel
+import net.minecraft.client.render.block.entity.BlockEntityRenderer
+import net.minecraft.client.render.model.json.ModelTransformation
+import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
@@ -10,6 +19,8 @@ import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
 import yummyloop.example.item.backpack.HasClient
 import java.util.function.Supplier
+import kotlin.math.sin
+import net.minecraft.item.Items as VanillaItems
 
 class TemplateBlockEntity : BlockEntity(type){
     companion object Register : HasClient  {
@@ -25,7 +36,7 @@ class TemplateBlockEntity : BlockEntity(type){
         override fun client () {
             if (!clientIni){
                 clientIni=true
-                BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, TemplateBlockEntityRenderer())
+                BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, Renderer())
             }
         }
     }
@@ -52,5 +63,43 @@ class TemplateBlockEntity : BlockEntity(type){
         super.fromTag(tag)
         number = tag.getInt("number")
         println(number)
+    }
+}
+
+@Environment(EnvType.CLIENT)
+private class Renderer :
+        BlockEntityRenderer<TemplateBlockEntity>() {
+    companion object{
+        private val stack = ItemStack(VanillaItems.JUKEBOX, 1)
+
+        private val BELL_BODY_TEXTURE = Identifier("textures/entity/bell/bell_body.png")
+        private val model = BellModel()
+    }
+
+    override fun render(blockEntity: TemplateBlockEntity, x: Double, y: Double, z: Double, partialTicks: Float, destroyStage: Int) {
+
+        GlStateManager.pushMatrix()
+        GlStateManager.enableRescaleNormal()
+        this.bindTexture(BELL_BODY_TEXTURE)
+        GlStateManager.translatef(x.toFloat(), y.toFloat(), z.toFloat())
+
+        model.method_17070(0F, 0F, 0.0625f)
+        GlStateManager.color4f(1.0f, 1.0f, 1.0f, 1.0f)
+
+        // Calculate the current offset in the y value
+        val offset = sin((blockEntity.world!!.time + partialTicks) / 8.0) / 4.0
+        // Move the item
+        GlStateManager.translated(x + 0.5, y + 1.25 + offset, z + 0.5)
+
+        // Rotate the item
+        GlStateManager.rotatef((blockEntity.world!!.time + partialTicks) * 4, 0f, 1f, 0f)
+
+        val light = blockEntity.world!!.getLightmapIndex(blockEntity.pos.up(), 0)
+        GLX.glMultiTexCoord2f(GLX.GL_TEXTURE1, (light and 0xFFFF).toFloat(), (light shr 16 and 0xFFFF).toFloat())
+
+        MinecraftClient.getInstance().itemRenderer.renderItem(stack, ModelTransformation.Type.GROUND);
+        //end of jukebox
+
+        GlStateManager.popMatrix()
     }
 }
