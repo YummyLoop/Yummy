@@ -3,12 +3,12 @@ package yummyloop.example.mixin
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.LivingEntityRenderer
-import net.minecraft.client.render.entity.feature.ArmorBipedFeatureRenderer
 import net.minecraft.client.render.entity.model.PlayerEntityModel
 import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
+import yummyloop.example.client.render.SpecialArmorFeatureRenderer
 import yummyloop.example.client.render.entity.SpecialBipedEntityModel
 import net.minecraft.client.render.entity.PlayerEntityRenderer as VanillaPlayerEntityRenderer
 
@@ -19,6 +19,6 @@ abstract class PlayerEntityRenderer( entityRenderDispatcher : EntityRenderDispat
     @Inject(at = [At("RETURN")], method = ["<init>(Lnet/minecraft/client/render/entity/EntityRenderDispatcher;Z)V"], cancellable = true)
     private fun onPlayerEntityRenderer(entityRenderDispatcher : EntityRenderDispatcher, boolean : Boolean, info: CallbackInfo) {
         // Default legs 0.5F, boots/chest/helmet 1F
-        //this.addFeature(ArmorBipedFeatureRenderer(this, SpecialBipedEntityModel(0.5f), SpecialBipedEntityModel(1.0f)))
+        this.addFeature(SpecialArmorFeatureRenderer(this, SpecialBipedEntityModel(0.5f), SpecialBipedEntityModel(1.0f)))
     }
 }

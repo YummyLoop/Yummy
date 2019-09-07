@@ -1,6 +1,8 @@
 package yummyloop.example.item
 
 import net.minecraft.block.Material
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.ItemConvertible
 import yummyloop.example.ExampleMod
 import yummyloop.example.block.Block
@@ -24,12 +26,12 @@ object Items {
 
         groups["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
 
-        items["itemX"] = Item(ExampleMod.id, "fabric_item", groups["groupA"]!!)
+        items["itemX"] = SpecialArmorItem(ExampleMod.id, "fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
         items["backpack"] = Backpack(ExampleMod.id, "ring", 6, groups["groupA"]!!)
         items["backpack2"] = Backpack(ExampleMod.id, "ring2", 5, groups["groupA"]!!)
         items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", blocks["blockA"]!!)
 
-        (items["itemX"] as Item).addTooltip("item.example.fabric_item.tooltip")
+        (items["itemX"] as SpecialArmorItem).addTooltip("item.example.fabric_item.tooltip")
 
         containers["backpack"] = BContainer
         blockEntities["backpack"] = TemplateBlockEntity
