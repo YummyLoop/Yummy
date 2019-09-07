@@ -9,6 +9,7 @@ import net.minecraft.client.render.model.json.Transformation
 import net.minecraft.client.util.math.Vector3f
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
+import kotlin.math.abs
 
 class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRotationOffset : Float, textureWidth : Int, textureHeight : Int) : BipedEntityModel<T>(){
     constructor(): this(0.0f)
@@ -81,7 +82,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     }
 
     private fun renderHead(player: T, slot: EquipmentSlot){
-        val part = headwear
+        val part = head
 
         GlStateManager.pushMatrix()
 
@@ -89,24 +90,20 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
             GlStateManager.translatef(0.0F, 0.2F, 0.0F)
         }
 
-        //Reference point / left / down / ?
-        val default = 0.0625F
-        GlStateManager.translatef(part.rotationPointX * default, part.rotationPointY * default, part.rotationPointZ * default)
-        //GlStateManager.rotatef(part.pitch * rad, 1f, 0f, 0f)
-        GlStateManager.rotatef(part.yaw * rad, 0f, 1f, 0f) // is right
-        GlStateManager.rotatef(part.roll * rad, 0f, 0f, 1f) //is right
-
-        GlStateManager.translatef(0F, -0.25F, 0F)
+        GlStateManager.translatef(0F, -0.3F, 0F)
         GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
 
-        // Transformation - negate the effects of the head reference y
-        val transformation = Transformation(
-                Vector3f(0F,0F,0F), //rotation
-                Vector3f(0F,0F,0F), //translation / ?, up, ?
-                Vector3f(1F,1F,1F) //scale
-        )
-        ModelTransformation.applyGl(transformation,false)
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F, -part.yaw * rad,0F),
+                /*translation  */Vector3f(0F,0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
 
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(-part.pitch * rad, 0F,0F),
+                /*translation  */Vector3f(0F, abs(part.pitch) * -0.3F, -part.pitch * 0.3F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
 
         MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
 
