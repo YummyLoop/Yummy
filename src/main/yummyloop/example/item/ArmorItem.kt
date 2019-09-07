@@ -13,7 +13,7 @@ import net.minecraft.world.World
 import net.minecraft.item.ArmorItem as VanillaArmorItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class ArmorItem(modId : String, itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot,  settings : Settings) :
+open class ArmorItem(modId : String, itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot, settings : Settings) :
         VanillaArmorItem(armorMaterial, equipmentSlot, settings) {
     private val tooltip = ArrayList<Text>()
 
