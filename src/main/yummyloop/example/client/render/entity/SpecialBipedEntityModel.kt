@@ -28,9 +28,11 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
                 renderHead(player,slot)
             }
             EquipmentSlot.CHEST -> {
+                renderChest(player, slot)
 
             }
             EquipmentSlot.LEGS -> {
+                renderRightLeg(player, slot,true)
 
             }
             EquipmentSlot.FEET -> {
@@ -87,7 +89,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
         GlStateManager.pushMatrix()
 
         if (player.isInSneakingPose) {
-            GlStateManager.translatef(0.0F, 0.2F, 0.0F)
+            GlStateManager.translatef(0.0F, 0.25F, 0.0F)
         }
 
         GlStateManager.translatef(0F, -0.3F, 0F)
@@ -102,6 +104,41 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
         ModelTransformation.applyGl(Transformation(
                 /*rotation     */Vector3f(-part.pitch * rad, 0F,0F),
                 /*translation  */Vector3f(0F, abs(part.pitch) * -0.3F, -part.pitch * 0.3F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
+
+        GlStateManager.popMatrix()
+    }
+
+    private fun renderChest(player: T, slot: EquipmentSlot){
+        val part = body
+
+        GlStateManager.pushMatrix()
+
+        if (player.isInSneakingPose) {
+            GlStateManager.translatef(0.0F, 0.25F, -0.1F)
+        }
+
+        GlStateManager.translatef(0F, -0.25F, 0F)
+        GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F, -part.yaw * rad,0F),
+                /*translation  */Vector3f(0F,0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(-part.pitch * rad, 0F,0F),
+                /*translation  */Vector3f(0F, 0F, 0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F, 0F,-part.roll * rad),
+                /*translation  */Vector3f(0F, 0F, 0F),
                 /*scale        */Vector3f(1F,1F,1F)
         ),false)
 
