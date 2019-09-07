@@ -8,7 +8,9 @@
     "ExampleMixin",
     "ItemRenderer",
     "FirstPersonRenderer",
-    "StaticMobEntity"
+    "StaticMobEntity",
+    "PlayerEntityRenderer",
+    "ArmorFeatureRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
