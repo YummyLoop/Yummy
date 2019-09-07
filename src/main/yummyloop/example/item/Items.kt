@@ -10,6 +10,7 @@ import yummyloop.example.item.backpack.BContainer
 import yummyloop.example.item.backpack.Backpack
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.Items as Vanilla
+import net.minecraft.item.Item.Settings as ItemSettings
 
 object Items {
     @JvmField val items = mutableMapOf<String, ItemConvertible>()
