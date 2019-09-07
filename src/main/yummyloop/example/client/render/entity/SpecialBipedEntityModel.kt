@@ -15,7 +15,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     constructor(scale: Float): this(scale, 0.0f, 64, 32)
 
     companion object {
-        private const val rad = 57.29578F
+        private const val rad = 57.295776F
     }
 
     // Render method
@@ -81,7 +81,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     }
 
     private fun renderHead(player: T, slot: EquipmentSlot){
-        val part = head
+        val part = headwear
 
         GlStateManager.pushMatrix()
 
@@ -90,11 +90,23 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
         }
 
         //Reference point / left / down / ?
+        val default = 0.0625F
+        GlStateManager.translatef(part.rotationPointX * default, part.rotationPointY * default, part.rotationPointZ * default)
+        //GlStateManager.rotatef(part.pitch * rad, 1f, 0f, 0f)
+        GlStateManager.rotatef(part.yaw * rad, 0f, 1f, 0f) // is right
+        GlStateManager.rotatef(part.roll * rad, 0f, 0f, 1f) //is right
+
         GlStateManager.translatef(0F, -0.25F, 0F)
-        GlStateManager.rotatef(part.pitch* rad, 1f, 0f, 0f)
-        GlStateManager.rotatef(part.yaw* rad, 0f, 1f, 0f)
-        GlStateManager.rotatef(part.roll* rad, 0f, 0f, 1f)
-        GlStateManager.scalef(0.625f, -0.625f, 0.625f) // Default head scale
+        GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
+
+        // Transformation - negate the effects of the head reference y
+        val transformation = Transformation(
+                Vector3f(0F,0F,0F), //rotation
+                Vector3f(0F,0F,0F), //translation / ?, up, ?
+                Vector3f(1F,1F,1F) //scale
+        )
+        ModelTransformation.applyGl(transformation,false)
+
 
         MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
 

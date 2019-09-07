@@ -27,6 +27,9 @@ object Items {
         groups["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
 
         items["itemX"] = SpecialArmorItem(ExampleMod.id, "fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
+        items["hat"] = SpecialArmorItem(ExampleMod.id, "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD, ItemSettings())
+
+
         items["backpack"] = Backpack(ExampleMod.id, "ring", 6, groups["groupA"]!!)
         items["backpack2"] = Backpack(ExampleMod.id, "ring2", 5, groups["groupA"]!!)
         items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", blocks["blockA"]!!)
