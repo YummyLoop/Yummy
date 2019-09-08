@@ -25,7 +25,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
 
         when (slot) {
             EquipmentSlot.HEAD -> {
-                renderHead(player,slot)
+                renderA(player, head, scale, slot)
             }
             EquipmentSlot.CHEST -> {
                 //renderChest(player, slot)
@@ -84,35 +84,6 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
         GlStateManager.popMatrix()
     }
 
-    private fun renderHead(player: T, slot: EquipmentSlot){
-        val part = head
-
-        GlStateManager.pushMatrix()
-
-        if (player.isInSneakingPose) {
-            GlStateManager.translatef(0.0F, 0.25F, 0.0F)
-        }
-
-        GlStateManager.translatef(0F, -0.3F, 0F)
-        GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(0F, -part.yaw * rad,0F),
-                /*translation  */Vector3f(0F,0F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(-part.pitch * rad, 0F,0F),
-                /*translation  */Vector3f(0F, abs(part.pitch) * -0.3F, -part.pitch * 0.3F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-
-        MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
-
-        GlStateManager.popMatrix()
-    }
-
     private fun renderChest(player: T, slot: EquipmentSlot){
         val part = body
 
@@ -151,6 +122,10 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     private fun renderA(player: T, part : Cuboid, scale: Float, slot: EquipmentSlot) {
         glMatrix {
             GlStateManager.translatef(part.x, part.y, part.z)
+
+            if (player.isInSneakingPose) {
+                GlStateManager.translatef(0.0f, 0.2f, 0.0f)
+            }
 
             if (part.pitch == 0.0f && part.yaw == 0.0f && part.roll == 0.0f) {
                 if (part.rotationPointX == 0.0f && part.rotationPointY == 0.0f && part.rotationPointZ == 0.0f) {
