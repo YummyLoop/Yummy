@@ -21,6 +21,7 @@ import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
+import yummyloop.example.render.HasClient
 
 class BContainer(
         containerType: ContainerType<*>?,

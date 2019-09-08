@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
-import yummyloop.example.item.backpack.RenderHand
+import yummyloop.example.render.firstPerson.RenderHand
 
 @Mixin(VanillaFirstPersonRenderer::class)
 abstract class FirstPersonRenderer {

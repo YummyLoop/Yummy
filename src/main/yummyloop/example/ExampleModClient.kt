@@ -6,7 +6,7 @@ import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemConvertible
 import yummyloop.example.item.Items
-import yummyloop.example.item.backpack.HasClient
+import yummyloop.example.render.HasClient
 
 class ExampleModClient : ClientModInitializer {
     override fun onInitializeClient() {

@@ -17,13 +17,13 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
-import yummyloop.example.item.backpack.HasClient
+import yummyloop.example.render.HasClient
 import java.util.function.Supplier
 import kotlin.math.sin
 import net.minecraft.item.Items as VanillaItems
 
 class TemplateBlockEntity : BlockEntity(type){
-    companion object Register : HasClient  {
+    companion object Register : HasClient {
         private val supplier = Supplier { TemplateBlockEntity() } // Supplier
         private var blocks = listOf(Items.blocks["blockA"]!!)   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!

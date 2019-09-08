@@ -1,4 +1,4 @@
-package yummyloop.example.item.backpack
+package yummyloop.example.render
 
 interface HasClient {
     fun client()
