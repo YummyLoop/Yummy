@@ -20,8 +20,8 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     }
 
     // Render method
-    fun specialRender(player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, float_6: Float, slot: EquipmentSlot) {
-        this.method_17087(player, float_1, float_2, float_3, float_4, float_5, float_6)
+    fun specialRender(player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, scale: Float, slot: EquipmentSlot) {
+        this.method_17087(player, float_1, float_2, float_3, float_4, float_5, scale)
 
         when (slot) {
             EquipmentSlot.HEAD -> {
@@ -29,12 +29,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
             }
             EquipmentSlot.CHEST -> {
                 //renderChest(player, slot)
-                GlStateManager.pushMatrix()
-                //GlStateManager.rotatef(90F, 1f, 0f, 0f)
-                //GlStateManager.translatef(0.0F, 0.25F, -0.1F)
-
-                renderA(float_6, player, slot)
-                GlStateManager.popMatrix()
+                renderA(player, rightArm, scale, slot)
 
             }
             EquipmentSlot.LEGS -> {
@@ -153,64 +148,17 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
         GlStateManager.popMatrix()
     }
 
-    private fun renderArm(player: T, slot: EquipmentSlot){
-        val part = rightArm
-        val isSwimming = player.isSwimming
-        val swimming = if (isSwimming) -1 else 1
-
-        GlStateManager.pushMatrix()
-
-        if (player.isInSneakingPose) {
-            GlStateManager.translatef(0.0F, 0.25F, -0.1F)
-        }
-        if (player.isSwimming){
-            GlStateManager.rotatef(180F, 1f, 0f, 0f)
-        }
-
-        GlStateManager.scalef((-0.625f), (-0.625f), swimming * 0.625f)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(0F,-part.yaw * rad,0F),
-                /*translation  */Vector3f(0F,0F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(-part.pitch * rad , 0F,0F),
-                /*translation  */Vector3f(0F, 0F, 0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(0F, 0F,part.roll * rad * swimming),
-                /*translation  */Vector3f(0F, 0F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(0F, 0F,0F),
-                /*translation  */Vector3f(0F,0F,0F),
-                /*scale        */Vector3f(1f, 1f, 1f)
-        ),false)
-
-        MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
-
-        GlStateManager.popMatrix()
-    }
-
-    private fun renderA(scale: Float, player: T, slot: EquipmentSlot) {
-        val part = rightArm
-
+    private fun renderA(player: T, part : Cuboid, scale: Float, slot: EquipmentSlot) {
         glMatrix {
             GlStateManager.translatef(part.x, part.y, part.z)
 
             if (part.pitch == 0.0f && part.yaw == 0.0f && part.roll == 0.0f) {
                 if (part.rotationPointX == 0.0f && part.rotationPointY == 0.0f && part.rotationPointZ == 0.0f) {
-                    renderItem(scale, player, slot)
+                    renderItem(player, part, scale, slot)
                 } else {
                     glMatrix {
                         GlStateManager.translatef(part.rotationPointX * scale, part.rotationPointY * scale, part.rotationPointZ * scale)
-                        renderItem(scale, player, slot)
+                        renderItem(player, part, scale, slot)
                     }
                 }
             } else {
@@ -221,14 +169,13 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
                     if (part.yaw   != 0.0f) GlStateManager.rotatef(part.yaw * rad  , 0.0f, 1.0f, 0.0f)
                     if (part.pitch != 0.0f) GlStateManager.rotatef(part.pitch * rad, 1.0f, 0.0f, 0.0f)
 
-                    renderItem(scale, player, slot)
+                    renderItem(player, part, scale, slot)
                 }
             }
         }
     }
 
-    private fun renderItem(scale: Float, player: T, slot: EquipmentSlot){
-        val part = rightArm
+    private fun renderItem(player: T, part : Cuboid, scale: Float, slot: EquipmentSlot){
         glMatrix {
             // Fix part location
             GlStateManager.translatef(-part.rotationPointX * scale, -part.rotationPointY * scale, -part.rotationPointZ * scale)
