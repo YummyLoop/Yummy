@@ -1,7 +1,7 @@
-@file:JvmName("StaticMobEntity")
+@file:JvmName("Hat")
 @file:Mixin(MobEntity::class)
 
-package yummyloop.example.mixin
+package yummyloop.example.mixin.armor
 
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.mob.MobEntity

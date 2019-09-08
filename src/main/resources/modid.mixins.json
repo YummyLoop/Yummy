@@ -6,11 +6,11 @@
   ],
   "client": [
     "ExampleMixin",
-    "ItemRenderer",
-    "FirstPersonRenderer",
-    "StaticMobEntity",
-    "PlayerEntityRenderer",
-    "ArmorFeatureRenderer"
+    "render/ItemRenderer",
+    "render/FirstPersonRenderer",
+    "armor/Hat",
+    "render/PlayerEntityRenderer",
+    "armor/render/ArmorFeatureRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

@@ -1,4 +1,4 @@
-package yummyloop.example.item
+package yummyloop.example.item.models
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment

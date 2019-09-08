@@ -1,4 +1,4 @@
-package yummyloop.example.mixin
+package yummyloop.example.mixin.render
 
 import net.minecraft.client.network.AbstractClientPlayerEntity
 import net.minecraft.client.render.entity.EntityRenderDispatcher

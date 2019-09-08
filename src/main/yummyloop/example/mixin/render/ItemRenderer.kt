@@ -1,10 +1,9 @@
-package yummyloop.example.mixin
+package yummyloop.example.mixin.render
 
 import net.minecraft.client.color.item.ItemColors
 import net.minecraft.client.render.BufferBuilder
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.render.model.BakedQuad
-import net.minecraft.item.DyeableItem
 import net.minecraft.client.render.item.ItemRenderer as VanillaItemRenderer
 import net.minecraft.item.ItemStack
 import net.minecraft.resource.SynchronousResourceReloadListener
@@ -13,7 +12,7 @@ import org.spongepowered.asm.mixin.Shadow
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
-import yummyloop.example.item.BuiltInItemModel
+import yummyloop.example.item.models.BuiltInItemModel
 
 @Mixin(VanillaItemRenderer::class)
 abstract class ItemRenderer : SynchronousResourceReloadListener {

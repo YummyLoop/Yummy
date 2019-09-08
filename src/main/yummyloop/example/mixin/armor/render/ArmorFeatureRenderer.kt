@@ -1,4 +1,4 @@
-package yummyloop.example.mixin
+package yummyloop.example.mixin.armor.render
 
 import net.minecraft.client.render.entity.feature.FeatureRenderer
 import net.minecraft.client.render.entity.feature.FeatureRendererContext

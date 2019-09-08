@@ -1,4 +1,4 @@
-package yummyloop.example.mixin
+package yummyloop.example.mixin.render
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
