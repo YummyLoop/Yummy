@@ -193,7 +193,7 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
                 /*scale        */Vector3f(1f, 1f, 1f)
         ),false)
 
-        renderItem(player, slot)
+        MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
 
         GlStateManager.popMatrix()
     }
@@ -206,11 +206,11 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
 
             if (part.pitch == 0.0f && part.yaw == 0.0f && part.roll == 0.0f) {
                 if (part.rotationPointX == 0.0f && part.rotationPointY == 0.0f && part.rotationPointZ == 0.0f) {
-                    renderItem(player, slot)
+                    renderItem(scale, player, slot)
                 } else {
                     glMatrix {
                         GlStateManager.translatef(part.rotationPointX * scale, part.rotationPointY * scale, part.rotationPointZ * scale)
-                        renderItem(player, slot)
+                        renderItem(scale, player, slot)
                     }
                 }
             } else {
@@ -221,19 +221,27 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
                     if (part.yaw   != 0.0f) GlStateManager.rotatef(part.yaw * rad  , 0.0f, 1.0f, 0.0f)
                     if (part.pitch != 0.0f) GlStateManager.rotatef(part.pitch * rad, 1.0f, 0.0f, 0.0f)
 
-                    renderItem(player, slot)
+                    renderItem(scale, player, slot)
                 }
             }
         }
     }
 
-    private fun renderItem(player: T, slot: EquipmentSlot){
+    private fun renderItem(scale: Float, player: T, slot: EquipmentSlot){
+        val part = rightArm
         glMatrix {
-            //GlStateManager.translatef(0F, 0.25F, 0F)
-            //GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
-            GlStateManager.translatef(0.0f, -0.25f, 0.0f)
+
+            // Fix part location
+            GlStateManager.translatef(-part.rotationPointX * scale, -part.rotationPointY * scale, -part.rotationPointZ * scale)
+
+            // Defaults
+            GlStateManager.translatef(0F, -0.25F, 0F)
+            GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
+
+
+            /*GlStateManager.translatef(0.0f, -0.25f, 0.0f)
             GlStateManager.rotatef(180.0f, 0.0f, 1.0f, 0.0f)
-            GlStateManager.scalef(0.625f, -0.625f, -0.625f)
+            GlStateManager.scalef(0.625f, -0.625f, -0.625f)*/
             /*
         ModelTransformation.applyGl(Transformation(
                 /*rotation     */Vector3f(-90F,0F,0F),
