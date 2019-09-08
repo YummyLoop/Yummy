@@ -39,7 +39,12 @@ class ExampleModClient : ClientModInitializer {
                     if(layer != 0){
                         -1
                     }else{
-                        (itemStack.item as DyeableItem).getColor(itemStack)
+                        val color = (itemStack.item as DyeableItem).getColor(itemStack)
+                        if (color == 10511680) { // Default color when color was not found
+                            -1
+                        }else{
+                            color
+                        }
                     }
                 },
                 item
