@@ -34,7 +34,7 @@ object Items {
 
         items["backpack"] = Backpack(ExampleMod.id, "ring", 6, groups["groupA"]!!)
         items["backpack2"] = Backpack(ExampleMod.id, "ring2", 5, groups["groupA"]!!)
-        items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", blocks["blockA"]!!)
+        items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
 
         (items["itemX"] as SpecialArmorItem).addTooltip("item.example.fabric_item.tooltip")
 

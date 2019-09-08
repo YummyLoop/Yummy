@@ -1,4 +1,4 @@
-package yummyloop.example.client.render.entity
+package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.MinecraftClient
@@ -32,16 +32,16 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
             }
             EquipmentSlot.LEGS -> {
                 renderPart(player, rightLeg, scale, slot)
-                mirror=true
+                mirror = true
                 renderPart(player, leftLeg, scale, slot)
-                mirror=false
+                mirror = false
 
             }
             EquipmentSlot.FEET -> {
                 renderPart(player, rightLeg, scale, slot)
-                mirror=true
+                mirror = true
                 renderPart(player, leftLeg, scale, slot)
-                mirror=false
+                mirror = false
 
             }
             else -> {}
@@ -77,8 +77,8 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
                 glMatrix {
                     GlStateManager.translatef(part.rotationPointX * scale, part.rotationPointY * scale, part.rotationPointZ * scale)
 
-                    if (part.roll  != 0.0f) GlStateManager.rotatef(part.roll * rad  , 0.0f, 0.0f, 1.0f)
-                    if (part.yaw   != 0.0f) GlStateManager.rotatef(part.yaw * rad  , 0.0f, 1.0f, 0.0f)
+                    if (part.roll  != 0.0f) GlStateManager.rotatef(part.roll * rad, 0.0f, 0.0f, 1.0f)
+                    if (part.yaw   != 0.0f) GlStateManager.rotatef(part.yaw * rad, 0.0f, 1.0f, 0.0f)
                     if (part.pitch != 0.0f) GlStateManager.rotatef(part.pitch * rad, 1.0f, 0.0f, 0.0f)
 
                     renderItem(player, part, scale, slot)

@@ -8,8 +8,8 @@ import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo
-import yummyloop.example.client.render.SpecialArmorFeatureRenderer
-import yummyloop.example.client.render.entity.SpecialBipedEntityModel
+import yummyloop.example.item.armor.render.SpecialArmorFeatureRenderer
+import yummyloop.example.item.armor.render.SpecialBipedEntityModel
 import net.minecraft.client.render.entity.PlayerEntityRenderer as VanillaPlayerEntityRenderer
 
 @Mixin(VanillaPlayerEntityRenderer::class)

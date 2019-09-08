@@ -1,4 +1,4 @@
-package yummyloop.example.client.render
+package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.minecraft.client.render.entity.feature.ArmorBipedFeatureRenderer
@@ -6,7 +6,6 @@ import net.minecraft.client.render.entity.feature.FeatureRendererContext
 import net.minecraft.client.render.entity.model.BipedEntityModel
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
-import yummyloop.example.client.render.entity.SpecialBipedEntityModel
 import yummyloop.example.item.SpecialArmorItem
 
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>  (

@@ -10,11 +10,11 @@ import org.spongepowered.asm.mixin.Mixin
 import org.spongepowered.asm.mixin.injection.At
 import org.spongepowered.asm.mixin.injection.Inject
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable
-import yummyloop.example.client.render.HeadGear
+import yummyloop.example.item.armor.Hat
 
 @Inject(at = [At("HEAD")], method = ["getPreferredEquipmentSlot"], cancellable = true)
 private fun onGetPreferredEquipmentSlot(stack: ItemStack, cir: CallbackInfoReturnable<EquipmentSlot>) {
-    if (stack.item is HeadGear) {
+    if (stack.item is Hat) {
         cir.returnValue = EquipmentSlot.HEAD
     }
     return
