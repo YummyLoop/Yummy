@@ -31,9 +31,6 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
                 (this.model as BipedEntityModel<T>).setAttributes(model)
                 model.method_17086(livingEntity, float_1, float_2, float_3)
 
-                // Disables default model rendering
-                hideModel(model)
-
                 // Resets color
                 GlStateManager.color4f(1F, 1F, 1F, 1F)
 
@@ -46,8 +43,5 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
         }
     }
 
-    private fun hideModel(model : A) {
-        this.method_4190(model)
-    }
 }
 

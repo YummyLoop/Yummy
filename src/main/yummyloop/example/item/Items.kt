@@ -29,6 +29,7 @@ object Items {
         items["itemX"] = SpecialArmorItem(ExampleMod.id, "fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
         items["hat"] = SpecialArmorItem(ExampleMod.id, "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD, ItemSettings())
         items["chest"] = SpecialArmorItem(ExampleMod.id, "chest", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
+        items["arm"] = SpecialArmorItem(ExampleMod.id, "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
 
 
         items["backpack"] = Backpack(ExampleMod.id, "ring", 6, groups["groupA"]!!)

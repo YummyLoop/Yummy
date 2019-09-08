@@ -21,14 +21,20 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
 
     // Render method
     fun specialRender(player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, float_6: Float, slot: EquipmentSlot) {
-        super.method_17088(player, float_1, float_2, float_3, float_4, float_5, float_6)
+        this.method_17087(player, float_1, float_2, float_3, float_4, float_5, float_6)
 
         when (slot) {
             EquipmentSlot.HEAD -> {
                 renderHead(player,slot)
             }
             EquipmentSlot.CHEST -> {
-                renderChest(player, slot)
+                //renderChest(player, slot)
+                GlStateManager.pushMatrix()
+                //GlStateManager.rotatef(90F, 1f, 0f, 0f)
+                //GlStateManager.translatef(0.0F, 0.25F, -0.1F)
+
+                renderA(float_6, player, slot)
+                GlStateManager.popMatrix()
 
             }
             EquipmentSlot.LEGS -> {
@@ -144,6 +150,127 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
 
         MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
 
+        GlStateManager.popMatrix()
+    }
+
+    private fun renderArm(player: T, slot: EquipmentSlot){
+        val part = rightArm
+        val isSwimming = player.isSwimming
+        val swimming = if (isSwimming) -1 else 1
+
+        GlStateManager.pushMatrix()
+
+        if (player.isInSneakingPose) {
+            GlStateManager.translatef(0.0F, 0.25F, -0.1F)
+        }
+        if (player.isSwimming){
+            GlStateManager.rotatef(180F, 1f, 0f, 0f)
+        }
+
+        GlStateManager.scalef((-0.625f), (-0.625f), swimming * 0.625f)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F,-part.yaw * rad,0F),
+                /*translation  */Vector3f(0F,0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(-part.pitch * rad , 0F,0F),
+                /*translation  */Vector3f(0F, 0F, 0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F, 0F,part.roll * rad * swimming),
+                /*translation  */Vector3f(0F, 0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(0F, 0F,0F),
+                /*translation  */Vector3f(0F,0F,0F),
+                /*scale        */Vector3f(1f, 1f, 1f)
+        ),false)
+
+        renderItem(player, slot)
+
+        GlStateManager.popMatrix()
+    }
+
+    private fun renderA(scale: Float, player: T, slot: EquipmentSlot) {
+        val part = rightArm
+
+        glMatrix {
+            GlStateManager.translatef(part.x, part.y, part.z)
+
+            if (part.pitch == 0.0f && part.yaw == 0.0f && part.roll == 0.0f) {
+                if (part.rotationPointX == 0.0f && part.rotationPointY == 0.0f && part.rotationPointZ == 0.0f) {
+                    renderItem(player, slot)
+                } else {
+                    glMatrix {
+                        GlStateManager.translatef(part.rotationPointX * scale, part.rotationPointY * scale, part.rotationPointZ * scale)
+                        renderItem(player, slot)
+                    }
+                }
+            } else {
+                glMatrix {
+                    GlStateManager.translatef(part.rotationPointX * scale, part.rotationPointY * scale, part.rotationPointZ * scale)
+
+                    if (part.roll  != 0.0f) GlStateManager.rotatef(part.roll * rad  , 0.0f, 0.0f, 1.0f)
+                    if (part.yaw   != 0.0f) GlStateManager.rotatef(part.yaw * rad  , 0.0f, 1.0f, 0.0f)
+                    if (part.pitch != 0.0f) GlStateManager.rotatef(part.pitch * rad, 1.0f, 0.0f, 0.0f)
+
+                    renderItem(player, slot)
+                }
+            }
+        }
+    }
+
+    private fun renderItem(player: T, slot: EquipmentSlot){
+        glMatrix {
+            //GlStateManager.translatef(0F, 0.25F, 0F)
+            //GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
+            GlStateManager.translatef(0.0f, -0.25f, 0.0f)
+            GlStateManager.rotatef(180.0f, 0.0f, 1.0f, 0.0f)
+            GlStateManager.scalef(0.625f, -0.625f, -0.625f)
+            /*
+        ModelTransformation.applyGl(Transformation(
+                /*rotation     */Vector3f(-90F,0F,0F),
+                /*translation  */Vector3f(0F,0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+        GlStateManager.pushMatrix()
+        ModelTransformation.applyGl(Transformation(//front
+                /*rotation     */Vector3f(0F,0F,0F),
+                /*translation  */Vector3f(0F,0.00001F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+        GlStateManager.pushMatrix()
+        ModelTransformation.applyGl(Transformation(//up
+                /*rotation     */Vector3f(0F,0F,0F),
+                /*translation  */Vector3f(0F,0F,0.00001F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+        GlStateManager.pushMatrix()
+        ModelTransformation.applyGl(Transformation(//out -> right
+                /*rotation     */Vector3f(0F,0F,0F),
+                /*translation  */Vector3f(1F,0F,0F),
+                /*scale        */Vector3f(1F,1F,1F)
+        ),false)
+*/
+
+
+            MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
+        }
+       /* GlStateManager.popMatrix()
+        GlStateManager.popMatrix()
+        GlStateManager.popMatrix()*/
+    }
+
+    private fun glMatrix( operations :()-> Unit){
+        GlStateManager.pushMatrix()
+        operations()
         GlStateManager.popMatrix()
     }
 }
