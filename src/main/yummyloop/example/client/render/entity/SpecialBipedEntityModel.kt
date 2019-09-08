@@ -230,7 +230,6 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
     private fun renderItem(scale: Float, player: T, slot: EquipmentSlot){
         val part = rightArm
         glMatrix {
-
             // Fix part location
             GlStateManager.translatef(-part.rotationPointX * scale, -part.rotationPointY * scale, -part.rotationPointZ * scale)
 
@@ -238,42 +237,8 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
             GlStateManager.translatef(0F, -0.25F, 0F)
             GlStateManager.scalef(-0.625f, -0.625f, 0.625f)
 
-
-            /*GlStateManager.translatef(0.0f, -0.25f, 0.0f)
-            GlStateManager.rotatef(180.0f, 0.0f, 1.0f, 0.0f)
-            GlStateManager.scalef(0.625f, -0.625f, -0.625f)*/
-            /*
-        ModelTransformation.applyGl(Transformation(
-                /*rotation     */Vector3f(-90F,0F,0F),
-                /*translation  */Vector3f(0F,0F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-        GlStateManager.pushMatrix()
-        ModelTransformation.applyGl(Transformation(//front
-                /*rotation     */Vector3f(0F,0F,0F),
-                /*translation  */Vector3f(0F,0.00001F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-        GlStateManager.pushMatrix()
-        ModelTransformation.applyGl(Transformation(//up
-                /*rotation     */Vector3f(0F,0F,0F),
-                /*translation  */Vector3f(0F,0F,0.00001F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-        GlStateManager.pushMatrix()
-        ModelTransformation.applyGl(Transformation(//out -> right
-                /*rotation     */Vector3f(0F,0F,0F),
-                /*translation  */Vector3f(1F,0F,0F),
-                /*scale        */Vector3f(1F,1F,1F)
-        ),false)
-*/
-
-
             MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
         }
-       /* GlStateManager.popMatrix()
-        GlStateManager.popMatrix()
-        GlStateManager.popMatrix()*/
     }
 
     private fun glMatrix( operations :()-> Unit){
