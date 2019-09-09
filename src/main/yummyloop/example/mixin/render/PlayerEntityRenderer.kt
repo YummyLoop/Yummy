@@ -18,7 +18,7 @@ abstract class PlayerEntityRenderer( entityRenderDispatcher : EntityRenderDispat
 
     @Inject(at = [At("RETURN")], method = ["<init>(Lnet/minecraft/client/render/entity/EntityRenderDispatcher;Z)V"], cancellable = true)
     private fun onPlayerEntityRenderer(entityRenderDispatcher : EntityRenderDispatcher, boolean : Boolean, info: CallbackInfo) {
-        // Default legs 0.5F, boots/chest/helmet 1F
-        this.addFeature(SpecialArmorFeatureRenderer(this, SpecialBipedEntityModel(0.5f), SpecialBipedEntityModel(1.0f)))
+        // Special armor feature renderer
+        this.addFeature(SpecialArmorFeatureRenderer(this))
     }
 }

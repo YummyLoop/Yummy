@@ -8,11 +8,18 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import yummyloop.example.item.SpecialArmorItem
 
-class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>  (
-        featureRendererContext_1 : FeatureRendererContext<T, M>,
-        model1 : A,
-        model2 : A) :
-        ArmorBipedFeatureRenderer<T, M, A>(featureRendererContext_1, model1, model2) {
+class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>>(
+        featureRendererContext_1: FeatureRendererContext<T, M>,
+        model1: M,
+        model2: M) :
+        ArmorBipedFeatureRenderer<T, M, M>(featureRendererContext_1, model1, model2) {
+
+    @Suppress("UNCHECKED_CAST")
+    constructor(featureRendererContext_1 : FeatureRendererContext<T, M>) :
+            this (featureRendererContext_1,
+                    SpecialBipedEntityModel<T>(0.5F) as M,
+                    SpecialBipedEntityModel<T>(1F) as M
+            )
 
     override fun render(var1: T, var2: Float, var3: Float, var4: Float, var5: Float, var6: Float, var7: Float, var8: Float) {
         this.renderArmor(var1, var2, var3, var4, var5, var6, var7, var8, EquipmentSlot.CHEST)
