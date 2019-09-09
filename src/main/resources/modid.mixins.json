@@ -6,16 +6,16 @@
   ],
   "client": [
     "ExampleMixin",
-    "render/ItemRenderer",
+    "Hat",
     "render/FirstPersonRenderer",
-    "armor/Hat",
-    "render/PlayerEntityRenderer",
-    "render/ArmorStandEntityRenderer",
-    "render/ZombieBaseEntityRenderer",
-    "render/ZombiePigmanEntityRenderer",
-    "render/ZombieVillagerEntityRenderer",
-    "render/SkeletonEntityRenderer",
-    "armor/render/ArmorFeatureRenderer"
+    "render/ItemRenderer",
+    "render/entity/ArmorStandEntityRenderer",
+    "render/entity/PlayerEntityRenderer",
+    "render/entity/SkeletonEntityRenderer",
+    "render/entity/ZombieBaseEntityRenderer",
+    "render/entity/ZombiePigmanEntityRenderer",
+    "render/entity/ZombieVillagerEntityRenderer",
+    "render/entity/feature/ArmorFeatureRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
