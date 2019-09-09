@@ -10,6 +10,7 @@
     "render/FirstPersonRenderer",
     "armor/Hat",
     "render/PlayerEntityRenderer",
+    "render/ArmorStandEntityRenderer",
     "armor/render/ArmorFeatureRenderer"
   ],
   "injectors": {
