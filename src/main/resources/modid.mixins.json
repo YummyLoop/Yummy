@@ -11,6 +11,10 @@
     "armor/Hat",
     "render/PlayerEntityRenderer",
     "render/ArmorStandEntityRenderer",
+    "render/ZombieBaseEntityRenderer",
+    "render/ZombiePigmanEntityRenderer",
+    "render/ZombieVillagerEntityRenderer",
+    "render/SkeletonEntityRenderer",
     "armor/render/ArmorFeatureRenderer"
   ],
   "injectors": {
