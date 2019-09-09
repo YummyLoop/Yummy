@@ -9,6 +9,8 @@ import net.minecraft.client.render.entity.model.BipedEntityModel
 import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.mob.ZombieVillagerEntity
+import net.minecraft.entity.passive.VillagerEntity
 import yummyloop.example.item.SpecialArmorItem
 
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
@@ -57,7 +59,12 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
                     MinecraftClient.getInstance().itemRenderer.renderItemAndGlow(ItemStack(Items.DIRT), ExampleModClient.bakedModel)
                     MinecraftClient.getInstance().blockRenderManager.modelRenderer.render( ExampleModClient.bakedModel, 1F, 1F, 1F, 1F)
                 }*/
-                renderPart(player, model.head, scale, slot)
+                glMatrix {
+                    if (player is VillagerEntity || player is ZombieVillagerEntity) {
+                        GlStateManager.translatef(0.0f, -0.15f, 0.0f)
+                    }
+                    renderPart(player, model.head, scale, slot)
+                }
             }
             EquipmentSlot.CHEST -> {
                 //renderPart(player, body, scale, slot)
