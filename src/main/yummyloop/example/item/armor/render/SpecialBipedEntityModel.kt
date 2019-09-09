@@ -7,10 +7,12 @@ import net.minecraft.client.render.entity.model.BipedEntityModel
 import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import yummyloop.example.ExampleModClient
 
-class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRotationOffset : Float, textureWidth : Int, textureHeight : Int) : BipedEntityModel<T>(){
+class SpecialBipedEntityModel<T : LivingEntity>(scale : Float) : BipedEntityModel<T>(scale){
     constructor(): this(0.0f)
-    constructor(scale: Float): this(scale, 0.0f, 64, 32)
 
     companion object {
         private const val rad = 57.295776F
@@ -23,6 +25,10 @@ class SpecialBipedEntityModel<T : LivingEntity>(scale : Float, private val yRota
 
         when (slot) {
             EquipmentSlot.HEAD -> {
+                /*glMatrix {
+                    MinecraftClient.getInstance().itemRenderer.renderItemAndGlow(ItemStack(Items.DIRT), ExampleModClient.bakedModel)
+                    MinecraftClient.getInstance().blockRenderManager.modelRenderer.render( ExampleModClient.bakedModel, 1F, 1F, 1F, 1F)
+                }*/
                 renderPart(player, head, scale, slot)
             }
             EquipmentSlot.CHEST -> {
