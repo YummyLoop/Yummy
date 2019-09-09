@@ -19,6 +19,6 @@ abstract class PlayerEntityRenderer( entityRenderDispatcher : EntityRenderDispat
     @Inject(at = [At("RETURN")], method = ["<init>(Lnet/minecraft/client/render/entity/EntityRenderDispatcher;Z)V"], cancellable = true)
     private fun onPlayerEntityRenderer(entityRenderDispatcher : EntityRenderDispatcher, boolean : Boolean, info: CallbackInfo) {
         // Special armor feature renderer
-        this.addFeature(SpecialArmorFeatureRenderer(this))
+        this.addFeature(SpecialArmorFeatureRenderer(this, SpecialBipedEntityModel(0.5f), SpecialBipedEntityModel(1.0f)))
     }
 }
