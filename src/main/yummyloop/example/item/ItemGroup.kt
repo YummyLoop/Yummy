@@ -5,7 +5,7 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.util.Identifier
+import yummyloop.example.util.registry.RegistryManager
 import java.util.function.Consumer
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
@@ -13,7 +13,7 @@ import net.minecraft.item.ItemGroup as VanillaItemGroup
  * ItemGroup defaults to MISC <p>
  * <b>Note:</b> ItemGroup can be set as null for no ItemGroup
  */
-class ItemGroup(modId : String, name : String, itemToIcon: ItemConvertible) {
+class ItemGroup(name : String, itemToIcon: ItemConvertible) {
     companion object{
         private val defaultItemToIcon : Item = Items.APPLE
     }
@@ -21,22 +21,22 @@ class ItemGroup(modId : String, name : String, itemToIcon: ItemConvertible) {
     private lateinit var fabricItemGroup : FabricItemGroupBuilder
 
     init {
-        create(modId, name, itemToIcon)
+        register(name, itemToIcon)
     }
-    constructor(modId : String, name : String) : this(modId, name, defaultItemToIcon)
-    constructor(modId : String, name : String, itemToIcon: ItemConvertible, itemStacks: Consumer<List<ItemStack>>): this(modId, name, itemToIcon) {
+    constructor(name : String) : this(name, defaultItemToIcon)
+    constructor(name : String, itemToIcon: ItemConvertible, itemStacks: Consumer<List<ItemStack>>): this(name, itemToIcon) {
         this.fabricItemGroup.appendItems(itemStacks);
     }
 
-    private fun create (modId : String, name : String, itemToIcon: ItemConvertible){
-        this.fabricItemGroup = FabricItemGroupBuilder.create(Identifier(modId, name)).icon{ItemStack(itemToIcon)}
+    private fun register (name : String, itemToIcon: ItemConvertible){
+        this.fabricItemGroup = RegistryManager.register(this, name).icon{ItemStack(itemToIcon)}
     }
 
     fun getGroup() : VanillaItemGroup? {
         if (this.mcItemGroup == null) {
-            this.mcItemGroup = this.fabricItemGroup.build();
+            this.mcItemGroup = this.fabricItemGroup.build()
         }
-        return this.mcItemGroup;
+        return this.mcItemGroup
     }
 }
 

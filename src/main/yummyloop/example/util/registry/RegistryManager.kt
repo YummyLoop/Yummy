@@ -1,10 +1,12 @@
 package yummyloop.example.util.registry
 
+import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
+import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
 
 object RegistryManager {
@@ -25,5 +27,12 @@ object RegistryManager {
     }
     fun <T : VanillaBlock> register(block : T, blockName : String) {
         register(block, this.modId, blockName)
+    }
+    // ItemGroup
+    fun <T : ItemGroup> register(itemGroup : T, modId : String, itemGroupName : String) : FabricItemGroupBuilder{
+        return FabricItemGroupBuilder.create(Identifier(modId, itemGroupName))
+    }
+    fun <T : ItemGroup> register(itemGroup : T, itemGroupName : String) : FabricItemGroupBuilder{
+        return register(itemGroup, this.modId, itemGroupName)
     }
 }

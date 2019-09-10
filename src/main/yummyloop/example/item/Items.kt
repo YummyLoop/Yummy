@@ -23,7 +23,7 @@ object Items : HashMap<String, VanillaItem>() {
     init {
         blocks["blockA"]=TemplateBlockWithEntity("example_blockrender", Block.of(Material.METAL).lightLevel(10))
 
-        groups["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
+        groups["groupA"] = ItemGroup("hello1", Vanilla.ANVIL)
 
         SpecialArmorItem("fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
                 .addTooltip("item.example.fabric_item.tooltip")
