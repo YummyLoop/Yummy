@@ -5,11 +5,10 @@ import net.minecraft.item.ArmorMaterial
 import yummyloop.example.item.armor.SpecialArmor
 
 class SpecialArmorItem(
-        modId : String,
         itemName: String,
         armorMaterial : ArmorMaterial,
         equipmentSlot : EquipmentSlot,
         settings : Settings
 ) :
-        ArmorItem(modId, itemName, armorMaterial, equipmentSlot, settings), SpecialArmor {
+        ArmorItem(itemName, armorMaterial, equipmentSlot, settings), SpecialArmor {
 }

@@ -15,12 +15,12 @@ import yummyloop.example.item.ItemGroup
 import yummyloop.example.render.firstPerson.RenderHand
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-class Backpack(modId: String, name: String, var rows : Int, settings : Settings) :
-        Item(modId, name, settings), DyeableItem , RenderHand/*, BuiltInItemModel*/ {
-    constructor(modId : String, itemName : String, rows : Int) :
-            this(modId, itemName, rows, Settings().group(VanillaItemGroup.MISC))
-    constructor(modId : String, itemName : String, rows : Int, group : ItemGroup) :
-            this(modId, itemName, rows, Settings().group(group.getGroup()))
+class Backpack(name: String, var rows : Int, settings : Settings) :
+        Item(name, settings), DyeableItem , RenderHand/*, BuiltInItemModel*/ {
+    constructor(itemName : String, rows : Int) :
+            this(itemName, rows, Settings().group(VanillaItemGroup.MISC))
+    constructor(itemName : String, rows : Int, group : ItemGroup) :
+            this(itemName, rows, Settings().group(group.getGroup()))
 
     init {
         this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }

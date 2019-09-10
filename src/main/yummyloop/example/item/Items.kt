@@ -26,14 +26,14 @@ object Items {
 
         groups["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
 
-        items["itemX"] = SpecialArmorItem(ExampleMod.id, "fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
-        items["hat"] = SpecialArmorItem(ExampleMod.id, "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD, ItemSettings())
-        items["chest"] = SpecialArmorItem(ExampleMod.id, "chest", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
-        items["arm"] = SpecialArmorItem(ExampleMod.id, "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
+        items["itemX"] = SpecialArmorItem("fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
+        items["hat"] = SpecialArmorItem( "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD, ItemSettings())
+        items["chest"] = SpecialArmorItem( "chest", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
+        items["arm"] = SpecialArmorItem( "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
 
 
-        items["backpack"] = Backpack(ExampleMod.id, "ring", 6, groups["groupA"]!!)
-        items["backpack2"] = Backpack(ExampleMod.id, "ring2", 5, groups["groupA"]!!)
+        items["backpack"] = Backpack("ring", 6, groups["groupA"]!!)
+        items["backpack2"] = Backpack("ring2", 5, groups["groupA"]!!)
         items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
 
         (items["itemX"] as SpecialArmorItem).addTooltip("item.example.fabric_item.tooltip")
