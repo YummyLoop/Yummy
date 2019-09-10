@@ -31,7 +31,7 @@ class Block constructor(blockName: String, settings: FabricBlockSettings) :
         register(blockName)
     }
 
-    // ItemName
+    // BlockName
     constructor(blockName: String) :
             this(blockName, of(Material.AIR))
 
