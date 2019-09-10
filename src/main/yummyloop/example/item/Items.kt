@@ -32,8 +32,8 @@ object Items : HashMap<String, VanillaItem>() {
         SpecialArmorItem( "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
 
 
-        Backpack("ring", 6, groups["groupA"]!!)
-        Backpack("ring2", 5, groups["groupA"]!!)
+        Backpack("ring", 6, groups["groupA"])
+        Backpack("ring2", 5, groups["groupA"])
         BlockItem("example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
 
         containers["backpack"] = BContainer

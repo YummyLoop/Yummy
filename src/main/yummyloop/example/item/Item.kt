@@ -17,10 +17,10 @@ open class Item(itemName: String, settings : Settings) : VanillaItem(settings) {
     }
     constructor(itemName : String) :
             this(itemName, Settings().group(VanillaItemGroup.MISC))
-    constructor(itemName : String, group : ItemGroup) :
-            this(itemName, Settings().group(group.getGroup()))
-    constructor(itemName : String, group : ItemGroup, maxCount : Int) :
-            this(itemName, Settings().group(group.getGroup()).maxCount(maxCount))
+    constructor(itemName : String, group : ItemGroup?) :
+            this(itemName, Settings().group(group?.getGroup()))
+    constructor(itemName : String, group : ItemGroup?, maxCount : Int) :
+            this(itemName, Settings().group(group?.getGroup()).maxCount(maxCount))
 
     private fun register (itemName : String) {
         RegistryManager.register(this, itemName)
