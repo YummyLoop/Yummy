@@ -34,7 +34,8 @@ open class Item(itemName: String, settings : Settings) : VanillaItem(settings) {
      * Appends a tooltip to the item
      * @param tooltip example: item.tutorial.fabric_item.tooltip
      */
-    fun addTooltip(tooltip : String){
+    fun addTooltip(tooltip : String) : Item{
         this.tooltip.add(TranslatableText(tooltip))
+        return this
     }
 }

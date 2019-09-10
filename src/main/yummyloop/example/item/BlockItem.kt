@@ -50,7 +50,8 @@ class BlockItem : VanillaBlockItem {
      * Appends a tooltip to the item
      * @param tooltip example: item.tutorial.fabric_item.tooltip
      */
-    fun addTooltip(tooltip: String) {
+    fun addTooltip(tooltip: String) : BlockItem{
         this.tooltip.add(TranslatableText(tooltip))
+        return this
     }
 }

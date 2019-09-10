@@ -34,7 +34,8 @@ open class ArmorItem(itemName: String, armorMaterial : ArmorMaterial, equipmentS
      * Appends a tooltip to the item
      * @param tooltip example: item.tutorial.fabric_item.tooltip
      */
-    fun addTooltip(tooltip : String){
+    open fun addTooltip(tooltip : String) : ArmorItem{
         this.tooltip.add(TranslatableText(tooltip))
+        return this
     }
 }

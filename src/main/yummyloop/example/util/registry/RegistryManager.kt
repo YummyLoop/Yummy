@@ -5,13 +5,16 @@ import net.minecraft.item.Item as VanillaItem
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
+import yummyloop.example.item.Items
 
 object RegistryManager {
-    var modId : String = ExampleMod.id
+    private var modId : String = ExampleMod.id
+    private val itemList = Items
 
     // Item
     fun <T : VanillaItem> register(item : T, modId : String, itemName : String) {
         Registry.register(Registry.ITEM, Identifier(modId, itemName), item)
+        itemList.putIfAbsent(itemName, item)
     }
     fun <T : VanillaItem> register(item : T, itemName : String) {
         register(item, this.modId, itemName)
