@@ -16,12 +16,12 @@ import net.minecraft.world.World
 import yummyloop.example.block.BlockWithEntity
 import net.minecraft.block.Block as VanillaBlock
 
-class TemplateBlockWithEntity constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
-        BlockWithEntity(modId, itemName, settings) {
+class TemplateBlockWithEntity constructor(blockName: String, settings: FabricBlockSettings) :
+        BlockWithEntity(blockName, settings) {
 
-    // ModId, ItemName
-    constructor(modId: String, itemName: String) :
-            this(modId, itemName, of(Material.AIR))
+    // BlockName
+    constructor(blockName: String) :
+            this(blockName, of(Material.AIR))
 
     //-------------------------------------------------
     //Block entity stuff

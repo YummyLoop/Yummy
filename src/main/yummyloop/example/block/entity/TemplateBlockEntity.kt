@@ -44,7 +44,7 @@ class TemplateBlockEntity : BlockEntity(type){
     var number = 7
 
     init {
-        println("Hello??? init")
+        println("\nHello??? init template block entity\n")
         markDirty()
     }
 

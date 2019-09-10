@@ -22,7 +22,7 @@ object Items {
     @JvmField val blocks = mutableMapOf<String, VanillaBlock>()
 
     init {
-        blocks["blockA"]=TemplateBlockWithEntity(ExampleMod.id, "example_blockrender", Block.of(Material.METAL).lightLevel(10))
+        blocks["blockA"]=TemplateBlockWithEntity("example_blockrender", Block.of(Material.METAL).lightLevel(10))
 
         groups["groupA"] = ItemGroup(ExampleMod.id, "hello1", Vanilla.ANVIL)
 
@@ -34,7 +34,7 @@ object Items {
 
         items["backpack"] = Backpack("ring", 6, groups["groupA"]!!)
         items["backpack2"] = Backpack("ring2", 5, groups["groupA"]!!)
-        items["blockItemA"] = BlockItem(ExampleMod.id, "example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
+        items["blockItemA"] = BlockItem("example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
 
         (items["itemX"] as SpecialArmorItem).addTooltip("item.example.fabric_item.tooltip")
 

@@ -6,10 +6,11 @@ import net.minecraft.block.MaterialColor
 import net.minecraft.util.DyeColor
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.block.Block as VanillaBlock
 
-// ModId, ItemName, FabricBlockSettings
-class Block constructor(modId: String, itemName: String, settings: FabricBlockSettings) :
+// ItemName, FabricBlockSettings
+class Block constructor(blockName: String, settings: FabricBlockSettings) :
         VanillaBlock(settings.build()) {
 
     companion object{
@@ -27,16 +28,16 @@ class Block constructor(modId: String, itemName: String, settings: FabricBlockSe
     }
 
     init {
-        register(modId, itemName)
+        register(blockName)
     }
 
-    // ModId, ItemName
-    constructor(modId: String, itemName: String) :
-            this(modId, itemName, of(Material.AIR))
+    // ItemName
+    constructor(blockName: String) :
+            this(blockName, of(Material.AIR))
 
     // End of constructors
-    private fun register(modId: String, itemName: String) {
-        Registry.register(Registry.BLOCK, Identifier(modId, itemName), this)
+    private fun register(blockName: String) {
+        RegistryManager.register(this, blockName)
     }
 
 }
