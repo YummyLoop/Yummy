@@ -3,7 +3,6 @@ package yummyloop.example.item
 import net.minecraft.block.Material
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterials
-import yummyloop.example.ExampleMod
 import yummyloop.example.block.Block
 import yummyloop.example.block.entity.TemplateBlockEntity
 import yummyloop.example.block.entity.TemplateBlockWithEntity
