@@ -38,6 +38,10 @@ class ItemGroup(name : String, itemToIcon: ItemConvertible) {
         }
         return this.mcItemGroup
     }
+
+    fun get() : VanillaItemGroup? {
+        return this.getGroup()
+    }
 }
 
 /* Example
