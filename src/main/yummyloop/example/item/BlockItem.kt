@@ -28,7 +28,7 @@ class BlockItem : VanillaBlockItem {
             this(itemName, Settings().group(VanillaItemGroup.MISC), Block.of(Material.AIR))
 
     // Name, ItemSettings, Block
-    constructor(itemName: String, itemSettings: Settings, block: VanillaBlock) :
+    constructor(itemName: String, itemSettings: Settings, block: VanillaBlock?) :
             super(block, itemSettings) {
         register(itemName)
     }

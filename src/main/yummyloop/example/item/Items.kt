@@ -33,7 +33,7 @@ object Items : HashMap<String, VanillaItem>() {
 
         Backpack("ring", 6, groups["groupA"])
         Backpack("ring2", 5, groups["groupA"])
-        BlockItem("example_blockrender", ItemSettings().group(null), blocks["blockA"]!!)
+        BlockItem("example_blockrender", ItemSettings().group(null), blocks["blockA"])
 
         containers["backpack"] = BContainer
         blockEntities["backpack"] = TemplateBlockEntity
