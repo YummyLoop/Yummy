@@ -25,7 +25,7 @@ object Items : HashMap<String, VanillaItem>() {
 
         Backpack("ring", 6, groups["hello1"])
         Backpack("ring2", 5, groups["hello1"])
-        BlockItem("example_blockrender", ItemSettings().group(null), Blocks["blockA"])
+        BlockItem("example_blockrender", ItemSettings().group(null), Blocks["template_be"])
 
         containers["backpack"] = BContainer
     }

@@ -29,7 +29,7 @@ class BlockItem : VanillaBlockItem {
 
     // Name, ItemSettings, Block
     constructor(itemName: String, itemSettings: Settings, block: VanillaBlock?) :
-            super(block, itemSettings) {
+            super(block ?: Block(itemName), itemSettings) {
         register(itemName)
     }
 
