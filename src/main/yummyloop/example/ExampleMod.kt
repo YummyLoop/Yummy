@@ -2,6 +2,7 @@ package yummyloop.example
 
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
+import yummyloop.example.block.Blocks
 import yummyloop.example.config.Config
 import yummyloop.example.item.Items
 import yummyloop.example.util.Logger
@@ -23,7 +24,8 @@ class ExampleMod : ModInitializer {
         logger.warn("logger warn")
         logger.fatal("logger fatal")
 
-        Items
+        Blocks.ini()
+        Items.ini()
 
         val cc = Config("a/b/Hello.jsonc")
         cc.add("Hello")

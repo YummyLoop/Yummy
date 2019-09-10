@@ -16,7 +16,7 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
-import yummyloop.example.item.Items
+import yummyloop.example.block.Blocks
 import yummyloop.example.render.HasClient
 import java.util.function.Supplier
 import kotlin.math.sin
@@ -25,7 +25,7 @@ import net.minecraft.item.Items as VanillaItems
 class TemplateBlockEntity : BlockEntity(type){
     companion object Register : HasClient {
         private val supplier = Supplier { TemplateBlockEntity() } // Supplier
-        private var blocks = listOf(Items.blocks["blockA"]!!)   // List of blocks to apply the entity to
+        private var blocks = listOf(Blocks["template_be"])   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
         init {
             val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())

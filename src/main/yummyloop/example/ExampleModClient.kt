@@ -18,6 +18,7 @@ import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemConvertible
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.Direction
+import yummyloop.example.block.Blocks
 import yummyloop.example.item.Items
 import yummyloop.example.render.HasClient
 import java.util.*
@@ -46,7 +47,7 @@ class ExampleModClient : ClientModInitializer {
             }
         }
 
-        for (i in Items.blockEntities) {
+        for (i in Blocks.entities) {
             if (i.value is HasClient) {
                 (i.value as HasClient).client()
             }
