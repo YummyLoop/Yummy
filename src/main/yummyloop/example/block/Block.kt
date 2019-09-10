@@ -9,7 +9,7 @@ import net.minecraft.util.registry.Registry
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.block.Block as VanillaBlock
 
-// ItemName, FabricBlockSettings
+// BlockName, FabricBlockSettings
 class Block constructor(blockName: String, settings: FabricBlockSettings) :
         VanillaBlock(settings.build()) {
 
