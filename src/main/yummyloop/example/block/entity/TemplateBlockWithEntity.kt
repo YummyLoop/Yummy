@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import yummyloop.example.block.Block
 import yummyloop.example.block.BlockWithEntity
 import net.minecraft.block.Block as VanillaBlock
 
@@ -21,7 +22,7 @@ class TemplateBlockWithEntity constructor(blockName: String, settings: FabricBlo
 
     // BlockName
     constructor(blockName: String) :
-            this(blockName, of(Material.AIR))
+            this(blockName, Block.of(Material.AIR))
 
     //-------------------------------------------------
     //Block entity stuff
