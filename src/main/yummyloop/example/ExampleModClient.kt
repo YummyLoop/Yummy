@@ -56,7 +56,7 @@ class ExampleModClient : ClientModInitializer {
 
         ModelLoadingRegistry.INSTANCE.registerAppender { manager, out->
             println("--- ModelAppender called! ---")
-            out.accept(ModelIdentifier("fabric:model#custom")) }
+            out.accept(ModelIdentifier("fabric","model#custom")) }
 
         ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager->
             ModelVariantProvider{
@@ -64,7 +64,7 @@ class ExampleModClient : ClientModInitializer {
                 if (modelId.variant == "custom" && modelId.namespace == "fabric") {
                     println("--- ModelVariantProvider called! ---")
                     //context.loadModel(Identifier("fabric:custom"))
-                    context.loadModel(Identifier("example:item/hat2"))
+                    context.loadModel(Identifier("example:template_be2"))
                 } else {
                     null
                 }
@@ -77,7 +77,7 @@ class ExampleModClient : ClientModInitializer {
                 when {
                     id.toString() == "fabric:custom" -> context.loadModel(Identifier("fabric:custom2"))
                     //id.toString() == "fabric:custom2" -> {
-                    id.toString() == "example:item/hat2" -> {
+                    id.toString() == "example:template_be2" -> {
                         println("--- ModelResourceProvider called! ---")
                         object : UnbakedModel {
 

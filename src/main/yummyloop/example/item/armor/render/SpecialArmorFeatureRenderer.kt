@@ -1,6 +1,8 @@
 package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
+import net.fabricmc.fabric.api.renderer.v1.RendererAccess
+import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.model.Cuboid
 import net.minecraft.client.render.entity.feature.ArmorBipedFeatureRenderer
@@ -11,6 +13,9 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ZombieVillagerEntity
 import net.minecraft.entity.passive.VillagerEntity
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import yummyloop.example.ExampleModClient
 import yummyloop.example.item.SpecialArmorItem
 
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
@@ -55,14 +60,13 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
 
         when (slot) {
             EquipmentSlot.HEAD -> {
-                /*glMatrix {
-                    MinecraftClient.getInstance().itemRenderer.renderItemAndGlow(ItemStack(Items.DIRT), ExampleModClient.bakedModel)
-                    MinecraftClient.getInstance().blockRenderManager.modelRenderer.render( ExampleModClient.bakedModel, 1F, 1F, 1F, 1F)
-                }*/
                 glMatrix {
                     if (player is VillagerEntity || player is ZombieVillagerEntity) {
                         GlStateManager.translatef(0.0f, -0.15f, 0.0f)
                     }
+                    //MinecraftClient.getInstance().itemRenderer.renderItemAndGlow(ItemStack(Items.DIRT), ExampleModClient.bakedModel)
+                    //MinecraftClient.getInstance().blockRenderManager.modelRenderer.render( ExampleModClient.bakedModel, 1F, 1F, 1F, 1F)
+
                     renderPart(player, model.head, scale, slot)
                 }
             }
