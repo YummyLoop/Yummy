@@ -1,4 +1,4 @@
-package yummyloop.example.item.models
+package yummyloop.example.item.models.builtIn
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.api.EnvType
