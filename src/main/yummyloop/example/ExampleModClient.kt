@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier
 import yummyloop.example.block.Blocks
 import yummyloop.example.item.Items
 import yummyloop.example.item.models.SimpleBakedItemModel
-import yummyloop.example.item.models.UnbakedModel
+import yummyloop.example.render.models.UnbakedModel
 import yummyloop.example.render.HasClient
 
 
@@ -67,8 +67,8 @@ class ExampleModClient : ClientModInitializer {
                         println("--- ModelResourceProvider called! ---")
                         UnbakedModel(
                                 SimpleBakedItemModel(
-                                        ModelIdentifier("example","template_be2"),
-                                        Identifier("example","template_be2")
+                                        ModelIdentifier("example", "template_be2"),
+                                        Identifier("example", "template_be2")
                                 )
                         )
                     }

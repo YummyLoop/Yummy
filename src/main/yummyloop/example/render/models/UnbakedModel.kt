@@ -1,4 +1,4 @@
-package yummyloop.example.item.models
+package yummyloop.example.render.models
 
 import net.minecraft.client.render.model.BakedModel
 import net.minecraft.client.render.model.ModelBakeSettings
