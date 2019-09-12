@@ -8,6 +8,7 @@
     "ExampleMixin",
     "Hat",
     "entity/attribute/EntityAttributes",
+    "entity/player/Hunger",
     "render/FirstPersonRenderer",
     "render/ItemRenderer",
     "render/entity/ArmorStandEntityRenderer",
