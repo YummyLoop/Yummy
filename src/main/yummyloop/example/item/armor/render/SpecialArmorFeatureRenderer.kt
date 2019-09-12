@@ -1,6 +1,8 @@
 package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.renderer.v1.RendererAccess
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.minecraft.client.MinecraftClient
@@ -18,6 +20,7 @@ import net.minecraft.item.Items
 import yummyloop.example.ExampleModClient
 import yummyloop.example.item.SpecialArmorItem
 
+@Environment(EnvType.CLIENT)
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
         featureRendererContext_1: FeatureRendererContext<T, M>,
         model1: A,
