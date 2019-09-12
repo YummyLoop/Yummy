@@ -14,10 +14,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ZombieVillagerEntity
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.ItemStack
-import yummyloop.example.item.SpecialArmorItem
-import yummyloop.example.item.armor.ArmorWithBody
-import yummyloop.example.item.armor.ArmorWithLeftArm
-import yummyloop.example.item.armor.ArmorWithRightArm
+import yummyloop.example.item.armor.*
 
 @Environment(EnvType.CLIENT)
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
@@ -95,18 +92,38 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
                 }
             }
             EquipmentSlot.LEGS -> {
-                renderStack = stack
-                mirror = false
-                renderPart(player, model.rightLeg, scale, slot)
-                mirror = true
-                renderPart(player, model.leftLeg, scale, slot)
+                if (stack.item is ArmorWithBody) {
+                    renderStack = ItemStack((stack.item as ArmorWithBody).bodyItem)
+                    renderStack.tag = stack.tag
+                    mirror = false
+                    renderPart(player, model.body, scale, slot)
+                }
+                if (stack.item is ArmorWithRightLeg) {
+                    renderStack = ItemStack((stack.item as ArmorWithRightLeg).rightLegItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
+                    renderPart(player, model.rightLeg, scale, slot)
+                }
+                if (stack.item is ArmorWithLeftLeg) {
+                    renderStack = ItemStack((stack.item as ArmorWithLeftLeg).leftLegItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
+                    renderPart(player, model.leftLeg, scale, slot)
+                }
             }
             EquipmentSlot.FEET -> {
-                renderStack = stack
-                mirror = false
-                renderPart(player, model.rightLeg, scale, slot)
-                mirror = true
-                renderPart(player, model.leftLeg, scale, slot)
+                if (stack.item is ArmorWithRightLeg) {
+                    renderStack = ItemStack((stack.item as ArmorWithRightLeg).rightLegItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
+                    renderPart(player, model.rightLeg, scale, slot)
+                }
+                if (stack.item is ArmorWithLeftLeg) {
+                    renderStack = ItemStack((stack.item as ArmorWithLeftLeg).leftLegItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
+                    renderPart(player, model.leftLeg, scale, slot)
+                }
             }
             else -> {}
         }

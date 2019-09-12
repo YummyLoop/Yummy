@@ -1,13 +1,12 @@
-package yummyloop.example.item
+package yummyloop.example.item.armor
 
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.ItemGroup
-import net.minecraft.text.TranslatableText
-import yummyloop.example.item.armor.SpecialArmor
+import yummyloop.example.item.ArmorItem
 
-open class SpecialArmorItem(
+abstract class SpecialArmorItem(
         itemName: String,
         armorMaterial : ArmorMaterial,
         equipmentSlot : EquipmentSlot,
@@ -19,7 +18,7 @@ open class SpecialArmorItem(
     constructor(itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot) :
             this(itemName, armorMaterial, equipmentSlot, Settings().group(ItemGroup.COMBAT))
 
-    override fun addTooltip(tooltip : String) : SpecialArmorItem{
+    override fun addTooltip(tooltip : String) : SpecialArmorItem {
         super.addTooltip(tooltip)
         return this
     }

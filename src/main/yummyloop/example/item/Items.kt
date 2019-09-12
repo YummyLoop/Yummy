@@ -1,6 +1,5 @@
 package yummyloop.example.item
 
-import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterials
 import yummyloop.example.block.Blocks
 import yummyloop.example.item.backpack.BContainer
@@ -16,14 +15,12 @@ object Items : HashMap<String, VanillaItem>() {
     fun ini() {
         ItemGroup("hello1", Vanilla.ANVIL)
 
-        SpecialArmorItem("fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET)
-                .addTooltip("item.example.fabric_item.tooltip")
-        SpecialArmorItem( "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD)
+        SpecialArmorBoots("boots", ArmorMaterials.LEATHER)
+        SpecialArmorHelmet("hat", ArmorMaterials.LEATHER)
         SpecialArmorChest( "chest", ArmorMaterials.LEATHER)
-        //SpecialArmorItem( "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
-
 
         Backpack("ring", 6, groups["hello1"])
+        //.addTooltip("item.example.fabric_item.tooltip")
         Backpack("ring2", 5, groups["hello1"])
         BlockItem("example_blockrender", ItemSettings().group(null), Blocks["template_be"])
 
