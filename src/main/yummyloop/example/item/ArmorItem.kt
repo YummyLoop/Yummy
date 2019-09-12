@@ -20,7 +20,9 @@ open class ArmorItem(itemName: String, armorMaterial : ArmorMaterial, equipmentS
         register(itemName)
     }
     constructor(itemName : String) :
-            this(itemName, ArmorMaterials.IRON, EquipmentSlot.HEAD, Settings().group(VanillaItemGroup.MISC))
+            this(itemName, ArmorMaterials.IRON, EquipmentSlot.HEAD)
+    constructor(itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot) :
+            this(itemName, armorMaterial, equipmentSlot, Settings().group(VanillaItemGroup.COMBAT))
 
     private fun register (itemName : String) {
         RegistryManager.register(this, itemName)

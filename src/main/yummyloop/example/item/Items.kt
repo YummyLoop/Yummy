@@ -16,11 +16,11 @@ object Items : HashMap<String, VanillaItem>() {
     fun ini() {
         ItemGroup("hello1", Vanilla.ANVIL)
 
-        SpecialArmorItem("fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET, ItemSettings())
+        SpecialArmorItem("fabric_item", ArmorMaterials.LEATHER, EquipmentSlot.FEET)
                 .addTooltip("item.example.fabric_item.tooltip")
-        SpecialArmorItem( "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD, ItemSettings())
-        SpecialArmorItem( "chest", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
-        SpecialArmorItem( "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
+        SpecialArmorItem( "hat", ArmorMaterials.LEATHER, EquipmentSlot.HEAD)
+        SpecialArmorChest( "chest", ArmorMaterials.LEATHER)
+        //SpecialArmorItem( "arm", ArmorMaterials.LEATHER, EquipmentSlot.CHEST, ItemSettings())
 
 
         Backpack("ring", 6, groups["hello1"])

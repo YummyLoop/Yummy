@@ -13,7 +13,11 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ZombieVillagerEntity
 import net.minecraft.entity.passive.VillagerEntity
+import net.minecraft.item.ItemStack
 import yummyloop.example.item.SpecialArmorItem
+import yummyloop.example.item.armor.ArmorWithBody
+import yummyloop.example.item.armor.ArmorWithLeftArm
+import yummyloop.example.item.armor.ArmorWithRightArm
 
 @Environment(EnvType.CLIENT)
 class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
@@ -21,6 +25,9 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
         model1: A,
         model2: A) :
         ArmorBipedFeatureRenderer<T, M, A>(featureRendererContext_1, model1, model2) {
+
+    private var stack : ItemStack = ItemStack.EMPTY
+    private var renderStack : ItemStack = ItemStack.EMPTY
 
     override fun render(var1: T, var2: Float, var3: Float, var4: Float, var5: Float, var6: Float, var7: Float, var8: Float) {
         this.renderArmor(var1, var2, var3, var4, var5, var6, var7, var8, EquipmentSlot.CHEST)
@@ -30,7 +37,7 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
     }
 
     private fun renderArmor(livingEntity: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, float_6: Float, float_7: Float, equipmentSlot: EquipmentSlot) {
-        val stack = livingEntity.getEquippedStack(equipmentSlot)
+        stack = livingEntity.getEquippedStack(equipmentSlot)
         if (stack.item is SpecialArmorItem) {
             val armor = stack.item as SpecialArmorItem
             if (armor.slotType == equipmentSlot) {
@@ -62,30 +69,44 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
                     if (player is VillagerEntity || player is ZombieVillagerEntity) {
                         GlStateManager.translatef(0.0f, -0.15f, 0.0f)
                     }
-                    //MinecraftClient.getInstance().itemRenderer.renderItemAndGlow(ItemStack(Items.DIRT), ExampleModClient.bakedModel)
-                    //MinecraftClient.getInstance().blockRenderManager.modelRenderer.render( ExampleModClient.bakedModel, 1F, 1F, 1F, 1F)
-
+                    renderStack = stack
+                    mirror = false
                     renderPart(player, model.head, scale, slot)
                 }
             }
             EquipmentSlot.CHEST -> {
-                //renderPart(player, body, scale, slot)
-                renderPart(player, model.rightArm, scale, slot)
-
+                if (stack.item is ArmorWithBody) {
+                    renderStack = ItemStack((stack.item as ArmorWithBody).bodyItem)
+                    renderStack.tag = stack.tag
+                    mirror = false
+                    renderPart(player, model.body, scale, slot)
+                }
+                if (stack.item is ArmorWithRightArm) {
+                    renderStack = ItemStack((stack.item as ArmorWithRightArm).rightArmItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithRightArm).mirrorRightArm
+                    renderPart(player, model.rightArm, scale, slot)
+                }
+                if (stack.item is ArmorWithLeftArm) {
+                    renderStack = ItemStack((stack.item as ArmorWithLeftArm).leftArmItem)
+                    renderStack.tag = stack.tag
+                    mirror = (stack.item as ArmorWithLeftArm).mirrorLeftArm
+                    renderPart(player, model.leftArm, scale, slot)
+                }
             }
             EquipmentSlot.LEGS -> {
+                renderStack = stack
+                mirror = false
                 renderPart(player, model.rightLeg, scale, slot)
                 mirror = true
                 renderPart(player, model.leftLeg, scale, slot)
-                mirror = false
-
             }
             EquipmentSlot.FEET -> {
+                renderStack = stack
+                mirror = false
                 renderPart(player, model.rightLeg, scale, slot)
                 mirror = true
                 renderPart(player, model.leftLeg, scale, slot)
-                mirror = false
-
             }
             else -> {}
         }
@@ -143,7 +164,7 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
             GlStateManager.translatef(0F, -0.25F, 0F)
             GlStateManager.scalef((if (mirror) -1 else 1 ) * -0.625f, -0.625f, 0.625f)
 
-            MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, player.getEquippedStack(slot), ModelTransformation.Type.HEAD)
+            MinecraftClient.getInstance().firstPersonRenderer.renderItem(player, renderStack, ModelTransformation.Type.HEAD)
         }
     }
 
