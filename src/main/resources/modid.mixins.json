@@ -3,13 +3,14 @@
   "package": "yummyloop.example.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "Hat",
+    "entity/attribute/EntityAttributes",
+    "entity/player/Hunger"
   ],
   "client": [
     "ExampleMixin",
-    "Hat",
-    "entity/attribute/EntityAttributes",
-    "entity/player/Hunger",
     "render/FirstPersonRenderer",
+    "render/InGameHud",
     "render/ItemRenderer",
     "render/entity/ArmorStandEntityRenderer",
     "render/entity/PlayerEntityRenderer",
