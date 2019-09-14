@@ -23,6 +23,14 @@ repositories {
         name = 'Cotton'
         url = 'http://server.bbkr.space:8081/artifactory/libs-release'
     }
+    maven {
+        name = 'Jitpack'
+        url = 'https://jitpack.io'
+    }
+    maven {
+        name = 'NerdHubMC'
+        url = 'https://maven.abusedmaster.xyz/'
+    }
     mavenLocal()
     mavenCentral()
     jcenter()
