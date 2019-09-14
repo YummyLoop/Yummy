@@ -17,11 +17,11 @@ import net.minecraft.item.ItemStack
 import yummyloop.example.item.armor.*
 
 @Environment(EnvType.CLIENT)
-class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>(
-        featureRendererContext_1: FeatureRendererContext<T, M>,
-        model1: A,
-        model2: A) :
-        ArmorBipedFeatureRenderer<T, M, A>(featureRendererContext_1, model1, model2) {
+class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A : BipedEntityModel<T>>
+    : ArmorBipedFeatureRenderer<T, M, A> {
+
+    constructor(featureRendererContext_1: FeatureRendererContext<T, M>, model1: A, model2: A)
+            : super (featureRendererContext_1, model1, model2)
 
     private var stack : ItemStack = ItemStack.EMPTY
     private var renderStack : ItemStack = ItemStack.EMPTY
