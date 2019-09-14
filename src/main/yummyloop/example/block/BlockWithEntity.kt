@@ -7,16 +7,16 @@ import net.minecraft.block.Material
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.block.BlockWithEntity as VanillaBlockWithEntity
 
-abstract class BlockWithEntity constructor(blockName: String, settings: FabricBlockSettings) :
-        VanillaBlockWithEntity(settings.build()) {
+abstract class BlockWithEntity : VanillaBlockWithEntity {
 
-    init {
+    constructor(blockName: String, settings: FabricBlockSettings)
+            : super (settings.build()) {
         register(blockName)
     }
 
     // BlockName
-    constructor(blockName: String) :
-            this(blockName, Block.of(Material.AIR))
+    constructor(blockName: String)
+            : this(blockName, Block.of(Material.AIR))
 
     // End of constructors
     private fun register(blockName: String) {
