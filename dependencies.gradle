@@ -2,12 +2,12 @@ dependencies {
     // Minecraft
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     // Minecraft Others
-    implementation 'javax.annotation:javax.annotation-api:1.3.2'
+    //implementation 'javax.annotation:javax.annotation-api:1.3.2'
 
     // Fabric
     mappings "net.fabricmc:yarn:${project.yarn_mappings}"
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-    modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     /** Kotlin 
      * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm )
@@ -31,4 +31,8 @@ dependencies {
     }
     // http://maven.modmuss50.me/io/github/prospector/modmenu/
     modRuntime("io.github.prospector:modmenu:1.7.9+build.118")
+
+    // https://github.com/emilyploszaj/trinkets
+    modImplementation "com.github.emilyploszaj:trinkets:v1.1.0"
+
 }
