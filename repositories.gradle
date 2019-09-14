@@ -16,14 +16,6 @@ repositories {
         url 'http://maven.modmuss50.me'
     }
     maven {
-        name = 'Cotton (Snapshot)'
-        url = 'http://server.bbkr.space:8081/artifactory/libs-snapshot'
-    }
-    maven {
-        name = 'Cotton'
-        url = 'http://server.bbkr.space:8081/artifactory/libs-release'
-    }
-    maven {
         name = 'Jitpack'
         url = 'https://jitpack.io'
     }
