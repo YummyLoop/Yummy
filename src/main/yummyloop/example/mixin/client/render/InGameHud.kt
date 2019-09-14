@@ -1,4 +1,4 @@
-package yummyloop.example.mixin.render
+package yummyloop.example.mixin.client.render
 
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.DrawableHelper

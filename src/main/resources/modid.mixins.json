@@ -9,16 +9,17 @@
   ],
   "client": [
     "ExampleMixin",
-    "render/FirstPersonRenderer",
-    "render/InGameHud",
-    "render/ItemRenderer",
-    "render/entity/ArmorStandEntityRenderer",
-    "render/entity/PlayerEntityRenderer",
-    "render/entity/SkeletonEntityRenderer",
-    "render/entity/ZombieBaseEntityRenderer",
-    "render/entity/ZombiePigmanEntityRenderer",
-    "render/entity/ZombieVillagerEntityRenderer",
-    "render/entity/feature/ArmorFeatureRenderer"
+    "client/network/OnEntitySpawn",
+    "client/render/FirstPersonRenderer",
+    "client/render/InGameHud",
+    "client/render/ItemRenderer",
+    "client/render/entity/ArmorStandEntityRenderer",
+    "client/render/entity/PlayerEntityRenderer",
+    "client/render/entity/SkeletonEntityRenderer",
+    "client/render/entity/ZombieBaseEntityRenderer",
+    "client/render/entity/ZombiePigmanEntityRenderer",
+    "client/render/entity/ZombieVillagerEntityRenderer",
+    "client/render/entity/feature/ArmorFeatureRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

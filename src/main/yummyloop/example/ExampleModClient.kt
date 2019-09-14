@@ -15,6 +15,8 @@ import yummyloop.example.item.Items
 import yummyloop.example.item.models.SimpleBakedItemModel
 import yummyloop.example.render.models.UnbakedModel
 import yummyloop.example.render.HasClient
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
+import yummyloop.example.item.Spear
 
 
 class ExampleModClient : ClientModInitializer {
@@ -40,6 +42,8 @@ class ExampleModClient : ClientModInitializer {
                 (i.value as HasClient).client()
             }
         }
+
+        EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
 
 
         ModelLoadingRegistry.INSTANCE.registerAppender { manager, out->

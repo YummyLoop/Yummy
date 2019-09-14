@@ -1,4 +1,4 @@
-package yummyloop.example.mixin.render
+package yummyloop.example.mixin.client.render
 
 import net.minecraft.client.color.item.ItemColors
 import net.minecraft.client.render.BufferBuilder

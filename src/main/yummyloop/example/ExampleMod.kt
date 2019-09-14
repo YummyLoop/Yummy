@@ -2,16 +2,29 @@ package yummyloop.example
 
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
+import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
+import net.minecraft.entity.EntityCategory
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.projectile.ProjectileEntity
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 import yummyloop.example.block.Blocks
 import yummyloop.example.config.Config
 import yummyloop.example.item.Items
+import yummyloop.example.item.Spear
 import yummyloop.example.util.Logger
 
 class ExampleMod : ModInitializer {
     companion object {
         const val id : String = "example"
+
+        val spearType: EntityType<out ProjectileEntity> = Registry.register(
+        Registry.ENTITY_TYPE,
+        Identifier (id, "spear"),
+        FabricEntityTypeBuilder.create(EntityCategory.MISC) { entity: EntityType<out ProjectileEntity>, world-> Spear.SpearEntity(entity, world) }.build())
     }
     private val logger: Logger = Logger("LoggerTest")
+
 
     override fun onInitialize() = runBlocking {
         logger.setLevel("ALL")
