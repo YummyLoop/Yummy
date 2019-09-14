@@ -10,10 +10,10 @@ abstract class SpecialArmorItem : ArmorItem, SpecialArmor {
 
     constructor(itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot, settings : Settings)
             : super(itemName, armorMaterial, equipmentSlot, settings)
-    constructor(itemName : String)
-            : this(itemName, ArmorMaterials.IRON, EquipmentSlot.HEAD)
     constructor(itemName: String, armorMaterial : ArmorMaterial, equipmentSlot : EquipmentSlot)
             : this(itemName, armorMaterial, equipmentSlot, Settings().group(ItemGroup.COMBAT))
+    constructor(itemName : String)
+            : this(itemName, ArmorMaterials.IRON, EquipmentSlot.HEAD)
 
     override fun addTooltip(tooltip : String) : SpecialArmorItem {
         super.addTooltip(tooltip)
