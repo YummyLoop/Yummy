@@ -141,7 +141,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
     }
 
     // Mostly the same as TridentEntity
-    class SpearEntity : ProjectileEntity {
+    open class SpearEntity : ProjectileEntity {
         companion object{
             private val loyalty: TrackedData<Byte>? =
                     DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
@@ -149,9 +149,10 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
             private val defaultItem = Items["Spear"]
         }
 
+        var attackDamage = 4.5F
         var stack: ItemStack = ItemStack(defaultItem)
         private var dealtDamage = false
-        var tick: Int = 0
+        private var tick: Int = 0
 
         constructor(entityType_1 : EntityType<out ProjectileEntity>, world_1 : World)
                 : super(entityType_1, world_1)
@@ -227,15 +228,18 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
 
         private fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound : SoundEvent, hitThunderSound : SoundEvent){
             val entityHit = entityHitResult.entity
-            var attackDamage = 8.0f
-            if (entityHit is LivingEntity) {
-                attackDamage += EnchantmentHelper.getAttackDamage(this.stack, entityHit.group)
-            }
-
             val owner = this.owner
+            var effectiveAttackDamage=this.attackDamage-1
             val damageSource = DamageSource.trident(this, owner)
             this.dealtDamage = true
-            if (entityHit.damage(damageSource, attackDamage) && entityHit is LivingEntity) {
+
+            // Enchanted damage calculation
+            if (entityHit is LivingEntity) {
+                effectiveAttackDamage += EnchantmentHelper.getAttackDamage(this.stack, entityHit.group)
+            }
+
+            // Hit and damage an entity
+            if (entityHit.damage(damageSource, effectiveAttackDamage) && entityHit is LivingEntity) {
                 if (owner is LivingEntity) {
                     EnchantmentHelper.onUserDamaged(entityHit, owner)
                     EnchantmentHelper.onTargetDamaged(owner, entityHit)
@@ -243,19 +247,33 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
                 this.onHit(entityHit)
             }
 
-            this.velocity = this.velocity.multiply(-0.01, -0.1, -0.01)
+            // Turn backwards after hitting an entity
+            this.velocity = this.velocity.multiply(-0.01, -0.01, -0.01)
 
+            // Channeling enchantment behaviour
+            if (!channelingEnchant(entityHit, owner, hitThunderSound)) {
+                this.playSound(hitSound, 1.0f, 1.0f)
+            }
+        }
+
+        protected fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
+            // If the weather is thundering && has channeling enchant
             if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.stack)) {
                 val blockPos = entityHit.blockPos
+                // If can see the sky
                 if (this.world.isSkyVisible(blockPos)) {
+                    // Create lightning entity
                     val lightningEntity = LightningEntity(this.world, blockPos.x.toDouble() + 0.5, blockPos.y.toDouble(), blockPos.z.toDouble() + 0.5, false)
                     lightningEntity.setChanneller(if (owner is ServerPlayerEntity) owner else null)
+                    // Spawn lightning entity
                     (this.world as ServerWorld).addLightning(lightningEntity)
+                    // Play sound
                     this.playSound(hitThunderSound, 5.0f, 1.0f)
-                    return
+                    // Return true for successful channeling
+                    return true
                 }
             }
-            this.playSound(hitSound, 1.0f, 1.0f)
+            return false
         }
 
         private fun isOwnerAlive(): Boolean {
@@ -297,7 +315,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
         }
 
         override fun getDragInWater(): Float {
-            return 0.99f
+            return 0.90f
         }
 
         @Environment(EnvType.CLIENT)
