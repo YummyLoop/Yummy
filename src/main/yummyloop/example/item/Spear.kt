@@ -39,6 +39,9 @@ import net.minecraft.item.Item
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
+import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.EntityHitResult
 
 
@@ -87,16 +90,27 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
         return multimap
     }
 
+    override fun use(world_1: World?, player: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
+        val stack = player.getStackInHand(hand)
+        return when {
+            stack.damage >= stack.maxDamage -> TypedActionResult(ActionResult.FAIL, stack)
+            else -> {
+                player.setCurrentHand(hand)
+                TypedActionResult(ActionResult.SUCCESS, stack)
+            }
+        }
+    }
+
     override fun onStoppedUsing(stack: ItemStack, world: World?, player: LivingEntity?, useTimeLeft: Int) {
         if (player is PlayerEntity) {
             val useTime = this.getMaxUseTime(stack) - useTimeLeft
             if (useTime < 10) return
             val riptideLevel = EnchantmentHelper.getRiptide(stack)
-            if (riptideLevel > 0 && !player.isInsideWaterOrRain) return
+
             if (!world!!.isClient) {
                 stack.damage(1, player, { playerEntity -> playerEntity.sendToolBreakStatus(playerEntity.activeHand) })
 
-                if (riptideLevel == 0) {
+                if (riptideLevel == 0 || !player.isInsideWaterOrRain) {
                     val thrownEntity = this.projectileEntity(ExampleMod.spearType, world, player, stack)
                     // set projectile velocity
                     thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + riptideLevel.toFloat() * 0.5f), 1.0f)
@@ -113,31 +127,38 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
             }
 
             player.incrementStat(Stats.USED.getOrCreateStat(this))
-            if (riptideLevel <= 0) return
-            val playerYaw = player.yaw
-            val playerPitch = player.pitch
-            var velocityX = -MathHelper.sin(playerYaw * 0.017453292f) * MathHelper.cos(playerPitch * 0.017453292f)
-            var velocityY = -MathHelper.sin(playerPitch * 0.017453292f)
-            var velocityZ = MathHelper.cos(playerYaw * 0.017453292f) * MathHelper.cos(playerPitch * 0.017453292f)
-            val absoluteVelocity = MathHelper.sqrt(velocityX * velocityX + velocityY * velocityY + velocityZ * velocityZ)
-            val velocityModifier = this.velocityMod * 3f * ((1.0f + riptideLevel.toFloat()) / 4.0f)
-            velocityX *= velocityModifier / absoluteVelocity
-            velocityY *= velocityModifier / absoluteVelocity
-            velocityZ *= velocityModifier / absoluteVelocity
-            player.addVelocity(velocityX.toDouble(), velocityY.toDouble(), velocityZ.toDouble())
-            player.method_6018(20)
-            if (player.onGround) {
-                player.move(MovementType.SELF, Vec3d(0.0, 1.1999999284744263, 0.0))
-            }
 
-            val soundEvent: SoundEvent = when {
-                riptideLevel >= 3 -> SoundEvents.ITEM_TRIDENT_RIPTIDE_3
-                riptideLevel == 2 -> SoundEvents.ITEM_TRIDENT_RIPTIDE_2
-                else -> SoundEvents.ITEM_TRIDENT_RIPTIDE_1
+            // Riptide enchant action
+            if (riptideLevel > 0 && player.isInsideWaterOrRain) {
+                ripTideEnchantAction(player, riptideLevel)
             }
-
-            world.playSoundFromEntity(null, player, soundEvent, SoundCategory.PLAYERS, 1.0f, 1.0f)
         }
+    }
+
+    protected fun ripTideEnchantAction(player : PlayerEntity, riptideLevel : Int) {
+        val playerYaw = player.yaw
+        val playerPitch = player.pitch
+        var velocityX = -MathHelper.sin(playerYaw * 0.017453292f) * MathHelper.cos(playerPitch * 0.017453292f)
+        var velocityY = -MathHelper.sin(playerPitch * 0.017453292f)
+        var velocityZ = MathHelper.cos(playerYaw * 0.017453292f) * MathHelper.cos(playerPitch * 0.017453292f)
+        val absoluteVelocity = MathHelper.sqrt(velocityX * velocityX + velocityY * velocityY + velocityZ * velocityZ)
+        val velocityModifier = this.velocityMod * 3f * ((1.0f + riptideLevel.toFloat()) / 4.0f)
+        velocityX *= velocityModifier / absoluteVelocity
+        velocityY *= velocityModifier / absoluteVelocity
+        velocityZ *= velocityModifier / absoluteVelocity
+        player.addVelocity(velocityX.toDouble(), velocityY.toDouble(), velocityZ.toDouble())
+        player.method_6018(20)
+        if (player.onGround) {
+            player.move(MovementType.SELF, Vec3d(0.0, 1.1999999284744263, 0.0))
+        }
+
+        val soundEvent: SoundEvent = when {
+            riptideLevel >= 3 -> SoundEvents.ITEM_TRIDENT_RIPTIDE_3
+            riptideLevel == 2 -> SoundEvents.ITEM_TRIDENT_RIPTIDE_2
+            else -> SoundEvents.ITEM_TRIDENT_RIPTIDE_1
+        }
+
+        player.world.playSoundFromEntity(null, player, soundEvent, SoundCategory.PLAYERS, 1.0f, 1.0f)
     }
 
     // Mostly the same as TridentEntity
