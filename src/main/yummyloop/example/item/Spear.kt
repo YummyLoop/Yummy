@@ -50,9 +50,6 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
     protected val attackDamage = 4.5
     protected val attackSpeed = 1.1
     protected val velocityMod = 0.85F
-    protected val projectileEntity = {entityType : EntityType<out ProjectileEntity>, world : World, livingEntity : LivingEntity, stack : ItemStack ->
-        SpearEntity(entityType, world, livingEntity, stack)
-    }
 
     init {
         register(itemName)
@@ -111,18 +108,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
                 stack.damage(1, player, { playerEntity -> playerEntity.sendToolBreakStatus(playerEntity.activeHand) })
 
                 if (riptideLevel == 0 || !player.isInsideWaterOrRain) {
-                    val thrownEntity = this.projectileEntity(ExampleMod.spearType, world, player, stack)
-                    // set projectile velocity
-                    thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + riptideLevel.toFloat() * 0.5f), 1.0f)
-                    if (player.abilities.creativeMode) {
-                        thrownEntity.pickupType = ProjectileEntity.PickupPermission.CREATIVE_ONLY
-                    }
-
-                    world.spawnEntity(thrownEntity)
-                    world.playSoundFromEntity(null, thrownEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f)
-                    if (!player.abilities.creativeMode) {
-                        player.inventory.removeOne(stack)
-                    }
+                    throwProjectile(player, stack)
                 }
             }
 
@@ -133,6 +119,18 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
                 ripTideEnchantAction(player, riptideLevel)
             }
         }
+    }
+
+    protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
+        val thrownEntity =  SpearEntity(ExampleMod.spearType, player.world, player, stack)
+        // set projectile velocity
+        thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + EnchantmentHelper.getRiptide(stack).toFloat() * 0.5f), 1.0f)
+        when {
+            player.abilities.creativeMode -> thrownEntity.pickupType = ProjectileEntity.PickupPermission.CREATIVE_ONLY
+            else -> player.inventory.removeOne(stack)
+        }
+        player.world.spawnEntity(thrownEntity)
+        player.world.playSoundFromEntity(null, thrownEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f)
     }
 
     protected fun ripTideEnchantAction(player : PlayerEntity, riptideLevel : Int) {
