@@ -4,10 +4,7 @@ import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
-import net.minecraft.container.ContainerType
-import net.minecraft.container.GenericContainer
-import net.minecraft.container.Slot
-import net.minecraft.container.SlotActionType
+import net.minecraft.container.*
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
@@ -21,6 +18,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
 import yummyloop.example.util.registry.ClientManager
+import yummyloop.example.util.registry.RegistryManager
 
 class BContainer(
         containerType: ContainerType<*>?,
@@ -39,11 +37,11 @@ class BContainer(
             this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(buf.readInt()*9))
 
     companion object Register {
-        val name = this::class.qualifiedName!!.toLowerCase()
+        private val name = this::class.qualifiedName!!.toLowerCase()
         val id = Identifier(ExampleMod.id, name)
         init {
-            ContainerProviderRegistry.INSTANCE.registerFactory(id) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
-            ClientManager.registerScreen(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> Screen(syncId, player, buf)}
+            RegistryManager.registerContainer(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> BContainer(syncId, player, buf) }
+            ClientManager.registerScreen(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> Screen(syncId, player, buf) }
         }
 
         @Environment(EnvType.CLIENT)
@@ -60,6 +58,7 @@ class BContainer(
     private val stack: ItemStack =  player.getStackInHand(hand)
 
     init {
+        // Load inventory from nbt tag
         val inventoryList = DefaultedList.ofSize(this.inventory.invSize, ItemStack.EMPTY);
         val compoundTag = stack.getSubTag("Items")
         if (compoundTag != null){
@@ -72,39 +71,14 @@ class BContainer(
         //this.inventory =  BasicInventory(*inventoryList.toTypedArray())
     }
 
-/*
-    init { // Look at GenericContainer.java
-        checkContainerSize(inventory, this.rows* 9)
-        inventory?.onInvOpen(playerInventory.player)
-        val twiceInventorySize = (this.rows - 4) * 18
-
-        // Inventory size
-        for (r in 0 until this.rows) {
-            for (c in 0 until 9) {
-                this.addSlot(BoxSlot(this.inventory, c + r * 9, 8 + c * 18, 18 + r * 18))
-            }
-        }
-        // Player inventory
-        for (r in 0 until 3) {
-            for (c in 0 until 9) {
-                this.addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * 18, 103 + r * 18 + twiceInventorySize))
-            }
-        }
-        // Hot Bar
-        for (c in 0 until 9) {
-            this.addSlot(Slot(playerInventory, c, 8 + c * 18, 161 + twiceInventorySize))
-        }
-    }
-
- */
-
     override fun canUse(playerEntity_1: PlayerEntity): Boolean {
         return this.inventory.canPlayerUseInv(playerEntity_1)
     }
 
     override fun close(player: PlayerEntity) {
-        //println(stack.name)
+        // Remove old nbt tag
         stack.removeSubTag("Items")
+        // Save inventory to nbt tag
         val compoundTag = Inventories.toTag(CompoundTag(), this.getStackList(this.inventory), false)
         if (!compoundTag.isEmpty) {
             stack.putSubTag("Items", compoundTag)
@@ -153,10 +127,35 @@ class BContainer(
         }
         return list
     }
+}
+
+/*
+    init { // Look at GenericContainer.java
+        checkContainerSize(inventory, this.rows* 9)
+        inventory?.onInvOpen(playerInventory.player)
+        val twiceInventorySize = (this.rows - 4) * 18
+
+        // Inventory size
+        for (r in 0 until this.rows) {
+            for (c in 0 until 9) {
+                this.addSlot(BoxSlot(this.inventory, c + r * 9, 8 + c * 18, 18 + r * 18))
+            }
+        }
+        // Player inventory
+        for (r in 0 until 3) {
+            for (c in 0 until 9) {
+                this.addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * 18, 103 + r * 18 + twiceInventorySize))
+            }
+        }
+        // Hot Bar
+        for (c in 0 until 9) {
+            this.addSlot(Slot(playerInventory, c, 8 + c * 18, 161 + twiceInventorySize))
+        }
+    }
 
     private class BoxSlot(inventory_1: Inventory, int_1: Int, int_2: Int, int_3: Int) : Slot(inventory_1, int_1, int_2, int_3) {
         override fun canInsert(itemStack_1: ItemStack): Boolean {
             return itemStack_1.item !is Backpack
         }
     }
-}
+ */

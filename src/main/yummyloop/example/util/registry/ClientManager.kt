@@ -11,7 +11,6 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
-import yummyloop.example.render.HasClient
 
 typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractContainerScreen<*>
 

@@ -1,14 +1,20 @@
 package yummyloop.example.util.registry
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
-import net.minecraft.block.Block as VanillaBlock
-import net.minecraft.item.Item as VanillaItem
+import net.fabricmc.fabric.api.container.ContainerProviderRegistry
+import net.minecraft.container.Container
+import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
+import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
 import yummyloop.example.block.Blocks
 import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
+import net.minecraft.block.Block as VanillaBlock
+import net.minecraft.item.Item as VanillaItem
+
+typealias ContainerFactory = (Int, Identifier, PlayerEntity, PacketByteBuf) -> Container
 
 object RegistryManager {
     private var modId : String = ExampleMod.id
@@ -39,5 +45,12 @@ object RegistryManager {
     }
     fun <T : ItemGroup> register(itemGroup : T, itemGroupName : String) : FabricItemGroupBuilder{
         return register(itemGroup, this.modId, itemGroupName)
+    }
+    // Containers
+    fun registerContainer(modId : String, containerName : String, containerFactory: ContainerFactory){
+        ContainerProviderRegistry.INSTANCE.registerFactory(Identifier(modId, containerName), containerFactory)
+    }
+    fun registerContainer(containerName : String, containerFactory: ContainerFactory) {
+        registerContainer(this.modId, containerName, containerFactory)
     }
 }
