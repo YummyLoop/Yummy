@@ -17,25 +17,12 @@ import yummyloop.example.render.models.UnbakedModel
 import yummyloop.example.render.HasClient
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import yummyloop.example.item.Spear
+import yummyloop.example.util.registry.ClientManager
 
-
-class ExampleModClient : ClientModInitializer {
+object ExampleModClient : ClientModInitializer {
     override fun onInitializeClient() {
-        // Init items
-        for (i in Items) {
-            if (i.value is HasClient) {
-                (i.value as HasClient).client()
-            }
-            if (i.value is DyeableItem) {
-                registerDyeableItem(i.value)
-            }
-        }
 
-        for (i in Items.containers) {
-            if (i.value is HasClient) {
-                (i.value as HasClient).client()
-            }
-        }
+        ClientManager.ini()
 
         for (i in Blocks.entities) {
             if (i.value is HasClient) {
@@ -96,23 +83,5 @@ class ExampleModClient : ClientModInitializer {
                     }
                 }
         )*/
-    }
-
-    private fun registerDyeableItem (item : ItemConvertible){
-        ColorProviderRegistry.ITEM.register(// json model requires a "tintindex" while 2d uses the texture layer
-                ItemColorProvider { itemStack, layer ->
-                    if(layer != 0){
-                        -1
-                    }else{
-                        val color = (itemStack.item as DyeableItem).getColor(itemStack)
-                        if (color == 10511680) { // Default color when color was not found
-                            -1
-                        }else{
-                            color
-                        }
-                    }
-                },
-                item
-        )
     }
 }

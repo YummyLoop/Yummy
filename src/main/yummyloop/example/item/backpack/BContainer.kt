@@ -2,7 +2,6 @@ package yummyloop.example.item.backpack
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
 import net.minecraft.container.ContainerType
@@ -15,13 +14,13 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.text.LiteralText
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
-import yummyloop.example.render.HasClient
+import yummyloop.example.util.registry.ClientManager
 
 class BContainer(
         containerType: ContainerType<*>?,
@@ -39,24 +38,17 @@ class BContainer(
     constructor(syncId : Int, player : PlayerEntity, buf: PacketByteBuf) :
             this(ContainerType.GENERIC_9X6, syncId, player, BasicInventory(buf.readInt()*9))
 
-    companion object Register : HasClient {
-        val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())
+    companion object Register {
+        val name = this::class.qualifiedName!!.toLowerCase()
+        val id = Identifier(ExampleMod.id, name)
         init {
             ContainerProviderRegistry.INSTANCE.registerFactory(id) { syncId, _, player, buf -> BContainer(syncId, player, buf) }
+            ClientManager.registerScreen(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> Screen(syncId, player, buf)}
         }
-        private var clientIni = false
-        override fun client () {
-            if (!clientIni) {
-                clientIni=true
-                ScreenProviderRegistry.INSTANCE.registerFactory(id) {
-                    syncId, _, player, buf ->
-                    Screen(syncId, player, buf)
-                }
-            }
-        }
+
         @Environment(EnvType.CLIENT)
         open class Screen(syncId: Int, player: PlayerEntity, buf: PacketByteBuf) :
-                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, LiteralText(buf.readString()))
+                ContainerScreen54(BContainer(syncId, player, buf), player.inventory, TranslatableText(buf.readString()))
     }
 
     // Get the hand
