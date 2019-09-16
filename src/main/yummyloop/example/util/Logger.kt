@@ -12,6 +12,11 @@ class Logger(private val name: String) {
         setLevel(level)
     }
 
+    constructor(name: String, level : String, prefix: Boolean) : this(name, level){
+        this.prefix="\t[$name] "
+    }
+
+    private var prefix : String = ""
     private val log: Logger = LogManager.getFormatterLogger(name)
 
     fun setLevel(level : String){
@@ -31,26 +36,30 @@ class Logger(private val name: String) {
     }
 
     fun debug(message : String){
-        this.log.debug(message)
+        this.log.debug(prefix+message)
     }
 
     fun error(message : String){
-        this.log.error(message)
+        this.log.error(prefix+message)
     }
 
     fun fatal(message : String){
-        this.log.fatal(message)
+        this.log.fatal(prefix+message)
     }
 
     fun info(message : String){
-        this.log.info(message)
+        this.log.info(prefix+message)
     }
 
     fun trace(message : String){
-        this.log.trace(message)
+        this.log.trace(prefix+message)
     }
 
     fun warn(message : String){
-        this.log.warn(message)
+        this.log.warn(prefix+message)
+    }
+
+    fun setPrefix(prefix : String){
+        this.prefix=prefix
     }
 }

@@ -14,20 +14,18 @@ import yummyloop.example.item.Items
 import yummyloop.example.item.Spear
 import yummyloop.example.util.Logger
 
-class ExampleMod : ModInitializer {
-    companion object {
-        const val id : String = "example"
+object ExampleMod : ModInitializer {
+    const val id : String = "example"
+    val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
 
-        val spearType: EntityType<out ProjectileEntity> = Registry.register(
-        Registry.ENTITY_TYPE,
-        Identifier (id, "spear"),
-        FabricEntityTypeBuilder.create(EntityCategory.MISC) { entity: EntityType<out ProjectileEntity>, world-> Spear.SpearEntity(entity, world) }.build())
-    }
-    private val logger: Logger = Logger("LoggerTest")
+
+    val spearType: EntityType<out ProjectileEntity> = Registry.register(
+    Registry.ENTITY_TYPE,
+    Identifier (id, "spear"),
+    FabricEntityTypeBuilder.create(EntityCategory.MISC) { entity: EntityType<out ProjectileEntity>, world-> Spear.SpearEntity(entity, world) }.build())
 
 
     override fun onInitialize() = runBlocking {
-        logger.setLevel("ALL")
         logger.info("**************************")
         logger.info("      Hello World !       ")
         logger.info("**************************")
