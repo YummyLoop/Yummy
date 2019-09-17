@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.At.Shift;
 public abstract class InGameHud extends DrawableHelper {
     @Final
     @Shadow
-    private Random random = new Random();
+    private Random random;
     @Final
     @Shadow
     private MinecraftClient client;
