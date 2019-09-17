@@ -1,29 +1,32 @@
 repositories {
-    maven {
-        name = 'Fabric'
-        url = 'http://maven.fabricmc.net'
-    }
+    mavenLocal()
+    mavenCentral()
+    jcenter()
     maven {
         name = 'Kotlin X'
         url = "https://kotlin.bintray.com/kotlinx"
     }
     maven {
-        name = 'CurseForge'
-        url 'https://minecraft.curseforge.com/api/maven'
+        name = 'Fabric'
+        url = 'http://maven.fabricmc.net'
     }
     maven {
         name = 'Modmuss50'
         url 'http://maven.modmuss50.me'
     }
     maven {
-        name = 'Jitpack'
-        url = 'https://jitpack.io'
+        name = 'CurseForge'
+        url 'https://minecraft.curseforge.com/api/maven'
     }
     maven {
         name = 'NerdHubMC'
         url = 'https://maven.abusedmaster.xyz/'
     }
-    mavenLocal()
-    mavenCentral()
-    jcenter()
+    maven {
+        name = 'Jitpack'
+        url = 'https://jitpack.io'
+        content {
+            excludeGroupByRegex ".*fabricmc.*"
+        }
+    }
 }
