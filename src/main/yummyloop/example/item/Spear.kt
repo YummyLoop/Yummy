@@ -369,8 +369,8 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
 
                 glMatrix {
                     GlStateManager.translatef(0F, 0.4F,0F)
-                    GlStateManager.scalef(1F, -1F, 1F)
-                    MinecraftClient.getInstance().itemRenderer.renderItem(this.stack, ModelTransformation.Type.NONE)
+                    GlStateManager.rotatef(180F,0F,1F, 0F)
+                    MinecraftClient.getInstance().itemRenderer.renderItem(this.stack, ModelTransformation.Type.HEAD)
                 }
             }
         }

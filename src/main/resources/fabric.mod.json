@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "modid",
+  "id": "yummyloop-example",
   "version": "${version}",
 
   "name": "Yummyloop Example Mod",
