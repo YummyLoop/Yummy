@@ -3,6 +3,7 @@ package yummyloop.example
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.EntityCategory
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.projectile.ProjectileEntity
@@ -18,6 +19,7 @@ object ExampleMod : ModInitializer {
     const val id : String = "example"
     val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
 
+    val trinketsExist=FabricLoader.getInstance().isModLoaded("trinkets")
 
     val spearType: EntityType<out ProjectileEntity> = Registry.register(
     Registry.ENTITY_TYPE,

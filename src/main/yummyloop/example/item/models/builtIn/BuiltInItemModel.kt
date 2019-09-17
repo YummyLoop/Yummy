@@ -34,6 +34,7 @@ interface BuiltInItemModel {
         GlStateManager.color4f(rgb.first, rgb.second, rgb.third,alpha)
     }
 
+    // see java.awt color and remove/change this
     fun toRGB(color : Int) : Triple<Float, Float, Float>{
         val red = (color shr 16 and 255).toFloat() / 255.0f
         val green = (color shr 8 and 255).toFloat() / 255.0f

@@ -11,6 +11,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
+import net.minecraft.item.Items as VanillaItems
 
 typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractContainerScreen<*>
 
@@ -52,6 +53,8 @@ object ClientManager {
 
     fun ini(){
         // Init items
+        registerDyeableItem(VanillaItems.ELYTRA)
+
         for (i in itemList) {
             if (i.value is DyeableItem) {
                 registerDyeableItem(i.value)

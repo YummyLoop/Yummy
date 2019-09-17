@@ -5,7 +5,8 @@
   "mixins": [
     "Hat",
     "entity/attribute/EntityAttributes",
-    "entity/player/Hunger"
+    "entity/player/Hunger",
+    "item/Elytra"
   ],
   "client": [
     "ExampleMixin",
@@ -19,7 +20,8 @@
     "client/render/entity/ZombieBaseEntityRenderer",
     "client/render/entity/ZombiePigmanEntityRenderer",
     "client/render/entity/ZombieVillagerEntityRenderer",
-    "client/render/entity/feature/ArmorFeatureRenderer"
+    "client/render/entity/feature/ArmorFeatureRenderer",
+    "client/render/entity/feature/ElytraFeatureRenderer"
   ],
   "injectors": {
     "defaultRequire": 1
