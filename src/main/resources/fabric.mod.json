@@ -3,14 +3,14 @@
   "id": "modid",
   "version": "${version}",
 
-  "name": "Example Mod",
+  "name": "Yummyloop Example Mod",
   "description": "This is an example description! Tell everyone what your mod is about!",
   "authors": [
-    "Me!"
+    "Yummyloop"
   ],
   "contact": {
-    "homepage": "https://?",
-    "sources": "https://git?"
+    "homepage": "https://github.com/YummyLoop/Yummy",
+    "sources": "https://github.com/YummyLoop/Yummy"
   },
 
   "license": "?",
@@ -32,7 +32,7 @@
     ]
   },
   "mixins": [
-    "modid.mixins.json"
+    "yummyloop.example.mixins.json"
   ],
 
   "depends": {
