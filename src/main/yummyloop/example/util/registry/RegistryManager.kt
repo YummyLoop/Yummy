@@ -2,6 +2,7 @@ package yummyloop.example.util.registry
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
+import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.container.Container
 import net.minecraft.entity.player.PlayerEntity
@@ -10,8 +11,10 @@ import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.registry.Registry
 import yummyloop.example.ExampleMod
 import yummyloop.example.block.Blocks
+import yummyloop.example.block.entity.TemplateBlockEntity
 import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
+import java.util.function.Supplier
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.Item as VanillaItem
 
@@ -60,5 +63,8 @@ object RegistryManager {
     }
     fun <T : BlockEntityType<*>> register(blockEntityType : T, blockName : String) {
         register(blockEntityType, this.modId, blockName)
+    }
+    fun <T : BlockEntity> register(sup : Supplier<T>, blocks: List<VanillaBlock?>, blockName : String) {
+        register(BlockEntityType.Builder.create(sup, *blocks.toTypedArray()).build(null)!!, this.modId, blockName)
     }
 }
