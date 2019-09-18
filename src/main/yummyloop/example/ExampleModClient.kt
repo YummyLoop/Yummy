@@ -4,19 +4,12 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider
-import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
-import net.minecraft.client.color.item.ItemColorProvider
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.util.ModelIdentifier
-import net.minecraft.item.DyeableItem
-import net.minecraft.item.ItemConvertible
 import net.minecraft.util.Identifier
-import yummyloop.example.block.Blocks
-import yummyloop.example.item.Items
+import yummyloop.example.item.Spear
 import yummyloop.example.item.models.SimpleBakedItemModel
 import yummyloop.example.render.models.UnbakedModel
-import yummyloop.example.render.HasClient
-import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
-import yummyloop.example.item.Spear
 import yummyloop.example.util.registry.ClientManager
 
 object ExampleModClient : ClientModInitializer {
@@ -24,11 +17,7 @@ object ExampleModClient : ClientModInitializer {
 
         ClientManager.ini()
 
-        for (i in Blocks.entities) {
-            if (i.value is HasClient) {
-                (i.value as HasClient).client()
-            }
-        }
+        //---------Code below is temporary, and/or needs to be improved
 
         EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
 

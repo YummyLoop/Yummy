@@ -4,7 +4,6 @@ import com.mojang.blaze3d.platform.GLX
 import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
@@ -14,30 +13,21 @@ import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
-import yummyloop.example.ExampleMod
 import yummyloop.example.block.Blocks
-import yummyloop.example.render.HasClient
+import yummyloop.example.util.registry.ClientManager
+import yummyloop.example.util.registry.RegistryManager
 import java.util.function.Supplier
 import kotlin.math.sin
 import net.minecraft.item.Items as VanillaItems
 
 class TemplateBlockEntity : BlockEntity(type){
-    companion object Register : HasClient {
+    companion object Register {
         private val supplier = Supplier { TemplateBlockEntity() } // Supplier
         private var blocks = listOf(Blocks["template_be"])   // List of blocks to apply the entity to
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
         init {
-            val id = Identifier(ExampleMod.id, this::class.qualifiedName!!.toLowerCase())
-            Registry.register(Registry.BLOCK_ENTITY, id, type)
-        }
-
-        private var clientIni = false
-        override fun client () {
-            if (!clientIni){
-                clientIni=true
-                BlockEntityRendererRegistry.INSTANCE.register(TemplateBlockEntity::class.java, Renderer())
-            }
+            RegistryManager.register(type, this::class.qualifiedName!!.toLowerCase())
+            ClientManager.registerBlockEntityRenderer(TemplateBlockEntity::class.java, Renderer())
         }
     }
 

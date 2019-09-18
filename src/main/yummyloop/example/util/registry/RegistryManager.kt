@@ -2,6 +2,7 @@ package yummyloop.example.util.registry
 
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.fabricmc.fabric.api.container.ContainerProviderRegistry
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.container.Container
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
@@ -52,5 +53,12 @@ object RegistryManager {
     }
     fun registerContainer(containerName : String, containerFactory: ContainerFactory) {
         registerContainer(this.modId, containerName, containerFactory)
+    }
+    // Block entity
+    fun <T : BlockEntityType<*>> register(blockEntityType : T, modId : String, blockName : String) {
+        Registry.register(Registry.BLOCK_ENTITY, Identifier(modId, blockName), blockEntityType)
+    }
+    fun <T : BlockEntityType<*>> register(blockEntityType : T, blockName : String) {
+        register(blockEntityType, this.modId, blockName)
     }
 }

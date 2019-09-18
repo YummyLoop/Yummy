@@ -14,11 +14,10 @@ import net.minecraft.item.Item.Settings as ItemSettings
 import net.minecraft.item.Items as Vanilla
 
 object Blocks : HashMap<String, VanillaBlock>() {
-    @JvmField val entities = mutableMapOf<String, Any>()
 
     fun ini() {
         TemplateBlockWithEntity("template_be", Block.of(Material.METAL).lightLevel(10))
 
-        entities["templateBlockEntity"] = TemplateBlockEntity
+        TemplateBlockEntity
     }
 }
