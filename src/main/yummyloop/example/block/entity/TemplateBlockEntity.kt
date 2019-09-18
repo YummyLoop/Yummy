@@ -27,7 +27,7 @@ class TemplateBlockEntity : BlockEntity(type){
         private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
         init {
             RegistryManager.register(type, this::class.qualifiedName!!.toLowerCase())
-            ClientManager.registerBlockEntityRenderer(TemplateBlockEntity::class.java, Renderer())
+            ClientManager.registerBlockEntityRenderer(TemplateBlockEntity::class.java, ::Renderer)
         }
     }
 

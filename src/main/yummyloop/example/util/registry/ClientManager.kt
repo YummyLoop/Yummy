@@ -22,7 +22,7 @@ object ClientManager {
     private var modId : String = ExampleMod.id
     private val itemList = Items
     private val screens = HashMap<Identifier, Screen>()
-    private val blockEntityRenderers = HashMap<Class<out VanillaBLockEntity>, BlockEntityRenderer<out VanillaBLockEntity>>()
+    private val blockEntityRenderers = HashMap<Class<out VanillaBLockEntity>, () -> BlockEntityRenderer<out VanillaBLockEntity>>()
 
     // Screens
     fun registerScreen(id : String, screen : Screen){
@@ -38,13 +38,13 @@ object ClientManager {
     }
 
     // BlockEntityRenders
-    fun registerBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: BlockEntityRenderer<out VanillaBLockEntity>){
+    fun registerBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
         if (blockEntityRenderers.putIfAbsent(blockEntityClass, blockEntityRenderer) != null){
             ExampleMod.logger.error("Block entity renderer for $blockEntityClass already exists!")
         }
     }
-    private fun bindBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: BlockEntityRenderer<out VanillaBLockEntity>){
-        BlockEntityRendererRegistry.INSTANCE.register(blockEntityClass, blockEntityRenderer)
+    private fun bindBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
+        BlockEntityRendererRegistry.INSTANCE.register(blockEntityClass, blockEntityRenderer())
     }
 
     // Dyeable items
