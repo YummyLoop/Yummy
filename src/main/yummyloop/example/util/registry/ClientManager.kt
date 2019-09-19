@@ -116,9 +116,26 @@ object ClientManager {
      * "minecraft:models/stone" model ( ModelResourceProvider handles the later step).
      * @see ModelResourceProvider
      */
-    private fun <T : VanillaUnbakedModel?> modelVariantProvider (modelVariant : (modelId: ModelIdentifier, context: ModelProviderContext) -> T){
+    private val modelVariantList =  HashSet<(ModelIdentifier, ModelProviderContext) -> VanillaUnbakedModel?>()
+    private fun appendModelVariantProviders() {
         ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager: ResourceManager? ->
-            ModelVariantProvider(modelVariant)
+            ModelVariantProvider { modelId: ModelIdentifier, context: ModelProviderContext ->
+                if (modelId.namespace == this.modId) {
+                    var ret : VanillaUnbakedModel?= null
+                    for (i in modelVariantList){
+                        ret = i(modelId,context)
+                        if (ret!=null) break
+                    }
+                    ret
+                } else {
+                    null
+                }
+            }
+        }
+    }
+    fun registerModelVariant(v : (ModelIdentifier, ModelProviderContext) -> VanillaUnbakedModel?){
+        if (isClient){
+            modelVariantList.add(v)
         }
     }
     private fun <T : VanillaUnbakedModel?> modelResourceProvider(modelResource : (id: Identifier, context: ModelProviderContext) -> T){
@@ -149,23 +166,22 @@ object ClientManager {
         EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
 
 
-        //requestModel("model", "custom")
+        requestModel("model", "custom")
         appendRequestedModels()
 
-        modelVariantProvider { modelId: ModelIdentifier, context: ModelProviderContext ->
-            if (modelId.namespace == this.modId) {
-                when {
-                    modelId.variant == "custom" -> {
-                        //modelId.path =  model name
-                        println("--- ModelVariantProvider called! ---")
-                        context.loadModel(Identifier(this.modId,"custom"))
-                    }
-                    else -> null
+        registerModelVariant { modelId: ModelIdentifier, context: ModelProviderContext ->
+            when {
+                modelId.variant == "custom" -> {
+                    //modelId.path =  model name
+                    println("--- ModelVariantProvider called! ---")
+                    context.loadModel(Identifier(this.modId,"custom"))
                 }
-            } else {
-                null
+                else -> null
             }
         }
+
+        appendModelVariantProviders()
+
 
         modelResourceProvider{ id: Identifier, context: ModelProviderContext ->
             when {
