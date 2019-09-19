@@ -121,17 +121,19 @@ object ClientManager {
      */
     private val modelVariantList =  HashSet<(ModelIdentifier, ModelProviderContext) -> VanillaUnbakedModel?>()
     private fun appendModelVariantProviders() {
-        ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager: ResourceManager? ->
-            ModelVariantProvider { modelId: ModelIdentifier, context: ModelProviderContext ->
-                if (modelId.namespace == this.modId) {
-                    var ret : VanillaUnbakedModel?= null
-                    for (i in modelVariantList){
-                        ret = i(modelId,context)
-                        if (ret!=null) break
+        if (modelVariantList.size > 0){
+            ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager: ResourceManager? ->
+                ModelVariantProvider { modelId: ModelIdentifier, context: ModelProviderContext ->
+                    if (modelId.namespace == this.modId) {
+                        var ret : VanillaUnbakedModel?= null
+                        for (i in modelVariantList){
+                            ret = i(modelId,context)
+                            if (ret!=null) break
+                        }
+                        ret
+                    } else {
+                        null
                     }
-                    ret
-                } else {
-                    null
                 }
             }
         }
@@ -169,9 +171,10 @@ object ClientManager {
         EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
 
 
-        requestModel("model", "custom")
+        //requestModel("model", "custom")
         appendRequestedModels()
 
+        /*
         registerModelVariant { modelId: ModelIdentifier, context: ModelProviderContext ->
             when {
                 modelId.variant == "custom" -> {
@@ -181,7 +184,7 @@ object ClientManager {
                 }
                 else -> null
             }
-        }
+        }*/
 
         appendModelVariantProviders()
 
