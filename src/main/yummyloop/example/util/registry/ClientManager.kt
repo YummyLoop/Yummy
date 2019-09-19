@@ -1,6 +1,7 @@
 package yummyloop.example.util.registry
 
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
+import net.fabricmc.fabric.api.client.model.ModelProviderContext
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider
 import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
@@ -14,13 +15,16 @@ import net.minecraft.client.util.ModelIdentifier
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemConvertible
+import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
+import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 import yummyloop.example.item.Spear
 import yummyloop.example.item.models.SimpleBakedItemModel
 import yummyloop.example.render.models.UnbakedModel
+import java.util.function.Consumer
 import net.minecraft.block.entity.BlockEntity as VanillaBLockEntity
 import net.minecraft.item.Items as VanillaItems
 
@@ -74,6 +78,47 @@ object ClientManager {
         )
     }
 
+    // Models
+    private val modelList = HashMap<Identifier, String>()
+    // ----------------------------------------------------------------------------------------------------------------
+    // Register a model appender, which can request loading additional models.
+    private fun appendRequestedModels(){
+        if (modelList.size > 0) {
+            ModelLoadingRegistry.INSTANCE.registerAppender { manager: ResourceManager, out: Consumer<ModelIdentifier> ->
+                for (i in modelList) {
+                    out.accept(ModelIdentifier(i.key, i.value))
+                }
+            }
+        }
+    }
+    // request model -> requires a blockState
+    private fun requestModel(name : String, variant : String){
+        if (modelList.putIfAbsent(Identifier(this.modId, name), variant) != null){
+            ExampleMod.logger.error("Model $name # $variant already exists!")
+        }
+    }
+    // request item model
+    private fun requestModel(name : String) {
+        requestModel(name, "inventory")
+    }
+    /**
+     * Model variant providers hooks the resolution of ModelIdentifiers.
+    *  In vanilla, this is the part where a "minecraft:stone#normal" identifier triggers the loading of a
+     * "minecraft:models/stone" model ( ModelResourceProvider handles the later step).
+     * @see ModelResourceProvider
+     */
+    private fun <T : VanillaUnbakedModel?> modelVariantProvider (modelVariant : (modelId: ModelIdentifier, context: ModelProviderContext) -> T){
+        ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager: ResourceManager? ->
+            ModelVariantProvider(modelVariant)
+        }
+    }
+    private fun <T : VanillaUnbakedModel?> modelResourceProvider(modelResource : (id: Identifier, context: ModelProviderContext) -> T){
+        ModelLoadingRegistry.INSTANCE.registerResourceProvider { manager: ResourceManager? ->
+            ModelResourceProvider(modelResource)
+        }
+    }
+
+    // ----------------------------------------------------------------------------------------------------------------
     fun ini(){
         // Init items
         registerDyeableItem(VanillaItems.ELYTRA)
@@ -95,38 +140,37 @@ object ClientManager {
         EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
 
 
-        ModelLoadingRegistry.INSTANCE.registerAppender { manager, out->
-            println("--- ModelAppender called! ---")
-            out.accept(ModelIdentifier(ExampleMod.id,"model#custom")) }
+        //requestModel("model", "custom")
+        appendRequestedModels()
 
-        ModelLoadingRegistry.INSTANCE.registerVariantProvider { manager->
-            ModelVariantProvider{
-                modelId, context->
-                if (modelId.variant == "custom" && modelId.namespace == ExampleMod.id) {
-                    println("--- ModelVariantProvider called! ---")
-                    context.loadModel(Identifier(ExampleMod.id, "custom"))
-                } else {
-                    null
-                }
-            }
-        }
-
-        ModelLoadingRegistry.INSTANCE.registerResourceProvider { manager->
-            ModelResourceProvider{
-                id, context->
+        modelVariantProvider { modelId: ModelIdentifier, context: ModelProviderContext ->
+            if (modelId.namespace == this.modId) {
                 when {
-                    id.toString() == "example:custom" -> context.loadModel(Identifier(ExampleMod.id, "custom2"))
-                    id.toString() == "example:custom2" -> {
-                        println("--- ModelResourceProvider called! ---")
-                        UnbakedModel(
-                                SimpleBakedItemModel(
-                                        ModelIdentifier("example", "template_be2"),
-                                        Identifier("example", "template_be2")
-                                )
-                        )
+                    modelId.variant == "custom" -> {
+                        //modelId.path =  model name
+                        println("--- ModelVariantProvider called! ---")
+                        context.loadModel(Identifier(this.modId,"custom"))
                     }
                     else -> null
                 }
+            } else {
+                null
+            }
+        }
+
+        modelResourceProvider{ id: Identifier, context: ModelProviderContext ->
+            when {
+                id.toString() == "example:custom" -> context.loadModel(Identifier(this.modId, "custom2"))
+                id.toString() == "example:custom2" -> {
+                    println("--- ModelResourceProvider called! ---")
+                    UnbakedModel(
+                            SimpleBakedItemModel(
+                                    ModelIdentifier("example", "template_be2"),
+                                    Identifier("example", "template_be2")
+                            )
+                    )
+                }
+                else -> null
             }
         }
 
