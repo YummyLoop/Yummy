@@ -1,5 +1,6 @@
 package yummyloop.example.util.registry
 
+import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelProviderContext
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
@@ -8,6 +9,7 @@ import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
+import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
@@ -32,14 +34,17 @@ typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractCon
 
 object ClientManager {
     private var modId : String = ExampleMod.id
+    private val isClient : Boolean = FabricLoader.getInstance().environmentType == EnvType.CLIENT
     private val itemList = Items
     private val screens = HashMap<Identifier, Screen>()
     private val blockEntityRenderers = HashMap<Class<out VanillaBLockEntity>, () -> BlockEntityRenderer<out VanillaBLockEntity>>()
 
     // Screens
     fun registerScreen(id : String, screen : Screen){
-        if (screens.putIfAbsent(Identifier(modId, id), screen) != null){
-            ExampleMod.logger.error("Screen $id already exists!")
+        if (isClient) {
+            if (screens.putIfAbsent(Identifier(modId, id), screen) != null) {
+                ExampleMod.logger.error("Screen $id already exists!")
+            }
         }
     }
     private fun registerScreenFactory(id : Identifier, screen : Screen){
@@ -51,8 +56,10 @@ object ClientManager {
 
     // BlockEntityRenders
     fun registerBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
-        if (blockEntityRenderers.putIfAbsent(blockEntityClass, blockEntityRenderer) != null){
-            ExampleMod.logger.error("Block entity renderer for $blockEntityClass already exists!")
+        if (isClient) {
+            if (blockEntityRenderers.putIfAbsent(blockEntityClass, blockEntityRenderer) != null) {
+                ExampleMod.logger.error("Block entity renderer for $blockEntityClass already exists!")
+            }
         }
     }
     private fun bindBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
@@ -92,13 +99,15 @@ object ClientManager {
         }
     }
     // request model -> requires a blockState
-    private fun requestModel(name : String, variant : String){
-        if (modelList.putIfAbsent(Identifier(this.modId, name), variant) != null){
-            ExampleMod.logger.error("Model $name # $variant already exists!")
+    fun requestModel(name : String, variant : String){
+        if (isClient) {
+            if (modelList.putIfAbsent(Identifier(this.modId, name), variant) != null) {
+                ExampleMod.logger.error("Model $name # $variant already exists!")
+            }
         }
     }
     // request item model
-    private fun requestModel(name : String) {
+    fun requestModel(name : String) {
         requestModel(name, "inventory")
     }
     /**
