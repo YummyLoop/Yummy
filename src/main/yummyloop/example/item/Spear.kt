@@ -171,7 +171,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
         var attackDamage = 4.5F
         var stack: ItemStack = ItemStack(defaultItem)
         private var dealtDamage = false
-        private var tick: Int = 0
+        private var loyaltyTick: Int = 0
 
         constructor(entityType_1 : EntityType<out ProjectileEntity>, world_1 : World)
                 : super(entityType_1, world_1)
@@ -195,44 +195,44 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
 
         override fun tick() {
             val catchSound = SoundEvents.ITEM_TRIDENT_RETURN
-            effectiveTick(catchSound)
-        }
-
-        private fun effectiveTick(catchSound : SoundEvent){
             if (this.inGroundTime > 4) {
                 this.dealtDamage = true
             }
 
             if (this.dealtDamage || this.isNoClip) {
-                val owner = this.owner
-                if (owner != null) {
-                    val loyalty = (this.dataTracker.get<Byte>(loyalty) as Byte).toInt()
-                    when {
-                        loyalty > 0 && !this.isOwnerAlive() -> {
-                            if (!this.world.isClient && this.pickupType == PickupPermission.ALLOWED) {
-                                this.dropStack(this.asItemStack(), 0.1f)
-                            }
-                            this.remove()
-                        }
-                        loyalty > 0 -> {
-                            this.isNoClip = true
-                            val pos = Vec3d(owner.x - this.x, owner.y + owner.standingEyeHeight.toDouble() - this.y, owner.z - this.z)
-                            this.y += pos.y * 0.015 * loyalty.toDouble()
-                            if (this.world.isClient) {
-                                this.prevRenderY = this.y
-                            }
+                loyaltyBehavior(catchSound)
+            }
+            super.tick()
+        }
 
-                            val loyaltyPart = 0.05 * loyalty.toDouble()
-                            this.velocity = this.velocity.multiply(0.95).add(pos.normalize().multiply(loyaltyPart))
-                            if (this.tick == 0) {
-                                this.playSound(catchSound, 10.0f, 1.0f)
-                            }
-                            ++this.tick
+        protected fun loyaltyBehavior(catchSound : SoundEvent){
+            val owner = this.owner
+            if (owner != null) {
+                val loyalty = (this.dataTracker.get<Byte>(loyalty) as Byte).toInt()
+                when {
+                    loyalty > 0 && !this.isOwnerAlive() -> {
+                        if (!this.world.isClient && this.pickupType == PickupPermission.ALLOWED) {
+                            this.dropStack(this.asItemStack(), 0.1f)
                         }
+                        this.remove()
+                    }
+                    loyalty > 0 -> {
+                        this.isNoClip = true
+                        val pos = Vec3d(owner.x - this.x, owner.y + owner.standingEyeHeight.toDouble() - this.y, owner.z - this.z)
+                        this.y += pos.y * 0.015 * loyalty.toDouble()
+                        if (this.world.isClient) {
+                            this.prevRenderY = this.y
+                        }
+
+                        val loyaltyPart = 0.05 * loyalty.toDouble()
+                        this.velocity = this.velocity.multiply(0.95).add(pos.normalize().multiply(loyaltyPart))
+                        if (this.loyaltyTick == 0) {
+                            this.playSound(catchSound, 10.0f, 1.0f)
+                        }
+                        ++this.loyaltyTick
                     }
                 }
             }
-            super.tick()
         }
 
         override fun getEntityCollision(vec3d_1: Vec3d, vec3d_2: Vec3d): EntityHitResult? {
