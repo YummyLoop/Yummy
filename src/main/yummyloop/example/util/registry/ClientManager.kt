@@ -99,16 +99,19 @@ object ClientManager {
         }
     }
     // request model -> requires a blockState
-    fun requestModel(name : String, variant : String){
-        if (isClient) {
+    fun requestModel(name : String, variant : String) : ModelIdentifier? {
+        return if (isClient) {
             if (modelList.putIfAbsent(Identifier(this.modId, name), variant) != null) {
                 ExampleMod.logger.error("Model $name # $variant already exists!")
             }
+            ModelIdentifier(Identifier(this.modId, name), variant)
+        }else{
+            null
         }
     }
     // request item model
-    fun requestModel(name : String) {
-        requestModel(name, "inventory")
+    fun requestModel(name : String) : ModelIdentifier? {
+        return requestModel(name, "inventory")
     }
     /**
      * Model variant providers hooks the resolution of ModelIdentifiers.
