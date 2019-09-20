@@ -189,6 +189,7 @@ object ClientManager {
         appendModelVariantProviders()
 
 
+        /*
         modelResourceProvider{ id: Identifier, context: ModelProviderContext ->
             when {
                 id.toString() == "example:custom" -> context.loadModel(Identifier(this.modId, "custom2"))
@@ -204,6 +205,7 @@ object ClientManager {
                 else -> null
             }
         }
+         */
 
         /* // Check when model loads
         ClientTickCallback.EVENT.register(
