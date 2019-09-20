@@ -76,19 +76,19 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
             EquipmentSlot.CHEST -> {
                 if (stack.item is ArmorWithBody) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","body")
+                    renderStack.orCreateTag.putInt("CustomModelData",1)
                     mirror = false
                     renderPart(player, model.body, scale, slot)
                 }
                 if (stack.item is ArmorWithRightArm) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","rightArm")
+                    renderStack.orCreateTag.putInt("CustomModelData",2)
                     mirror = (stack.item as ArmorWithRightArm).mirrorRightArm
                     renderPart(player, model.rightArm, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftArm) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","leftArm")
+                    renderStack.orCreateTag.putInt("CustomModelData",3)
                     mirror = (stack.item as ArmorWithLeftArm).mirrorLeftArm
                     renderPart(player, model.leftArm, scale, slot)
                 }
@@ -96,19 +96,19 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
             EquipmentSlot.LEGS -> {
                 if (stack.item is ArmorWithBody) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","body")
+                    renderStack.orCreateTag.putInt("CustomModelData",1)
                     mirror = false
                     renderPart(player, model.body, scale, slot)
                 }
                 if (stack.item is ArmorWithRightLeg) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","rightLeg")
+                    renderStack.orCreateTag.putInt("CustomModelData",2)
                     mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
                     renderPart(player, model.rightLeg, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftLeg) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","leftLeg")
+                    renderStack.orCreateTag.putInt("CustomModelData",3)
                     mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
                     renderPart(player, model.leftLeg, scale, slot)
                 }
@@ -116,13 +116,13 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
             EquipmentSlot.FEET -> {
                 if (stack.item is ArmorWithRightLeg) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","rightLeg")
+                    renderStack.orCreateTag.putInt("CustomModelData",1)
                     mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
                     renderPart(player, model.rightLeg, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftLeg) {
                     renderStack=stack.copy()
-                    renderStack.orCreateTag.putString("model","leftLeg")
+                    renderStack.orCreateTag.putInt("CustomModelData",2)
                     mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
                     renderPart(player, model.leftLeg, scale, slot)
                 }

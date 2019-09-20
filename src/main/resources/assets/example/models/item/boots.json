@@ -84,6 +84,7 @@
         }
     ],
     "overrides": [
-        { "predicate": {"custom_model_data": 1}, "model": "minecraft:item/gold_ingot"}
+        { "predicate": {"custom_model_data": 1}, "model": "example:item/armor/boots.right.leg"},
+        { "predicate": {"custom_model_data": 2}, "model": "example:item/armor/boots.right.leg"}
     ]
 }

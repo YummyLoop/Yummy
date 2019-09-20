@@ -66,5 +66,10 @@
 			"origin": [8, 8, 8],
 			"children": [0, 1, 2, 3]
 		}
+	],
+	"overrides": [
+		{ "predicate": {"custom_model_data": 1}, "model": "example:item/armor/chest.body"},
+		{ "predicate": {"custom_model_data": 2}, "model": "example:item/armor/chest.right.arm"},
+		{ "predicate": {"custom_model_data": 3}, "model": "example:item/armor/chest.right.arm"}
 	]
 }
