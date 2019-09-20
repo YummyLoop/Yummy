@@ -1,7 +1,6 @@
 package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -15,7 +14,6 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ZombieVillagerEntity
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import yummyloop.example.item.armor.*
 
 @Environment(EnvType.CLIENT)
@@ -59,7 +57,7 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
     }
 
     // Render method
-    private fun specialRender(model : A, player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, scale: Float, slot: EquipmentSlot) = runBlocking{
+    private fun specialRender(model : A, player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, scale: Float, slot: EquipmentSlot) {
         model.method_17087(player, float_1, float_2, float_3, float_4, float_5, scale)
 
         when (slot) {
