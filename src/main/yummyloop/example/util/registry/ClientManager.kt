@@ -64,22 +64,28 @@ object ClientManager {
     }
 
     // Dyeable items
-    private fun registerDyeableItem (item : ItemConvertible){
-        ColorProviderRegistry.ITEM.register(// json model requires a "tintindex" while 2d uses the texture layer
-            ItemColorProvider { itemStack, layer ->
-                if(layer != 0){
-                    -1
-                }else{
-                    val color = (itemStack.item as DyeableItem).getColor(itemStack)
-                    if (color == 10511680) { // Default color when color was not found
+    private val dyeableItemList = HashSet<ItemConvertible?>()
+    private fun registerDyeableItem(item : ItemConvertible){
+        dyeableItemList.add(item)
+    }
+    private fun registerDyeableItems() {
+        if (dyeableItemList.size>0) {
+            ColorProviderRegistry.ITEM.register(// json model requires a "tintindex" while 2d uses the texture layer
+                ItemColorProvider { itemStack, layer ->
+                    if (layer != 0) {
                         -1
-                    }else{
-                        color
+                    } else {
+                        val color = (itemStack.item as DyeableItem).getColor(itemStack)
+                        if (color == 10511680) { // Default color when color was not found
+                            -1
+                        } else {
+                            color
+                        }
                     }
-                }
-            },
-            item
-        )
+                },
+                *dyeableItemList.toTypedArray()
+            )
+        }
     }
 
     // Models
@@ -156,6 +162,9 @@ object ClientManager {
                 registerDyeableItem(i.value)
             }
         }
+
+        registerDyeableItems()
+
         for (i in screens){
             registerScreenFactory(i.key,i.value)
         }
