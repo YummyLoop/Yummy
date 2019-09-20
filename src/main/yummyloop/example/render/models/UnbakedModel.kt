@@ -10,7 +10,7 @@ import java.util.function.Function
 import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 
 class UnbakedModel(private val bakedModel : BakedModel) : VanillaUnbakedModel {
-    override fun bake(var1: ModelLoader?, var2: Function<Identifier, Sprite>?, var3: ModelBakeSettings?): BakedModel? {
+    override fun bake(modelLoader: ModelLoader?, idSprite: Function<Identifier, Sprite>?, settings: ModelBakeSettings?): BakedModel? {
         return bakedModel
     }
 
