@@ -27,7 +27,7 @@
     "client": [
       {
         "adapter": "kotlin",
-        "value": "yummyloop.example.ExampleModClient"
+        "value": "yummyloop.example.ExampleMod"
       }
     ]
   },

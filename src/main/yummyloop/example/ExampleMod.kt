@@ -1,6 +1,7 @@
 package yummyloop.example
 
 import kotlinx.coroutines.runBlocking
+import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
 import net.fabricmc.loader.api.FabricLoader
@@ -14,8 +15,9 @@ import yummyloop.example.config.Config
 import yummyloop.example.item.Items
 import yummyloop.example.item.Spear
 import yummyloop.example.util.Logger
+import yummyloop.example.util.registry.ClientManager
 
-object ExampleMod : ModInitializer {
+object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
     val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
 
@@ -51,5 +53,9 @@ object ExampleMod : ModInitializer {
         //val test : Array<String> = cc.get(1)
         //println( test[0] )
 
+    }
+
+    override fun onInitializeClient() {
+        ClientManager.ini()
     }
 }
