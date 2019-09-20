@@ -1,4 +1,4 @@
-package yummyloop.example.item
+package yummyloop.example.item.spear
 
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.Multimap
@@ -43,6 +43,8 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.EntityHitResult
+import yummyloop.example.item.ItemGroup
+import yummyloop.example.item.Items
 
 
 open class Spear(itemName: String, settings : Settings) : TridentItem(settings) {
@@ -73,7 +75,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
      * Appends a tooltip to the item
      * @param tooltip example: item.tutorial.fabric_item.tooltip
      */
-    fun addTooltip(tooltip : String) : Spear{
+    fun addTooltip(tooltip : String) : Spear {
         this.tooltip.add(TranslatableText(tooltip))
         return this
     }
@@ -122,7 +124,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
     }
 
     protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
-        val thrownEntity =  SpearEntity(ExampleMod.spearType, player.world, player, stack)
+        val thrownEntity = SpearEntity(ExampleMod.spearType, player.world, player, stack)
         // set projectile velocity
         thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + EnchantmentHelper.getRiptide(stack).toFloat() * 0.5f), 1.0f)
         when {

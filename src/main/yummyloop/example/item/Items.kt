@@ -4,6 +4,7 @@ import net.minecraft.item.ArmorMaterials
 import yummyloop.example.block.Blocks
 import yummyloop.example.item.backpack.BContainer
 import yummyloop.example.item.backpack.Backpack
+import yummyloop.example.item.spear.Spear
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.Item.Settings as ItemSettings
 import net.minecraft.item.Items as Vanilla

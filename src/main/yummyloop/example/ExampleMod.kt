@@ -13,7 +13,7 @@ import net.minecraft.util.registry.Registry
 import yummyloop.example.block.Blocks
 import yummyloop.example.config.Config
 import yummyloop.example.item.Items
-import yummyloop.example.item.Spear
+import yummyloop.example.item.spear.Spear
 import yummyloop.example.util.Logger
 import yummyloop.example.util.registry.ClientManager
 
