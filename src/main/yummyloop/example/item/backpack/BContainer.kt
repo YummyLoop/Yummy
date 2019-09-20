@@ -2,9 +2,10 @@ package yummyloop.example.item.backpack
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry
 import net.minecraft.client.gui.screen.ingame.ContainerScreen54
-import net.minecraft.container.*
+import net.minecraft.container.ContainerType
+import net.minecraft.container.GenericContainer
+import net.minecraft.container.SlotActionType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.BasicInventory
 import net.minecraft.inventory.Inventories
@@ -16,7 +17,7 @@ import net.minecraft.util.DefaultedList
 import net.minecraft.util.Hand
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
-import yummyloop.example.ExampleMod
+import yummyloop.example.config.Config
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 
@@ -38,7 +39,7 @@ class BContainer(
 
     companion object Register {
         private val name = this::class.qualifiedName!!.toLowerCase()
-        val id = Identifier(ExampleMod.id, name)
+        val id = Identifier(Config.modId, name)
         init {
             RegistryManager.registerContainer(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> BContainer(syncId, player, buf) }
             ClientManager.registerScreen(name) { syncId : Int, identifier : Identifier, player : PlayerEntity, buf : PacketByteBuf -> Screen(syncId, player, buf) }

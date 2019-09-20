@@ -9,7 +9,7 @@ import net.minecraft.client.render.model.json.ModelItemOverride
 import net.minecraft.client.render.model.json.ModelItemPropertyOverrideList
 import net.minecraft.client.texture.Sprite
 import net.minecraft.util.Identifier
-import yummyloop.example.ExampleMod
+import yummyloop.example.config.Config
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.util.*
@@ -31,7 +31,7 @@ class SemiUnbakedModel(private val name : String) : VanillaUnbakedModel {
     }
 
     private fun getJsonModel(): JsonUnbakedModel {
-        val id = Identifier(ExampleMod.id,"models/item/$name.json")
+        val id = Identifier(Config.modId,"models/item/$name.json")
         val inputStreamReader = InputStreamReader(MinecraftClient.getInstance().resourceManager.getResource(id).inputStream, Charsets.UTF_8) //rawData to char
         val reader = BufferedReader(inputStreamReader) //char to text
         val ret = JsonUnbakedModel.deserialize(reader)//json text to data
