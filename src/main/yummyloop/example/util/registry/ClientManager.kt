@@ -1,6 +1,5 @@
 package yummyloop.example.util.registry
 
-import net.fabricmc.api.EnvType
 import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelProviderContext
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
@@ -9,7 +8,6 @@ import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
@@ -21,18 +19,19 @@ import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import yummyloop.example.ExampleMod
+import yummyloop.example.config.Config
 import yummyloop.example.item.Items
-import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 import yummyloop.example.item.spear.Spear
 import java.util.function.Consumer
 import net.minecraft.block.entity.BlockEntity as VanillaBLockEntity
+import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 import net.minecraft.item.Items as VanillaItems
 
 typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractContainerScreen<*>
 
 object ClientManager {
-    private var modId : String = ExampleMod.id
-    private val isClient : Boolean = FabricLoader.getInstance().environmentType == EnvType.CLIENT
+    private var modId : String = Config.modId
+    private val isClient : Boolean = Config.isClient()
     private val itemList = Items
     private val screens = HashMap<Identifier, Screen>()
     private val blockEntityRenderers = HashMap<Class<out VanillaBLockEntity>, () -> BlockEntityRenderer<out VanillaBLockEntity>>()

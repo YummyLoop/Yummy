@@ -9,9 +9,8 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.registry.Registry
-import yummyloop.example.ExampleMod
 import yummyloop.example.block.Blocks
-import yummyloop.example.block.entity.TemplateBlockEntity
+import yummyloop.example.config.Config
 import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
 import java.util.function.Supplier
@@ -21,7 +20,7 @@ import net.minecraft.item.Item as VanillaItem
 typealias ContainerFactory = (Int, Identifier, PlayerEntity, PacketByteBuf) -> Container
 
 object RegistryManager {
-    private var modId : String = ExampleMod.id
+    private var modId : String = Config.modId
     private val blockList = Blocks
     private val itemList = Items
     private val itemGroupList = Items.groups

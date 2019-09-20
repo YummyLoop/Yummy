@@ -4,14 +4,12 @@ import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
-import net.fabricmc.loader.api.FabricLoader
 import net.minecraft.entity.EntityCategory
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.block.Blocks
-import yummyloop.example.config.Config
 import yummyloop.example.item.Items
 import yummyloop.example.item.spear.Spear
 import yummyloop.example.util.Logger
@@ -20,8 +18,6 @@ import yummyloop.example.util.registry.ClientManager
 object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
     val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
-
-    val trinketsExist=FabricLoader.getInstance().isModLoaded("trinkets")
 
     val spearType: EntityType<out ProjectileEntity> = Registry.register(
     Registry.ENTITY_TYPE,
@@ -42,7 +38,8 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         Blocks.ini()
         Items.ini()
 
-        val cc = Config("a/b/Hello.jsonc")
+        /*
+        val cc = ConfigFile("a/b/Hello.jsonc")
         cc.add("Hello")
         val i1 = "Hello World !"
         cc.add(yummyloop.example.test.java())
@@ -52,6 +49,7 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         println(cc.toJson())
         //val test : Array<String> = cc.get(1)
         //println( test[0] )
+         */
 
     }
 

@@ -16,13 +16,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Config {
+public class ConfigFile {
     private final Path path;
     private final List<Object> list = new ArrayList<>();
     private final List<Class<?>> classList = new ArrayList<>();
     private final Logger logger = new Logger(this.getClass().toString(), "OFF");
 
-    public Config(String file){
+    public ConfigFile(String file){
         this.path = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(file);
         this.path.toFile().getParentFile().mkdirs();
     }
