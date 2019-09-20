@@ -77,7 +77,6 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
                 if (stack.item is ArmorWithBody) {
                     renderStack=stack.copy()
                     renderStack.orCreateTag.putString("model","body")
-                    //ModelTransformation.applyGl((stack.item as ArmorWithBody).bodyTransform?.head, false)
                     mirror = false
                     renderPart(player, model.body, scale, slot)
                 }

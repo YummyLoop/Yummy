@@ -41,7 +41,7 @@ class BakedSpecialArmor(private val name: String) : BakedModel, FabricBakedModel
     }
     private val bodyT = fetchTransform(Identifier(ExampleMod.id,"models/item/$name.body.json"))
     private val rArmT = fetchTransform(Identifier(ExampleMod.id,"models/item/$name.right.arm.json"))
-    private val lArmT = fetchTransform(Identifier(ExampleMod.id,"models/item/$name.left.arm.json"))
+    private val lArmT = rArmT //(Identifier(ExampleMod.id,"models/item/$name.left.arm.json"))
     private val disp = fetchTransform(Identifier(ExampleMod.id,"models/item/$name.display.json"))
     private var trans = disp
 
@@ -51,23 +51,23 @@ class BakedSpecialArmor(private val name: String) : BakedModel, FabricBakedModel
         var ret = bakedModelManager.getModel(ModelIdentifier(Identifier(ExampleMod.id, "$name.display"), "inventory"))
         if (stack.orCreateTag.containsKey("model")) {
             when (stack.orCreateTag.getString("model")) {
-                "body" -> {
-                    trans = bodyT
-                    ret = bakedModelManager.getModel((stack.item as ArmorWithBody).body)
-                }
                 "rightLeg" -> {
                     ret = bakedModelManager.getModel((stack.item as ArmorWithRightLeg).rightLeg)
                 }
                 "leftLeg" -> {
                     ret = bakedModelManager.getModel((stack.item as ArmorWithLeftLeg).leftLeg)
                 }
-                "rightArm" -> {
+                "body" -> {
+                    ret = bakedModelManager.getModel((stack.item as ArmorWithBody).body)
                     trans = rArmT
+                }
+                "rightArm" -> {
                     ret = bakedModelManager.getModel((stack.item as ArmorWithRightArm).rightArm)
+                    trans = lArmT
                 }
                 "leftArm" -> {
-                    trans = lArmT
                     ret = bakedModelManager.getModel((stack.item as ArmorWithLeftArm).leftArm)
+                    trans = bodyT
                 }
                 else -> {
                     println("This should not happen at BakedSpecialArmor")
@@ -75,7 +75,6 @@ class BakedSpecialArmor(private val name: String) : BakedModel, FabricBakedModel
             }
             context.fallbackConsumer().accept(ret)
         }else{
-            trans = disp
             context.fallbackConsumer().accept(ret)
         }
     }
