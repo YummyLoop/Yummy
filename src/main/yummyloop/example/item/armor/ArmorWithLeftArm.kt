@@ -1,8 +1,8 @@
 package yummyloop.example.item.armor
 
-import yummyloop.example.item.Item
+import net.minecraft.client.util.ModelIdentifier
 
 interface ArmorWithLeftArm {
-    val leftArmItem : Item
+    val leftArm : ModelIdentifier?
     val mirrorLeftArm : Boolean
 }

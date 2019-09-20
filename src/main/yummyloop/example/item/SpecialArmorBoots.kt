@@ -7,6 +7,9 @@ import net.minecraft.item.ItemGroup
 import yummyloop.example.item.armor.ArmorWithLeftLeg
 import yummyloop.example.item.armor.ArmorWithRightLeg
 import yummyloop.example.item.armor.SpecialArmorItem
+import yummyloop.example.item.armor.render.BakedSpecialArmor
+import yummyloop.example.render.models.UnbakedModel
+import yummyloop.example.util.registry.ClientManager
 
 class SpecialArmorBoots(
         itemName: String,
@@ -19,8 +22,19 @@ class SpecialArmorBoots(
     constructor(itemName: String, armorMaterial : ArmorMaterial) :
             this(itemName, armorMaterial, Settings().group(ItemGroup.COMBAT))
 
-    override val rightLegItem: Item = Item("$itemName.right.leg", Settings().group(null).maxCount(1))
+    override val rightLeg = ClientManager.requestModel("$itemName.right.leg")
     override val mirrorRightLeg: Boolean = false
-    override val leftLegItem: Item = rightLegItem //Item("$itemName.left.leg", Settings().group(null).maxCount(1))
+    override val leftLeg = rightLeg
     override val mirrorLeftLeg: Boolean = true
+
+    init {
+        ClientManager.requestModel("$itemName.display")
+        ClientManager.registerModelVariant { modelIdentifier, modelProviderContext ->
+            if (modelIdentifier.path == itemName) {
+                UnbakedModel(BakedSpecialArmor(itemName))
+            } else {
+                null
+            }
+        }
+    }
 }

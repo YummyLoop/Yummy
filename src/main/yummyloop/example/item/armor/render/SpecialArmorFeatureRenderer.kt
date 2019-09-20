@@ -1,6 +1,7 @@
 package yummyloop.example.item.armor.render
 
 import com.mojang.blaze3d.platform.GlStateManager
+import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -14,6 +15,7 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.mob.ZombieVillagerEntity
 import net.minecraft.entity.passive.VillagerEntity
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import yummyloop.example.item.armor.*
 
 @Environment(EnvType.CLIENT)
@@ -57,7 +59,7 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
     }
 
     // Render method
-    private fun specialRender(model : A, player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, scale: Float, slot: EquipmentSlot) {
+    private fun specialRender(model : A, player: T, float_1: Float, float_2: Float, float_3: Float, float_4: Float, float_5: Float, scale: Float, slot: EquipmentSlot) = runBlocking{
         model.method_17087(player, float_1, float_2, float_3, float_4, float_5, scale)
 
         when (slot) {
@@ -73,54 +75,55 @@ class SpecialArmorFeatureRenderer<T : LivingEntity, M : BipedEntityModel<T>, A :
             }
             EquipmentSlot.CHEST -> {
                 if (stack.item is ArmorWithBody) {
-                    renderStack = ItemStack((stack.item as ArmorWithBody).bodyItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","body")
+                    //ModelTransformation.applyGl((stack.item as ArmorWithBody).bodyTransform?.head, false)
                     mirror = false
                     renderPart(player, model.body, scale, slot)
                 }
                 if (stack.item is ArmorWithRightArm) {
-                    renderStack = ItemStack((stack.item as ArmorWithRightArm).rightArmItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","rightArm")
                     mirror = (stack.item as ArmorWithRightArm).mirrorRightArm
                     renderPart(player, model.rightArm, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftArm) {
-                    renderStack = ItemStack((stack.item as ArmorWithLeftArm).leftArmItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","leftArm")
                     mirror = (stack.item as ArmorWithLeftArm).mirrorLeftArm
                     renderPart(player, model.leftArm, scale, slot)
                 }
             }
             EquipmentSlot.LEGS -> {
                 if (stack.item is ArmorWithBody) {
-                    renderStack = ItemStack((stack.item as ArmorWithBody).bodyItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","body")
                     mirror = false
                     renderPart(player, model.body, scale, slot)
                 }
                 if (stack.item is ArmorWithRightLeg) {
-                    renderStack = ItemStack((stack.item as ArmorWithRightLeg).rightLegItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","rightLeg")
                     mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
                     renderPart(player, model.rightLeg, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftLeg) {
-                    renderStack = ItemStack((stack.item as ArmorWithLeftLeg).leftLegItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","leftLeg")
                     mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
                     renderPart(player, model.leftLeg, scale, slot)
                 }
             }
             EquipmentSlot.FEET -> {
                 if (stack.item is ArmorWithRightLeg) {
-                    renderStack = ItemStack((stack.item as ArmorWithRightLeg).rightLegItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","rightLeg")
                     mirror = (stack.item as ArmorWithRightLeg).mirrorRightLeg
                     renderPart(player, model.rightLeg, scale, slot)
                 }
                 if (stack.item is ArmorWithLeftLeg) {
-                    renderStack = ItemStack((stack.item as ArmorWithLeftLeg).leftLegItem)
-                    renderStack.tag = stack.tag
+                    renderStack=stack.copy()
+                    renderStack.orCreateTag.putString("model","leftLeg")
                     mirror = (stack.item as ArmorWithLeftLeg).mirrorLeftLeg
                     renderPart(player, model.leftLeg, scale, slot)
                 }
