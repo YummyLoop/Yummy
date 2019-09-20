@@ -1,4 +1,4 @@
-package yummyloop.example.item.models
+package yummyloop.example.render.models
 
 import net.fabricmc.fabric.api.renderer.v1.model.FabricBakedModel
 import net.fabricmc.fabric.api.renderer.v1.render.RenderContext

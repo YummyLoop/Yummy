@@ -24,8 +24,6 @@ import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
 import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 import yummyloop.example.item.Spear
-import yummyloop.example.item.models.SimpleBakedItemModel
-import yummyloop.example.render.models.UnbakedModel
 import java.util.function.Consumer
 import net.minecraft.block.entity.BlockEntity as VanillaBLockEntity
 import net.minecraft.item.Items as VanillaItems
