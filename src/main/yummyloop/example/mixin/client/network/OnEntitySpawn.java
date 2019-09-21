@@ -41,9 +41,9 @@ public abstract class OnEntitySpawn implements ClientPlayPacketListener {
             double y = packet.getY();
             double z = packet.getZ();
 
-            EntityType entityType = SpearEntity.Companion.getType();
+            EntityType entityType = SpearEntity.Companion.getRegisteredType();
             if (packetEntityType == entityType) {
-                entity = new SpearEntity(entityType, world, x, y, z);
+                entity = new SpearEntity(world, x, y, z);
                 if (player != null) {
                     ((ProjectileEntity) entity).setOwner(player);
                 }
