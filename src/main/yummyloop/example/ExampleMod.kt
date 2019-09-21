@@ -10,6 +10,7 @@ import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.example.block.Blocks
+import yummyloop.example.modCompatibility.ModCompatibilityManager
 import yummyloop.example.item.Items
 import yummyloop.example.item.spear.Spear
 import yummyloop.example.util.Logger
@@ -35,6 +36,7 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         logger.warn("logger warn")
         logger.fatal("logger fatal")
 
+        ModCompatibilityManager
         Blocks.ini()
         Items.ini()
 
