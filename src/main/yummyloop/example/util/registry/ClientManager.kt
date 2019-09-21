@@ -11,17 +11,18 @@ import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.minecraft.client.color.item.ItemColorProvider
 import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
+import net.minecraft.client.render.entity.EntityRenderDispatcher
+import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.client.util.ModelIdentifier
+import net.minecraft.entity.Entity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemConvertible
 import net.minecraft.resource.ResourceManager
 import net.minecraft.util.Identifier
 import net.minecraft.util.PacketByteBuf
-import yummyloop.example.ExampleMod
 import yummyloop.example.config.Config
 import yummyloop.example.item.Items
-import yummyloop.example.item.spear.Spear
 import java.util.function.Consumer
 import net.minecraft.block.entity.BlockEntity as VanillaBLockEntity
 import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
@@ -31,16 +32,18 @@ typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractCon
 
 object ClientManager {
     private var modId : String = Config.modId
+    private val logger = Config.logger
     private val isClient : Boolean = Config.isClient()
     private val itemList = Items
     private val screens = HashMap<Identifier, Screen>()
     private val blockEntityRenderers = HashMap<Class<out VanillaBLockEntity>, () -> BlockEntityRenderer<out VanillaBLockEntity>>()
 
     // Screens
+    // ----------------------------------------------------------------------------------------------------------------
     fun registerScreen(id : String, screen : Screen){
         if (isClient) {
             if (screens.putIfAbsent(Identifier(modId, id), screen) != null) {
-                ExampleMod.logger.error("Screen $id already exists!")
+                logger.error("Screen $id already exists!")
             }
         }
     }
@@ -52,10 +55,11 @@ object ClientManager {
     }
 
     // BlockEntityRenders
+    // ----------------------------------------------------------------------------------------------------------------
     fun registerBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
         if (isClient) {
             if (blockEntityRenderers.putIfAbsent(blockEntityClass, blockEntityRenderer) != null) {
-                ExampleMod.logger.error("Block entity renderer for $blockEntityClass already exists!")
+                logger.error("Block entity renderer for $blockEntityClass already exists!")
             }
         }
     }
@@ -64,6 +68,7 @@ object ClientManager {
     }
 
     // Dyeable items
+    // ----------------------------------------------------------------------------------------------------------------
     private val dyeableItemList = HashSet<ItemConvertible?>()
     private fun registerDyeableItem(item : ItemConvertible){
         dyeableItemList.add(item)
@@ -105,7 +110,7 @@ object ClientManager {
     fun requestModel(name : String, variant : String) : ModelIdentifier? {
         return if (isClient) {
             if (modelList.putIfAbsent(Identifier(this.modId, name), variant) != null) {
-                ExampleMod.logger.error("Model $name # $variant already exists!")
+                logger.error("Model $name # $variant already exists!")
             }
             ModelIdentifier(Identifier(this.modId, name), variant)
         }else{
@@ -152,6 +157,27 @@ object ClientManager {
         }
     }
 
+    //Entities
+    // ----------------------------------------------------------------------------------------------------------------
+    private val entityRenderers = HashMap<Class<out Entity>, (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity> >()
+    private fun bindEntityRenderer(entityClass: Class<out Entity>, function: (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity>) {
+        EntityRendererRegistry.INSTANCE.register(entityClass, function)
+    }
+    private fun bindEntityRenderers() {
+        if (entityRenderers.size>0){
+            for (i in entityRenderers){
+                bindEntityRenderer(i.key, i.value)
+            }
+        }
+    }
+    fun <T: Entity> registerEntityRenderer(entityClass: Class<T>, function: (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<T>) {
+        if (isClient) {
+            if (entityRenderers.putIfAbsent(entityClass, function) != null) {
+                logger.error("Entity renderer for $entityClass already exists!")
+            }
+        }
+    }
+
     // ----------------------------------------------------------------------------------------------------------------
     fun ini(){
         // Init items
@@ -172,9 +198,9 @@ object ClientManager {
             bindBlockEntityRenderer(i.key,i.value)
         }
 
-        //---------Code below is temporary, and/or needs to be improved
+        bindEntityRenderers()
 
-        EntityRendererRegistry.INSTANCE.register(Spear.SpearEntity::class.java) { entityRenderDispatcher, context -> Spear.SpearEntityRenderer(entityRenderDispatcher) }
+        //---------Code below is temporary, and/or needs to be improved
 
 
         //requestModel("model", "custom")
