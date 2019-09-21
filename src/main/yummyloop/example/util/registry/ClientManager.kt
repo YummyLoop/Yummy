@@ -170,7 +170,7 @@ object ClientManager {
             }
         }
     }
-    fun <T: Entity> registerEntityRenderer(entityClass: Class<T>, function: (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<T>) {
+    fun registerEntityRenderer(entityClass: Class<out Entity>, function: (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity>) {
         if (isClient) {
             if (entityRenderers.putIfAbsent(entityClass, function) != null) {
                 logger.error("Entity renderer for $entityClass already exists!")

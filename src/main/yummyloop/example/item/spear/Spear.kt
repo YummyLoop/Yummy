@@ -41,7 +41,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
 
     init {
         register(itemName)
-        ClientManager.registerEntityRenderer(SpearEntity::class.java) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> SpearEntityRenderer(entityRenderDispatcher) }
+        ClientManager.registerEntityRenderer(SpearEntity::class.java) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
     }
     constructor(itemName : String) :
             this(itemName, Settings().group(VanillaItemGroup.MISC))

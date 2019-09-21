@@ -1,29 +1,24 @@
 package yummyloop.example.item.spear
 
 import com.mojang.blaze3d.platform.GlStateManager
-import net.minecraft.client.MinecraftClient
+import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.client.render.model.json.ModelTransformation
+import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
-import yummyloop.example.item.Items
+import net.minecraft.item.Item as VanillaItem
 
-class SpearEntityRenderer : EntityRenderer<SpearEntity> {
-    constructor(e1 : EntityRenderDispatcher) : super(e1)
+class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: EntityRendererRegistry.Context, item : VanillaItem) : EntityRenderer<Entity>(e1) {
+    val stack = ItemStack(item)
 
-    companion object{
-        val defaultItem = Items["spear"]
+    override fun getTexture(entity: Entity?): Identifier? {
+        return null// Is ignored
     }
 
-    val stack = ItemStack(defaultItem)
-
-    override fun getTexture(var1: SpearEntity?): Identifier? {
-        return Identifier("minecraft:textures/item/iron_ingot.png") // Is ignored
-    }
-
-    override fun render(entity: SpearEntity, x: Double, y: Double, z: Double, float_1: Float, float_2: Float) {
+    override fun render(entity: Entity, x: Double, y: Double, z: Double, float_1: Float, float_2: Float) {
         glMatrix {
             GlStateManager.translatef(x.toFloat(), y.toFloat(), z.toFloat())
             GlStateManager.rotatef(MathHelper.lerp(float_2, entity.prevYaw, entity.yaw) - 90.0f, 0.0f, 1.0f, 0.0f)
@@ -32,7 +27,7 @@ class SpearEntityRenderer : EntityRenderer<SpearEntity> {
             glMatrix {
                 GlStateManager.translatef(0F, 0.4F,0F)
                 GlStateManager.rotatef(180F,0F,1F, 0F)
-                MinecraftClient.getInstance().itemRenderer.renderItem(this.stack, ModelTransformation.Type.HEAD)
+                context.itemRenderer.renderItem(this.stack, ModelTransformation.Type.HEAD)
             }
         }
     }
