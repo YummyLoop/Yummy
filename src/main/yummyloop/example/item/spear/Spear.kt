@@ -124,7 +124,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
     }
 
     protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
-        val thrownEntity = SpearEntity(ExampleMod.spearType, player.world, player, stack)
+        val thrownEntity = SpearEntity(SpearEntity.type, player.world, player, stack)
         // set projectile velocity
         thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + EnchantmentHelper.getRiptide(stack).toFloat() * 0.5f), 1.0f)
         when {
@@ -168,6 +168,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
                     DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
 
             private val defaultItem = Items["Spear"]
+            val type = RegistryManager.registerEntityType("spear", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
         }
 
         var attackDamage = 4.5F
@@ -175,15 +176,15 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
         private var dealtDamage = false
         private var loyaltyTick: Int = 0
 
-        constructor(entityType_1 : EntityType<out ProjectileEntity>, world_1 : World)
+        constructor(entityType_1 : EntityType<SpearEntity>, world_1 : World)
                 : super(entityType_1, world_1)
 
-        constructor(entityType : EntityType<out ProjectileEntity> ,world : World, livingEntity : LivingEntity, stack : ItemStack)
+        constructor(entityType : EntityType<SpearEntity> ,world : World, livingEntity : LivingEntity, stack : ItemStack)
                 : super(entityType, livingEntity, world){
             this.stack = stack.copy()
             this.dataTracker.set(loyalty, EnchantmentHelper.getLoyalty(stack).toByte())
         }
-        constructor(entityType : EntityType<out ProjectileEntity>, world_1: World, double_1: Double, double_2: Double, double_3: Double)
+        constructor(entityType : EntityType<SpearEntity>, world_1: World, double_1: Double, double_2: Double, double_3: Double)
                 : super(entityType, double_1, double_2, double_3, world_1)
 
         override fun asItemStack(): ItemStack {

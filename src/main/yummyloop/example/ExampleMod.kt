@@ -20,12 +20,6 @@ object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
     val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
 
-    val spearType: EntityType<out ProjectileEntity> = Registry.register(
-    Registry.ENTITY_TYPE,
-    Identifier (id, "spear"),
-    FabricEntityTypeBuilder.create(EntityCategory.MISC) { entity: EntityType<out ProjectileEntity>, world-> Spear.SpearEntity(entity, world) }.build())
-
-
     override fun onInitialize() = runBlocking {
         logger.info("**************************")
         logger.info("      Hello World !       ")
