@@ -22,7 +22,9 @@ import net.minecraft.world.World
 import yummyloop.example.util.registry.RegistryManager
 
 abstract class AbstractSpearEntity : ProjectileEntity {
-
+    companion object{
+        private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(AbstractSpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
+    }
     protected abstract var attackDamage: Float
     private var stack: ItemStack = ItemStack.EMPTY
     private var dealtDamage = false
@@ -40,7 +42,9 @@ abstract class AbstractSpearEntity : ProjectileEntity {
     constructor(entityType : EntityType<out AbstractSpearEntity>, world: World, x: Double, y: Double, z: Double)
             : super(entityType, x, y, z, world)
 
-    protected abstract fun getLoyalty(): TrackedData<Byte>
+    private fun getLoyalty(): TrackedData<Byte>{
+        return loyalty
+    }
 
     override fun asItemStack(): ItemStack {
         return stack.copy()

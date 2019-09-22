@@ -33,7 +33,6 @@ object SpearBirch : AbstractSpear("spear_birch", SpearSettings.Wooden.itemSettin
 
     private class InternalEntity : AbstractSpearEntity {
         companion object{
-            private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(InternalEntity::class.java, TrackedDataHandlerRegistry.BYTE)
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
@@ -48,9 +47,5 @@ object SpearBirch : AbstractSpear("spear_birch", SpearSettings.Wooden.itemSettin
                 : super(registeredType, world, x, y, z)
 
         override var attackDamage: Float = SpearSettings.Wooden.entityAttackDamage
-
-        override fun getLoyalty(): TrackedData<Byte> {
-            return loyalty
-        }
     }
 }
