@@ -116,8 +116,16 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
         }
     }
 
+    protected fun getThrownEntity(player : PlayerEntity, stack: ItemStack): ProjectileEntity {
+        return SpearEntity(player.world, player, stack)
+    }
+
+    protected fun getThrowSound(): SoundEvent {
+        return SoundEvents.ITEM_TRIDENT_THROW
+    }
+
     protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
-        val thrownEntity = SpearEntity(player.world, player, stack)
+        val thrownEntity = getThrownEntity(player, stack)
         // set projectile velocity
         thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + EnchantmentHelper.getRiptide(stack).toFloat() * 0.5f), 1.0f)
         when {
@@ -125,7 +133,7 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
             else -> player.inventory.removeOne(stack)
         }
         player.world.spawnEntity(thrownEntity)
-        player.world.playSoundFromEntity(null, thrownEntity, SoundEvents.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f)
+        player.world.playSoundFromEntity(null, thrownEntity, getThrowSound(), SoundCategory.PLAYERS, 1.0f, 1.0f)
     }
 
     protected fun ripTideEnchantAction(player : PlayerEntity, riptideLevel : Int) {
