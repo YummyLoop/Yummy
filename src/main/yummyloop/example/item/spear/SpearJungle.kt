@@ -15,20 +15,20 @@ import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-open class Spear(itemName: String, settings : Settings) : AbstractSpear(itemName, settings) {
+object SpearJungle : AbstractSpear("spear_jungle", SpearSettings.Wooden.itemSettings) {
 
-    override val attackDamage = 4.5F
-    override val attackSpeed = 1.1F
-    override val velocityMod = 0.85F
+    override val attackDamage = SpearSettings.Wooden.attackDamage
+    override val attackSpeed = SpearSettings.Wooden.attackSpeed
+    override val velocityMod = SpearSettings.Wooden.velocityMod
 
-    constructor(itemName : String) :
-            this(itemName, Settings().group(VanillaItemGroup.COMBAT).maxDamage(60))
-
-    override fun ini() {
+    init {
         InternalEntity
-        ClientManager.registerEntityRenderer(InternalEntity::class.java)
+        ClientManager.registerEntityRenderer(InternalEntity::class.java) //look for ways to replace the need for a class or use byteBuddy ?
         { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
     }
+
+    // remove this or look at ByteBuddy latter for the "internalEntity"
+    override fun ini() {}
 
     override fun getThrownEntity(player: PlayerEntity, stack: ItemStack): ProjectileEntity {
         return InternalEntity(player.world, player, stack)
@@ -36,10 +36,9 @@ open class Spear(itemName: String, settings : Settings) : AbstractSpear(itemName
 
     private class InternalEntity : AbstractSpearEntity {
         companion object{
-            private var name : String = "spear"
             private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(InternalEntity::class.java, TrackedDataHandlerRegistry.BYTE)
-            private val registeredType = RegistryManager.registerMiscEntityType(
-                    (name+"_entity"),
+            private val registeredType= RegistryManager.registerMiscEntityType(
+                    (itemName +"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
                     { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) })
         }
@@ -51,7 +50,7 @@ open class Spear(itemName: String, settings : Settings) : AbstractSpear(itemName
         constructor(world: World, x: Double, y: Double, z: Double)
                 : super(registeredType, world, x, y, z)
 
-        override var attackDamage: Float = 4.5F
+        override var attackDamage: Float = SpearSettings.Wooden.entityAttackDamage
 
         override fun getLoyalty(): TrackedData<Byte> {
             return loyalty

@@ -28,7 +28,7 @@ import yummyloop.example.item.ItemGroup
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-abstract class AbstractSpear(itemName: String, settings : Settings) : TridentItem(settings) {
+abstract class AbstractSpear(val itemName: String, settings : Settings) : TridentItem(settings) {
     private val tooltip = ArrayList<Text>()
     protected abstract val attackDamage: Float
     protected abstract val attackSpeed: Float
