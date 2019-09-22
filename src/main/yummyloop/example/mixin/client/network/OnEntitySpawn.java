@@ -17,6 +17,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yummyloop.example.item.spear.SpearEntity;
+import yummyloop.example.util.registry.RegistryManager;
 
 @Mixin({ClientPlayNetworkHandler.class})
 public abstract class OnEntitySpawn implements ClientPlayPacketListener {
@@ -41,15 +42,15 @@ public abstract class OnEntitySpawn implements ClientPlayPacketListener {
             double y = packet.getY();
             double z = packet.getZ();
 
-            EntityType entityType = SpearEntity.Companion.getRegisteredType();
+            EntityType entityType = RegistryManager.INSTANCE.getEntityType().get("spear_entity");
             if (packetEntityType == entityType) {
                 entity = new SpearEntity(world, x, y, z);
-                if (player != null) {
-                    ((ProjectileEntity) entity).setOwner(player);
-                }
             }
 
             if (entity != null) {
+                if (player != null && entity instanceof ProjectileEntity) {
+                    ((ProjectileEntity) entity).setOwner(player);
+                }
                 int packetId = packet.getId();
                 entity.updateTrackedPosition(x, y, z);
                 entity.pitch = (float)(packet.getPitch() * 360) / 256.0F;

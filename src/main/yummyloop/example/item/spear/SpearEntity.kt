@@ -19,20 +19,16 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import yummyloop.example.item.Items
 import yummyloop.example.util.registry.RegistryManager
 
 open class SpearEntity : ProjectileEntity {
     companion object{
-        private val loyalty: TrackedData<Byte>? =
-                DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
-
-        private val defaultItem = Items["spear"]
-        val registeredType = RegistryManager.registerEntityType("spear_entity", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
+        private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
+        private val registeredType = RegistryManager.registerEntityType("spear_entity", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
     }
 
     var attackDamage = 4.5F
-    var stack: ItemStack = ItemStack(defaultItem)
+    private var stack: ItemStack = ItemStack.EMPTY
     private var dealtDamage = false
     private var loyaltyTick: Int = 0
 
@@ -42,7 +38,7 @@ open class SpearEntity : ProjectileEntity {
     constructor(entityType : EntityType<SpearEntity>, world : World, livingEntity : LivingEntity, stack : ItemStack)
             : super(entityType, livingEntity, world){
         this.stack = stack.copy()
-        this.dataTracker.set(loyalty, EnchantmentHelper.getLoyalty(stack).toByte())
+        this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(stack).toByte())
     }
     constructor(world : World, livingEntity : LivingEntity, stack : ItemStack)
             : this(registeredType, world, livingEntity, stack)
@@ -52,13 +48,17 @@ open class SpearEntity : ProjectileEntity {
     constructor(world: World, x: Double, y: Double, z: Double)
             : this(registeredType, world, x, y, z)
 
+    private fun getLoyalty(): TrackedData<Byte> {
+        return loyalty
+    }
+
     override fun asItemStack(): ItemStack {
         return stack.copy()
     }
 
     override fun initDataTracker() {
         super.initDataTracker()
-        this.dataTracker.startTracking(loyalty, 0.toByte())
+        this.dataTracker.startTracking(getLoyalty(), 0.toByte())
     }
 
     override fun tick() {
@@ -76,7 +76,7 @@ open class SpearEntity : ProjectileEntity {
     protected fun loyaltyBehavior(catchSound : SoundEvent){
         val owner = this.owner
         if (owner != null) {
-            val loyalty = (this.dataTracker.get<Byte>(loyalty) as Byte).toInt()
+            val loyalty = (this.dataTracker.get<Byte>(getLoyalty()) as Byte).toInt()
             when {
                 loyalty > 0 && !this.isOwnerAlive() -> {
                     if (!this.world.isClient && this.pickupType == PickupPermission.ALLOWED) {
@@ -185,7 +185,7 @@ open class SpearEntity : ProjectileEntity {
         }
 
         this.dealtDamage = compoundTag_1.getBoolean("DealtDamage")
-        this.dataTracker.set(loyalty, EnchantmentHelper.getLoyalty(this.stack).toByte())
+        this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(this.stack).toByte())
     }
 
     override fun writeCustomDataToTag(compoundTag_1: CompoundTag) {
@@ -195,7 +195,7 @@ open class SpearEntity : ProjectileEntity {
     }
 
     override fun age() {
-        val loyalty = (this.dataTracker.get<Byte>(loyalty) as Byte).toInt()
+        val loyalty = (this.dataTracker.get<Byte>(getLoyalty()) as Byte).toInt()
         if (this.pickupType != PickupPermission.ALLOWED || loyalty <= 0) {
             super.age()
         }

@@ -6,9 +6,7 @@ import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.MovementType
+import net.minecraft.entity.*
 import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
@@ -39,9 +37,17 @@ open class Spear(itemName: String, settings : Settings) : TridentItem(settings) 
     protected val attackSpeed = 1.1
     protected val velocityMod = 0.85F
 
+    companion object{
+        private var ini = false
+    }
+
     init {
         register(itemName)
-        ClientManager.registerEntityRenderer(SpearEntity::class.java) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
+        if (!ini) {
+            ini = true
+            SpearEntity
+            ClientManager.registerEntityRenderer(SpearEntity::class.java) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
+        }
     }
     constructor(itemName : String) :
             this(itemName, Settings().group(VanillaItemGroup.MISC))

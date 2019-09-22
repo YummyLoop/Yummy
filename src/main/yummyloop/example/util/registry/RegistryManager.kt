@@ -29,6 +29,7 @@ object RegistryManager {
     private val blockList = Blocks
     private val itemList = Items
     private val itemGroupList = Items.groups
+    val entityType = HashMap<String, EntityType<out Entity>>()
 
     // Item
     //-----------------------------------------------------------------------------------------------------------------
@@ -79,10 +80,12 @@ object RegistryManager {
     // Entity type
     //-----------------------------------------------------------------------------------------------------------------
     fun <M : Entity> registerEntityType(modId: String, name: String, category: EntityCategory, function: (EntityType<M>, World) -> M): EntityType<M> {
-        return Registry.register(
+        val ret = Registry.register(
                 Registry.ENTITY_TYPE,
                 Identifier (modId, name),
                 FabricEntityTypeBuilder.create(category){ entity: EntityType<M>, world : World -> function(entity, world)}.build())
+        entityType[name] = ret
+        return ret
     }
     fun <M : Entity> registerEntityType(name: String, category: EntityCategory, function: (EntityType<M>, World) -> M): EntityType<M> {
         return registerEntityType(this.modId, name, category, function)
