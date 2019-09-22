@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.render.entity
 
 import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry

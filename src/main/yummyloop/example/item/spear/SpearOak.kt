@@ -11,9 +11,9 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
+import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
-import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 object SpearOak : AbstractSpear("spear_oak", SpearSettings.Wooden.itemSettings) {
 
@@ -26,9 +26,6 @@ object SpearOak : AbstractSpear("spear_oak", SpearSettings.Wooden.itemSettings) 
         ClientManager.registerEntityRenderer(InternalEntity::class.java) //look for ways to replace the need for a class or use byteBuddy ?
         { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
     }
-
-    // remove this or look at ByteBuddy latter for the "internalEntity"
-    override fun ini() {}
 
     override fun getThrownEntity(player: PlayerEntity, stack: ItemStack): ProjectileEntity {
         return InternalEntity(player.world, player, stack)

@@ -34,16 +34,8 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
     protected abstract val attackSpeed: Float
     protected abstract val velocityMod: Float
 
-    companion object{
-        private var ini = false
-    }
-
     init {
         register(itemName)
-        if (!ini) {
-            ini = true
-            this.ini()
-        }
     }
     constructor(itemName : String) :
             this(itemName, Settings().group(VanillaItemGroup.COMBAT).maxDamage(60))
@@ -51,8 +43,6 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
     private fun register (itemName : String) {
         RegistryManager.register(this, itemName)
     }
-
-    protected abstract fun ini()
 
     override fun appendTooltip(itemStack: ItemStack?, world: World?, tooltip: MutableList<Text>?, tooltipContext: TooltipContext?) {
         tooltip?.addAll(this.tooltip)
