@@ -9,6 +9,7 @@ import net.minecraft.entity.attribute.EntityAttributeModifier
 import net.minecraft.entity.attribute.EntityAttributes
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
+import net.minecraft.item.DyeableItem
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.item.TridentItem
@@ -28,7 +29,7 @@ import yummyloop.example.item.ItemGroup
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-abstract class AbstractSpear(val itemName: String, settings : Settings) : TridentItem(settings) {
+abstract class AbstractSpear(val itemName: String, settings : Settings) : TridentItem(settings), DyeableItem {
     private val tooltip = ArrayList<Text>()
     protected abstract val attackDamage: Float
     protected abstract val attackSpeed: Float
@@ -108,6 +109,9 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
 
     protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
         val thrownEntity = getThrownEntity(player, stack)
+        if (thrownEntity is AbstractSpearEntity){
+            thrownEntity.setItem(stack)
+        }
         // set projectile velocity
         thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f + EnchantmentHelper.getRiptide(stack).toFloat() * 0.5f), 1.0f)
         when {

@@ -2,6 +2,8 @@ package yummyloop.example.item.spear
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
+import net.fabricmc.api.EnvironmentInterface
+import net.fabricmc.api.EnvironmentInterfaces
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.*
 import net.minecraft.entity.damage.DamageSource
@@ -10,23 +12,26 @@ import net.minecraft.entity.data.TrackedData
 import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
+import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
+import net.minecraft.util.SystemUtil
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import yummyloop.example.util.registry.RegistryManager
 
-abstract class AbstractSpearEntity : ProjectileEntity {
+@EnvironmentInterfaces(EnvironmentInterface(value = EnvType.CLIENT, itf = FlyingItemEntity::class))
+abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
     companion object{
+        private val ITEM: TrackedData<ItemStack> = DataTracker.registerData(AbstractSpearEntity::class.java, TrackedDataHandlerRegistry.ITEM_STACK)
         private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(AbstractSpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
     }
     protected abstract var attackDamage: Float
-    private var stack: ItemStack = ItemStack.EMPTY
+    private var istack: ItemStack = ItemStack.EMPTY
     private var dealtDamage = false
     private var loyaltyTick: Int = 0
 
@@ -35,7 +40,8 @@ abstract class AbstractSpearEntity : ProjectileEntity {
 
     constructor(entityType : EntityType<out AbstractSpearEntity>, world : World, livingEntity : LivingEntity, stack : ItemStack)
             : super(entityType, livingEntity, world){
-        this.stack = stack.copy()
+        this.istack = stack.copy()
+        this.setItem(this.istack)
         this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(stack).toByte())
     }
 
@@ -47,12 +53,14 @@ abstract class AbstractSpearEntity : ProjectileEntity {
     }
 
     override fun asItemStack(): ItemStack {
-        return stack.copy()
+        val i = this.getItem()
+        return if (i.isEmpty) ItemStack(this.getDefaultItem()) else i.copy()
     }
 
     override fun initDataTracker() {
         super.initDataTracker()
         this.dataTracker.startTracking(getLoyalty(), 0.toByte())
+        this.getDataTracker().startTracking(ITEM, ItemStack.EMPTY)
     }
 
     override fun tick() {
@@ -116,7 +124,7 @@ abstract class AbstractSpearEntity : ProjectileEntity {
 
         // Enchanted damage calculation
         if (entityHit is LivingEntity) {
-            effectiveAttackDamage += EnchantmentHelper.getAttackDamage(this.stack, entityHit.group)
+            effectiveAttackDamage += EnchantmentHelper.getAttackDamage(this.asItemStack(), entityHit.group)
         }
 
         // Hit and damage an entity
@@ -139,7 +147,7 @@ abstract class AbstractSpearEntity : ProjectileEntity {
 
     private fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
         // If the weather is thundering && has channeling enchant
-        if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.stack)) {
+        if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.asItemStack())) {
             val blockPos = entityHit.blockPos
             // If can see the sky
             if (this.world.isSkyVisible(blockPos)) {
@@ -175,16 +183,17 @@ abstract class AbstractSpearEntity : ProjectileEntity {
     override fun readCustomDataFromTag(compoundTag_1: CompoundTag) {
         super.readCustomDataFromTag(compoundTag_1)
         if (compoundTag_1.containsKey("Spear", 10)) {
-            this.stack = ItemStack.fromTag(compoundTag_1.getCompound("Spear"))
+            this.istack = ItemStack.fromTag(compoundTag_1.getCompound("Spear"))
         }
 
         this.dealtDamage = compoundTag_1.getBoolean("DealtDamage")
-        this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(this.stack).toByte())
+        this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(this.istack).toByte())
+        this.setItem(istack)
     }
 
     override fun writeCustomDataToTag(compoundTag_1: CompoundTag) {
         super.writeCustomDataToTag(compoundTag_1)
-        compoundTag_1.put("Spear", this.stack.toTag(CompoundTag()))
+        compoundTag_1.put("Spear", this.getItem().toTag(CompoundTag()))
         compoundTag_1.putBoolean("DealtDamage", this.dealtDamage)
     }
 
@@ -206,6 +215,27 @@ abstract class AbstractSpearEntity : ProjectileEntity {
 
     override fun getSound(): SoundEvent? {
         return SoundEvents.ITEM_TRIDENT_HIT_GROUND
+    }
+
+
+    @Environment(EnvType.CLIENT)
+    override fun getStack(): ItemStack {
+        val stack = this.getItem()
+        return if (stack.isEmpty) ItemStack(this.getDefaultItem()) else stack
+    }
+
+    protected fun getItem(): ItemStack {
+        return this.getDataTracker().get<ItemStack>(ITEM) as ItemStack
+    }
+
+    protected fun getDefaultItem(): Item {
+        return this.istack.item
+    }
+
+    fun setItem(itemStack_1: ItemStack) {
+        if (itemStack_1.item !== this.getDefaultItem() || itemStack_1.hasTag()) {
+            this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
+        }
     }
 
 }
