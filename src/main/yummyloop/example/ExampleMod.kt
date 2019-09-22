@@ -3,16 +3,9 @@ package yummyloop.example
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
-import net.fabricmc.fabric.api.entity.FabricEntityTypeBuilder
-import net.minecraft.entity.EntityCategory
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.projectile.ProjectileEntity
-import net.minecraft.util.Identifier
-import net.minecraft.util.registry.Registry
 import yummyloop.example.block.Blocks
 import yummyloop.example.modCompatibility.ModCompatibilityManager
 import yummyloop.example.item.Items
-import yummyloop.example.item.spear.Spear
 import yummyloop.example.util.Logger
 import yummyloop.example.util.registry.ClientManager
 
