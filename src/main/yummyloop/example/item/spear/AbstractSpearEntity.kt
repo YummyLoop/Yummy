@@ -21,39 +21,26 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
 import yummyloop.example.util.registry.RegistryManager
 
-open class SpearEntity : ProjectileEntity {
-    companion object{
-        private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
-        private val registeredType = RegistryManager.registerMiscEntityType(
-                "spear_entity",
-                { entity: EntityType<SpearEntity>, world : World-> SpearEntity(entity, world) },
-                { world: World, x: Double, y: Double, z: Double -> SpearEntity(world, x,y,z) })
-    }
+abstract class AbstractSpearEntity : ProjectileEntity {
 
-    var attackDamage = 4.5F
+    protected abstract var attackDamage: Float
     private var stack: ItemStack = ItemStack.EMPTY
     private var dealtDamage = false
     private var loyaltyTick: Int = 0
 
-    constructor(entityType : EntityType<SpearEntity>, world : World)
+    constructor(entityType : EntityType<out AbstractSpearEntity>, world : World)
             : super(entityType, world)
 
-    constructor(entityType : EntityType<SpearEntity>, world : World, livingEntity : LivingEntity, stack : ItemStack)
+    constructor(entityType : EntityType<out AbstractSpearEntity>, world : World, livingEntity : LivingEntity, stack : ItemStack)
             : super(entityType, livingEntity, world){
         this.stack = stack.copy()
         this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(stack).toByte())
     }
-    constructor(world : World, livingEntity : LivingEntity, stack : ItemStack)
-            : this(registeredType, world, livingEntity, stack)
 
-    constructor(entityType : EntityType<SpearEntity>, world: World, x: Double, y: Double, z: Double)
+    constructor(entityType : EntityType<out AbstractSpearEntity>, world: World, x: Double, y: Double, z: Double)
             : super(entityType, x, y, z, world)
-    constructor(world: World, x: Double, y: Double, z: Double)
-            : this(registeredType, world, x, y, z)
 
-    private fun getLoyalty(): TrackedData<Byte> {
-        return loyalty
-    }
+    protected abstract fun getLoyalty(): TrackedData<Byte>
 
     override fun asItemStack(): ItemStack {
         return stack.copy()
@@ -76,7 +63,7 @@ open class SpearEntity : ProjectileEntity {
         super.tick()
     }
 
-    protected fun loyaltyBehavior(catchSound : SoundEvent){
+    private fun loyaltyBehavior(catchSound : SoundEvent){
         val owner = this.owner
         if (owner != null) {
             val loyalty = (this.dataTracker.get<Byte>(getLoyalty()) as Byte).toInt()
@@ -146,7 +133,7 @@ open class SpearEntity : ProjectileEntity {
         }
     }
 
-    protected fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
+    private fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
         // If the weather is thundering && has channeling enchant
         if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.stack)) {
             val blockPos = entityHit.blockPos

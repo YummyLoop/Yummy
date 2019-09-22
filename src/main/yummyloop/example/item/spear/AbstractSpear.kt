@@ -30,8 +30,8 @@ import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 abstract class AbstractSpear(itemName: String, settings : Settings) : TridentItem(settings) {
     private val tooltip = ArrayList<Text>()
-    protected abstract val attackDamage: Double
-    protected abstract val attackSpeed: Double
+    protected abstract val attackDamage: Float
+    protected abstract val attackSpeed: Float
     protected abstract val velocityMod: Float
 
     companion object{
@@ -70,7 +70,7 @@ abstract class AbstractSpear(itemName: String, settings : Settings) : TridentIte
     override fun getModifiers(equipmentSlot_1: EquipmentSlot?): Multimap<String, EntityAttributeModifier> {
         val multimap = HashMultimap.create<String, EntityAttributeModifier>()
         if (equipmentSlot_1 == EquipmentSlot.MAINHAND) {
-            multimap.put(EntityAttributes.ATTACK_DAMAGE.id, EntityAttributeModifier(Item.ATTACK_DAMAGE_MODIFIER_UUID, "Tool modifier", (attackDamage-1), EntityAttributeModifier.Operation.ADDITION))
+            multimap.put(EntityAttributes.ATTACK_DAMAGE.id, EntityAttributeModifier(Item.ATTACK_DAMAGE_MODIFIER_UUID, "Tool modifier", (attackDamage-1).toDouble(), EntityAttributeModifier.Operation.ADDITION))
             multimap.put(EntityAttributes.ATTACK_SPEED.id, EntityAttributeModifier(Item.ATTACK_SPEED_MODIFIER_UUID, "Tool modifier", (attackSpeed-1.1-2.9000000953674316), EntityAttributeModifier.Operation.ADDITION))
         }
         return multimap
