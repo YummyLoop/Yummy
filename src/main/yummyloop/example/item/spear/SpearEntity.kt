@@ -24,7 +24,10 @@ import yummyloop.example.util.registry.RegistryManager
 open class SpearEntity : ProjectileEntity {
     companion object{
         private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
-        private val registeredType = RegistryManager.registerEntityType("spear_entity", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
+        private val registeredType = RegistryManager.registerMiscEntityType(
+                "spear_entity",
+                { entity: EntityType<SpearEntity>, world : World-> SpearEntity(entity, world) },
+                { world: World, x: Double, y: Double, z: Double -> SpearEntity(world, x,y,z) })
     }
 
     var attackDamage = 4.5F

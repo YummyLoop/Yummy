@@ -1,5 +1,7 @@
 package yummyloop.example.mixin.client.network;
 
+import kotlin.Pair;
+import kotlin.jvm.functions.Function4;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.network.packet.EntitySpawnS2CPacket;
@@ -11,13 +13,16 @@ import net.minecraft.entity.projectile.ProjectileEntity;
 import net.minecraft.entity.vehicle.AbstractMinecartEntity;
 import net.minecraft.network.NetworkThreadUtils;
 import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yummyloop.example.item.spear.SpearEntity;
 import yummyloop.example.util.registry.RegistryManager;
+
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Mixin({ClientPlayNetworkHandler.class})
 public abstract class OnEntitySpawn implements ClientPlayPacketListener {
@@ -42,9 +47,18 @@ public abstract class OnEntitySpawn implements ClientPlayPacketListener {
             double y = packet.getY();
             double z = packet.getZ();
 
-            EntityType entityType = RegistryManager.INSTANCE.getEntityType().get("spear_entity");
+            /*
+            EntityType entityType = RegistryManager.INSTANCE.getMiscEntityType().get("spear_entity").getFirst();
             if (packetEntityType == entityType) {
-                entity = new SpearEntity(world, x, y, z);
+                //entity = new SpearEntity(world, x, y, z);
+                entity = RegistryManager.INSTANCE.getMiscEntityType().get("spear_entity").getSecond().invoke(world, x, y, z);
+            }*/
+
+            for (Map.Entry<String, Pair<EntityType<? extends Entity>, Function4<World, Double, Double, Double, Entity>>> entry : RegistryManager.INSTANCE.getMiscEntityType().entrySet()) {
+                if (entry.getValue().getFirst() == packetEntityType) {
+                    entity = entry.getValue().getSecond().invoke(world, x, y, z);
+                    break;
+                }
             }
 
             if (entity != null) {
