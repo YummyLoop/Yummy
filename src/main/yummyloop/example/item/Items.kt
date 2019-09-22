@@ -22,6 +22,7 @@ object Items : HashMap<String, VanillaItem>() {
         SpecialArmorChest( "chest", ArmorMaterials.LEATHER)
 
         Spear("spear", ItemSettings().maxDamage(60).group(VanillaItemGroup.COMBAT))
+        Spear("spear2", ItemSettings().maxDamage(60).group(VanillaItemGroup.COMBAT))
 
         Backpack("ring", 6, groups["hello1"])
         //.addTooltip("item.example.fabric_item.tooltip")

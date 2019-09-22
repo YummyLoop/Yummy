@@ -1,0 +1,9 @@
+{
+	"credit": "Made by YummyLoop",
+	"parent": "example:item/spear",
+	"textures": {
+		"particle": "minecraft:block/stripped_acacia_log",
+		"layer0": "minecraft:block/stripped_acacia_log",
+		"layer1": "minecraft:block/stripped_acacia_log_top"
+	}
+}

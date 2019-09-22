@@ -35,11 +35,11 @@ open class Spear(itemName: String, settings : Settings) : AbstractSpear(itemName
     }
 
     private class InternalEntity : AbstractSpearEntity {
-
         companion object{
+            private var name : String = "spear"
             private val loyalty: TrackedData<Byte> = DataTracker.registerData<Byte>(InternalEntity::class.java, TrackedDataHandlerRegistry.BYTE)
             private val registeredType = RegistryManager.registerMiscEntityType(
-                    "spear_entity",
+                    (name+"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
                     { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) })
         }
