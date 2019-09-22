@@ -14,6 +14,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -173,10 +174,10 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         }
     }
 
-    override fun onPlayerCollision(playerEntity_1: PlayerEntity?) {
+    override fun onPlayerCollision(player: PlayerEntity) {
         val owner = this.owner
-        if (owner == null || owner.uuid === playerEntity_1!!.uuid) {
-            super.onPlayerCollision(playerEntity_1)
+        if (owner == null || owner.uuid === player.uuid) {
+            super.onPlayerCollision(player)
         }
     }
 
