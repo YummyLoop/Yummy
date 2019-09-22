@@ -9,6 +9,7 @@ object SpearSettings {
         const val entityAttackDamage = attackDamage
         const val attackSpeed = 1.1F
         const val velocityMod = 0.85F
-        val itemSettings: Item.Settings = Item.Settings().group(ItemGroup.COMBAT).maxDamage(60)
+        const val durability = 60
+        val itemSettings: Item.Settings = Item.Settings().group(ItemGroup.COMBAT).maxDamage(durability)
     }
 }
