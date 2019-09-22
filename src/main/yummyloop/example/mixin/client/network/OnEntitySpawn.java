@@ -22,7 +22,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yummyloop.example.util.registry.RegistryManager;
 
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Mixin({ClientPlayNetworkHandler.class})
 public abstract class OnEntitySpawn implements ClientPlayPacketListener {
