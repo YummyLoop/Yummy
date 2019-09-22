@@ -27,8 +27,8 @@ open class SpearEntity : ProjectileEntity {
         private val loyalty: TrackedData<Byte>? =
                 DataTracker.registerData<Byte>(SpearEntity::class.java, TrackedDataHandlerRegistry.BYTE)
 
-        private val defaultItem = Items["Spear"]
-        val registeredType = RegistryManager.registerEntityType("spear", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
+        private val defaultItem = Items["spear"]
+        val registeredType = RegistryManager.registerEntityType("spear_entity", EntityCategory.MISC) { entity: EntityType<SpearEntity>, world-> SpearEntity(entity, world) }
     }
 
     var attackDamage = 4.5F

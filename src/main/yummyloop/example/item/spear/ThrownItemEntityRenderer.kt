@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.EntityRenderer
 import net.minecraft.client.render.model.json.ModelTransformation
+import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.Entity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
@@ -15,7 +16,7 @@ class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: 
     val stack = ItemStack(item)
 
     override fun getTexture(entity: Entity?): Identifier? {
-        return null// Is ignored
+        return SpriteAtlasTexture.BLOCK_ATLAS_TEX// Is ignored
     }
 
     override fun render(entity: Entity, x: Double, y: Double, z: Double, float_1: Float, float_2: Float) {
