@@ -183,9 +183,7 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
 
     override fun readCustomDataFromTag(compoundTag_1: CompoundTag) {
         super.readCustomDataFromTag(compoundTag_1)
-        if (compoundTag_1.containsKey("Spear", 10)) {
-            this.istack = ItemStack.fromTag(compoundTag_1.getCompound("Spear"))
-        }
+        this.istack = ItemStack.fromTag(compoundTag_1.getCompound("Spear"))
 
         this.dealtDamage = compoundTag_1.getBoolean("DealtDamage")
         this.dataTracker.set(getLoyalty(), EnchantmentHelper.getLoyalty(this.istack).toByte())

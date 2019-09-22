@@ -36,11 +36,13 @@ class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: 
                     GlStateManager.enableColorMaterial()
                     GlStateManager.setupSolidRenderingTextureCombine(this.getOutlineColor(entity))
                 }
+                GlStateManager.disableLighting()
                 if (entity is FlyingItemEntity){
                     context.itemRenderer.renderItem((entity as FlyingItemEntity).stack, ModelTransformation.Type.HEAD)
                 }else{
                     context.itemRenderer.renderItem(this.stack, ModelTransformation.Type.HEAD)
                 }
+                GlStateManager.enableLighting()
                 if (this.renderOutlines) {
                     GlStateManager.tearDownSolidRenderingTextureCombine()
                     GlStateManager.disableColorMaterial()
