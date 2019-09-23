@@ -116,7 +116,7 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
             if (entityHit is LivingEntity) {
                 entityHit.movementSpeed = entityHit.movementSpeed * 0.1F
                 entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 50, 3, false, false, true))
-                if (random.nextInt(100) > 90){
+                if (random.nextInt(100) > 91){
                     entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.POISON, 60, 1, false, false, true))
                 }else{
                     entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.MINING_FATIGUE, 60, 1, false, false, true))
