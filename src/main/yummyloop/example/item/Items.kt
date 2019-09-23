@@ -26,7 +26,7 @@ object Items : HashMap<String, VanillaItem>() {
         SpearJungle
         SpearOak
         SpearSpruce
-        CobWeb
+        Cobweb
 
         Backpack("ring", 6, groups["hello1"])
         //.addTooltip("item.example.fabric_item.tooltip")

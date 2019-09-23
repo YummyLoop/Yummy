@@ -5,6 +5,7 @@
   "mixins": [
     "Hat",
     "entity/attribute/EntityAttributes",
+    "entity/mob/Spider",
     "entity/player/Hunger",
     "item/Elytra"
   ],

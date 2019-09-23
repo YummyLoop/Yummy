@@ -25,7 +25,7 @@ import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 
-object CobWeb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) {
+object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) {
 
     override val attackDamage = 1F
     override val attackSpeed = 1F
@@ -91,7 +91,7 @@ object CobWeb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
         return InternalEntity(player.world, player, stack)
     }
 
-    private class InternalEntity : AbstractSpearEntity {
+    class InternalEntity : AbstractSpearEntity {
         companion object{
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
