@@ -27,8 +27,8 @@ import yummyloop.example.util.registry.RegistryManager
 
 object CobWeb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) {
 
-    override val attackDamage = SpearSettings.Wooden.attackDamage
-    override val attackSpeed = SpearSettings.Wooden.attackSpeed
+    override val attackDamage = 1F
+    override val attackSpeed = 1F
     override val velocityMod = SpearSettings.Wooden.velocityMod
 
     init {
@@ -113,21 +113,22 @@ object CobWeb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
 
             val entityHit = entityHitResult.entity
             if (entityHit is LivingEntity) {
-                entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 200, 3, false, false, true))
+                entityHit.movementSpeed = entityHit.movementSpeed * 0.1F
+                entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 50, 3, false, false, true))
+                if (random.nextInt(100) > 90){
+                    entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.POISON, 60, 1, false, false, true))
+                }else{
+                    entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.MINING_FATIGUE, 60, 1, false, false, true))
+                }
             }
-            // Turn backwards after hitting an entity
-            this.velocity = this.velocity.multiply(-0.005, -0.005, -0.005)
+            // Set projectile velocity after hitting an entity
+            this.velocity = this.velocity.multiply(0.25, 0.25, 0.25)
             //this.remove()
         }
 
         override fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound: SoundEvent, hitThunderSound: SoundEvent) {
             // Channeling enchantment behaviour
             channelingEnchant(entityHitResult.entity, owner, hitThunderSound)
-        }
-
-        override fun onPlayerCollision(player: PlayerEntity) {
-            super.onPlayerCollision(player)
-            player.movementSpeed = player.movementSpeed*0.2F
         }
 
         override fun getSound(): SoundEvent {
