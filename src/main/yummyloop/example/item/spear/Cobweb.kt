@@ -1,7 +1,9 @@
 package yummyloop.example.item.spear
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
+import net.minecraft.block.Block
 import net.minecraft.block.BlockState
+import net.minecraft.block.Blocks
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -18,7 +20,6 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.EntityHitResult
-import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
@@ -124,6 +125,19 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
             // Set projectile velocity after hitting an entity
             this.velocity = this.velocity.multiply(0.25, 0.25, 0.25)
             //this.remove()
+        }
+
+        override fun onBlockCollision(collisionBlockState: BlockState?) {
+            if (!world.isClient){
+                val currentBlockPos = BlockPos(this)
+                val currentBlock = world.getBlockState(currentBlockPos)
+
+                if (currentBlock.isAir && inGround && (random.nextInt(100) > 96)){
+                    world.setBlockState(currentBlockPos, Blocks.COBWEB.defaultState, 2)
+                    world.playLevelEvent(2001, currentBlockPos, Block.getRawIdFromState(currentBlock))
+                    this.remove()
+                }
+            }
         }
 
         override fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound: SoundEvent, hitThunderSound: SoundEvent) {
