@@ -107,7 +107,7 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
         return SoundEvents.ITEM_TRIDENT_THROW
     }
 
-    protected fun throwProjectile(player : PlayerEntity, stack: ItemStack){
+    protected open fun throwProjectile(player : PlayerEntity, stack: ItemStack){
         val thrownEntity = getThrownEntity(player, stack)
         if (thrownEntity is AbstractSpearEntity){
             thrownEntity.setItem(stack)

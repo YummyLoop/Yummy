@@ -14,7 +14,6 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
@@ -110,13 +109,13 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         return if (this.dealtDamage) null else super.getEntityCollision(vec3d_1, vec3d_2)
     }
 
-    override fun onEntityHit(entityHitResult_1: EntityHitResult) {
+    override fun onEntityHit(entityHitResult: EntityHitResult) {
         val hitSound = SoundEvents.ITEM_TRIDENT_HIT
         val hitThunderSound = SoundEvents.ITEM_TRIDENT_THUNDER
-        effectiveOnEntityHit(entityHitResult_1, hitSound, hitThunderSound)
+        effectiveOnEntityHit(entityHitResult, hitSound, hitThunderSound)
     }
 
-    private fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound : SoundEvent, hitThunderSound : SoundEvent){
+    protected open fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound : SoundEvent, hitThunderSound : SoundEvent){
         val entityHit = entityHitResult.entity
         val owner = this.owner
         var effectiveAttackDamage=this.attackDamage-1
@@ -146,7 +145,7 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         }
     }
 
-    private fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
+    protected fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
         // If the weather is thundering && has channeling enchant
         if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.asItemStack())) {
             val blockPos = entityHit.blockPos
@@ -232,9 +231,7 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
     }
 
     fun setItem(itemStack_1: ItemStack) {
-        if (itemStack_1.item !== this.getDefaultItem() || itemStack_1.hasTag()) {
-            this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
-        }
+        this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
     }
 
 }
