@@ -8,6 +8,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.container.Container
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityCategory
+import net.minecraft.entity.EntityDimensions
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.util.Identifier
@@ -85,6 +86,17 @@ object RegistryManager {
                 Identifier (modId, name),
                 FabricEntityTypeBuilder.create(category){ entity: EntityType<M>, world : World -> function(entity, world)}.build())
     }
+    fun <M : Entity> registerEntityType(modId: String, name: String, category: EntityCategory, function: (EntityType<M>, World) -> M, entitySettings: EntitySettings ): EntityType<M> {
+        val builder = FabricEntityTypeBuilder.create(category){ entity: EntityType<M>, world : World -> function(entity, world)}
+        if (entitySettings.isImmuneToFire()) builder.setImmuneToFire()
+        if (!entitySettings.isSaveable()) builder.disableSaving()
+        if (!entitySettings.isSummonable()) builder.disableSummon()
+        builder.size(entitySettings.size())
+        return Registry.register(
+                Registry.ENTITY_TYPE,
+                Identifier (modId, name),
+                builder.build())
+    }
     fun <M : Entity> registerEntityType(name: String, category: EntityCategory, function: (EntityType<M>, World) -> M ): EntityType<M> {
         return registerEntityType(this.modId, name, category, function)
     }
@@ -95,5 +107,59 @@ object RegistryManager {
     }
     fun <M : Entity> registerMiscEntityType(name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity ): EntityType<M> {
         return registerMiscEntityType(this.modId, name, function, worldFunction)
+    }
+    fun <M : Entity> registerMiscEntityType(modId: String, name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity, entitySettings: EntitySettings ): EntityType<M> {
+        val ret = registerEntityType(this.modId, name, EntityCategory.MISC, function, entitySettings)
+        miscEntityType[name] = Pair(ret, worldFunction)
+        return ret
+    }
+    fun <M : Entity> registerMiscEntityType(name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity, entitySettings: EntitySettings ): EntityType<M> {
+        return registerMiscEntityType(this.modId, name, function, worldFunction, entitySettings)
+    }
+
+    class EntitySettings{
+        private var summonable = true
+        private var saveable = true
+        private var immuneToFire = false
+        private var size = EntityDimensions.changing(-1.0f, -1.0f)
+
+        fun isSummonable(): Boolean {
+            return this.summonable
+        }
+
+        fun isSaveable(): Boolean {
+            return this.saveable
+        }
+
+        fun isImmuneToFire(): Boolean {
+            return this.immuneToFire
+        }
+
+        fun size(): EntityDimensions? {
+            return this.size
+        }
+        fun size(dim: EntityDimensions) : EntitySettings {
+            this.size = dim
+            return this
+        }
+        fun size(x: Float, y : Float) : EntitySettings {
+            this.size = EntityDimensions.changing(x, y)
+            return this
+        }
+
+        fun setImmuneToFire() : EntitySettings{
+            this.immuneToFire = true
+            return this
+        }
+
+        fun disableSave() : EntitySettings{
+            this.saveable = false
+            return this
+        }
+
+        fun disableSummon() : EntitySettings{
+            this.summonable = false
+            return this
+        }
     }
 }
