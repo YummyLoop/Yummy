@@ -69,6 +69,13 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
             this.dealtDamage = true
         }
 
+        if (this.isOnFire) {
+            this.burn(1)
+        } else if (!this.isFireImmune && this.world.doesAreaContainFireSource(this.boundingBox.expand(1.25))) {
+            this.setOnFireFor(8)
+            this.burn(1)
+        }
+
         if (this.dealtDamage || this.isNoClip) {
             loyaltyBehavior(catchSound)
         }
@@ -125,6 +132,9 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         // Enchanted damage calculation
         if (entityHit is LivingEntity) {
             effectiveAttackDamage += EnchantmentHelper.getAttackDamage(this.asItemStack(), entityHit.group)
+            if (this.isOnFire){
+                entityHit.setOnFireFor(4)
+            }
         }
 
         // Hit and damage an entity
@@ -232,6 +242,28 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
 
     fun setItem(itemStack_1: ItemStack) {
         this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
+    }
+
+    private var damagedTick = 0
+    override fun damage(damageSource: DamageSource, damage: Float): Boolean {
+        return if (this.isInvulnerableTo(damageSource)) {
+            false
+        } else {
+            this.scheduleVelocityUpdate()
+            if (!world.isClient) {
+                damagedTick++
+                if (damagedTick > 40) {
+                    damagedTick = 0
+                    if (istack.damage < istack.maxDamage) {
+                        istack.damage(1, random, null)
+                        this.setItem(istack)
+                    } else {
+                        this.remove()
+                    }
+                }
+            }
+            true
+        }
     }
 
 }

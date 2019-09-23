@@ -29,8 +29,8 @@ class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: 
             GlStateManager.rotatef(MathHelper.lerp(float_2, entity.prevPitch, entity.pitch) + 90.0f, 0.0f, 0.0f, 1.0f)
 
             glMatrix {
-                GlStateManager.translatef(0F, 0.4F,0F)
-                GlStateManager.rotatef(180F,0F,1F, 0F)
+                //GlStateManager.translatef(0F, 0.4F,0F)
+                //GlStateManager.rotatef(180F,0F,1F, 0F)
 
                 if (this.renderOutlines) {
                     GlStateManager.enableColorMaterial()

@@ -5,8 +5,10 @@ import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
 import net.minecraft.client.render.entity.EntityRenderDispatcher
+import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
@@ -97,7 +99,8 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
-                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) })
+                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) },
+                    RegistryManager.EntitySettings().size(0.85F, 0.85F))
         }
 
         constructor(internalEntityType : EntityType<InternalEntity>, world : World)
@@ -139,6 +142,23 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
                 }
             }
         }
+
+        private var health = 15
+        override fun damage(damageSource: DamageSource, damage: Float): Boolean {
+            return if (this.isInvulnerableTo(damageSource)) {
+                false
+            } else {
+                this.scheduleVelocityUpdate()
+                if (!world.isClient){
+                    this.health = (this.health.toFloat() - damage).toInt()
+                    if (this.health <= 0) {
+                        this.remove()
+                    }
+                }
+                false
+            }
+        }
+
 
         override fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound: SoundEvent, hitThunderSound: SoundEvent) {
             // Channeling enchantment behaviour

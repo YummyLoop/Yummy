@@ -4,9 +4,6 @@ import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.data.DataTracker
-import net.minecraft.entity.data.TrackedData
-import net.minecraft.entity.data.TrackedDataHandlerRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
@@ -36,7 +33,8 @@ object SpearJungle : AbstractSpear("spear_jungle", SpearSettings.Wooden.itemSett
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
-                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) })
+                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) },
+                    RegistryManager.EntitySettings().size(0.5f, 0.5f))
         }
 
         constructor(internalEntityType : EntityType<InternalEntity>, world : World)
