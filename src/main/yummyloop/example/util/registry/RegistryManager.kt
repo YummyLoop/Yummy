@@ -80,12 +80,6 @@ object RegistryManager {
     }
     // Entity type
     //-----------------------------------------------------------------------------------------------------------------
-    fun <M : Entity> registerEntityType(modId: String, name: String, category: EntityCategory, function: (EntityType<M>, World) -> M ): EntityType<M> {
-        return Registry.register(
-                Registry.ENTITY_TYPE,
-                Identifier (modId, name),
-                FabricEntityTypeBuilder.create(category){ entity: EntityType<M>, world : World -> function(entity, world)}.build())
-    }
     fun <M : Entity> registerEntityType(modId: String, name: String, category: EntityCategory, function: (EntityType<M>, World) -> M, entitySettings: EntitySettings ): EntityType<M> {
         val builder = FabricEntityTypeBuilder.create(category){ entity: EntityType<M>, world : World -> function(entity, world)}
         if (entitySettings.isImmuneToFire()) builder.setImmuneToFire()
@@ -98,20 +92,15 @@ object RegistryManager {
                 builder.build())
     }
     fun <M : Entity> registerEntityType(name: String, category: EntityCategory, function: (EntityType<M>, World) -> M ): EntityType<M> {
-        return registerEntityType(this.modId, name, category, function)
+        return registerEntityType(this.modId, name, category, function, EntitySettings())
     }
-    fun <M : Entity> registerMiscEntityType(modId: String, name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity ): EntityType<M> {
-        val ret = registerEntityType(this.modId, name, EntityCategory.MISC, function)
+    fun <M : Entity> registerMiscEntityType(modId: String, name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity, entitySettings: EntitySettings ): EntityType<M> {
+        val ret = registerEntityType(modId, name, EntityCategory.MISC, function, entitySettings)
         miscEntityType[name] = Pair(ret, worldFunction)
         return ret
     }
     fun <M : Entity> registerMiscEntityType(name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity ): EntityType<M> {
-        return registerMiscEntityType(this.modId, name, function, worldFunction)
-    }
-    fun <M : Entity> registerMiscEntityType(modId: String, name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity, entitySettings: EntitySettings ): EntityType<M> {
-        val ret = registerEntityType(this.modId, name, EntityCategory.MISC, function, entitySettings)
-        miscEntityType[name] = Pair(ret, worldFunction)
-        return ret
+        return registerMiscEntityType(this.modId, name, function, worldFunction, EntitySettings())
     }
     fun <M : Entity> registerMiscEntityType(name: String, function: (EntityType<M>, World) -> M, worldFunction : (World, Double, Double, Double) -> Entity, entitySettings: EntitySettings ): EntityType<M> {
         return registerMiscEntityType(this.modId, name, function, worldFunction, entitySettings)
