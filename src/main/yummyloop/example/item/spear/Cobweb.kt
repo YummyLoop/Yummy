@@ -23,7 +23,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
-import yummyloop.example.entity.AbstractSpearEntity
+import yummyloop.example.item.entity.AbstractSpearEntity
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
