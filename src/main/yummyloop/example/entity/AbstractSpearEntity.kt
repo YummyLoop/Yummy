@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.entity
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
