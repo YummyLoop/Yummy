@@ -8,6 +8,7 @@ import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.Entity
 import net.minecraft.entity.FlyingItemEntity
+import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
@@ -37,6 +38,13 @@ class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: 
                     GlStateManager.setupSolidRenderingTextureCombine(this.getOutlineColor(entity))
                 }
                 GlStateManager.disableLighting()
+                if (entity is ProjectileEntity){
+                    val shake = entity.shake - float_2
+                    if (shake > 0.0f) {
+                        val shakeRoll = -MathHelper.sin(shake * 2.5f) * (shake)
+                        GlStateManager.rotatef(shakeRoll, 0.0f, 0.0f, 1.0f)
+                    }
+                }
                 if (entity is FlyingItemEntity){
                     context.itemRenderer.renderItem((entity as FlyingItemEntity).stack, ModelTransformation.Type.HEAD)
                 }else{
