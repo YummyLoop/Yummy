@@ -41,9 +41,7 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
     constructor(itemName : String) :
             this(itemName, Settings().group(VanillaItemGroup.COMBAT).maxDamage(60))
 
-    private fun register (itemName : String) {
-        RegistryManager.register(this, itemName)
-    }
+    private fun register (itemName : String) = RegistryManager.register(this, itemName)
 
     override fun appendTooltip(itemStack: ItemStack?, world: World?, tooltip: MutableList<Text>?, tooltipContext: TooltipContext?) {
         tooltip?.addAll(this.tooltip)
@@ -103,9 +101,7 @@ abstract class AbstractSpear(val itemName: String, settings : Settings) : Triden
 
     protected abstract fun getThrownEntity(player : PlayerEntity, stack: ItemStack): ProjectileEntity
 
-    protected fun getThrowSound(): SoundEvent {
-        return SoundEvents.ITEM_TRIDENT_THROW
-    }
+    protected fun getThrowSound(): SoundEvent = SoundEvents.ITEM_TRIDENT_THROW
 
     protected open fun throwProjectile(player : PlayerEntity, stack: ItemStack){
         val thrownEntity = getThrownEntity(player, stack)

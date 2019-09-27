@@ -5,7 +5,9 @@ import net.fabricmc.api.Environment
 import net.fabricmc.api.EnvironmentInterface
 import net.fabricmc.api.EnvironmentInterfaces
 import net.minecraft.enchantment.EnchantmentHelper
-import net.minecraft.entity.*
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.FlyingItemEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.data.DataTracker
 import net.minecraft.entity.data.TrackedData
@@ -16,13 +18,13 @@ import net.minecraft.item.Item
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.server.network.ServerPlayerEntity
-import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.SystemUtil
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
+import yummyloop.example.item.entity.EntityHelper.channelingEnchant
 
 @EnvironmentInterfaces(EnvironmentInterface(value = EnvType.CLIENT, itf = FlyingItemEntity::class))
 abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
@@ -34,6 +36,9 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
     private var istack: ItemStack = ItemStack.EMPTY
     private var dealtDamage = false
     private var loyaltyTick: Int = 0
+    override fun getDragInWater(): Float = 0.90f
+    private fun getLoyalty(): TrackedData<Byte> = loyalty
+    override fun getSound(): SoundEvent? = SoundEvents.ITEM_TRIDENT_HIT_GROUND
 
     constructor(entityType : EntityType<out AbstractSpearEntity>, world : World)
             : super(entityType, world)
@@ -47,10 +52,6 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
 
     constructor(entityType : EntityType<out AbstractSpearEntity>, world: World, x: Double, y: Double, z: Double)
             : super(entityType, x, y, z, world)
-
-    private fun getLoyalty(): TrackedData<Byte>{
-        return loyalty
-    }
 
     override fun asItemStack(): ItemStack {
         val i = this.getItem()
@@ -150,29 +151,9 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         this.velocity = this.velocity.multiply(-0.01, -0.01, -0.01)
 
         // Channeling enchantment behaviour
-        if (!channelingEnchant(entityHit, owner, hitThunderSound)) {
+        if (!channelingEnchant(entityHit, owner, hitThunderSound, this.asItemStack())) {
             this.playSound(hitSound, 1.0f, 1.0f)
         }
-    }
-
-    protected fun channelingEnchant(entityHit : Entity, owner : Entity?, hitThunderSound: SoundEvent) : Boolean{
-        // If the weather is thundering && has channeling enchant
-        if (this.world is ServerWorld && this.world.isThundering && EnchantmentHelper.hasChanneling(this.asItemStack())) {
-            val blockPos = entityHit.blockPos
-            // If can see the sky
-            if (this.world.isSkyVisible(blockPos)) {
-                // Create lightning entity
-                val lightningEntity = LightningEntity(this.world, blockPos.x.toDouble() + 0.5, blockPos.y.toDouble(), blockPos.z.toDouble() + 0.5, false)
-                lightningEntity.setChanneller(if (owner is ServerPlayerEntity) owner else null)
-                // Spawn lightning entity
-                (this.world as ServerWorld).addLightning(lightningEntity)
-                // Play sound
-                this.playSound(hitThunderSound, 5.0f, 1.0f)
-                // Return true for successful channeling
-                return true
-            }
-        }
-        return false
     }
 
     private fun isOwnerAlive(): Boolean {
@@ -212,19 +193,8 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         }
     }
 
-    override fun getDragInWater(): Float {
-        return 0.90f
-    }
-
     @Environment(EnvType.CLIENT)
-    override fun shouldRenderFrom(double_1: Double, double_2: Double, double_3: Double): Boolean {
-        return true
-    }
-
-    override fun getSound(): SoundEvent? {
-        return SoundEvents.ITEM_TRIDENT_HIT_GROUND
-    }
-
+    override fun shouldRenderFrom(double_1: Double, double_2: Double, double_3: Double): Boolean = true
 
     @Environment(EnvType.CLIENT)
     override fun getStack(): ItemStack {
@@ -232,17 +202,12 @@ abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {
         return if (stack.isEmpty) ItemStack(this.getDefaultItem()) else stack
     }
 
-    protected fun getItem(): ItemStack {
-        return this.getDataTracker().get<ItemStack>(ITEM) as ItemStack
-    }
+    protected fun getItem(): ItemStack = this.getDataTracker().get<ItemStack>(ITEM) as ItemStack
 
-    protected fun getDefaultItem(): Item {
-        return this.istack.item
-    }
+    protected fun getDefaultItem(): Item = this.istack.item
 
-    fun setItem(itemStack_1: ItemStack) {
-        this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
-    }
+    fun setItem(itemStack_1: ItemStack) =
+            this.getDataTracker().set(ITEM, SystemUtil.consume(itemStack_1.copy(), { itemStack_1x -> itemStack_1x.count = 1 }))
 
     private var damagedTick = 0
     override fun damage(damageSource: DamageSource, damage: Float): Boolean {
