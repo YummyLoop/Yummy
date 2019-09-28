@@ -12,6 +12,7 @@ import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
+import yummyloop.example.item.entity.AbstractProjectileEntity
 import net.minecraft.item.Item as VanillaItem
 
 class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: EntityRendererRegistry.Context, item : VanillaItem) : EntityRenderer<Entity>(e1) {
@@ -38,7 +39,13 @@ class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: 
                     GlStateManager.setupSolidRenderingTextureCombine(this.getOutlineColor(entity))
                 }
                 GlStateManager.disableLighting()
-                if (entity is ProjectileEntity){
+                if (entity is ProjectileEntity) {
+                    val shake = entity.shake - float_2
+                    if (shake > 0.0f) {
+                        val shakeRoll = -MathHelper.sin(shake * 2.5f) * (shake)
+                        GlStateManager.rotatef(shakeRoll, 0.0f, 0.0f, 1.0f)
+                    }
+                } else if (entity is AbstractProjectileEntity) {
                     val shake = entity.shake - float_2
                     if (shake > 0.0f) {
                         val shakeRoll = -MathHelper.sin(shake * 2.5f) * (shake)

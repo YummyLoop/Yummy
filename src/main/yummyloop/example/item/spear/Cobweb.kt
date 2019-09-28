@@ -1,41 +1,33 @@
 package yummyloop.example.item.spear
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
-import net.minecraft.block.Block
 import net.minecraft.block.BlockState
-import net.minecraft.block.Blocks
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
-import net.minecraft.entity.effect.StatusEffectInstance
-import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
-import net.minecraft.sound.SoundEvent
-import net.minecraft.sound.SoundEvents
 import net.minecraft.stat.Stats
-import net.minecraft.util.ActionResult
-import net.minecraft.util.Hand
-import net.minecraft.util.TypedActionResult
-import net.minecraft.util.hit.EntityHitResult
+import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import yummyloop.example.item.Item
+import yummyloop.example.item.Items
+import yummyloop.example.item.entity.AbstractCobwebProjectileEntity
 import yummyloop.example.item.entity.AbstractSpearEntity
-import yummyloop.example.item.entity.EntityHelper.channelingEnchant
+import yummyloop.example.item.entity.AbstractProjectileEntity
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 
-object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) {
+object Cobweb : Item("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) {
 
-    override val attackDamage = 1F
-    override val attackSpeed = 1F
-    override val velocityMod = SpearSettings.Wooden.velocityMod
+    const val itemName = "cobweb"
+    private const val velocityMod = 1.0f
 
     init {
+        this.addPropertyGetter(Identifier("throwing")) { itemStack, world, livingEntity -> if (livingEntity != null && livingEntity.isUsingItem && livingEntity.activeItem == itemStack) 1.0f else 0.0f }
         InternalEntity
         ClientManager.registerEntityRenderer(InternalEntity::class.java) //look for ways to replace the need for a class or use byteBuddy ?
         { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context -> ThrownItemEntityRenderer(entityRenderDispatcher, context, this) }
@@ -59,7 +51,7 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
         }
     }
 
-    override fun throwProjectile(player : PlayerEntity, stack: ItemStack){
+     private fun throwProjectile(player : PlayerEntity, stack: ItemStack){
         val thrownEntity = getThrownEntity(player, stack)
         if (thrownEntity is AbstractSpearEntity){
             thrownEntity.setItem(stack)
@@ -68,7 +60,7 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
         thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f), 1.0f)
 
         // pickup permissions
-        thrownEntity.pickupType = ProjectileEntity.PickupPermission.CREATIVE_ONLY
+        thrownEntity.pickupPermission = AbstractProjectileEntity.PickupPermission.CREATIVE_ONLY
 
         if (!player.isCreative) {
             //player.inventory.removeOne(stack) // remove 1 stack
@@ -91,11 +83,19 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
         return false
     }
 
-    override fun getThrownEntity(player: PlayerEntity, stack: ItemStack): ProjectileEntity {
+    override fun getUseAction(itemStack_1: ItemStack): UseAction {
+        return UseAction.SPEAR
+    }
+
+    override fun getMaxUseTime(itemStack_1: ItemStack): Int {
+        return 72000
+    }
+
+     private fun getThrownEntity(player: PlayerEntity, stack: ItemStack): AbstractProjectileEntity {
         return InternalEntity(player.world, player, stack)
     }
 
-    class InternalEntity : AbstractSpearEntity {
+    class InternalEntity : AbstractCobwebProjectileEntity {
         companion object{
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
@@ -107,67 +107,9 @@ object Cobweb : AbstractSpear("cobweb", Settings().group(ItemGroup.COMBAT).maxCo
         constructor(internalEntityType : EntityType<InternalEntity>, world : World)
                 : super(internalEntityType, world)
         constructor(world : World, livingEntity : LivingEntity, stack : ItemStack)
-                : super(registeredType, world, livingEntity, stack)
+                : super(registeredType, livingEntity, world, stack)
         constructor(world: World, x: Double, y: Double, z: Double)
-                : super(registeredType, world, x, y, z)
+                : super(registeredType, x, y, z, world)
 
-        override var attackDamage: Float = 0F
-
-        override fun onEntityHit(entityHitResult: EntityHitResult) {
-            super.onEntityHit(entityHitResult)
-
-            val entityHit = entityHitResult.entity
-            if (entityHit is LivingEntity) {
-                entityHit.movementSpeed = entityHit.movementSpeed * 0.1F
-                entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.SLOWNESS, 50, 3, false, false, true))
-                if (random.nextInt(100) > 91){
-                    entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.POISON, 60, 1, false, false, true))
-                }else{
-                    entityHit.addPotionEffect(StatusEffectInstance(StatusEffects.MINING_FATIGUE, 60, 1, false, false, true))
-                }
-            }
-            // Set projectile velocity after hitting an entity
-            this.velocity = this.velocity.multiply(0.25, 0.25, 0.25)
-            //this.remove()
-        }
-
-        override fun onBlockCollision(collisionBlockState: BlockState?) {
-            if (!world.isClient){
-                val currentBlockPos = BlockPos(this)
-                val currentBlock = world.getBlockState(currentBlockPos)
-
-                if (currentBlock.isAir && inGround && (random.nextInt(100) > 96)){
-                    world.setBlockState(currentBlockPos, Blocks.COBWEB.defaultState, 2)
-                    world.playLevelEvent(2001, currentBlockPos, Block.getRawIdFromState(currentBlock))
-                    this.remove()
-                }
-            }
-        }
-
-        private var health = 15
-        override fun damage(damageSource: DamageSource, damage: Float): Boolean {
-            return if (this.isInvulnerableTo(damageSource)) {
-                false
-            } else {
-                this.scheduleVelocityUpdate()
-                if (!world.isClient){
-                    this.health = (this.health.toFloat() - damage).toInt()
-                    if (this.health <= 0) {
-                        this.remove()
-                    }
-                }
-                false
-            }
-        }
-
-
-        override fun effectiveOnEntityHit(entityHitResult: EntityHitResult, hitSound: SoundEvent, hitThunderSound: SoundEvent) {
-            // Channeling enchantment behaviour
-            channelingEnchant(entityHitResult.entity, owner, hitThunderSound, this.asItemStack())
-        }
-
-        override fun getSound(): SoundEvent {
-            return SoundEvents.ENTITY_FOX_SPIT
-        }
     }
 }

@@ -1,5 +1,7 @@
 package yummyloop.example.item.entity
 
+import net.minecraft.block.Block
+import net.minecraft.block.Blocks
 import net.minecraft.client.network.packet.ItemPickupAnimationS2CPacket
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
@@ -14,6 +16,7 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
+import net.minecraft.world.GameRules
 import kotlin.random.Random
 
 object EntityHelper {
@@ -164,6 +167,24 @@ fun Entity.handleProjectilePitchYaw(){
 fun Entity.scaleVelocityByRandomFactor(factor : Float){
     val random = Random
     this.velocity = velocity.multiply((random.nextFloat() * factor).toDouble(), (random.nextFloat() * factor).toDouble(), (random.nextFloat() * factor).toDouble())
+}
+
+fun Entity.dropItemStack(stack: ItemStack) {
+    if (!world.isClient) {
+        this.remove()
+        if (this.world.gameRules.getBoolean(GameRules.DO_ENTITY_DROPS)) {
+            if (this.hasCustomName()) {
+                stack.setCustomName(this.customName)
+            }
+            this.dropStack(stack)
+        }
+    }
+}
+
+fun Entity.placeBlock(at : BlockPos , block : Block){
+    val blockAt = world.getBlockState(at)
+    world.setBlockState(at, block.defaultState, 2)
+    world.playLevelEvent(2001, at, Block.getRawIdFromState(blockAt))
 }
 
 fun LivingEntity.sendItemPickup(entity: Entity, quantity: Int) {
