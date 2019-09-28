@@ -53,9 +53,9 @@ abstract class AbstractCobwebProjectileEntity : AbstractProjectileEntity{
     }
 
     override fun pushAwayFrom(entity: Entity) {
-        if (entity is AbstractCobwebProjectileEntity || entity is SpiderEntity) return
         this.hitEntity = true
         this.isSilent = true
+        if (entity is AbstractCobwebProjectileEntity || entity is SpiderEntity) return
         if (!this.world.isClient) {
             if (!entity.noClip && !this.noClip) {
                 this.setPosition(entity.x, entity.y+0.01, entity.z)
@@ -90,8 +90,10 @@ abstract class AbstractCobwebProjectileEntity : AbstractProjectileEntity{
     }
 
     override fun onEntityHit(entityHitResult: EntityHitResult) {
-        this.hitEntity = true
         val entityHit = entityHitResult.entity
+
+        if (entityHit is AbstractCobwebProjectileEntity || entityHit is SpiderEntity) return
+        this.hitEntity = true
         this.setEffects(entityHit)
 
         // Set projectile velocity after hitting an entity
