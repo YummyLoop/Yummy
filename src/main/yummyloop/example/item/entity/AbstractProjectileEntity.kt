@@ -187,7 +187,7 @@ abstract class AbstractProjectileEntity : Entity, Projectile {
     private fun handleProjectileHit(){
         val currentPosition = Vec3d(this.x, this.y, this.z)
         var nextPosition = currentPosition.add(velocity)
-        var hitResult: HitResult? = this.world.rayTrace(RayTraceContext(currentPosition, nextPosition, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, this))
+        var hitResult: HitResult? = this.hitResult(currentPosition, nextPosition)
         if ((hitResult as HitResult).type != HitResult.Type.MISS) {
             nextPosition = hitResult.pos
         }

@@ -28,7 +28,7 @@ public final class Spider extends HostileEntity implements RangedAttackMob {
             method = "initGoals()V"
     )
     private void onInitGoals(CallbackInfo info) {
-        this.goalSelector.add(4, new ProjectileAttackGoal(this, 1.0D, 40, 10.0F));
+        this.goalSelector.add(4, new ProjectileAttackGoal(this, 1.0D, 40, 9.0F));
     }
 
     @Override

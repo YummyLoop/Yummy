@@ -2,6 +2,7 @@ package yummyloop.example.item.entity
 
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
+import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -12,6 +13,8 @@ import net.minecraft.entity.mob.EndermanEntity
 import net.minecraft.entity.mob.SpiderEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
+import net.minecraft.server.MinecraftServer
+import net.minecraft.server.dedicated.MinecraftDedicatedServer
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.hit.EntityHitResult
@@ -81,10 +84,10 @@ abstract class AbstractCobwebProjectileEntity : AbstractProjectileEntity{
             if(!isOnFire) this.dropItemStack(ItemStack(Items.STRING))
         }
         if (this.isOnFire) {
-            shake+=5
+            shake+=7
         } else if (!this.isFireImmune && this.world.doesAreaContainFireSource(this.boundingBox.expand(1.1))) {
             this.setOnFireFor(8)
-            shake+=5
+            shake+=7
         }
         super.tick()
     }

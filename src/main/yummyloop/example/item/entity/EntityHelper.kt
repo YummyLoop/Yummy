@@ -1,22 +1,22 @@
 package yummyloop.example.item.entity
 
 import net.minecraft.block.Block
-import net.minecraft.block.Blocks
 import net.minecraft.client.network.packet.ItemPickupAnimationS2CPacket
 import net.minecraft.enchantment.EnchantmentHelper
 import net.minecraft.entity.Entity
 import net.minecraft.entity.LightningEntity
-import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.particle.ParticleTypes
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.server.world.ServerWorld
 import net.minecraft.sound.SoundEvent
+import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Box
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.GameRules
+import net.minecraft.world.RayTraceContext
 import kotlin.random.Random
 
 object EntityHelper {
@@ -187,7 +187,15 @@ fun Entity.placeBlock(at : BlockPos , block : Block){
     world.playLevelEvent(2001, at, Block.getRawIdFromState(blockAt))
 }
 
-fun LivingEntity.sendItemPickup(entity: Entity, quantity: Int) {
+fun Entity.hitResult(currentPosition : Vec3d, destinationPosition : Vec3d) : HitResult?{
+    return this.world.rayTrace(RayTraceContext(currentPosition, destinationPosition, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.NONE, this))
+}
+fun Entity.hitResult(destinationPosition : Vec3d) : HitResult?{
+    val currentPosition = Vec3d(this.x, this.y, this.z)
+    return this.hitResult(currentPosition, destinationPosition)
+}
+
+fun Entity.sendItemPickup(entity: Entity, quantity: Int) {
     if (!entity.removed && !this.world.isClient) {
         (this.world as ServerWorld).method_14178().sendToOtherNearbyPlayers(entity, ItemPickupAnimationS2CPacket(entity.entityId, this.entityId, quantity))
     }
