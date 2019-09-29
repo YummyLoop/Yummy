@@ -118,10 +118,7 @@ fun Entity.handleEnvironmentDrag(airDrag : Float, waterDrag: Float){
 }
 
 fun Entity.handleGravity(){
-    if (!this.hasNoGravity() && !noClip) {
-        val currentVelocity = this.velocity
-        this.setVelocity(currentVelocity.x, currentVelocity.y - 0.05000000074505806, currentVelocity.z)
-    }
+    if (!this.hasNoGravity() && !noClip) this.setVelocity(this.velocity.x, this.velocity.y - 0.05000000074505806, this.velocity.z)
 }
 
 fun Entity.setNextPosition(){
@@ -144,21 +141,12 @@ fun Entity.handleProjectilePitchYaw(){
     }
 
     this.pitch = Math.toDegrees(MathHelper.atan2(velocityY, norm.toDouble())).toFloat()
-    while (this.pitch - this.prevPitch < -180.0f) {
-        this.prevPitch -= 360.0f
-    }
 
-    while (this.pitch - this.prevPitch >= 180.0f) {
-        this.prevPitch += 360.0f
-    }
+    while (this.pitch - this.prevPitch < -180.0f) this.prevPitch -= 360.0f
+    while (this.pitch - this.prevPitch >= 180.0f) this.prevPitch += 360.0f
 
-    while (this.yaw - this.prevYaw < -180.0f) {
-        this.prevYaw -= 360.0f
-    }
-
-    while (this.yaw - this.prevYaw >= 180.0f) {
-        this.prevYaw += 360.0f
-    }
+    while (this.yaw - this.prevYaw < -180.0f) this.prevYaw -= 360.0f
+    while (this.yaw - this.prevYaw >= 180.0f) this.prevYaw += 360.0f
 
     this.pitch = MathHelper.lerp(0.2f, this.prevPitch, this.pitch)
     this.yaw = MathHelper.lerp(0.2f, this.prevYaw, this.yaw)
