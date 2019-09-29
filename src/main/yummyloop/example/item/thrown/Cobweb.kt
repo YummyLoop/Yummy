@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.item.thrown
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.block.BlockState
@@ -12,11 +12,10 @@ import net.minecraft.stat.Stats
 import net.minecraft.util.*
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
+import yummyloop.example.entity.AbstractCobwebProjectileEntity
+import yummyloop.example.entity.AbstractSpearEntity
+import yummyloop.example.entity.AbstractProjectileEntity
 import yummyloop.example.item.Item
-import yummyloop.example.item.Items
-import yummyloop.example.item.entity.AbstractCobwebProjectileEntity
-import yummyloop.example.item.entity.AbstractSpearEntity
-import yummyloop.example.item.entity.AbstractProjectileEntity
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
@@ -41,7 +40,7 @@ object Cobweb : Item("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) 
 
     override fun onStoppedUsing(stack: ItemStack, world: World?, player: LivingEntity?, useTimeLeft: Int) {
         if (player is PlayerEntity) {
-            val useTime = this.getMaxUseTime(stack) - useTimeLeft
+            val useTime = getMaxUseTime(stack) - useTimeLeft
             if (useTime < 10) return
 
             if (!world!!.isClient) {
@@ -57,7 +56,7 @@ object Cobweb : Item("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) 
             thrownEntity.setItem(stack)
         }
         // set projectile velocity
-        thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, this.velocityMod*(2.5f), 1.0f)
+        thrownEntity.setProperties(player, player.pitch, player.yaw, 0.0f, velocityMod *(2.5f), 1.0f)
 
         // pickup permissions
         thrownEntity.pickupPermission = AbstractProjectileEntity.PickupPermission.CREATIVE_ONLY
@@ -100,7 +99,7 @@ object Cobweb : Item("cobweb", Settings().group(ItemGroup.COMBAT).maxCount(16)) 
             private val registeredType= RegistryManager.registerMiscEntityType(
                     (itemName +"_entity"),
                     { entity: EntityType<InternalEntity>, world : World-> InternalEntity(entity, world) },
-                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x,y,z) },
+                    { world: World, x: Double, y: Double, z: Double -> InternalEntity(world, x, y, z) },
                     RegistryManager.EntitySettings().size(0.85F, 0.85F))
         }
 

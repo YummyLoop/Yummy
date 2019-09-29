@@ -1,4 +1,4 @@
-package yummyloop.example.item.entity
+package yummyloop.example.entity
 
 import net.minecraft.block.Block
 import net.minecraft.client.network.packet.ItemPickupAnimationS2CPacket

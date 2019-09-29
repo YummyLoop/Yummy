@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.item.thrown.spear
 
 import com.google.common.collect.HashMultimap
 import com.google.common.collect.Multimap
@@ -25,7 +25,7 @@ import net.minecraft.util.TypedActionResult
 import net.minecraft.util.math.MathHelper
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import yummyloop.example.item.entity.AbstractSpearEntity
+import yummyloop.example.entity.AbstractSpearEntity
 import yummyloop.example.util.registry.RegistryManager
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 

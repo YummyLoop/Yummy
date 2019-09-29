@@ -1,20 +1,16 @@
-package yummyloop.example.item.entity
+package yummyloop.example.entity
 
 import net.minecraft.block.BlockState
 import net.minecraft.block.Blocks
-import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.effect.StatusEffectInstance
 import net.minecraft.entity.effect.StatusEffects
 import net.minecraft.entity.mob.EndermanEntity
 import net.minecraft.entity.mob.SpiderEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.server.MinecraftServer
-import net.minecraft.server.dedicated.MinecraftDedicatedServer
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
 import net.minecraft.util.hit.EntityHitResult

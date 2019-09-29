@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.item.thrown.spear
 
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup

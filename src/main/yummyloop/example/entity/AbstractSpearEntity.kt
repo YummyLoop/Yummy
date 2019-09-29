@@ -1,4 +1,4 @@
-package yummyloop.example.item.entity
+package yummyloop.example.entity
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -24,7 +24,7 @@ import net.minecraft.util.SystemUtil
 import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.math.Vec3d
 import net.minecraft.world.World
-import yummyloop.example.item.entity.EntityHelper.channelingEnchant
+import yummyloop.example.entity.EntityHelper.channelingEnchant
 
 @EnvironmentInterfaces(EnvironmentInterface(value = EnvType.CLIENT, itf = FlyingItemEntity::class))
 abstract class AbstractSpearEntity : ProjectileEntity, FlyingItemEntity {

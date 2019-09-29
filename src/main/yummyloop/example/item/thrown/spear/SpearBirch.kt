@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.item.thrown.spear
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.render.entity.EntityRenderDispatcher
@@ -8,7 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import yummyloop.example.item.entity.AbstractSpearEntity
+import yummyloop.example.entity.AbstractSpearEntity
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager

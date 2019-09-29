@@ -1,4 +1,4 @@
-package yummyloop.example.item.entity
+package yummyloop.example.entity
 
 import com.google.common.collect.Lists
 import it.unimi.dsi.fastutil.ints.IntOpenHashSet
@@ -32,7 +32,6 @@ import net.minecraft.util.hit.EntityHitResult
 import net.minecraft.util.hit.HitResult
 import net.minecraft.util.math.*
 import net.minecraft.util.registry.Registry
-import net.minecraft.world.RayTraceContext
 import net.minecraft.world.World
 import java.util.*
 import kotlin.experimental.and

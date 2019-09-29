@@ -12,7 +12,7 @@ import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.math.MathHelper
-import yummyloop.example.item.entity.AbstractProjectileEntity
+import yummyloop.example.entity.AbstractProjectileEntity
 import net.minecraft.item.Item as VanillaItem
 
 class ThrownItemEntityRenderer(e1: EntityRenderDispatcher, private val context: EntityRendererRegistry.Context, item : VanillaItem) : EntityRenderer<Entity>(e1) {

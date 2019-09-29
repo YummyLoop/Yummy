@@ -1,4 +1,4 @@
-package yummyloop.example.item.spear
+package yummyloop.example.item.thrown.spear
 
 import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
 import net.minecraft.client.render.entity.EntityRenderDispatcher
@@ -8,12 +8,12 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.projectile.ProjectileEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.world.World
-import yummyloop.example.item.entity.AbstractSpearEntity
+import yummyloop.example.entity.AbstractSpearEntity
 import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 
-object SpearDarkOak : AbstractSpear("spear_dark_oak", SpearSettings.Wooden.itemSettings) {
+object SpearSpruce : AbstractSpear("spear_spruce", SpearSettings.Wooden.itemSettings) {
 
     override val attackDamage = SpearSettings.Wooden.attackDamage
     override val attackSpeed = SpearSettings.Wooden.attackSpeed

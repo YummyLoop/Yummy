@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import yummyloop.example.item.Items;
-import yummyloop.example.item.entity.AbstractCobwebProjectileEntity;
-import yummyloop.example.item.spear.Cobweb;
+import yummyloop.example.entity.AbstractCobwebProjectileEntity;
+import yummyloop.example.item.thrown.Cobweb;
 
 @Mixin(SpiderEntity.class)
 public final class Spider extends HostileEntity implements RangedAttackMob {
