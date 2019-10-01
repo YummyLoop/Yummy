@@ -1,27 +1,27 @@
 package yummyloop.example.util.data
 
 import net.minecraft.server.world.ServerWorld
+import net.minecraft.world.dimension.DimensionType
 import yummyloop.example.mixin.server.world.ServerWorldMixin
-import kotlin.reflect.KFunction1
 import kotlin.reflect.KFunction2
 
-object DimensionDataManager {
+object DataManager {
     private val uninitializedDimensionDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
-    private val uninitializedLevelDataList = HashMap<String, KFunction1<String, LevelData>>()
+    private val uninitializedLevelDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
     private val dimensionDataList = HashSet<DimensionData>()
-    private val levelDataList = HashSet<LevelData>()
+    private val levelDataList = HashSet<DimensionData>()
     private var iniGlobal = true
 
     init {
-        //registerDimensionData("test99", ::TestData)
-        //registerLevelData("tglobal", ::TestLevelData)
+        //registerDimensionData("test91", ::TestData)
+        //registerLevelData("tglobal1", ::TestData)
     }
 
     @JvmStatic
     fun iniDimension(world : ServerWorld) {
         //println(world.saveHandler.worldDir.absolutePath.toString())
         //println("Ini data for dimension" + world.dimension.toString())
-        if (iniGlobal) levelDataIni(world) // assumes the first dim initialized is the overworld or equivalent
+        if (iniGlobal && world.dimension.type == DimensionType.OVERWORLD) levelDataIni(world)
         for (i in uninitializedDimensionDataList){
             val name = i.key + world.dimension.type.suffix
             this.dimensionDataList.add(world.persistentStateManager.getOrCreate({ i.value(world, name) }, name))
@@ -30,9 +30,14 @@ object DimensionDataManager {
 
     @JvmStatic
     fun tick(world : ServerWorld){
-        for (i in dimensionDataList){
-            if (i.getWorld() == world){
-                i.tick()
+        for (dim in dimensionDataList){
+            if (dim.getWorld() == world){
+                dim.tick()
+            }
+        }
+        if (world.dimension.type == DimensionType.OVERWORLD){ // might be out of sync with multiple overworlds
+            for (level in levelDataList){
+                level.tick()
             }
         }
     }
@@ -41,7 +46,7 @@ object DimensionDataManager {
         iniGlobal=false
         for (i in uninitializedLevelDataList){
             val name = "../" + i.key + "_level"
-            this.levelDataList.add(world.persistentStateManager.getOrCreate({ i.value(name) }, name))
+            this.levelDataList.add(world.persistentStateManager.getOrCreate({ i.value(world, name) }, name))
         }
     }
 
@@ -50,16 +55,14 @@ object DimensionDataManager {
         this.uninitializedDimensionDataList[name] = data
     }
 
-    // Pseudo level data, but its dependent of the overworld or equivalent dimension
-    fun registerLevelData(name: String, data: KFunction1<String, LevelData>) {
+    // Pseudo level data, but it is dependent of the overworld, by default minecraft has the same behaviour
+    fun registerLevelData(name: String, data: KFunction2<ServerWorld, String, DimensionData>) {
         this.uninitializedLevelDataList[name] = data
     }
 
 
     //-----------------------------------------------------------------------------------------------------------------
     //placeholders to suppress mixin cast error
-    @JvmStatic
-    fun iniDimension(world : ServerWorldMixin) {}
-    @JvmStatic
-    fun tick(world : ServerWorldMixin) {}
+    @JvmStatic fun iniDimension(world : ServerWorldMixin) {}
+    @JvmStatic fun tick(world : ServerWorldMixin) {}
 }

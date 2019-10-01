@@ -16,7 +16,7 @@ import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import yummyloop.example.util.data.DimensionDataManager;
+import yummyloop.example.util.data.DataManager;
 
 import java.util.concurrent.Executor;
 import java.util.function.BiFunction;
@@ -48,7 +48,7 @@ public abstract class ServerWorldMixin extends World {
                                WorldGenerationProgressListener worldGenerationProgressListener,
                                CallbackInfo info) {
 
-        DimensionDataManager.iniDimension( this);
+        DataManager.iniDimension( this);
     }
 
     @Inject(
@@ -62,7 +62,7 @@ public abstract class ServerWorldMixin extends World {
             expect = 0
     )
     private void onServerWorldTick(BooleanSupplier booleanSupplier, CallbackInfo info){
-        DimensionDataManager.tick(this);
+        DataManager.tick(this);
     }
 
     @Shadow

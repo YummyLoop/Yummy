@@ -5,8 +5,6 @@ import net.minecraft.server.world.ServerWorld
 
 class TestData(world : ServerWorld, name : String) : DimensionData(world, name) {
 
-    // note: create companion/static instance list for external access
-
     override fun tick() {
         //testInt++
         //println(testInt)
@@ -15,10 +13,8 @@ class TestData(world : ServerWorld, name : String) : DimensionData(world, name) 
 
     private var testInt=0
 
-    init {
-        //println("Hello world from test data")
+    init {// Changes made here will only take effect the first time the data is saved/created
         this.markDirty()
-        //testInt++
     }
 
     override fun toTag(tag: CompoundTag): CompoundTag {
