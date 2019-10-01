@@ -8,8 +8,8 @@ import kotlin.reflect.KFunction2
 object DataManager {
     private val uninitializedDimensionDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
     private val uninitializedLevelDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
-    private val dimensionDataList = HashSet<DimensionData>()
-    private val levelDataList = HashSet<DimensionData>()
+    private val dimensionDataList = HashMap<String, DimensionData>()
+    private val levelDataList = HashMap<String, DimensionData>()
     private var iniGlobal = true
 
     init {
@@ -24,20 +24,20 @@ object DataManager {
         if (iniGlobal && world.dimension.type == DimensionType.OVERWORLD) levelDataIni(world)
         for (i in uninitializedDimensionDataList){
             val name = i.key + world.dimension.type.suffix
-            this.dimensionDataList.add(world.persistentStateManager.getOrCreate({ i.value(world, name) }, name))
+            this.dimensionDataList[name] = world.persistentStateManager.getOrCreate({ i.value(world, name) }, name)
         }
     }
 
     @JvmStatic
     fun tick(world : ServerWorld){
         for (dim in dimensionDataList){
-            if (dim.getWorld() == world){
-                dim.tick()
+            if (dim.value.getWorld() == world){
+                dim.value.tick()
             }
         }
         if (world.dimension.type == DimensionType.OVERWORLD){ // might be out of sync with multiple overworlds
             for (level in levelDataList){
-                level.tick()
+                level.value.tick()
             }
         }
     }
@@ -46,7 +46,7 @@ object DataManager {
         iniGlobal=false
         for (i in uninitializedLevelDataList){
             val name = "../" + i.key + "_level"
-            this.levelDataList.add(world.persistentStateManager.getOrCreate({ i.value(world, name) }, name))
+            this.levelDataList[name] = world.persistentStateManager.getOrCreate({ i.value(world, name) }, name)
         }
     }
 
@@ -63,6 +63,6 @@ object DataManager {
 
     //-----------------------------------------------------------------------------------------------------------------
     //placeholders to suppress mixin cast error
-    @JvmStatic fun iniDimension(world : ServerWorldMixin) {}
-    @JvmStatic fun tick(world : ServerWorldMixin) {}
+    @JvmStatic fun iniDimension(world : ServerWorldMixin) = Unit
+    @JvmStatic fun tick(world : ServerWorldMixin) = Unit
 }
