@@ -8,7 +8,8 @@
     "entity/mob/Spider",
     "entity/player/Hunger",
     "item/Elytra",
-    "server/world/ServerWorldMixin"
+    "server/world/ServerWorldMixin",
+    "world/WorldSaveHandlerMixin"
   ],
   "client": [
     "ExampleMixin",
