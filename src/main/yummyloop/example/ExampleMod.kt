@@ -7,6 +7,7 @@ import yummyloop.example.block.Blocks
 import yummyloop.example.modCompatibility.ModCompatibilityManager
 import yummyloop.example.item.Items
 import yummyloop.example.util.Logger
+import yummyloop.example.util.data.DimensionDataManager
 import yummyloop.example.util.registry.ClientManager
 
 object ExampleMod : ModInitializer, ClientModInitializer {
@@ -23,6 +24,7 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         logger.warn("logger warn")
         logger.fatal("logger fatal")
 
+        DimensionDataManager
         ModCompatibilityManager
         Blocks.ini()
         Items.ini()

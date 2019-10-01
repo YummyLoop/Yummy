@@ -7,7 +7,8 @@
     "entity/attribute/EntityAttributes",
     "entity/mob/Spider",
     "entity/player/Hunger",
-    "item/Elytra"
+    "item/Elytra",
+    "server/world/ServerWorldMixin"
   ],
   "client": [
     "ExampleMixin",
