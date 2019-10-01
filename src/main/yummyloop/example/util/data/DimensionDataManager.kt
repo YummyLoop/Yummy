@@ -6,7 +6,7 @@ import kotlin.reflect.KFunction2
 
 object DimensionDataManager {
     private val uninitializedDimensionDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
-    private val dimensionDataList = HashMap<DimensionData, ServerWorld>()
+    private val dimensionDataList = HashSet<DimensionData>()
 
     init {
         //registerDimensionData("test99", ::TestData)
@@ -17,15 +17,15 @@ object DimensionDataManager {
         //println("Ini data for dimension" + world.dimension.toString())
         for (i in uninitializedDimensionDataList){
             val name = i.key + world.dimension.type.suffix
-            this.dimensionDataList[world.persistentStateManager.getOrCreate({ i.value(world, name) }, name)] = world
+            this.dimensionDataList.add(world.persistentStateManager.getOrCreate({ i.value(world, name) }, name))
         }
     }
 
     @JvmStatic
     fun tick(world : ServerWorld){
         for (i in dimensionDataList){
-            if (i.value == world){
-                i.key.tick()
+            if (i.getWorld() == world){
+                i.tick()
             }
         }
     }
