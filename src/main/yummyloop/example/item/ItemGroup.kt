@@ -4,7 +4,7 @@ import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
+import net.minecraft.item.Items as VanillaItems
 import yummyloop.example.util.registry.RegistryManager
 import java.util.function.Consumer
 import net.minecraft.item.ItemGroup as VanillaItemGroup
@@ -13,9 +13,9 @@ import net.minecraft.item.ItemGroup as VanillaItemGroup
  * ItemGroup defaults to MISC <p>
  * <b>Note:</b> ItemGroup can be set as null for no ItemGroup
  */
-class ItemGroup(name : String, itemToIcon: ItemConvertible) {
+class ItemGroup(name : String, itemToIcon: ItemConvertible) { // Todo: refactor to the items/blocks format
     companion object{
-        private val defaultItemToIcon : Item = Items.APPLE
+        private val defaultItemToIcon : Item = VanillaItems.APPLE
     }
     private var mcItemGroup : VanillaItemGroup? = null
     private lateinit var fabricItemGroup : FabricItemGroupBuilder
@@ -30,6 +30,7 @@ class ItemGroup(name : String, itemToIcon: ItemConvertible) {
 
     private fun register (name : String, itemToIcon: ItemConvertible){
         this.fabricItemGroup = RegistryManager.register(this, name).icon{ItemStack(itemToIcon)}
+        Items.groups[name] = this.getGroup()
     }
 
     fun getGroup() : VanillaItemGroup? {

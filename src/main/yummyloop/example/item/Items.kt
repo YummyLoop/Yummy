@@ -9,9 +9,10 @@ import yummyloop.example.item.thrown.Cobweb
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.Item.Settings as ItemSettings
 import net.minecraft.item.Items as Vanilla
+import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 object Items : HashMap<String, VanillaItem>() {
-    @JvmField val groups = mutableMapOf<String, ItemGroup>()
+    @JvmField val groups = mutableMapOf<String, VanillaItemGroup?>()
     @JvmField val containers = mutableMapOf<String, Any>()
 
     fun ini() {
@@ -33,6 +34,7 @@ object Items : HashMap<String, VanillaItem>() {
         //.addTooltip("item.example.fabric_item.tooltip")
         Backpack("ring2", 5, groups["hello1"])
         BlockItem("example_blockrender", ItemSettings().group(null), Blocks["template_be"])
+        BlockItem("test_barrel", ItemSettings().group(groups["hello1"]), Blocks["test_barrel"])
 
         containers["backpack"] = BContainer
     }

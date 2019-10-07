@@ -38,9 +38,7 @@ class BlockItem : VanillaBlockItem {
             this(itemName, Settings().group(net.minecraft.item.ItemGroup.MISC), block)
 
     // Register name
-    private fun register(itemName: String) {
-        RegistryManager.register(this, itemName)
-    }
+    private fun register(itemName: String) = RegistryManager.register(this, itemName)
 
     override fun appendTooltip(itemStack: ItemStack?, world: World?, tooltip: MutableList<Text>, tooltipContext: TooltipContext?) {
         tooltip.addAll(this.tooltip)

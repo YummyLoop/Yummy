@@ -32,13 +32,10 @@ class Block constructor(blockName: String, settings: FabricBlockSettings) :
     }
 
     // BlockName
-    constructor(blockName: String) :
-            this(blockName, of(Material.AIR))
+    constructor(blockName: String) : this(blockName, of(Material.AIR))
 
     // End of constructors
-    private fun register(blockName: String) {
-        RegistryManager.register(this, blockName)
-    }
+    private fun register(blockName: String) = RegistryManager.register(this, blockName)
 
 }
 

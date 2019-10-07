@@ -41,9 +41,7 @@ class TemplateBlockWithEntity constructor(blockName: String, settings: FabricBlo
         return true
     }
 
-    override fun getRenderType(blockState_1: BlockState?): BlockRenderType {
-       return BlockRenderType.MODEL
-    }
+    override fun getRenderType(blockState: BlockState): BlockRenderType = BlockRenderType.MODEL
 
     override fun getOutlineShape(blockState_1: BlockState?, blockView_1: BlockView?, blockPos_1: BlockPos?, entityContext_1: EntityContext?): VoxelShape {
         return VanillaBlock.createCuboidShape(1.0, 0.0, 1.0, 15.0, 20.0, 15.0)

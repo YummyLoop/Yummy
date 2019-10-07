@@ -29,7 +29,6 @@ object RegistryManager {
     private var modId : String = Config.modId
     private val blockList = Blocks
     private val itemList = Items
-    private val itemGroupList = Items.groups
     val miscEntityType = HashMap<String, Pair<EntityType<out Entity>, (World, Double, Double, Double) -> Entity >>()
 
     // Item
@@ -53,7 +52,6 @@ object RegistryManager {
     // ItemGroup
     //-----------------------------------------------------------------------------------------------------------------
     fun <T : ItemGroup> register(itemGroup : T, modId : String, itemGroupName : String) : FabricItemGroupBuilder{
-        itemGroupList.putIfAbsent(itemGroupName, itemGroup)
         return FabricItemGroupBuilder.create(Identifier(modId, itemGroupName))
     }
     fun <T : ItemGroup> register(itemGroup : T, itemGroupName : String) : FabricItemGroupBuilder{
