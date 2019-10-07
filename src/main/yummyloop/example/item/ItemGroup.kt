@@ -1,65 +1,34 @@
 package yummyloop.example.item;
 
-import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder
 import net.minecraft.item.Item
 import net.minecraft.item.ItemConvertible
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items as VanillaItems
+import net.minecraft.item.Items as Vanilla
 import yummyloop.example.util.registry.RegistryManager
 import java.util.function.Consumer
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
-/**
- * ItemGroup defaults to MISC <p>
- * <b>Note:</b> ItemGroup can be set as null for no ItemGroup
- */
-class ItemGroup(name : String, itemToIcon: ItemConvertible) { // Todo: refactor to the items/blocks format
-    companion object{
-        private val defaultItemToIcon : Item = VanillaItems.APPLE
-    }
-    private var mcItemGroup : VanillaItemGroup? = null
-    private lateinit var fabricItemGroup : FabricItemGroupBuilder
+object ItemGroup{
+    private val map = HashMap<String, VanillaItemGroup>()
+    private val defaultItemToIcon : Item = Vanilla.APPLE
 
-    init {
-        register(name, itemToIcon)
-    }
-    constructor(name : String) : this(name, defaultItemToIcon)
-    constructor(name : String, itemToIcon: ItemConvertible, itemStacks: Consumer<List<ItemStack>>): this(name, itemToIcon) {
-        this.fabricItemGroup.appendItems(itemStacks);
+    operator fun set(name: String, itemToIcon: ItemConvertible) {
+        map[name] = RegistryManager.registerItemGroup(name).icon{ItemStack(itemToIcon)}.build()
     }
 
-    private fun register (name : String, itemToIcon: ItemConvertible){
-        this.fabricItemGroup = RegistryManager.register(this, name).icon{ItemStack(itemToIcon)}
-        Items.groups[name] = this.getGroup()
+    operator fun set(name: String, itemToIcon: ItemConvertible, itemStacks: List<ItemStack>) {
+        val fabricConsumer : Consumer<MutableList<ItemStack>> = Consumer { stacks -> stacks.addAll(itemStacks) }
+        map[name] = RegistryManager.registerItemGroup(name).icon{ItemStack(itemToIcon)}.appendItems(fabricConsumer).build()
     }
 
-    fun getGroup() : VanillaItemGroup? {
-        if (this.mcItemGroup == null) {
-            this.mcItemGroup = this.fabricItemGroup.build()
+    operator fun get(name: String) : VanillaItemGroup?{
+        val value = map[name]
+        return if (value == null){
+            val ret = RegistryManager.registerItemGroup(name).icon{ItemStack(defaultItemToIcon)}.build()
+            map[name] = ret
+            ret
+        }else{
+            value
         }
-        return this.mcItemGroup
-    }
-
-    fun get() : VanillaItemGroup? {
-        return this.getGroup()
     }
 }
-
-/* Example
-    // New Item
-    Item a = new Item("tutorial", "fabric_item", ItemGroup.MISC);
-    // New Custom ItemStack
-    ItemStack b = new ItemStack(a);
-    b.getOrCreateTag().putInt("CustomModelData", 1);
-    b.setCustomName(new LiteralText("Hello"));
-
-    // New manual/custom Fabric ItemGroup
-    ItemGroup helloGroup = new ItemGroup("tutorial", "hello", Items.APPLE, stacks ->
-    {
-        stacks.add(new ItemStack(Blocks.BONE_BLOCK));
-        stacks.add(new ItemStack(Items.APPLE));
-        stacks.add(ItemStack.EMPTY);
-        stacks.add(new ItemStack(Items.IRON_SHOVEL));
-        stacks.add(b);
-    });
-*/

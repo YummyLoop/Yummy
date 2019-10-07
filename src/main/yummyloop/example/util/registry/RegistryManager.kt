@@ -51,11 +51,11 @@ object RegistryManager {
     }
     // ItemGroup
     //-----------------------------------------------------------------------------------------------------------------
-    fun <T : ItemGroup> register(itemGroup : T, modId : String, itemGroupName : String) : FabricItemGroupBuilder{
+    fun registerItemGroup(modId : String, itemGroupName : String) : FabricItemGroupBuilder{
         return FabricItemGroupBuilder.create(Identifier(modId, itemGroupName))
     }
-    fun <T : ItemGroup> register(itemGroup : T, itemGroupName : String) : FabricItemGroupBuilder{
-        return register(itemGroup, this.modId, itemGroupName)
+    fun registerItemGroup(itemGroupName : String) : FabricItemGroupBuilder{
+        return registerItemGroup(this.modId, itemGroupName)
     }
     // Containers
     //-----------------------------------------------------------------------------------------------------------------
