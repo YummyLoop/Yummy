@@ -4,8 +4,6 @@ import com.mojang.blaze3d.platform.GLX
 import com.mojang.blaze3d.platform.GlStateManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.render.block.entity.BellModel
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
@@ -13,18 +11,17 @@ import net.minecraft.client.render.model.json.ModelTransformation
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.Identifier
+import yummyloop.example.block.BlockEntity
 import yummyloop.example.block.Blocks
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
-import java.util.function.Supplier
 import kotlin.math.sin
 import net.minecraft.item.Items as VanillaItems
 
 class TemplateBlockEntity : BlockEntity(type){
     companion object Register {
-        private val supplier = Supplier { TemplateBlockEntity() } // Supplier
-        private var blocks = listOf(Blocks["template_be"])   // List of blocks to apply the entity to
-        private val type = BlockEntityType.Builder.create(supplier, *blocks.toTypedArray()).build(null)!!
+        private var blocks= listOf(Blocks["template_be"])   // List of blocks to apply the entity to
+        private val type= createType(::TemplateBlockEntity, blocks)
         init {
             RegistryManager.register(type, this::class.qualifiedName!!.toLowerCase())
             ClientManager.registerBlockEntityRenderer(TemplateBlockEntity::class.java, ::Renderer)
