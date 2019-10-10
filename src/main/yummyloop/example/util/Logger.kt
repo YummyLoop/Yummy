@@ -6,14 +6,13 @@ import org.apache.logging.log4j.core.appender.ConsoleAppender
 import org.apache.logging.log4j.core.appender.RollingRandomAccessFileAppender
 import org.apache.logging.log4j.core.layout.PatternLayout
 import org.apache.logging.log4j.message.ParameterizedMessageFactory
-import yummyloop.example.config.Config
 import java.util.concurrent.LinkedBlockingQueue
 import org.apache.logging.log4j.core.Logger as Log4jLogger
 
 
 // see https://logging.apache.org/log4j/log4j-2.4/faq.html
 class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, ParameterizedMessageFactory()) {
-    private val id = Config.modId
+    private val id = this.name
     private val layout: PatternLayout = PatternLayout.newBuilder()
         .withConfiguration(this.privateConfig.config)
         .withPattern("[%d{HH:mm:ss}] [$id/%level]: %msg%n")
