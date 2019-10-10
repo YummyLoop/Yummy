@@ -11,7 +11,7 @@ import yummyloop.example.util.registry.ClientManager
 
 object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
-    val logger: Logger = Logger(id.toUpperCase(), "ALL", true)
+    val logger: Logger = Logger(id.toUpperCase(), "ALL")
 
     override fun onInitialize() = runBlocking {
         logger.info("**************************")
