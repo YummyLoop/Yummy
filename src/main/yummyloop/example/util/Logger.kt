@@ -43,6 +43,7 @@ class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, Param
         this.removeAppender(default)
         this.privateConfig.loggerConfig.addAppender(appender, null, null)
     }
+
     private fun replaceFileAppender() {
         val default = this.appenders["File"] as RollingRandomAccessFileAppender
 
@@ -51,7 +52,7 @@ class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, Param
                 .setConfiguration(this.privateConfig.config)
                 .withBufferSize(default.bufferSize)
                 .withFileName(default.fileName)
-                .withFilePattern(default.fileName)
+                .withFilePattern(default.filePattern)
                 .withPolicy(default.manager.getTriggeringPolicy())
                 .withFilter(default.filter)
                 .withName(default.name)
