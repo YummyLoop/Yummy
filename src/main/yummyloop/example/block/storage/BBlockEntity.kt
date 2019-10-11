@@ -18,32 +18,42 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.DefaultedList
 import net.minecraft.util.math.Direction
+import yummyloop.example.util.data.DataManager
+import yummyloop.example.util.data.LevelChestData
 
 open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContainerBlockEntity(blockEntityType) {
     private var inventory: DefaultedList<ItemStack>? = null
     private var viewerCount: Int = 0
+    private var data = DataManager.levelDataList["levelChestData"] as LevelChestData
+    private var id : Long = 0
 
     init {
-        this.inventory = DefaultedList.ofSize(27, ItemStack.EMPTY)
+        this.inventory = data[this.id]
     }
 
-    override fun toTag(compoundTag_1: CompoundTag): CompoundTag {
-        super.toTag(compoundTag_1)
-        //if (!this.serializeLootTable(compoundTag_1)) {
-            Inventories.toTag(compoundTag_1, this.inventory!!)
-        //}
+    override fun toTag(compoundTag: CompoundTag): CompoundTag {
+        super.toTag(compoundTag)
+        compoundTag.putLong("storage_id", id)
+        data[this.id]=this.inventory
 
-        return compoundTag_1
+        return compoundTag
     }
 
-    override fun fromTag(compoundTag_1: CompoundTag) {
-        super.fromTag(compoundTag_1)
-        this.inventory = DefaultedList.ofSize(this.invSize, ItemStack.EMPTY)
-        //if (!this.deserializeLootTable(compoundTag_1)) {
-            Inventories.fromTag(compoundTag_1, this.inventory)
-        //}
-
+    override fun fromTag(compoundTag: CompoundTag) {
+        super.fromTag(compoundTag)
+        this.id = compoundTag.getLong("storage_id")
+        this.inventory=data[this.id]
     }
+
+    fun newId(){
+        this.setId(data.nextId())
+    }
+
+    fun setId(id : Long) {
+        this.id = id
+        this.inventory=data[this.id]
+    }
+    fun id() = this.id
 
     override fun getInvSize(): Int {
         return 27
@@ -64,24 +74,23 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
         return false
     }
 
-    override fun getInvStack(int_1: Int): ItemStack {
-        return this.inventory!![int_1]
+    override fun getInvStack(slot: Int): ItemStack {
+        return this.inventory!![slot]
     }
 
-    override fun takeInvStack(int_1: Int, int_2: Int): ItemStack {
-        return Inventories.splitStack(this.inventory, int_1, int_2)
+    override fun takeInvStack(slot: Int, count: Int): ItemStack {
+        return Inventories.splitStack(this.inventory, slot, count)
     }
 
-    override fun removeInvStack(int_1: Int): ItemStack {
-        return Inventories.removeStack(this.inventory, int_1)
+    override fun removeInvStack(slot: Int): ItemStack {
+        return Inventories.removeStack(this.inventory, slot)
     }
 
-    override fun setInvStack(int_1: Int, itemStack_1: ItemStack) {
-        this.inventory!![int_1] = itemStack_1
-        if (itemStack_1.count > this.invMaxStackAmount) {
-            itemStack_1.count = this.invMaxStackAmount
+    override fun setInvStack(slot: Int, itemStack: ItemStack) {
+        this.inventory!![slot] = itemStack
+        if (itemStack.count > this.invMaxStackAmount) {
+            itemStack.count = this.invMaxStackAmount
         }
-
     }
 
     override fun clear() {
@@ -92,30 +101,31 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
         return this.inventory
     }
 
-    override fun setInvStackList(defaultedList_1: DefaultedList<ItemStack>) {
-        this.inventory = defaultedList_1
+    override fun setInvStackList(defaultedList: DefaultedList<ItemStack>) {
+        this.inventory = defaultedList
     }
 
     override fun getContainerName(): Text {
         return TranslatableText("container.barrel", *arrayOfNulls(0))
     }
 
-    override fun createContainer(int_1: Int, playerInventory_1: PlayerInventory): Container {
-        return GenericContainer.createGeneric9x3(int_1, playerInventory_1, this)
+    override fun createContainer(syncId: Int, playerInventory: PlayerInventory): Container {
+        return GenericContainer.createGeneric9x3(syncId, playerInventory, this)
     }
 
-    override fun onInvOpen(playerEntity_1: PlayerEntity) {
-        if (!playerEntity_1.isSpectator) {
+    override fun onInvOpen(playerEntity: PlayerEntity) {
+        if (!playerEntity.isSpectator) {
             if (this.viewerCount < 0) {
                 this.viewerCount = 0
             }
 
+            println("chest id:"+this.id)
             ++this.viewerCount
-            val blockState_1 = this.cachedState
-            val boolean_1 = blockState_1.get(Barrel.OPEN) as Boolean
-            if (!boolean_1) {
-                this.playSound(blockState_1, SoundEvents.BLOCK_BARREL_OPEN)
-                this.setOpen(blockState_1, true)
+            val cachedBlockState = this.cachedState
+            val isOpen = cachedBlockState.get(Barrel.OPEN) as Boolean
+            if (!isOpen) {
+                this.playSound(cachedBlockState, SoundEvents.BLOCK_BARREL_OPEN)
+                this.setOpen(cachedBlockState, true)
             }
 
             this.scheduleUpdate()
@@ -128,43 +138,42 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
     }
 
     fun tick() {
-        val int_1 = this.pos.x
-        val int_2 = this.pos.y
-        val int_3 = this.pos.z
-        this.viewerCount = ChestBlockEntity.countViewers(this.world!!, this, int_1, int_2, int_3)
+        val x = this.pos.x
+        val y = this.pos.y
+        val z = this.pos.z
+        this.viewerCount = ChestBlockEntity.countViewers(this.world!!, this, x, y, z)
         if (this.viewerCount > 0) {
             this.scheduleUpdate()
         } else {
-            val blockState_1 = this.cachedState
+            val cachedBlockState = this.cachedState
             /*if (blockState_1.block !== Blocks.BARREL) {
                 this.invalidate()
                 return
             }*/
 
-            val boolean_1 = blockState_1.get(Barrel.OPEN) as Boolean
-            if (boolean_1) {
-                this.playSound(blockState_1, SoundEvents.BLOCK_BARREL_CLOSE)
-                this.setOpen(blockState_1, false)
+            val isOpen = cachedBlockState.get(Barrel.OPEN) as Boolean
+            if (isOpen) {
+                this.playSound(cachedBlockState, SoundEvents.BLOCK_BARREL_CLOSE)
+                this.setOpen(cachedBlockState, false)
             }
         }
-
     }
 
-    override fun onInvClose(playerEntity_1: PlayerEntity) {
-        if (!playerEntity_1.isSpectator) {
+    override fun onInvClose(playerEntity: PlayerEntity) {
+        if (!playerEntity.isSpectator) {
             --this.viewerCount
         }
     }
 
-    private fun setOpen(blockState_1: BlockState, boolean_1: Boolean) {
-        this.world!!.setBlockState(this.getPos(), blockState_1.with(Barrel.OPEN, boolean_1) as BlockState, 3)
+    private fun setOpen(blockState: BlockState, open: Boolean) {
+        this.world!!.setBlockState(this.getPos(), blockState.with(Barrel.OPEN, open) as BlockState, 3)
     }
 
-    private fun playSound(blockState_1: BlockState, soundEvent_1: SoundEvent) {
-        val vec3i_1 = (blockState_1.get(Barrel.FACING) as Direction).vector
-        val double_1 = this.pos.x.toDouble() + 0.5 + vec3i_1.x.toDouble() / 2.0
-        val double_2 = this.pos.y.toDouble() + 0.5 + vec3i_1.y.toDouble() / 2.0
-        val double_3 = this.pos.z.toDouble() + 0.5 + vec3i_1.z.toDouble() / 2.0
-        this.world!!.playSound(null as PlayerEntity?, double_1, double_2, double_3, soundEvent_1, SoundCategory.BLOCKS, 0.5f, this.world!!.random.nextFloat() * 0.1f + 0.9f)
+    private fun playSound(blockState: BlockState, soundEvent: SoundEvent) {
+        val facePos = (blockState.get(Barrel.FACING) as Direction).vector
+        val x = this.pos.x.toDouble() + 0.5 + facePos.x.toDouble() / 2.0
+        val y = this.pos.y.toDouble() + 0.5 + facePos.y.toDouble() / 2.0
+        val z = this.pos.z.toDouble() + 0.5 + facePos.z.toDouble() / 2.0
+        this.world!!.playSound(null as PlayerEntity?, x, y, z, soundEvent, SoundCategory.BLOCKS, 0.5f, this.world!!.random.nextFloat() * 0.1f + 0.9f)
     }
 }

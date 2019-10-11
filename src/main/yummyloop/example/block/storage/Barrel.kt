@@ -8,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.stat.Stats
 import net.minecraft.state.StateFactory
 import net.minecraft.state.property.BooleanProperty
@@ -25,6 +26,10 @@ import net.minecraft.world.World
 import yummyloop.example.block.BlockEntity
 import yummyloop.example.block.BlockWithEntity
 import yummyloop.example.block.Blocks
+import yummyloop.example.item.Item
+import yummyloop.example.item.Items
+import yummyloop.example.util.data.DataManager
+import yummyloop.example.util.data.LevelChestData
 import yummyloop.example.util.registry.RegistryManager
 import java.util.*
 import net.minecraft.block.Block as VanillaBlock
@@ -63,8 +68,11 @@ class Barrel(blockName: String, blockSettings: FabricBlockSettings) : BlockWithE
     override fun onBlockRemoved(blockState: BlockState, world: World, blockPos: BlockPos, blockState_2: BlockState, boolean: Boolean) {
         if (blockState.block !== blockState_2.block) {
             val blockEntity = world.getBlockEntity(blockPos)
-            if (blockEntity is Inventory) {
-                ItemScatterer.spawn(world, blockPos, (blockEntity as Inventory))
+            if (blockEntity is IEntity) {
+                //ItemScatterer.spawn(world, blockPos, (blockEntity as Inventory))
+                val self = ItemStack(Items["test_barrel"])
+                self.orCreateTag.putLong("storage_id", blockEntity.id())
+                ItemScatterer.spawn(world, blockPos.x.toDouble(), blockPos.y.toDouble(), blockPos.z.toDouble(), self)
                 world.updateHorizontalAdjacent(blockPos, this)
             }
 
@@ -84,6 +92,18 @@ class Barrel(blockName: String, blockSettings: FabricBlockSettings) : BlockWithE
             val blockEntity = world.getBlockEntity(blockPos)
             if (blockEntity is IEntity) {
                 blockEntity.customName = itemStack.name
+            }
+        }
+
+        if (!world.isClient) {
+            val tag = itemStack.orCreateTag
+            val blockEntity = world.getBlockEntity(blockPos)
+            if (blockEntity is IEntity) {
+                if (!tag.isEmpty) {
+                    blockEntity.setId(tag.getLong("storage_id"))
+                } else {
+                    blockEntity.newId()
+                }
             }
         }
     }

@@ -8,13 +8,14 @@ import kotlin.reflect.KFunction2
 object DataManager {
     private val uninitializedDimensionDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
     private val uninitializedLevelDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
-    private val dimensionDataList = HashMap<String, DimensionData>()
-    private val levelDataList = HashMap<String, DimensionData>()
+    val dimensionDataList = HashMap<String, DimensionData>()
+    val levelDataList = HashMap<String, DimensionData>()
     private var iniGlobal = true
 
     init {
         //registerDimensionData("test91", ::TestData)
         //registerLevelData("tglobal1", ::TestData)
+        registerLevelData("levelChestData", ::LevelChestData)
     }
 
     @JvmStatic
@@ -46,7 +47,7 @@ object DataManager {
         iniGlobal=false
         for (i in uninitializedLevelDataList){
             val name = "../" + i.key + "_level"
-            this.levelDataList[name] = world.persistentStateManager.getOrCreate({ i.value(world, name) }, name)
+            this.levelDataList[i.key] = world.persistentStateManager.getOrCreate({ i.value(world, name) }, name)
         }
     }
 
