@@ -34,7 +34,7 @@ class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, Param
         val appender = builder
                 .setConfiguration(this.privateConfig.config)
                 .withName(default.name)
-                .withLayout(layout)
+                .withLayout(this.layout)
                 .build()
 
         appender.start()
@@ -55,7 +55,7 @@ class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, Param
                 .withPolicy(default.manager.getTriggeringPolicy())
                 .withFilter(default.filter)
                 .withName(default.name)
-                .withLayout(layout)
+                .withLayout(this.layout)
                 .build()
 
         appender.start()
@@ -82,7 +82,7 @@ class Logger(name: String) : Log4jLogger(LoggerContext.getContext(), name, Param
         this.privateConfig.loggerConfig.addAppender(appender, null, null)
     }
 
-    private fun setLevel(level : String){
+    fun setLevel(level : String){
         val logLevel : Level = when (level) {
             "ALL" -> Level.ALL
             "DEBUG" -> Level.DEBUG
