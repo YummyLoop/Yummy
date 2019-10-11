@@ -56,9 +56,6 @@ class Barrel(blockName: String, blockSettings: FabricBlockSettings) : BlockWithE
         if (blockEntity is IEntity) {
             playerEntity.openContainer(blockEntity)
             playerEntity.incrementStat(Stats.OPEN_BARREL)
-        }else{
-            println("Hello this should not be happening!")
-            println(blockEntity.toString())
         }
 
         return true
@@ -106,11 +103,6 @@ class Barrel(blockName: String, blockSettings: FabricBlockSettings) : BlockWithE
                 }
             }
         }
-    }
-
-    override fun hasComparatorOutput(blockState: BlockState): Boolean = true
-    override fun getComparatorOutput(blockState: BlockState, world: World, blockPos: BlockPos): Int {
-        return Container.calculateComparatorOutput(world.getBlockEntity(blockPos))
     }
 
     override fun rotate(blockState: BlockState, blockRotation: BlockRotation): BlockState {

@@ -45,9 +45,7 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
         this.inventory=data[this.id]
     }
 
-    fun newId(){
-        this.setId(data.nextId())
-    }
+    fun newId() = this.setId(data.nextId())
 
     fun setId(id : Long) {
         this.id = id
@@ -55,36 +53,17 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
     }
     fun id() = this.id
 
-    override fun getInvSize(): Int {
-        return 27
-    }
+    override fun getInvSize(): Int = 27
 
     override fun isInvEmpty(): Boolean {
-        val var1 = this.inventory!!.iterator()
-
-        var itemStack_1: ItemStack
-        do {
-            if (!var1.hasNext()) {
-                return true
-            }
-
-            itemStack_1 = var1.next() as ItemStack
-        } while (itemStack_1.isEmpty)
-
-        return false
+        return (this.inventory!! == DefaultedList.ofSize(invSize, ItemStack.EMPTY))
     }
 
-    override fun getInvStack(slot: Int): ItemStack {
-        return this.inventory!![slot]
-    }
+    override fun getInvStack(slot: Int): ItemStack = this.inventory!![slot]
 
-    override fun takeInvStack(slot: Int, count: Int): ItemStack {
-        return Inventories.splitStack(this.inventory, slot, count)
-    }
+    override fun takeInvStack(slot: Int, count: Int): ItemStack = Inventories.splitStack(this.inventory, slot, count)
 
-    override fun removeInvStack(slot: Int): ItemStack {
-        return Inventories.removeStack(this.inventory, slot)
-    }
+    override fun removeInvStack(slot: Int): ItemStack = Inventories.removeStack(this.inventory, slot)
 
     override fun setInvStack(slot: Int, itemStack: ItemStack) {
         this.inventory!![slot] = itemStack
@@ -93,21 +72,15 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
         }
     }
 
-    override fun clear() {
-        this.inventory!!.clear()
-    }
+    override fun clear() = this.inventory!!.clear()
 
-    override fun getInvStackList(): DefaultedList<ItemStack>? {
-        return this.inventory
-    }
+    override fun getInvStackList(): DefaultedList<ItemStack>? = this.inventory
 
     override fun setInvStackList(defaultedList: DefaultedList<ItemStack>) {
         this.inventory = defaultedList
     }
 
-    override fun getContainerName(): Text {
-        return TranslatableText("container.barrel", *arrayOfNulls(0))
-    }
+    override fun getContainerName(): Text = TranslatableText("container.barrel", null)
 
     override fun createContainer(syncId: Int, playerInventory: PlayerInventory): Container {
         return GenericContainer.createGeneric9x3(syncId, playerInventory, this)
