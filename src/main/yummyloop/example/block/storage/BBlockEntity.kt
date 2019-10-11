@@ -21,22 +21,21 @@ import net.minecraft.util.DefaultedList
 import net.minecraft.util.math.Direction
 import yummyloop.example.util.data.DataManager
 import yummyloop.example.util.data.LevelChestData
-import java.util.*
 
 open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContainerBlockEntity(blockEntityType) {
     private var inventory: DefaultedList<ItemStack>? = null
     private var viewerCount: Int = 0
-    private var data = DataManager.Level["levelChestData"] as LevelChestData
+    private var data = DataManager.Level["levelChestData"] as LevelChestData?
     private var id : Long = 0
 
     init {
-        this.inventory = data[this.id]
+        this.inventory = data?.get(this.id)
     }
 
     override fun toTag(compoundTag: CompoundTag): CompoundTag {
         super.toTag(compoundTag)
         compoundTag.putLong("storage_id", id)
-        data[this.id]=this.inventory
+        data?.set(this.id, this.inventory)
 
         return compoundTag
     }
@@ -44,14 +43,14 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
     override fun fromTag(compoundTag: CompoundTag) {
         super.fromTag(compoundTag)
         this.id = compoundTag.getLong("storage_id")
-        this.inventory=data[this.id]
+        this.inventory = data?.get(this.id)
     }
 
-    fun newId() = this.setId(data.nextId())
+    fun newId() = this.setId(data!!.nextId())
 
     fun setId(id : Long) {
         this.id = id
-        this.inventory=data[this.id]
+        this.inventory= data?.get(this.id)
     }
     fun id() = this.id
 
