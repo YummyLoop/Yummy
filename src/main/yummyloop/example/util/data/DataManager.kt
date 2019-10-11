@@ -8,8 +8,8 @@ import kotlin.reflect.KFunction2
 object DataManager {
     private val uninitializedDimensionDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
     private val uninitializedLevelDataList = HashMap<String, KFunction2<ServerWorld, String, DimensionData>>()
-    val dimensionDataList = HashMap<String, DimensionData>()
-    val levelDataList = HashMap<String, DimensionData>()
+    private val dimensionDataList = HashMap<String, DimensionData>()
+    private val levelDataList = HashMap<String, DimensionData>()
     private var iniGlobal = true
 
     init {
@@ -61,7 +61,18 @@ object DataManager {
         this.uninitializedLevelDataList[name] = data
     }
 
-
+    //-----------------------------------------------------------------------------------------------------------------
+    // Custom getters
+    object Level{
+        operator fun get(id : String): DimensionData? {
+            return levelDataList[id]
+        }
+    }
+    object Dimension{
+        operator fun get(id : String): DimensionData? {
+            return dimensionDataList[id]
+        }
+    }
     //-----------------------------------------------------------------------------------------------------------------
     //placeholders to suppress mixin cast error
     @JvmStatic fun iniDimension(world : ServerWorldMixin) = Unit

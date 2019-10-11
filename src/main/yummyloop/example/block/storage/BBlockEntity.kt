@@ -14,17 +14,19 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.sound.SoundCategory
 import net.minecraft.sound.SoundEvent
 import net.minecraft.sound.SoundEvents
+import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.DefaultedList
 import net.minecraft.util.math.Direction
 import yummyloop.example.util.data.DataManager
 import yummyloop.example.util.data.LevelChestData
+import java.util.*
 
 open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContainerBlockEntity(blockEntityType) {
     private var inventory: DefaultedList<ItemStack>? = null
     private var viewerCount: Int = 0
-    private var data = DataManager.levelDataList["levelChestData"] as LevelChestData
+    private var data = DataManager.Level["levelChestData"] as LevelChestData
     private var id : Long = 0
 
     init {
@@ -80,7 +82,9 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
         this.inventory = defaultedList
     }
 
-    override fun getContainerName(): Text = TranslatableText("container.barrel", null)
+    override fun getContainerName(): Text {
+        return LiteralText(TranslatableText("container.barrel", null).asString() + " " + this.id.toString(32))
+    }
 
     override fun createContainer(syncId: Int, playerInventory: PlayerInventory): Container {
         return GenericContainer.createGeneric9x3(syncId, playerInventory, this)
