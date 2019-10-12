@@ -8,7 +8,6 @@ import net.minecraft.container.Container
 import net.minecraft.container.GenericContainer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.sound.SoundCategory
@@ -59,21 +58,6 @@ open class BBlockEntity (blockEntityType: BlockEntityType<*>) : LootableContaine
     override fun isInvEmpty(): Boolean {
         return (this.inventory!! == DefaultedList.ofSize(invSize, ItemStack.EMPTY))
     }
-
-    override fun getInvStack(slot: Int): ItemStack = this.inventory!![slot]
-
-    override fun takeInvStack(slot: Int, count: Int): ItemStack = Inventories.splitStack(this.inventory, slot, count)
-
-    override fun removeInvStack(slot: Int): ItemStack = Inventories.removeStack(this.inventory, slot)
-
-    override fun setInvStack(slot: Int, itemStack: ItemStack) {
-        this.inventory!![slot] = itemStack
-        if (itemStack.count > this.invMaxStackAmount) {
-            itemStack.count = this.invMaxStackAmount
-        }
-    }
-
-    override fun clear() = this.inventory!!.clear()
 
     override fun getInvStackList(): DefaultedList<ItemStack>? = this.inventory
 
