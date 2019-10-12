@@ -1,18 +1,15 @@
 package yummyloop.example.item.backpack
 
-import net.fabricmc.fabric.api.container.ContainerProviderRegistry
-import net.minecraft.block.BlockState
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.DyeableItem
 import net.minecraft.item.ItemStack
 import net.minecraft.item.ItemUsageContext
 import net.minecraft.util.*
-import net.minecraft.util.math.BlockPos
 import net.minecraft.world.World
 import yummyloop.example.item.Item
-import yummyloop.example.item.ItemGroup
 import yummyloop.example.render.firstPerson.RenderHand
+import yummyloop.example.util.extensions.openContainer
 import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 class Backpack(name: String, var rows : Int, settings : Settings) :
@@ -23,7 +20,7 @@ class Backpack(name: String, var rows : Int, settings : Settings) :
             this(itemName, rows, Settings().group(group))
 
     init {
-        this.addPropertyGetter(Identifier("using")) { itemStack_1, _, livingEntity_1 -> if (livingEntity_1 != null && livingEntity_1.activeItem == itemStack_1) 1.0f else 0.0f }
+        this.addPropertyGetter(Identifier("using")) { itemStack, _, livingEntity -> if (livingEntity != null && livingEntity.activeItem == itemStack) 1.0f else 0.0f }
     }
 
     //---------------------------------------------------------
@@ -43,7 +40,7 @@ class Backpack(name: String, var rows : Int, settings : Settings) :
             }
             // Open inventory
             if (this.rows < 1 || this.rows > 6) this.rows = 6
-            ContainerProviderRegistry.INSTANCE.openContainer(BContainer.id, player) { buf ->
+            player.openContainer(BContainer.id) { buf: PacketByteBuf ->
                 buf.writeInt(this.rows)
                 buf.writeString(itemStack.name.string)
             }
@@ -55,35 +52,10 @@ class Backpack(name: String, var rows : Int, settings : Settings) :
         }
     }
 
-    override fun useOnBlock(itemUsageContext_1: ItemUsageContext?): ActionResult {
-        return ActionResult.PASS
-    }
-
-    override fun useOnEntity(itemStack_1: ItemStack?, playerEntity_1: PlayerEntity?, livingEntity_1: LivingEntity?, hand_1: Hand?): Boolean {
-        return false
-    }
-
-    override fun getUseAction(itemStack_1: ItemStack?): UseAction {
-        return UseAction.BLOCK
-    }
-
-    override fun getMaxUseTime(itemStack_1: ItemStack?): Int {
-        return 0
-    }
-
-    override fun onStoppedUsing(itemStack_1: ItemStack?, world_1: World?, livingEntity_1: LivingEntity?, int_1: Int) {
-    }
-
-    override fun finishUsing(itemStack_1: ItemStack?, world_1: World?, livingEntity_1: LivingEntity?): ItemStack? {
-        //println("is the container closed?")
-        return itemStack_1//ItemStack(Items.IRON_BARS)
-    }
-
-    override fun isUsedOnRelease(itemStack_1: ItemStack?): Boolean {
-        return false
-    }
-
-    override fun canMine(blockState_1: BlockState?, world_1: World?, blockPos_1: BlockPos?, playerEntity_1: PlayerEntity?): Boolean {
-        return true // gets stuck if false
-    }
+    override fun useOnBlock(itemUsageContext: ItemUsageContext?): ActionResult = ActionResult.PASS
+    override fun useOnEntity(itemStack: ItemStack?, playerEntity: PlayerEntity?, livingEntity: LivingEntity?, hand: Hand?): Boolean = false
+    override fun getUseAction(itemStack: ItemStack?): UseAction = UseAction.BLOCK
+    override fun getMaxUseTime(itemStack: ItemStack?): Int = 0
+    override fun onStoppedUsing(itemStack: ItemStack?, world: World?, livingEntity: LivingEntity?, int_1: Int) = Unit
+    override fun finishUsing(itemStack: ItemStack?, world: World?, livingEntity: LivingEntity?): ItemStack? = itemStack
 }

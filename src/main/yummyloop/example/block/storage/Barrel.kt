@@ -2,13 +2,10 @@ package yummyloop.example.block.storage
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.minecraft.block.BlockState
-import net.minecraft.container.Container
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
 import net.minecraft.stat.Stats
 import net.minecraft.state.StateFactory
 import net.minecraft.state.property.BooleanProperty
@@ -26,10 +23,7 @@ import net.minecraft.world.World
 import yummyloop.example.block.BlockEntity
 import yummyloop.example.block.BlockWithEntity
 import yummyloop.example.block.Blocks
-import yummyloop.example.item.Item
 import yummyloop.example.item.Items
-import yummyloop.example.util.data.DataManager
-import yummyloop.example.util.data.LevelChestData
 import yummyloop.example.util.registry.RegistryManager
 import java.util.*
 import net.minecraft.block.Block as VanillaBlock
