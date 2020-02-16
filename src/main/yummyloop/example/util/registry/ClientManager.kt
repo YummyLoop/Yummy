@@ -4,12 +4,11 @@ import net.fabricmc.fabric.api.client.model.ModelLoadingRegistry
 import net.fabricmc.fabric.api.client.model.ModelProviderContext
 import net.fabricmc.fabric.api.client.model.ModelResourceProvider
 import net.fabricmc.fabric.api.client.model.ModelVariantProvider
-import net.fabricmc.fabric.api.client.render.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.render.ColorProviderRegistry
-import net.fabricmc.fabric.api.client.render.EntityRendererRegistry
+import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
 import net.fabricmc.fabric.api.client.screen.ScreenProviderRegistry
 import net.minecraft.client.color.item.ItemColorProvider
-import net.minecraft.client.gui.screen.ingame.AbstractContainerScreen
+import net.minecraft.client.gui.screen.ingame.ContainerScreen
 import net.minecraft.client.render.block.entity.BlockEntityRenderer
 import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.client.render.entity.EntityRenderer
@@ -28,7 +27,7 @@ import net.minecraft.block.entity.BlockEntity as VanillaBLockEntity
 import net.minecraft.client.render.model.UnbakedModel as VanillaUnbakedModel
 import net.minecraft.item.Items as VanillaItems
 
-typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> AbstractContainerScreen<*>
+typealias Screen = (Int, Identifier, PlayerEntity, PacketByteBuf) -> ContainerScreen<*>
 
 object ClientManager {
     private var modId : String = Config.modId
@@ -63,9 +62,9 @@ object ClientManager {
             }
         }
     }
-    private fun bindBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
+    /*private fun bindBlockEntityRenderer(blockEntityClass: Class<out VanillaBLockEntity>, blockEntityRenderer: () -> BlockEntityRenderer<out VanillaBLockEntity>){
         BlockEntityRendererRegistry.INSTANCE.register(blockEntityClass, blockEntityRenderer())
-    }
+    }*/
 
     // Dyeable items
     // ----------------------------------------------------------------------------------------------------------------
@@ -159,7 +158,7 @@ object ClientManager {
 
     //Entities
     // ----------------------------------------------------------------------------------------------------------------
-    private val entityRenderers = HashMap<Class<out Entity>, (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity> >()
+   /* private val entityRenderers = HashMap<Class<out Entity>, (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity> >()
     private fun bindEntityRenderer(entityClass: Class<out Entity>, function: (EntityRenderDispatcher, EntityRendererRegistry.Context) -> EntityRenderer<out Entity>) {
         EntityRendererRegistry.INSTANCE.register(entityClass, function)
     }
@@ -177,7 +176,7 @@ object ClientManager {
             }
         }
     }
-
+    */
     // ----------------------------------------------------------------------------------------------------------------
     fun ini(){
         // Init items
@@ -194,11 +193,15 @@ object ClientManager {
         for (i in screens){
             registerScreenFactory(i.key,i.value)
         }
+
+        /*
         for (i in blockEntityRenderers){
             bindBlockEntityRenderer(i.key,i.value)
         }
 
         bindEntityRenderers()
+
+         */
 
         //---------Code below is temporary, and/or needs to be improved
 

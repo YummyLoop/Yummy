@@ -68,7 +68,7 @@ object RegistryManager {
     // Block entity
     //-----------------------------------------------------------------------------------------------------------------
     fun <M: BlockEntity, T : BlockEntityType<M>> register(blockEntityType : T, modId : String, blockName : String) {
-        Registry.register(Registry.BLOCK_ENTITY, Identifier(modId, blockName), blockEntityType)
+        Registry.register(Registry.BLOCK_ENTITY_TYPE, Identifier(modId, blockName), blockEntityType)
     }
     fun <M: BlockEntity, T : BlockEntityType<M>> register(blockEntityType : T, blockName : String) {
         register(blockEntityType, this.modId, blockName)

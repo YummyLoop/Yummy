@@ -13,7 +13,7 @@ import yummyloop.example.render.entity.ThrownItemEntityRenderer
 import yummyloop.example.util.registry.ClientManager
 import yummyloop.example.util.registry.RegistryManager
 
-object SpearBirch : AbstractSpear("spear_birch", SpearSettings.Wooden.itemSettings) {
+object `SpearBirch.old` : AbstractSpear("spear_birch", SpearSettings.Wooden.itemSettings) {
 
     override val attackDamage = SpearSettings.Wooden.attackDamage
     override val attackSpeed = SpearSettings.Wooden.attackSpeed

@@ -39,7 +39,7 @@ abstract class AbstractCobwebProjectileEntity : AbstractProjectileEntity{
     override fun isAttackable(): Boolean = true
     override fun isPushable(): Boolean = true
     override fun collides(): Boolean = !this.removed
-    private fun getDrag() : Float = if (this.isInsideWater) dragInWater else dragInAir
+    private fun getDrag() : Float = if (this.touchingWater) dragInWater else dragInAir
     //override fun getHardCollisionBox(entity: Entity): Box? = if (entity.isPushable) entity.boundingBox else null
     override fun getHitSound(): SoundEvent = SoundEvents.ENTITY_FOX_SPIT
 

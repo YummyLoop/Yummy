@@ -5,25 +5,10 @@
   "mixins": [
     "Hat",
     "entity/attribute/EntityAttributes",
-    "entity/mob/Spider",
-    "entity/player/Hunger",
-    "item/Elytra",
-    "server/world/ServerWorldMixin"
+    "item/Elytra"
   ],
   "client": [
-    "ExampleMixin",
-    "client/network/OnEntitySpawn",
-    "client/render/FirstPersonRenderer",
-    "client/render/InGameHud",
-    "client/render/ItemRenderer",
-    "client/render/entity/ArmorStandEntityRenderer",
-    "client/render/entity/PlayerEntityRenderer",
-    "client/render/entity/SkeletonEntityRenderer",
-    "client/render/entity/ZombieBaseEntityRenderer",
-    "client/render/entity/ZombiePigmanEntityRenderer",
-    "client/render/entity/ZombieVillagerEntityRenderer",
-    "client/render/entity/feature/ArmorFeatureRenderer",
-    "client/render/entity/feature/ElytraFeatureRenderer"
+    "ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1

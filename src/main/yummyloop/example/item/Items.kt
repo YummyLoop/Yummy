@@ -1,16 +1,12 @@
 package yummyloop.example.item
 
 import net.minecraft.item.ArmorMaterials
-import net.minecraft.item.ItemStack
 import yummyloop.example.block.Blocks
-import yummyloop.example.item.backpack.BContainer
+//import yummyloop.example.item.backpack.BContainer
 import yummyloop.example.item.backpack.Backpack
-import yummyloop.example.item.thrown.spear.*
-import yummyloop.example.item.thrown.Cobweb
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.Item.Settings as ItemSettings
 import net.minecraft.item.Items as Vanilla
-import net.minecraft.item.ItemGroup as VanillaItemGroup
 
 object Items : HashMap<String, VanillaItem>() {
     @JvmField val containers = mutableMapOf<String, Any>()
@@ -23,6 +19,7 @@ object Items : HashMap<String, VanillaItem>() {
         SpecialArmorHelmet("hat", ArmorMaterials.LEATHER)
         SpecialArmorChest( "chest", ArmorMaterials.LEATHER)
 
+        /*
         SpearAcacia
         SpearBirch
         SpearDarkOak
@@ -30,6 +27,7 @@ object Items : HashMap<String, VanillaItem>() {
         SpearOak
         SpearSpruce
         Cobweb
+         */
 
         Backpack("ring", 6, ItemGroup["hello1"])
         //.addTooltip("item.example.fabric_item.tooltip")
@@ -37,7 +35,7 @@ object Items : HashMap<String, VanillaItem>() {
         BlockItem("example_blockrender", ItemSettings().group(null), Blocks["template_be"])
         BlockItem("test_barrel", ItemSettings().group(ItemGroup["hello2"]), Blocks["test_barrel"])
 
-        containers["backpack"] = BContainer
+        //containers["backpack"] = BContainer
     }
 }
 

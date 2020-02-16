@@ -1,6 +1,6 @@
 package yummyloop.example.modCompatibility
 
-import dev.emi.trinkets.api.TrinketSlots
+//import dev.emi.trinkets.api.TrinketSlots
 import net.minecraft.util.Identifier
 
 object Trinkets {
@@ -16,6 +16,6 @@ object Trinkets {
         addSubSlot("offhand",   "ring",     "textures/item/empty_trinket_slot_ring.png")
     }
     private fun addSubSlot(group : String, slot: String, texture : String){
-        TrinketSlots.addSubSlot(group, slot, Identifier("trinkets", texture))
+        //TrinketSlots.addSlot(group, slot, Identifier("trinkets", texture))
     }
 }

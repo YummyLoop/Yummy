@@ -40,10 +40,10 @@ class Backpack(name: String, var rows : Int, settings : Settings) :
             }
             // Open inventory
             if (this.rows < 1 || this.rows > 6) this.rows = 6
-            player.openContainer(BContainer.id) { buf: PacketByteBuf ->
+           /* player.openContainer(BContainer.id) { buf: PacketByteBuf ->
                 buf.writeInt(this.rows)
                 buf.writeString(itemStack.name.string)
-            }
+            }*/
 
             player.setCurrentHand(hand)
             TypedActionResult(ActionResult.SUCCESS, itemStack)
