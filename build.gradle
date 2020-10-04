@@ -8,8 +8,6 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
-libsDirName = "${project.outDir}" // Output location of 'gradle build'
-
 minecraft {
 }
 
@@ -47,6 +45,7 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
 version = project.mod_version
 group = project.maven_group
+libsDirName = "${project.outDir}" // Output location of 'jar / gradle build'
 
 jar {
 	from "LICENSE"
@@ -101,17 +100,18 @@ compileKotlin {
     }
 }
 
+// Source files location, currently makes the source location for java and kotlin the same
 sourceSets {
     main.kotlin.srcDirs += 'src/main'
     main.java.srcDirs += 'src/main'
 }
-
 
 /*
  * Tasks
 */
 File configFile = file('gradle.properties')
 
+// Increments the minor mod version by 1
 task incrementVersion{
 	doFirst {
 		int lastdot = version.lastIndexOf('.')+1
@@ -120,35 +120,6 @@ task incrementVersion{
 		// Replace the mod version by the new one (+1)
 		configFile.setText(configFile.getText()
 		 .replaceFirst("mod_version =.*", "mod_version = "+major+minor+"")
-		)
-	}
-}
-
-task updateFabric {
-	doFirst {
-		// Get fabric versions/webpage
-		def fabricWeb ="https://maven.fabricmc.net/net/fabricmc/"
-		def fabricData="maven-metadata.xml"
-		def (loader) = "${fabricWeb}fabric-loader/${fabricData}".toURL().text      	  =~ "<release>.*</release>"
-		def (api)    = "${fabricWeb}fabric-api/fabric-api/${fabricData}".toURL().text =~ "<release>.*</release>"
-		def (yarn)   = "${fabricWeb}yarn/${fabricData}".toURL().text				  =~ "<release>.*</release>"
-		def loom 	 = "${fabricWeb}fabric-loom/${fabricData}".toURL().text           =~ "<version>.*</version>"
-		// Filter results
-		loader = loader.replaceAll("<[/]*release>", "")
-		api    = api.replaceAll("<[/]*release>", "")
-		yarn   = yarn.replaceAll("<[/]*release>", "")
-		loom   = loom[( (int) loom.size())-1].replaceAll("<[/]*version>", "")
-		// Print results
-		println "yarn   = ${yarn}"
-		println "loader = ${loader}"
-		println "api    = ${api}"
-		println "loom   = ${loom}"
-
-		// Update versions to the latest
-		configFile.setText(configFile.getText()
-		   .replaceFirst("yarn_mappings=.*", "yarn_mappings=${yarn}")
-		   .replaceFirst("loader_version=.*", "loader_version=${loader}")
-		   .replaceFirst("fabric_version=.*", "fabric_version=${api}")
 		)
 	}
 }

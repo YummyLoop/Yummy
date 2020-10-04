@@ -7,11 +7,8 @@ dependencies {
         modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
     // Kotlin optional
-        /**
-         * https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
-         * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization )
-         * ( https://plugins.gradle.org/plugin/org.jetbrains.dokka )
-         * */
+        // https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization
+        // https://plugins.gradle.org/plugin/org.jetbrains.dokka
 
     // Others
         // REI https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
