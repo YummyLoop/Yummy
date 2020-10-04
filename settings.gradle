@@ -11,14 +11,9 @@ pluginManagement {
         }
         gradlePluginPortal()
     }
-    resolutionStrategy {
-        eachPlugin {
-            if (requested.id.id == "kotlin") {
-                useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
-            }
-            if (requested.id.id == "kotlinx-serialization") {
-                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
-            }
-        }
+
+    plugins {
+        id 'fabric-loom' version loom_version
+        id "org.jetbrains.kotlin.jvm" version kotlin_version
     }
 }

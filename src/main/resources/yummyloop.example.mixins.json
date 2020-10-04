@@ -3,9 +3,6 @@
   "package": "yummyloop.example.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "Hat",
-    "entity/attribute/EntityAttributes",
-    "item/Elytra"
   ],
   "client": [
     "ExampleMixin"

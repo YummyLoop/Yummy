@@ -1,27 +1,26 @@
 dependencies {
-    // Minecraft + Fabric
+    // Minecraft + Yarn + Fabric + Fabric API + Fabric Kotlin
         minecraft "com.mojang:minecraft:${project.minecraft_version}"
         mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
         modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
-        modApi "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
-    // Kotlin https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
-        modApi "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+        modImplementation "net.fabricmc:fabric-language-kotlin:${project.fabric_kotlin_version}"
 
     // Kotlin optional
         /**
+         * https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
          * ( https://plugins.gradle.org/plugin/org.jetbrains.kotlin.plugin.serialization )
          * ( https://plugins.gradle.org/plugin/org.jetbrains.dokka )
          * */
 
     // Others
         // REI https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
-            modImplementation("me.shedaniel:RoughlyEnoughItems:${project.mod_REI}"){
-                exclude module: "ModMenu"
-            }
+            //modImplementation("me.shedaniel:RoughlyEnoughItems:${project.mod_REI}"){
+            //    exclude module: "ModMenu"
+            //}
 
         // ModMenu https://www.curseforge.com/minecraft/mc-mods/modmenu or http://maven.modmuss50.me/io/github/prospector/modmenu/
-            modImplementation("io.github.prospector:modmenu:${project.mod_ModMenu}")
+            //modImplementation("io.github.prospector:modmenu:${project.mod_ModMenu}")
 
         // Trinkets https://github.com/emilyploszaj/trinkets
             //modImplementation "com.github.emilyploszaj:trinkets:v2.4.1"

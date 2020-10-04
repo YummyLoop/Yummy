@@ -3,18 +3,18 @@ package yummyloop.example
 import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
-import yummyloop.example.block.Blocks
-import yummyloop.example.modCompatibility.ModCompatibilityManager
-import yummyloop.example.item.Items
-import yummyloop.example.util.Logger
-import yummyloop.example.util.registry.ClientManager
+//import yummyloop.example.block.Blocks
+//import yummyloop.example.modCompatibility.ModCompatibilityManager
+//import yummyloop.example.item.Items
+//import yummyloop.example.util.Logger
+//import yummyloop.example.util.registry.ClientManager
 
 object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
-    val logger: Logger = Logger(id.toUpperCase(), "ALL")
+    //val logger: Logger = Logger(id.toUpperCase(), "ALL")
 
     override fun onInitialize() = runBlocking {
-        logger.info("**************************")
+        /*logger.info("**************************")
         logger.info("      Hello World !       ")
         logger.info("**************************")
         logger.debug("logger debug")
@@ -22,10 +22,10 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         logger.trace("logger trace")
         logger.warn("logger warn")
         logger.fatal("logger fatal")
-
-        ModCompatibilityManager
-        Blocks.ini()
-        Items.ini()
+    */
+        //ModCompatibilityManager
+        //Blocks.ini()
+        //Items.ini()
 
         /*
         val cc = ConfigFile("a/b/Hello.jsonc")
@@ -43,6 +43,6 @@ object ExampleMod : ModInitializer, ClientModInitializer {
     }
 
     override fun onInitializeClient() {
-        ClientManager.ini()
+        //ClientManager.ini()
     }
 }
