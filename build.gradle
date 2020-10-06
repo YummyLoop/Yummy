@@ -8,6 +8,9 @@ plugins {
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+version = project.mod_version
+group = project.maven_group
+
 minecraft {
 }
 
@@ -43,8 +46,6 @@ task sourcesJar(type: Jar, dependsOn: classes) {
 }
 
 archivesBaseName = "${project.archives_base_name}-${project.minecraft_version}"
-version = project.mod_version
-group = project.maven_group
 libsDirName = "${project.outDir}" // Output location of 'jar / gradle build'
 
 jar {
