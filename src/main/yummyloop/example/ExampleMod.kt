@@ -1,28 +1,27 @@
 package yummyloop.example
 
-import kotlinx.coroutines.runBlocking
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
+
 //import yummyloop.example.block.Blocks
 //import yummyloop.example.modCompatibility.ModCompatibilityManager
 //import yummyloop.example.item.Items
-//import yummyloop.example.util.Logger
 //import yummyloop.example.util.registry.ClientManager
 
 object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
-    //val logger: Logger = Logger(id.toUpperCase(), "ALL")
+    private val logger: Logger = LogManager.getFormatterLogger(id.toUpperCase())
 
-    override fun onInitialize() = runBlocking {
-        /*logger.info("**************************")
+    override fun onInitialize() {
+        logger.info("**************************")
         logger.info("      Hello World !       ")
         logger.info("**************************")
-        logger.debug("logger debug")
         logger.error("logger error")
-        logger.trace("logger trace")
         logger.warn("logger warn")
         logger.fatal("logger fatal")
-    */
+
         //ModCompatibilityManager
         //Blocks.ini()
         //Items.ini()

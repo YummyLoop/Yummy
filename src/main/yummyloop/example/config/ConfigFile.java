@@ -5,7 +5,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSyntaxException;
 import net.fabricmc.loader.api.FabricLoader;
-import yummyloop.example.util.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -20,7 +21,7 @@ public class ConfigFile {
     private final Path path;
     private final List<Object> list = new ArrayList<>();
     private final List<Class<?>> classList = new ArrayList<>();
-    private final Logger logger = new Logger(this.getClass().toString(), "OFF");
+    private final Logger logger = LogManager.getFormatterLogger(this.getClass().toString());
 
     public ConfigFile(String file){
         this.path = FabricLoader.getInstance().getConfigDirectory().toPath().resolve(file);
