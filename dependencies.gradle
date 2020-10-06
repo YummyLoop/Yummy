@@ -12,12 +12,10 @@ dependencies {
 
     // Others
         // REI https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
-            //modImplementation("me.shedaniel:RoughlyEnoughItems:${project.mod_REI}"){
-            //    exclude module: "ModMenu"
-            //}
+            modImplementation("me.shedaniel:RoughlyEnoughItems:${project.mod_REI}")
 
-        // ModMenu https://www.curseforge.com/minecraft/mc-mods/modmenu or http://maven.modmuss50.me/io/github/prospector/modmenu/
-            //modImplementation("io.github.prospector:modmenu:${project.mod_ModMenu}")
+        // ModMenu https://www.curseforge.com/minecraft/mc-mods/modmenu
+            modImplementation("io.github.prospector:modmenu:${project.mod_ModMenu}")
 
         // Trinkets https://github.com/emilyploszaj/trinkets
             //modImplementation "com.github.emilyploszaj:trinkets:v2.4.1"
