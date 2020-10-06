@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger
 
 object ExampleMod : ModInitializer, ClientModInitializer {
     const val id : String = "example"
-    private val logger: Logger = LogManager.getFormatterLogger(id.toUpperCase())
+    private val logger: Logger = LogManager.getLogger(id.toUpperCase())
 
     override fun onInitialize() {
         logger.info("**************************")
