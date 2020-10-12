@@ -4,6 +4,7 @@ import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
+import yummyloop.example.config.ModConfigSetup
 
 //import yummyloop.example.block.Blocks
 //import yummyloop.example.modCompatibility.ModCompatibilityManager
@@ -11,8 +12,9 @@ import org.apache.logging.log4j.Logger
 //import yummyloop.example.util.registry.ClientManager
 
 object ExampleMod : ModInitializer, ClientModInitializer {
-    const val id : String = "example"
+    const val id : String = "yummy-example"
     private val logger: Logger = LogManager.getLogger(id.toUpperCase())
+    val modConfig = ModConfigSetup()
 
     override fun onInitialize() {
         logger.info("**************************")
@@ -25,19 +27,6 @@ object ExampleMod : ModInitializer, ClientModInitializer {
         //ModCompatibilityManager
         //Blocks.ini()
         //Items.ini()
-
-        /*
-        val cc = ConfigFile("a/b/Hello.jsonc")
-        cc.add("Hello")
-        val i1 = "Hello World !"
-        cc.add(yummyloop.example.test.java())
-        cc.add(arrayOf ("sa","sb","sc"))
-        cc.add("End")
-        if (!cc.load()) {cc.save()}
-        println(cc.toJson())
-        //val test : Array<String> = cc.get(1)
-        //println( test[0] )
-         */
 
     }
 

@@ -29,6 +29,9 @@
         "adapter": "kotlin",
         "value": "yummyloop.example.ExampleMod"
       }
+    ],
+    "modmenu": [
+      "yummyloop.example.config.ModMenuIntegration"
     ]
   },
   "mixins": [

@@ -16,7 +16,7 @@ import net.minecraft.util.PacketByteBuf
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import yummyloop.example.block.Blocks
-import yummyloop.example.config.Config
+import yummyloop.example.config.ModConfig
 import yummyloop.example.item.ItemGroup
 import yummyloop.example.item.Items
 import java.util.function.Supplier
@@ -26,7 +26,7 @@ import net.minecraft.item.Item as VanillaItem
 typealias ContainerFactory = (Int, Identifier, PlayerEntity, PacketByteBuf) -> Container
 
 object RegistryManager {
-    private var modId : String = Config.modId
+    private var modId : String = ModConfig.modId
     private val blockList = Blocks
     private val itemList = Items
     val miscEntityType = HashMap<String, Pair<EntityType<out Entity>, (World, Double, Double, Double) -> Entity >>()
