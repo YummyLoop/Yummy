@@ -8,7 +8,7 @@ import net.minecraft.world.World
 import yummyloop.example.registry.RegistryManager
 import net.minecraft.item.Item as VanillaItem
 import net.minecraft.item.ItemGroup as VanillaItemGroup
-g
+
 open class Item(itemName: String, settings : Settings) : VanillaItem(settings) {
     private val tooltip = ArrayList<Text>()
 
