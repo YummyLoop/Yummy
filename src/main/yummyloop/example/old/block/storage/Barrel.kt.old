@@ -22,7 +22,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import yummyloop.example.old.block.BlockEntity
 import yummyloop.example.old.block.BlockWithEntity
-import yummyloop.example.old.block.Blocks
+import yummyloop.example.block.Blocks
 import yummyloop.example.old.item.Items
 import yummyloop.example.old.util.registry.RegistryManager
 import java.util.*

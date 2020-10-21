@@ -1,4 +1,4 @@
-package yummyloop.example.old.item
+package yummyloop.example.item
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.minecraft.block.Material
@@ -7,8 +7,8 @@ import net.minecraft.item.ItemStack
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.world.World
-import yummyloop.example.old.block.Block
-import yummyloop.example.old.util.registry.RegistryManager
+import yummyloop.example.block.Block
+import yummyloop.example.registry.RegistryManager
 import java.util.*
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.BlockItem as VanillaBlockItem

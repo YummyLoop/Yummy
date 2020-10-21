@@ -1,10 +1,10 @@
-package yummyloop.example.old.block
+package yummyloop.example.block
 
 import net.fabricmc.fabric.api.block.FabricBlockSettings
 import net.minecraft.block.Material
 import net.minecraft.block.MaterialColor
 import net.minecraft.util.DyeColor
-import yummyloop.example.old.util.registry.RegistryManager
+import yummyloop.example.registry.RegistryManager
 import net.minecraft.block.Block as VanillaBlock
 
 // BlockName, FabricBlockSettings

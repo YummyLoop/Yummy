@@ -10,7 +10,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import yummyloop.example.ExampleMod
 import yummyloop.example.item.Items
-import yummyloop.example.old.block.Blocks
+import yummyloop.example.block.Blocks
 import java.util.function.Supplier
 import net.minecraft.block.Block as VanillaBlock
 import net.minecraft.item.Item as VanillaItem
