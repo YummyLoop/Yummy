@@ -1,0 +1,20 @@
+package yummyloop.example.old.item
+
+import net.minecraft.entity.EquipmentSlot
+import net.minecraft.item.ArmorMaterial
+import net.minecraft.item.ArmorMaterials
+import net.minecraft.item.ItemGroup
+import yummyloop.example.old.item.armor.SpecialArmorItem
+
+class SpecialArmorHelmet(
+        itemName: String,
+        armorMaterial : ArmorMaterial,
+        settings : Settings)
+    : SpecialArmorItem(itemName, armorMaterial, EquipmentSlot.HEAD, settings){
+
+    constructor(itemName : String) :
+            this(itemName, ArmorMaterials.IRON)
+    constructor(itemName: String, armorMaterial : ArmorMaterial) :
+            this(itemName, armorMaterial, Settings().group(ItemGroup.COMBAT))
+
+}

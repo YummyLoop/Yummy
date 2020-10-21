@@ -1,0 +1,11 @@
+package yummyloop.example.old.modCompatibility
+
+import yummyloop.example.config.ModConfig
+
+object ModCompatibilityManager {
+    init {
+        if (ModConfig.Compatibility.trinkets){
+            Trinkets
+        }
+    }
+}
