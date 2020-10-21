@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "id": "yummyloop-example",
+  "id": "yummy",
   "version": "${version}",
 
-  "name": "Yummyloop Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Yummyloop's Yummy Mod",
+  "description": "This is an yummy mod!",
   "authors": [
     "Yummyloop"
   ],
@@ -14,33 +14,33 @@
   },
 
   "license": "?",
-  "icon": "assets/example/icon.png",
+  "icon": "assets/yummy/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
       {
         "adapter": "kotlin",
-        "value": "yummyloop.example.ExampleMod"
+        "value": "yummyloop.yummy.Yummy"
       }
     ],
     "client": [
       {
         "adapter": "kotlin",
-        "value": "yummyloop.example.ExampleMod"
+        "value": "yummyloop.yummy.Yummy"
       }
     ],
     "modmenu": [
-      "yummyloop.example.config.ModMenuIntegration"
+      "yummyloop.yummy.config.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "yummyloop.example.mixins.json"
+    "yummyloop.yummy.mixins.json"
   ],
 
   "depends": {
-    "fabric-language-kotlin": ">=1.3.30",
-    "fabricloader": ">=0.4.0"
+    "fabric-language-kotlin": ">=1.4.0",
+    "fabricloader": ">=0.10.0"
   },
   "suggests": {
     "flamingo": "*"
