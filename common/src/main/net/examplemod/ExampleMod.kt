@@ -1,36 +1,27 @@
 package net.examplemod;
 
-import me.shedaniel.architectury.registry.CreativeTabs
-import me.shedaniel.architectury.registry.DeferredRegister
-import me.shedaniel.architectury.registry.Registries
-import me.shedaniel.architectury.registry.RegistrySupplier
-//import net.minecraft.core.Registry
-//import net.minecraft.resources.ResourceLocation
-//import net.minecraft.util.LazyLoadedValue
-//import net.minecraft.world.item.CreativeModeTab
-//import net.minecraft.world.item.Item
-//import net.minecraft.world.item.ItemStack
-
-import java.util.function.Supplier
+import me.shedaniel.architectury.registry.*
+import net.minecraft.block.Blocks
+import net.minecraft.item.Item
+import net.minecraft.item.ItemStack
+import net.minecraft.util.Identifier
+import net.minecraft.util.registry.Registry
 
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
+
     // We can use this if we don't want to use DeferredRegister
-    //public static final LazyLoadedValue<Registries> REGISTRIES = new LazyLoadedValue<>(() -> Registries.get(MOD_ID));
+    val REGISTRIES by lazyOf( Registries.get(MOD_ID))
+
     // Registering a new creative tab
-    //public static final CreativeModeTab EXAMPLE_TAB = CreativeTabs.create(new ResourceLocation(MOD_ID, "example_tab"), new Supplier<ItemStack>() {
-    //    @Override
-    //    public ItemStack get() {
-    //        return new ItemStack(EXAMPLE_ITEM.get());
-    //    }
-    //});
-    
-    //public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_REGISTRY);
-    //public static final RegistrySupplier<Item> EXAMPLE_ITEM = ITEMS.register("example_item", () ->
-    //        new Item(new Item.Properties().tab(ExampleMod.EXAMPLE_TAB)));
+    var EXAMPLE_TAB = CreativeTabs.create(Identifier(MOD_ID, "example_tab")) { -> ItemStack(Blocks.COBBLESTONE) }
+
+    // Registering a new item
+    var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
+    var EXAMPLE_ITEM = ITEMS.register("example_item") { -> Item(Item.Settings().group(EXAMPLE_TAB))}
     
     fun init() {
-        //ITEMS.register();
+        ITEMS.register()
         println(ExampleExpectPlatform.getConfigDirectory().absolutePath)
         println("Kotlin says hello !!!")
     }
