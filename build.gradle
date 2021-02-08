@@ -45,3 +45,18 @@ allprojects {
         withSourcesJar()
     }
 }
+
+task getJars (type: Copy) {
+    dependsOn ':fabric:build'
+    dependsOn ':forge:build'
+
+    from ('fabric/build/libs'){
+        include "*-fabric.jar"
+    }
+    from ('forge/build/libs'){
+        include "*-forge.jar"
+    }
+    into "out"
+}
+
+

@@ -6,6 +6,8 @@ configurations {
     shadow
 }
 
+//libsDirName = "../out" // Output location of jar instead of default build/libs
+
 architectury {
     platformSetupLoomIde()
 }
