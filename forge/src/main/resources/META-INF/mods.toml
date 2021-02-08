@@ -1,33 +1,33 @@
-modLoader = "javafml"
-loaderVersion = "[35,)"
+modLoader = "kotlinforforge"
+loaderVersion = "[1,)"
 #issueTrackerURL = ""
-license = "Insert License Here"
+license = "?"
 
 [[mods]]
-modId = "examplemod"
+modId = "yummy"
 version = "${version}"
-displayName = "Example Mod"
-authors = "Me!"
+displayName = "Yummy Mod"
+authors = "YummyLoop"
 description = '''
-This is an example description! Tell everyone what your mod is about!
+This is an yummy mod!
 '''
 #logoFile = ""
 
-[[dependencies.examplemod]]
+[[dependencies.yummy]]
 modId = "forge"
 mandatory = true
 versionRange = "[35,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.yummy]]
 modId = "minecraft"
 mandatory = true
 versionRange = "[1.16.2,)"
 ordering = "NONE"
 side = "BOTH"
 
-[[dependencies.examplemod]]
+[[dependencies.yummy]]
 modId = "architectury"
 mandatory = true
 versionRange = "[1.1.55,)"

@@ -14,7 +14,7 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import java.util.function.Supplier
 
 object ExampleMod {
-    const val MOD_ID = "examplemod";
+    const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
     // We can use this if we don't want to use DeferredRegister
     //public static final LazyLoadedValue<Registries> REGISTRIES = new LazyLoadedValue<>(() -> Registries.get(MOD_ID));
     // Registering a new creative tab
