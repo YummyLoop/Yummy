@@ -12,4 +12,12 @@ include("common")
 include("fabric")
 include("forge")
 
-rootProject.name = "architectury-example-mod"
+rootProject.name = archives_base_name
+
+/* Outdated
+ maven { url "https://kotlin.bintray.com/kotlinx" }
+ plugins {
+        id 'fabric-loom' version loom_version
+        id "org.jetbrains.kotlin.jvm" version kotlin_version
+    }
+ */
