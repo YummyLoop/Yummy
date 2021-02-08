@@ -18,6 +18,9 @@ dependencies {
     // Remove the next line if you don't want to depend on the API
     modCompile "me.shedaniel:architectury:${rootProject.architectury_version}:fabric"
 
+    // Extra dependencies
+    modImplementation "net.fabricmc:fabric-language-kotlin:${rootProject.fabric_kotlin_version}"
+
     compileOnly(project(path: ":common")) {
         transitive = false
     }

@@ -1,29 +1,39 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "yummy",
   "version": "${version}",
-  "name": "Example Mod",
-  "description": "This is an example description! Tell everyone what your mod is about!",
+  "name": "Yummy Mod",
+  "description": "This is an yummy mod!",
   "authors": [
-    "Me!"
+    "YummyLoop!"
   ],
   "contact": {
-    "homepage": "https://fabricmc.net/",
-    "sources": "https://github.com/FabricMC/fabric-example-mod"
+    "homepage": "https://github.com/YummyLoop/Yummy",
+    "sources": "https://github.com/YummyLoop/Yummy"
   },
-  "license": "Insert License Here",
-  "icon": "assets/examplemod/icon.png",
+  "license": "?",
+  "icon": "assets/yummy/icon.png",
   "environment": "*",
   "entrypoints": {
     "main": [
-      "net.examplemod.fabric.ExampleModFabric"
+      {
+        "adapter": "kotlin",
+        "value": "net.examplemod.fabric.ExampleModFabric"
+      }
+    ],
+    "client": [
+      {
+        "adapter": "kotlin",
+        "value": "net.examplemod.fabric.ExampleModFabric"
+      }
     ]
   },
   "depends": {
     "fabricloader": ">=0.7.4",
     "fabric": "*",
     "minecraft": ">=1.16.4",
-    "architectury": ">=1.1.55"
+    "architectury": ">=1.1.55",
+    "fabric-language-kotlin": ">=1.4.0"
   },
   "suggests": {
     "flamingo": "*"

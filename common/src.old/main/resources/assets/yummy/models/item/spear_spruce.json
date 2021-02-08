@@ -1,9 +1,0 @@
-{
-	"credit": "Made by YummyLoop",
-	"parent": "example:item/spear_oak",
-	"textures": {
-		"particle": "minecraft:block/stripped_spruce_log",
-		"layer0": "minecraft:block/stripped_spruce_log",
-		"layer1": "minecraft:block/stripped_spruce_log_top"
-	}
-}
