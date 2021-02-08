@@ -1,0 +1,36 @@
+# Minecraft + Yarn + Loader + Loom + Fabric
+	# https://modmuss50.me/fabric.html
+	# https://maven.fabricmc.net/net/fabricmc
+	minecraft_version=1.16.3
+	yarn_mappings=1.16.3+build.47
+	loader_version=0.10.1+build.209
+	loom_version=0.5-SNAPSHOT
+	fabric_version=0.24.0+build.411-1.16
+
+# Kotlin
+	# https://plugins.gradle.org/plugin/org.jetbrains.kotlin.jvm
+	# https://maven.fabricmc.net/net/fabricmc/fabric-language-kotlin/
+	kotlin.code.style=official
+	kotlin_version=1.4.0
+	fabric_kotlin_version=1.4.0+build.1
+
+# Mod Properties
+	mod_version = 1.0.0
+	maven_group = yummyloop.yummy
+	archives_base_name = Yummyloop-yummy
+	mod_author = Yummyloop
+
+# Dependencies
+	# https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items
+	mod_REI=5.6.1
+	# https://www.curseforge.com/minecraft/mc-mods/modmenu
+	mod_ModMenu=1.14.6+build.31
+	# https://www.curseforge.com/minecraft/mc-mods/auto-config-updated-api
+	mod_AutoConfig=3.2.2
+
+# Gradle properties
+	buildDir=.build
+	# Build output (relative to buildDir or absolute)
+	outDir = ../out
+	# Memory available to gradle.
+	org.gradle.jvmargs=-Xmx1G
