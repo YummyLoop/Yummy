@@ -12,6 +12,10 @@ architectury {
     platformSetupLoomIde()
 }
 
+repositories {
+    maven { url "https://maven.terraformersmc.com/releases" }
+}
+
 dependencies {
     modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
@@ -20,6 +24,7 @@ dependencies {
 
     // Extra dependencies
     modImplementation "net.fabricmc:fabric-language-kotlin:${rootProject.fabric_kotlin_version}"
+    modImplementation "com.terraformersmc:modmenu:${rootProject.fabric_mod_ModMenu}"
 
     compileOnly(project(path: ":common")) {
         transitive = false
