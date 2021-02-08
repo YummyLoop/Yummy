@@ -33,5 +33,6 @@ public class ExampleMod {
         ITEMS.register();
         
         System.out.println(ExampleExpectPlatform.getConfigDirectory().getAbsolutePath());
+        Hello.INSTANCE.saySomething();
     }
 }
