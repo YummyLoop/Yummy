@@ -27,7 +27,7 @@ allprojects {
     apply plugin: "architectury-plugin"
 
     archivesBaseName = rootProject.archives_base_name
-    version = rootProject.mod_version
+    version = "${rootProject.mod_version}_${rootProject.minecraft_version}"
     group = rootProject.maven_group
 
     tasks.withType(JavaCompile) {
@@ -44,6 +44,17 @@ allprojects {
 
     java {
         withSourcesJar()
+    }
+
+    jar {
+        manifest {
+            attributes([
+                    "Title"     : "${rootProject.archives_base_name}",
+                    "Version"   : "${rootProject.mod_version}",
+                    "Author"    : "${rootProject.mod_author}",
+                    "Timestamp" : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            ])
+        }
     }
 }
 
