@@ -10,6 +10,7 @@ architectury {
 
 subprojects {
     apply plugin: "forgified-fabric-loom"
+    apply plugin: "org.jetbrains.kotlin.jvm"
 
     loom {
         silentMojangMappingsLicense()
@@ -19,6 +20,12 @@ subprojects {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         // The following line declares the mojmap mappings, you may use other mappings as well
         mappings loom.officialMojangMappings()
+    }
+
+    // Source files location, currently makes the source location for java and kotlin the same
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main'
+        main.java.srcDirs += 'src/main'
     }
 }
 
