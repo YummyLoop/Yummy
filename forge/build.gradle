@@ -16,10 +16,7 @@ loom {
      useFabricMixin = true
 }
 
-repositories {
-    maven { url "https://maven.shedaniel.me/" }
-    maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
-}
+apply from: "${rootDir}/repositories.gradle"
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"

@@ -1,6 +1,4 @@
-repositories {
-    maven { url "https://maven.shedaniel.me/" }
-}
+apply from: "${rootDir}/repositories.gradle"
 
 dependencies {
     // Remove the next line if you don't want to depend on the API

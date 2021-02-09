@@ -1,0 +1,6 @@
+// Repositories of common, fabric and forge dependencies
+repositories {
+    maven { url "https://maven.shedaniel.me/" }
+    maven { url "https://maven.terraformersmc.com/releases" }
+    maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
+}
