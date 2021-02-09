@@ -17,6 +17,7 @@ loom {
 }
 
 repositories {
+    maven { url "https://maven.shedaniel.me/" }
     maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
 }
 

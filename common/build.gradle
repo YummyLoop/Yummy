@@ -1,3 +1,7 @@
+repositories {
+    maven { url "https://maven.shedaniel.me/" }
+}
+
 dependencies {
     // Remove the next line if you don't want to depend on the API
     modCompile "me.shedaniel:architectury:${rootProject.architectury_version}"
