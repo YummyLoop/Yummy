@@ -29,6 +29,11 @@ subprojects {
         main.kotlin.srcDirs += 'src/main'
         main.java.srcDirs += 'src/main'
     }
+    compileKotlin {
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
+    }
 }
 
 allprojects {
