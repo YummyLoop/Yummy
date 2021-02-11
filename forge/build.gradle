@@ -1,5 +1,5 @@
 plugins {
-    id "com.github.johnrengelman.shadow" version "5.0.0"
+    id "com.github.johnrengelman.shadow"
 }
 
 configurations {
@@ -17,6 +17,7 @@ loom {
 }
 
 apply from: "${rootDir}/repositories.gradle"
+apply from: "${rootProject.project("common").projectDir}/shadow.gradle"
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
