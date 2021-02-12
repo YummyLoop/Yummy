@@ -26,6 +26,7 @@ dependencies {
 
     // Extra dependencies
     implementation "thedarkcolour:kotlinforforge:${rootProject.forge_kotlin_version}"
+    modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:forge")
 
     compileOnly(project(path: ":common")) {
         transitive = false

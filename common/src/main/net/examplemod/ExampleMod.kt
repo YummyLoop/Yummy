@@ -10,9 +10,11 @@ import net.minecraft.item.ItemGroup
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import net.examplemod.config.clothconfig.AutoConfig
 
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
+    val modConfig = AutoConfig()
 
     // We can use this if we don't want to use DeferredRegister
     val REGISTRIES by lazyOf( Registries.get(MOD_ID))

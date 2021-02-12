@@ -24,8 +24,13 @@ dependencies {
     // Extra dependencies
     modImplementation "net.fabricmc:fabric-language-kotlin:${rootProject.fabric_kotlin_version}"
     modImplementation "com.terraformersmc:modmenu:${rootProject.fabric_mod_ModMenu}"
-    modCompileOnly "me.shedaniel:RoughlyEnoughItems-api:${rootProject.fabric_mod_REI}"
-    modRuntime "me.shedaniel:RoughlyEnoughItems:${rootProject.fabric_mod_REI}"
+    modCompileOnly ("me.shedaniel:RoughlyEnoughItems-api:${rootProject.fabric_mod_REI}") {
+        exclude(module: "config-2")
+    }
+    modRuntime ("me.shedaniel:RoughlyEnoughItems:${rootProject.fabric_mod_REI}") {
+        exclude(module: "config-2")
+    }
+    modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:fabric")
 
     compileOnly(project(path: ":common")) {
         transitive = false
