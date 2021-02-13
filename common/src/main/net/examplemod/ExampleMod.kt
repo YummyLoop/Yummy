@@ -19,12 +19,15 @@ object ExampleMod {
     val log: Logger = LogManager.getLogger("Yummy")
     val modConfig = AutoConfig()
 
-    // We can use this if we don't want to use DeferredRegister
-    val REGISTRIES by lazyOf(Registries.get(MOD_ID))
-
     // Registering a new creative tab
     var EXAMPLE_TAB: ItemGroup =
         CreativeTabs.create(Identifier(MOD_ID, "example_tab")) { ItemStack(Blocks.COBBLESTONE) }
+
+    // We can use this if we don't want to use DeferredRegister
+    val REGISTRIES by lazyOf(Registries.get(MOD_ID))
+    var lazyItems = REGISTRIES.get(Registry.ITEM_KEY)
+    var lazyItem =
+        lazyItems.registerSupplied(Identifier(MOD_ID, "example_lazy_item")) { Item(Item.Settings().group(EXAMPLE_TAB)) }
 
     // Registering a new item
     var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
