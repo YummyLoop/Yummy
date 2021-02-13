@@ -20,15 +20,17 @@ object ExampleMod {
     val modConfig = AutoConfig()
 
     // We can use this if we don't want to use DeferredRegister
-    val REGISTRIES by lazyOf( Registries.get(MOD_ID))
+    val REGISTRIES by lazyOf(Registries.get(MOD_ID))
 
     // Registering a new creative tab
-    var EXAMPLE_TAB: ItemGroup = CreativeTabs.create(Identifier(MOD_ID, "example_tab")) { ItemStack(Blocks.COBBLESTONE) }
+    var EXAMPLE_TAB: ItemGroup =
+        CreativeTabs.create(Identifier(MOD_ID, "example_tab")) { ItemStack(Blocks.COBBLESTONE) }
 
     // Registering a new item
     var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
-    var EXAMPLE_ITEM: RegistrySupplier<Item> = ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB))}
-    
+    var EXAMPLE_ITEM: RegistrySupplier<Item> =
+        ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB)) }
+
     fun init() {
         log.info("**************************")
         log.info("     YummY says hello!    ")

@@ -8,6 +8,6 @@ import net.examplemod.ExampleMod.MOD_ID
 //https://shedaniel.gitbook.io/cloth-config/auto-config/introduction-to-auto-config-1u
 @Config(name = MOD_ID)
 class ModConfig : ConfigData {
-    var a : Boolean = true
-    var b : Boolean = false
+    var a: Boolean = true
+    var b: Boolean = false
 }
