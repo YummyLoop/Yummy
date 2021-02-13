@@ -1,33 +1,26 @@
 # gradle
-
-.gradle/
-gradle/
+/.gradle/
+/*/.gradle/
+/gradle/
+/*/gradle/
 gradlew
 gradlew.bat
-.build/
-build/
-out/
-classes/
+
+/.build/
+/*/.build/
+/build/
+/*/build/
+/out/
+/run/
 
 # idea
-
 .idea/
 *.iml
 *.ipr
 *.iws
 
 # vscode
-
 .settings/
 .vscode/
-bin/
 .classpath
 .project
-
-# fabric
-
-run/
-libs/*.jar
-
-# ?
-stale_outputs_checked
