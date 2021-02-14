@@ -20,15 +20,18 @@ object GeckoLibImpl {
         textureLocation: String,
         animationFileLocation: String
     ): Supplier<out I> where I : Item, I : IAnimatable {
-        val itemRenderer = GeckoUtils.GenericItemRenderer(
-            GeckoUtils.GenericModel(
-                modID,
-                modelLocation,
-                textureLocation,
-                animationFileLocation
-            )
-        )
-        val itemSupplier = itemFunc(itemSettings.setISTER { Callable { itemRenderer } })
+        val itemSupplier = itemFunc(itemSettings.setISTER {
+            Callable {
+                GeckoUtils.GenericItemRenderer(
+                    GeckoUtils.GenericModel(
+                        modID,
+                        modelLocation,
+                        textureLocation,
+                        animationFileLocation
+                    )
+                )
+            }
+        })
         return Supplier { itemSupplier }
     }
 }
