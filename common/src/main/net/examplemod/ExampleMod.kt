@@ -3,8 +3,9 @@ package net.examplemod
 import me.shedaniel.architectury.registry.CreativeTabs
 import me.shedaniel.architectury.registry.DeferredRegister
 import me.shedaniel.architectury.registry.Registries
-import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.config.clothconfig.AutoConfig
+import net.examplemod.integration.geckolib.GeckoLib
+import net.examplemod.integration.geckolib.JackInTheBoxItem2
 import net.minecraft.block.Blocks
 import net.minecraft.item.Item
 import net.minecraft.item.ItemGroup
@@ -31,18 +32,19 @@ object ExampleMod {
 
     // Registering a new item
     var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
-    var EXAMPLE_ITEM: RegistrySupplier<Item> =
-        ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB)) }
+    var EXAMPLE_ITEM = ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB)) }
+    var JACK_IN_THE_BOX2 = GeckoLib.Items.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
 
     fun init() {
         log.info("**************************")
         log.info("     YummY says hello!    ")
         log.info("**************************")
-        log.error("logger error")
-        log.warn("logger warn")
-        log.fatal("logger fatal")
+        //log.error("logger error")
+        //log.warn("logger warn")
+        //log.fatal("logger fatal")
 
         ITEMS.register()
         println(ExampleExpectPlatform.getConfigDirectory().absolutePath)
+        GeckoLib.initialize()
     }
 }

@@ -3,4 +3,5 @@ repositories {
     maven { url "https://maven.shedaniel.me/" }
     maven { url "https://maven.terraformersmc.com/releases" }
     maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
+    maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
 }

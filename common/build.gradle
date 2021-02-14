@@ -9,7 +9,9 @@ dependencies {
     modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     // Extra dependencies
-    modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}")
+    modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
+    modApi "software.bernie.geckolib:geckolib-core:1.0.4"
+
 }
 
 architectury {

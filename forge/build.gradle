@@ -26,7 +26,8 @@ dependencies {
 
     // Extra dependencies
     implementation "thedarkcolour:kotlinforforge:${rootProject.forge_kotlin_version}"
-    modApi("me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:forge")
+    modApi "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:forge"
+    modImplementation "software.bernie.geckolib:geckolib-forge-1.16.5:3.0.13"
 
     compileOnly(project(path: ":common")) {
         transitive = false
