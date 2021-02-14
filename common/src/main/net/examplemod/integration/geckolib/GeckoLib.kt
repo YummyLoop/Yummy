@@ -26,34 +26,22 @@ object GeckoLib {
             animationFileLocation: String = "animations/$itemID.animation.json",
             modID: String = ExampleMod.MOD_ID
         ): RegistrySupplier<I> where I : Item, I : IAnimatable {
-            var sup = GeckoSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
-            val myItem = ITEMS.register(itemID, sup)
+            val itemSupplier =
+                geckoSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
+            val myItem = ITEMS.register(itemID, itemSupplier)
             itemList.add(arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation))
             return myItem
-
-            /*
-            val geckoI =
-                registerGeckoItem(modID, itemID, modelLocation, textureLocation, animationFileLocation, itemFunc, itemSettings)
-            return if (geckoI.get() == null) {
-                val myItem = ITEMS.register(itemID){ itemFunc(itemSettings) }
-                itemList.add(arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation))
-                GeckoItem(myItem)
-            } else {
-                geckoI
-            }
-
-             */
         }
     }
 
     @JvmStatic
     @ExpectPlatform
-    fun <I> GeckoSupplier(
+    fun <I> geckoSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
         itemSettings: Item.Settings,
         modID: String,
         modelLocation: String,
         textureLocation: String,
         animationFileLocation: String
-    ):  Supplier<out I> where I : Item, I : IAnimatable = throw AssertionError()
+    ): Supplier<out I> where I : Item, I : IAnimatable = throw AssertionError()
 }

@@ -5,14 +5,13 @@ import software.bernie.geckolib3.GeckoLib
 import software.bernie.geckolib3.core.IAnimatable
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
-import net.examplemod.integration.geckolib.GeckoLib as MyGeckoLib
 
 object GeckoLibImpl {
     @JvmStatic
     fun initialize(): Unit = GeckoLib.initialize()
 
     @JvmStatic
-    fun <I> GeckoSupplier(
+    fun <I> geckoSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
         itemSettings: Item.Settings,
         modID: String,

@@ -21,7 +21,8 @@ object GeckoUtils {
         override fun getAnimationFileLocation(obj: T) = Identifier(modID, animationFileLocation)
     }
 
-    open class GenericItemRenderer<T>(gModel: GenericModel<T>) : GeoItemRenderer<T>(gModel) where T : IAnimatable, T : Item
+    open class GenericItemRenderer<T>(gModel: GenericModel<T>) :
+        GeoItemRenderer<T>(gModel) where T : IAnimatable, T : Item
 
     object Items {
         fun registerAll() {
