@@ -5,26 +5,55 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
 import net.examplemod.ExampleMod.ITEMS
 import net.minecraft.item.Item
+import software.bernie.geckolib3.core.IAnimatable
 import java.util.function.Supplier
+import kotlin.reflect.KFunction1
 
 object GeckoLib {
-    @JvmStatic @ExpectPlatform
+    @JvmStatic
+    @ExpectPlatform
     fun initialize(): Unit = throw AssertionError()
 
     object Items {
-        var itemList : MutableList<Array<Any>> = mutableListOf()
+        var itemList: MutableList<Array<Any>> = mutableListOf()
+
         fun <I> register(
-            itemID : String,
+            itemID: String,
+            itemFunc: KFunction1<Item.Settings, I>,
+            itemSettings: Item.Settings,
             modelLocation: String = "geo/$itemID.geo.json",
             textureLocation: String = "textures/item/$itemID.png",
             animationFileLocation: String = "animations/$itemID.animation.json",
-            modID: String = ExampleMod.MOD_ID,
-            supplier: Supplier<out I>
-        ) : RegistrySupplier<I> where I : Item {
-            val myItem = ITEMS.register(itemID, supplier)
+            modID: String = ExampleMod.MOD_ID
+        ): RegistrySupplier<I> where I : Item, I : IAnimatable {
+            var sup = GeckoSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
+            val myItem = ITEMS.register(itemID, sup)
             itemList.add(arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation))
-            //registerGeckoItem(myItem.get(), modID, modelLocation, textureLocation, animationFileLocation)
             return myItem
+
+            /*
+            val geckoI =
+                registerGeckoItem(modID, itemID, modelLocation, textureLocation, animationFileLocation, itemFunc, itemSettings)
+            return if (geckoI.get() == null) {
+                val myItem = ITEMS.register(itemID){ itemFunc(itemSettings) }
+                itemList.add(arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation))
+                GeckoItem(myItem)
+            } else {
+                geckoI
+            }
+
+             */
         }
     }
+
+    @JvmStatic
+    @ExpectPlatform
+    fun <I> GeckoSupplier(
+        itemFunc: KFunction1<Item.Settings, I>,
+        itemSettings: Item.Settings,
+        modID: String,
+        modelLocation: String,
+        textureLocation: String,
+        animationFileLocation: String
+    ):  Supplier<out I> where I : Item, I : IAnimatable = throw AssertionError()
 }

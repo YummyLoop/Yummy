@@ -33,7 +33,8 @@ object ExampleMod {
     // Registering a new item
     var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
     var EXAMPLE_ITEM = ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB)) }
-    var JACK_IN_THE_BOX2 = GeckoLib.Items.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
+    //var JACK_IN_THE_BOX2 = GeckoLib.Items.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
+    var JACK_IN_THE_BOX2 = GeckoLib.Items.register("jack", ::JackInTheBoxItem2, Item.Settings().group(EXAMPLE_TAB))
 
     fun init() {
         log.info("**************************")
