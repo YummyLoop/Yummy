@@ -10,6 +10,7 @@ object GeckoLibImpl {
     @JvmStatic
     fun initialize(): Unit = GeckoLib.initialize()
 
+    @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     fun <I> geckoSupplier(
         itemFunc: KFunction1<Item.Settings, I>,

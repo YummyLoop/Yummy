@@ -28,7 +28,7 @@ object GeckoUtils {
         fun registerAll() {
             for (i in GeckoLib.Items.itemList) {
                 GeoItemRenderer.registerItemRenderer(
-                    (i[0] as RegistrySupplier<Item>).get(),
+                    @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<Item>).get(),
                     GenericItemRenderer(
                         GenericModel(
                             modID = i[1] as String,

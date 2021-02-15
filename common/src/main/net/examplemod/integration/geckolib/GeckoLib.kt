@@ -34,6 +34,7 @@ object GeckoLib {
         }
     }
 
+    @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
     fun <I> geckoSupplier(
