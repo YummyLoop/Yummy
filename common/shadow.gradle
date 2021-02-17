@@ -1,4 +1,7 @@
 // Documentation: https://imperceptiblethoughts.com/shadow/
+// add following line to the build.gradle to use
+//apply from: "${rootProject.project("common").projectDir}/shadow.gradle"
+
 def skip = true // Disable this file
 def shadowList =
         [   // 0MavenRepo, 1PackageName, 2Version, 3Relocate(true/false)

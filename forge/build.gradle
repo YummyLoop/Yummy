@@ -1,12 +1,6 @@
-plugins {
-    id "com.github.johnrengelman.shadow"
-}
-
 configurations {
     shadow
 }
-
-//libsDirName = "../out" // Output location of jar instead of default build/libs
 
 architectury {
     platformSetupLoomIde()
@@ -15,9 +9,6 @@ architectury {
 loom {
      useFabricMixin = true
 }
-
-apply from: "${rootDir}/repositories.gradle"
-apply from: "${rootProject.project("common").projectDir}/shadow.gradle"
 
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"

@@ -2,6 +2,7 @@ plugins {
     id "architectury-plugin"
     id "forgified-fabric-loom" apply false
     id "org.jetbrains.kotlin.jvm"
+    id "com.github.johnrengelman.shadow"
 }
 
 architectury {
@@ -11,12 +12,16 @@ architectury {
 subprojects {
     apply plugin: "forgified-fabric-loom"
     apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "com.github.johnrengelman.shadow"
+
+    //libsDirName = "../out" // Output location of jar instead of default build/libs
 
     loom {
         silentMojangMappingsLicense()
         mixinConfig "mixin.examplemod.json"
     }
-    
+
+    apply from: "${rootDir}/repositories.gradle"
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         // The following line declares the mojmap mappings, you may use other mappings as well
