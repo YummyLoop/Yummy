@@ -1,13 +1,8 @@
-configurations {
-    shadow
-}
-
-architectury {
-    platformSetupLoomIde()
-}
+configurations { shadow }
+architectury { platformSetupLoomIde() }
 
 loom {
-     useFabricMixin = true
+    useFabricMixin = true
 }
 
 dependencies {

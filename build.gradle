@@ -34,11 +34,7 @@ subprojects {
         main.kotlin.srcDirs += 'src/main'
         main.java.srcDirs += 'src/main'
     }
-    compileKotlin {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
+    compileKotlin { kotlinOptions { jvmTarget = "1.8" } }
 }
 
 allprojects {
@@ -68,23 +64,23 @@ allprojects {
     jar {
         manifest {
             attributes([
-                    "Title"     : "${rootProject.archives_base_name}",
-                    "Version"   : "${rootProject.mod_version}",
-                    "Author"    : "${rootProject.mod_author}",
-                    "Timestamp" : new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+                    "Title"    : "${rootProject.archives_base_name}",
+                    "Version"  : "${rootProject.mod_version}",
+                    "Author"   : "${rootProject.mod_author}",
+                    "Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
             ])
         }
     }
 }
 
-task getJars (type: Copy) {
+task getJars(type: Copy) {
     dependsOn ':fabric:build'
     dependsOn ':forge:build'
 
-    from ('fabric/.build/libs'){
+    from('fabric/.build/libs') {
         include "*-fabric.jar"
     }
-    from ('forge/.build/libs'){
+    from('forge/.build/libs') {
         include "*-forge.jar"
     }
     into "out"

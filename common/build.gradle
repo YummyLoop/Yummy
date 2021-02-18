@@ -8,13 +8,12 @@ dependencies {
 
     // Extra dependencies
     modImplementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
-    modImplementation "software.bernie.geckolib:geckolib-core:1.0.4"
-    modImplementation ("software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.20:dev"){
-        transitive = false
-    }
+
+    // GeckoLib (ideally should only use the core and a common, but ...)
+    //modImplementation("software.bernie.geckolib:geckolib-core:1.0.4")
+    modImplementation("software.bernie.geckolib:geckolib-forge-1.16.5:3.0.13") { transitive = false }
+    modImplementation("software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.20:dev") { transitive = false }
 
 }
 
-architectury {
-    common()
-}
+architectury { common() }
