@@ -5,14 +5,24 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
 import net.examplemod.ExampleMod.ITEMS
 import net.minecraft.item.Item
+import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable
+import software.bernie.geckolib3.model.AnimatedGeoModel
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
-object GeckoLib {
-    @JvmStatic
-    @ExpectPlatform
-    fun initialize(): Unit = throw AssertionError()
+object GeckoUtils {
+    open class GenericModel<T>(
+        private val modID: String,
+        private val modelLocation: String,
+        private val textureLocation: String,
+        private val animationFileLocation: String
+    ) : AnimatedGeoModel<T>() where T : IAnimatable {
+
+        override fun getModelLocation(obj: T) = Identifier(modID, modelLocation)
+        override fun getTextureLocation(obj: T) = Identifier(modID, textureLocation)
+        override fun getAnimationFileLocation(obj: T) = Identifier(modID, animationFileLocation)
+    }
 
     object Items {
         var itemList: MutableList<Array<Any>> = mutableListOf()

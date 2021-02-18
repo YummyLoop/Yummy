@@ -1,15 +1,16 @@
 package net.examplemod.integration.geckolib.forge
 
+import net.examplemod.integration.geckolib.GeckoUtils
 import net.minecraft.item.Item
-import software.bernie.geckolib3.GeckoLib
 import software.bernie.geckolib3.core.IAnimatable
+import software.bernie.geckolib3.renderers.geo.GeoItemRenderer
 import java.util.concurrent.Callable
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
-object GeckoLibImpl {
-    @JvmStatic
-    fun initialize(): Unit = GeckoLib.initialize()
+object GeckoUtilsImpl {
+    open class GenericItemRenderer<T>(gModel: GeckoUtils.GenericModel<T>) :
+        GeoItemRenderer<T>(gModel) where T : IAnimatable, T : Item
 
     @JvmStatic
     fun <I> geckoSupplier(
@@ -22,7 +23,7 @@ object GeckoLibImpl {
     ): Supplier<out I> where I : Item, I : IAnimatable {
         val itemSupplier = itemFunc(itemSettings.setISTER {
             Callable {
-                GeckoUtils.GenericItemRenderer(
+                GenericItemRenderer(
                     GeckoUtils.GenericModel(
                         modID,
                         modelLocation,
@@ -35,3 +36,4 @@ object GeckoLibImpl {
         return Supplier { itemSupplier }
     }
 }
+
