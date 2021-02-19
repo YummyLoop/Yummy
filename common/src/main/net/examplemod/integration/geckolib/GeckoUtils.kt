@@ -3,7 +3,7 @@ package net.examplemod.integration.geckolib
 import me.shedaniel.architectury.annotations.ExpectPlatform
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
-import net.examplemod.ExampleMod.ITEMS
+import net.examplemod.items.Ytem
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable
@@ -18,7 +18,6 @@ object GeckoUtils {
         private val textureLocation: String,
         private val animationFileLocation: String
     ) : AnimatedGeoModel<T>() where T : IAnimatable {
-
         override fun getModelLocation(obj: T) = Identifier(modID, modelLocation)
         override fun getTextureLocation(obj: T) = Identifier(modID, textureLocation)
         override fun getAnimationFileLocation(obj: T) = Identifier(modID, animationFileLocation)
@@ -35,10 +34,10 @@ object GeckoUtils {
             textureLocation: String = "textures/item/$itemID.png",
             animationFileLocation: String = "animations/$itemID.animation.json",
             modID: String = ExampleMod.MOD_ID
-        ): RegistrySupplier<I> where I : Item, I : IAnimatable {
+        ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
             val itemSupplier =
-                geckoSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
-            val myItem = ITEMS.register(itemID, itemSupplier)
+                geckoItemSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
+            val myItem = Ytem.register(itemID, itemSupplier)
             itemList.add(arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation))
             return myItem
         }
@@ -47,7 +46,7 @@ object GeckoUtils {
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
-    fun <I> geckoSupplier(
+    fun <I> geckoItemSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
         itemSettings: Item.Settings,
         modID: String,

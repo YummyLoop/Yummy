@@ -9,11 +9,11 @@ import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
 object GeckoUtilsImpl {
-    open class GenericItemRenderer<T>(gModel: GeckoUtils.GenericModel<T>) :
+    open class GenericItemRendererImpl<T>(gModel: GeckoUtils.GenericModel<T>) :
         GeoItemRenderer<T>(gModel) where T : IAnimatable, T : Item
 
     @JvmStatic
-    fun <I> geckoSupplier(
+    fun <I> geckoItemSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
         itemSettings: Item.Settings,
         modID: String,
@@ -23,7 +23,7 @@ object GeckoUtilsImpl {
     ): Supplier<out I> where I : Item, I : IAnimatable {
         val itemSupplier = itemFunc(itemSettings.setISTER {
             Callable {
-                GenericItemRenderer(
+                GenericItemRendererImpl(
                     GeckoUtils.GenericModel(
                         modID,
                         modelLocation,

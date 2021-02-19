@@ -4,9 +4,11 @@ import me.shedaniel.architectury.platform.Platform
 import me.shedaniel.architectury.registry.CreativeTabs
 import me.shedaniel.architectury.registry.DeferredRegister
 import me.shedaniel.architectury.registry.Registries
+import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.config.clothconfig.AutoConfig
 import net.examplemod.integration.geckolib.GeckoUtils
 import net.examplemod.integration.geckolib.JackInTheBoxItem2
+import net.examplemod.items.Ytem
 import net.fabricmc.api.EnvType
 import net.minecraft.block.Blocks
 import net.minecraft.item.Item
@@ -34,9 +36,8 @@ object ExampleMod {
         lazyItems.registerSupplied(Identifier(MOD_ID, "example_lazy_item")) { Item(Item.Settings().group(EXAMPLE_TAB)) }
 
     // Registering a new item
-    var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
-    var EXAMPLE_ITEM = ITEMS.register("example_item") { Item(Item.Settings().group(EXAMPLE_TAB)) }
-
+    //var ITEMS = DeferredRegister.create(MOD_ID, Registry.ITEM_KEY)
+    var EXAMPLE_ITEM = Ytem.register("example_item") { Ytem(Ytem.Settings().group(EXAMPLE_TAB)) }
     // Gecko
     var JACK_IN_THE_BOX2 = GeckoUtils.Items.register("jack", ::JackInTheBoxItem2, Item.Settings().group(EXAMPLE_TAB))
     //var JACK_IN_THE_BOX2  = ITEMS.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
@@ -49,10 +50,9 @@ object ExampleMod {
         //log.warn("logger warn")
         //log.fatal("logger fatal")
 
-        ITEMS.register()
-        println(ExampleExpectPlatform.getConfigDirectory().absolutePath)
-
         GeckoLib.initialize()
+        Ytem.register()
+        println(ExampleExpectPlatform.getConfigDirectory().absolutePath)
 
         if (Platform.getEnv() == EnvType.CLIENT) {
             println("Its client")
