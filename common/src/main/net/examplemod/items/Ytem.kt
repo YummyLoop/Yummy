@@ -3,14 +3,19 @@ package net.examplemod.items
 import me.shedaniel.architectury.registry.DeferredRegister
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
+import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.FoodComponent
 import net.minecraft.item.ItemGroup
+import net.minecraft.item.ItemStack
+import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Rarity
 import net.minecraft.util.registry.Registry
+import net.minecraft.world.World
 import java.util.function.Supplier
 import net.minecraft.item.Item as VanillaItem
 
-class Ytem(settings: VanillaItem.Settings) : VanillaItem(settings) {
+class Ytem(settings: VanillaItem.Settings = Settings().group(ItemGroup.MISC)) : VanillaItem(settings) {
     companion object {
         private val deferredRegister: DeferredRegister<VanillaItem> =
             DeferredRegister.create(ExampleMod.MOD_ID, Registry.ITEM_KEY)
@@ -19,6 +24,17 @@ class Ytem(settings: VanillaItem.Settings) : VanillaItem(settings) {
             deferredRegister.register(itemId, itemSupplier)
 
         fun register() = deferredRegister.register()
+    }
+
+    private val tooltip by lazy { ArrayList<Text>() }
+    fun addTooltip(tooltip: String) = this.tooltip.add(TranslatableText(tooltip))
+    override fun appendTooltip(
+        itemStack: ItemStack,
+        world: World?,
+        tooltip: MutableList<Text>,
+        tooltipContext: TooltipContext,
+    ) {
+        tooltip.addAll(this.tooltip)
     }
 
     class Settings : VanillaItem.Settings() {
@@ -56,3 +72,9 @@ class Ytem(settings: VanillaItem.Settings) : VanillaItem(settings) {
     }
 
 }
+/* Reference
+    // New Custom ItemStack
+    ItemStack b = new ItemStack(a);
+    b.getOrCreateTag().putInt("CustomModelData", 1);
+    b.setCustomName(new LiteralText("Hello"));
+*/
