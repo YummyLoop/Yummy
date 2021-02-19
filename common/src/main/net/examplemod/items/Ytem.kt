@@ -20,10 +20,18 @@ class Ytem(settings: VanillaItem.Settings = Settings().group(ItemGroup.MISC)) : 
         private val deferredRegister: DeferredRegister<VanillaItem> =
             DeferredRegister.create(ExampleMod.MOD_ID, Registry.ITEM_KEY)
 
-        fun register(itemId: String, itemSupplier: Supplier<out VanillaItem>): RegistrySupplier<VanillaItem> =
-            deferredRegister.register(itemId, itemSupplier)
+        internal fun register(
+            itemId: String,
+            itemSupplier: Supplier<out VanillaItem> = Supplier { Ytem() },
+        ): RegistrySupplier<VanillaItem> = deferredRegister.register(itemId, itemSupplier)
 
-        fun register() = deferredRegister.register()
+        internal fun register() = deferredRegister.register()
+
+        // We can use this if we don't want to use DeferredRegister
+//        val REGISTRIES by lazyOf(Registries.get(ExampleMod.MOD_ID))
+//        var lazyItems = REGISTRIES.get(Registry.ITEM_KEY)
+//        var lazyItem =
+//            lazyItems.registerSupplied(Identifier(ExampleMod.MOD_ID, "example_lazy_item"), ::Ytem)
     }
 
     private val tooltip by lazy { ArrayList<Text>() }
