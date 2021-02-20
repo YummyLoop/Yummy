@@ -17,7 +17,7 @@ dependencies {
     modCompileOnly("me.shedaniel:RoughlyEnoughItems-api:${rootProject.fabric_mod_REI}") { exclude(module: "config-2") }
     modRuntime("me.shedaniel:RoughlyEnoughItems:${rootProject.fabric_mod_REI}") { exclude(module: "config-2") }
     modImplementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:fabric"
-    modImplementation "software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.20:dev"
+    modImplementation "software.bernie.geckolib:geckolib-fabric-1.16.5:3.0.21:dev"
 
     compileOnly(project(path: ":common")) {
         transitive = false
