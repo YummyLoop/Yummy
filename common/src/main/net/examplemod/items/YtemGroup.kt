@@ -10,4 +10,9 @@ object YtemGroup {
     // Registering a new creative tab
     var EXAMPLE_TAB: ItemGroup =
         CreativeTabs.create(Identifier(ExampleMod.MOD_ID, "example_tab")) { ItemStack(Ytems.EXAMPLE_ITEM.get()) }
+
+    internal object Dev {
+        var devGroup: ItemGroup =
+            CreativeTabs.create(Identifier(ExampleMod.MOD_ID, "dev_tab")) { ItemStack(Ytems.EXAMPLE_ITEM.get()) }
+    }
 }

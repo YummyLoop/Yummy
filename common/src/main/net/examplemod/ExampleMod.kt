@@ -10,23 +10,27 @@ import software.bernie.geckolib3.GeckoLib
 
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
-    val log: Logger = LogManager.getLogger("Yummy")
+    internal val log: Logger = LogManager.getLogger("Yummy")
     val modConfig = AutoConfig()
 
     fun init() {
+        GeckoLib.initialize()
+        if (Platform.isDevelopmentEnvironment() || modConfig.dev) dev()
+        Ytems.register()
+    }
+
+    private fun dev() {
         log.info("**************************")
         log.info("     YummY says hello!    ")
         log.info("**************************")
         //log.error("logger error")
         //log.warn("logger warn")
         //log.fatal("logger fatal")
-
-        GeckoLib.initialize()
-        Ytems
         println(ExampleExpectPlatform.getConfigDirectory().absolutePath)
-
         if (Platform.getEnv() == EnvType.CLIENT) {
             println("Its client")
         }
+
+        Ytems.Dev
     }
 }

@@ -9,23 +9,24 @@ import net.minecraft.item.Item
 import java.util.function.Supplier
 
 object Ytems {
-    init {
-        Ytem.register()
-    }
+    internal fun register() = Ytem.register()
 
     var EXAMPLE_ITEM = Ytem.register("example_item") { Ytem(Ytem.Settings().group(YtemGroup.EXAMPLE_TAB)) }
-    var test_ITEM = Ytem.register("test_item")
 
-    // Gecko
-    var JACK_IN_THE_BOX2 =
-        GeckoUtils.Items.register("jack", ::JackInTheBoxItem2, Item.Settings().group(YtemGroup.EXAMPLE_TAB))
+    internal object Dev {
+        var test_ITEM = Ytem.register("test_item")
 
-    //var JACK_IN_THE_BOX2  = ITEMS.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
-    var armor = GeckoUtils.Items.registerArmor(
-        "potato_armor",
-        "_head" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, Ytem.Settings()) },
-        "_chestplate" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, Ytem.Settings()) },
-        "_leggings" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, Ytem.Settings()) },
-        "_boots" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.FEET, Ytem.Settings()) },
-    )
+        // Gecko
+        var JACK_IN_THE_BOX2 =
+            GeckoUtils.Items.register("jack", ::JackInTheBoxItem2, Item.Settings().group(YtemGroup.Dev.devGroup))
+
+        //var JACK_IN_THE_BOX2  = ITEMS.register("jack") { JackInTheBoxItem2(Item.Settings().group(EXAMPLE_TAB)) }
+        var armor = GeckoUtils.Items.registerArmor(
+            "potato_armor",
+            "_head" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, Ytem.Settings()) },
+            "_chestplate" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, Ytem.Settings()) },
+            "_leggings" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, Ytem.Settings()) },
+            "_boots" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.FEET, Ytem.Settings()) },
+        )
+    }
 }
