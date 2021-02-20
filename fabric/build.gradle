@@ -1,6 +1,10 @@
 configurations { shadow }
 architectury { platformSetupLoomIde() }
 
+loom{
+    mixinConfigs = ["mixin.examplemod.json", "mixin.examplemod.fabric.json"]
+}
+
 dependencies {
     modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
     modCompile "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"

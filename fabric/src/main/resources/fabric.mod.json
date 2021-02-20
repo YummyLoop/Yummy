@@ -32,7 +32,8 @@
     ]
   },
   "mixins": [
-    "mixin.examplemod.json"
+    "mixin.examplemod.json",
+    "mixin.examplemod.fabric.json"
   ],
   "depends": {
     "fabricloader": ">=0.7.4",
