@@ -22,6 +22,7 @@ object ExampleModForge {
 
     @Mod.EventBusSubscriber(modid = ExampleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     object ClientSide {
+        @Suppress("UNUSED_PARAMETER")
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         fun registerRenderers(event: FMLClientSetupEvent) {

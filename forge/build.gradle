@@ -1,5 +1,8 @@
 configurations { shadow }
-architectury { platformSetupLoomIde() }
+architectury {
+    platformSetupLoomIde()
+    forge()
+}
 
 loom {
     useFabricMixin = true
@@ -8,19 +11,19 @@ loom {
 dependencies {
     forge "net.minecraftforge:forge:${rootProject.minecraft_version}-${rootProject.forge_version}"
     // Remove the next line if you don't want to depend on the API
-    modCompile "me.shedaniel:architectury:${rootProject.architectury_version}:forge"
+    modCompile "me.shedaniel:architectury-forge:${rootProject.architectury_version}"
 
     // Extra dependencies
     implementation "thedarkcolour:kotlinforforge:${rootProject.forge_kotlin_version}"
-    modImplementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:forge"
+    modImplementation "me.shedaniel.cloth:cloth-config-forge:${rootProject.cloth_config_version}"
     modImplementation "software.bernie.geckolib:geckolib-forge-${rootProject.forge_geckolib_version}"
     compileOnly("mezz.jei:jei-${rootProject.forge_jei_version}:api")
     modRuntime("mezz.jei:jei-${rootProject.forge_jei_version}")
 
-    compileOnly(project(path: ":common")) {
+    implementation(project(path: ":common")) {
         transitive = false
     }
-    runtimeOnly(project(path: ":common", configuration: "transformDevelopmentForge")) {
+    developmentForge(project(path: ":common")) {
         transitive = false
     }
     shadow(project(path: ":common", configuration: "transformProductionForge")) {
