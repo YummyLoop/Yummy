@@ -13,6 +13,14 @@ import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
 object GeckoUtils {
+    /**
+     * Generic Model for gecko
+     *
+     * @param modID Mod id
+     * @param modelLocation Model location
+     * @param textureLocation Texture location
+     * @param animationFileLocation Animation location
+     */
     open class GenericModel<T>(
         private val modID: String,
         private val modelLocation: String,
@@ -24,9 +32,24 @@ object GeckoUtils {
         override fun getAnimationFileLocation(obj: T) = Identifier(modID, animationFileLocation)
     }
 
+    /**
+     * List of gecko items for late render registry on different platforms (forge/fabric)
+     */
     var geckoList: MutableList<Pair<GeckoType, Array<Any>>> = mutableListOf()
 
     object Items {
+
+        /**
+         * Registers a Gecko Item
+         *
+         * @param itemID Base item name
+         * @param itemFunc Constructor of the item Class
+         * @param itemSettings Pair of ItemName to append + the item settings for said item
+         * @param modelLocation Model location
+         * @param textureLocation Texture location
+         * @param animationFileLocation Animation location
+         * @param modID Mod id
+         */
         fun <I> register(
             itemID: String,
             itemFunc: KFunction1<Item.Settings, I>,
@@ -44,6 +67,80 @@ object GeckoUtils {
             return myItem
         }
 
+        /**
+         * Registers a gecko Armor + their items as Gecko Items
+         *
+         * @param itemID Base item name
+         * @param itemFunc Constructor of the item Class
+         * @param itemSettings0 Pair of ItemName to append + the item settings for said item
+         * @param itemSettings1 Pair of ItemName to append + the item settings for said item
+         * @param itemSettings2 Pair of ItemName to append + the item settings for said item
+         * @param itemSettings3 Pair of ItemName to append + the item settings for said item
+         * @param modelLocation Model location
+         * @param textureLocation Texture location
+         * @param animationFileLocation Animation location
+         * @param modID Mod id
+         */
+        fun <I> registerArmor(
+            itemID: String,
+            itemFunc: KFunction1<Item.Settings, I>,
+            itemSettings0: Pair<String, Item.Settings>,
+            itemSettings1: Pair<String, Item.Settings>? = null,
+            itemSettings2: Pair<String, Item.Settings>? = null,
+            itemSettings3: Pair<String, Item.Settings>? = null,
+            modelLocation: String = "geo/$itemID.geo.json",
+            textureLocation: String = "textures/item/$itemID.png",
+            animationFileLocation: String = "animations/$itemID.animation.json",
+            modID: String = ExampleMod.MOD_ID,
+        ): MutableList<RegistrySupplier<Item>> where I : Item, I : IAnimatable {
+            val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
+            myList.add(register(itemID + itemSettings0.first,
+                itemFunc,
+                itemSettings0.second,
+                modelLocation,
+                textureLocation,
+                animationFileLocation,
+                modID))
+            if (itemSettings1 != null) myList.add(register(itemID + itemSettings1.first,
+                itemFunc,
+                itemSettings1.second,
+                modelLocation,
+                textureLocation,
+                animationFileLocation,
+                modID))
+            if (itemSettings2 != null) myList.add(register(itemID + itemSettings2.first,
+                itemFunc,
+                itemSettings2.second,
+                modelLocation,
+                textureLocation,
+                animationFileLocation,
+                modID))
+            if (itemSettings3 != null) myList.add(register(itemID + itemSettings3.first,
+                itemFunc,
+                itemSettings3.second,
+                modelLocation,
+                textureLocation,
+                animationFileLocation,
+                modID))
+
+            geckoList.add(Pair(GeckoType.Armor,
+                arrayOf(myList.first(), modID, modelLocation, textureLocation, animationFileLocation)))
+            return myList
+        }
+
+        /**
+         * Registers a gecko Armor (their items are registered as vanilla items)
+         *
+         * @param itemID Base item name
+         * @param item0 Pair of ItemName to append + the item supplier for said item
+         * @param item1 Pair of ItemName to append + the item supplier for said item
+         * @param item2 Pair of ItemName to append + the item supplier for said item
+         * @param item3 Pair of ItemName to append + the item supplier for said item
+         * @param modelLocation Model location
+         * @param textureLocation Texture location
+         * @param animationFileLocation Animation location
+         * @param modID Mod id
+         */
         fun <T> registerArmor(
             itemID: String,
             item0: Pair<String, Supplier<T>>,
@@ -66,6 +163,16 @@ object GeckoUtils {
         }
     }
 
+    /**
+     * Gets a platform dependent (forge) Gecko Supplier
+     *
+     * @param itemFunc Constructor of the item Class
+     * @param itemSettings Pair of ItemName to append + the item settings for said item
+     * @param modelLocation Model location
+     * @param textureLocation Texture location
+     * @param animationFileLocation Animation location
+     * @param modID Mod id
+     */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
