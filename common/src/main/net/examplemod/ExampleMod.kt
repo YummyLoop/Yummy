@@ -2,7 +2,6 @@ package net.examplemod
 
 import me.shedaniel.architectury.platform.Platform
 import net.examplemod.config.clothconfig.AutoConfig
-import net.examplemod.items.Ytems
 import net.fabricmc.api.EnvType
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -16,7 +15,7 @@ object ExampleMod {
     fun init() {
         GeckoLib.initialize()
         if (Platform.isDevelopmentEnvironment() || modConfig.dev) dev()
-        Ytems.register()
+        ModRegistry.register()
     }
 
     private fun dev() {
@@ -31,6 +30,6 @@ object ExampleMod {
             println("Its client")
         }
 
-        Ytems.Dev
+        ModRegistry.dev()
     }
 }
