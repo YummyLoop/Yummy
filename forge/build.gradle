@@ -13,7 +13,7 @@ dependencies {
     // Extra dependencies
     implementation "thedarkcolour:kotlinforforge:${rootProject.forge_kotlin_version}"
     modImplementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}:forge"
-    modImplementation "software.bernie.geckolib:geckolib-forge-1.16.5:3.0.13"
+    modImplementation "software.bernie.geckolib:geckolib-forge-${rootProject.forge_geckolib_version}"
     compileOnly("mezz.jei:jei-${rootProject.forge_jei_version}:api")
     modRuntime("mezz.jei:jei-${rootProject.forge_jei_version}")
 
