@@ -59,9 +59,9 @@ object GeckoUtils {
             animationFileLocation: String = "animations/$itemID.animation.json",
             modID: String = ExampleMod.MOD_ID,
         ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
-            val itemSupplier =
-                geckoItemSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation)
-            val myItem = ModRegistry.Register.item(itemID, itemSupplier)
+            val myItem = ModRegistry.Register.item(
+                itemID,
+                geckoItemSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation))
             geckoList.add(Pair(GeckoType.Item,
                 arrayOf(myItem, modID, modelLocation, textureLocation, animationFileLocation)))
             return myItem
