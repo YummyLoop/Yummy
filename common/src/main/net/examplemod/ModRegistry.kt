@@ -1,8 +1,6 @@
 package net.examplemod
 
-import me.shedaniel.architectury.registry.BlockProperties
-import me.shedaniel.architectury.registry.DeferredRegister
-import me.shedaniel.architectury.registry.RegistrySupplier
+import me.shedaniel.architectury.registry.*
 import net.examplemod.block.TestBlockEntity
 import net.examplemod.block.TestBlockWithEntity
 import net.examplemod.integration.geckolib.GeckoUtils
@@ -44,6 +42,9 @@ object ModRegistry {
         /** Block Entity Type register */
         val blockEntityTypeRegister: DeferredRegister<BlockEntityType<*>> =
             DeferredRegister.create(ExampleMod.MOD_ID, Registry.BLOCK_ENTITY_TYPE_KEY)
+
+        /** Block Entity Renderer register */
+        //val blockEntityRendererRegister = BlockEntityRenderers
 
         /** Item register */
         val itemRegister: DeferredRegister<VanillaItem> =

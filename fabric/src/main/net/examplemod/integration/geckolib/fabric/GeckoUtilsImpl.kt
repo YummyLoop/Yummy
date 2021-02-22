@@ -2,11 +2,14 @@ package net.examplemod.integration.geckolib.fabric
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.integration.geckolib.GeckoUtils
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
+import software.bernie.geckolib3.renderer.geo.GeoBlockRenderer
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
@@ -80,6 +83,13 @@ object GeckoUtilsImpl {
                 )
             )
         }
+    }
+
+    object Blocks {
+        class GenericBlockRenderImpl<T>(
+            rendererDispatcherIn: BlockEntityRenderDispatcher?,
+            gModel: GeckoUtils.GenericModel<T?>,
+        ) : GeoBlockRenderer<T>(rendererDispatcherIn, gModel) where T : BlockEntity?, T : IAnimatable?
     }
 
     @Suppress("UNUSED_PARAMETER")

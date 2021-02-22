@@ -163,6 +163,9 @@ object GeckoUtils {
         }
     }
 
+    object Blocks {
+
+    }
     /**
      * Gets a platform dependent (forge) Gecko Supplier
      *
@@ -187,6 +190,7 @@ object GeckoUtils {
 
     enum class GeckoType {
         Item,
-        Armor
+        Armor,
+        Block
     }
 }
