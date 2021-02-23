@@ -26,7 +26,7 @@ object ExampleModForge {
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
         fun registerRenderers(event: FMLClientSetupEvent) {
-            GeckoUtilsImpl.Items.registerAll()
+            GeckoUtilsImpl.registerAll()
         }
     }
 }

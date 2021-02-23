@@ -4,6 +4,8 @@ import me.shedaniel.architectury.annotations.ExpectPlatform
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
 import net.examplemod.ModRegistry
+import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable
@@ -164,8 +166,18 @@ object GeckoUtils {
     }
 
     object Blocks {
-
+        fun <T> register(
+            blockEntityType: RegistrySupplier<BlockEntityType<T>>,
+            modelLocation: String = "geo/${blockEntityType.id}.geo.json",
+            textureLocation: String = "textures/block/${blockEntityType.id}.png",
+            animationFileLocation: String = "animations/${blockEntityType.id}.animation.json",
+            modID: String = ExampleMod.MOD_ID,
+        ) where T : BlockEntity {
+            geckoList.add(Pair(GeckoType.Block,
+                arrayOf(blockEntityType, modID, modelLocation, textureLocation, animationFileLocation)))
+        }
     }
+
     /**
      * Gets a platform dependent (forge) Gecko Supplier
      *

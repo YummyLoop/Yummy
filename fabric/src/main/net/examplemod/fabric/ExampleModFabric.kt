@@ -9,6 +9,6 @@ object ExampleModFabric : ModInitializer, ClientModInitializer {
     override fun onInitialize() = init()
 
     override fun onInitializeClient() {
-        GeckoUtilsImpl.Items.registerAll()
+        GeckoUtilsImpl.registerAll()
     }
 }
