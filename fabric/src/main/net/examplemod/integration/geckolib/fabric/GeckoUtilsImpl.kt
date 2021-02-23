@@ -3,15 +3,20 @@ package net.examplemod.integration.geckolib.fabric
 import me.shedaniel.architectury.registry.BlockEntityRenderers
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.integration.geckolib.GeckoUtils
+import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
+import net.minecraft.client.render.entity.EntityRenderDispatcher
+import net.minecraft.entity.EntityType
+import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
 import software.bernie.geckolib3.renderer.geo.GeoBlockRenderer
+import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
@@ -24,6 +29,7 @@ internal object GeckoUtilsImpl {
                 GeckoUtils.GeckoType.Item -> Items.registerItemRenderer(i.second)
                 GeckoUtils.GeckoType.Armor -> Items.registerArmorRenderer(i.second)
                 GeckoUtils.GeckoType.Block -> Blocks.registerBlockRenderer(i.second)
+                GeckoUtils.GeckoType.Entity -> Entities.registerEntityRenderer(i.second)
                 else -> continue
             }
         }
@@ -92,6 +98,32 @@ internal object GeckoUtilsImpl {
                 @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<BlockEntityType<BlockEntity>>).get()
             ) {
                 GenericBlockRenderImpl(it,
+                    GeckoUtils.GenericModel(
+                        modID = i[1] as String,
+                        modelLocation = i[2] as String,
+                        textureLocation = i[3] as String,
+                        animationFileLocation = i[4] as String
+                    )
+                )
+            }
+        }
+    }
+
+    object Entities {
+        class GenericEntityRenderImpl<T>(
+            rendererDispatcherIn: EntityRenderDispatcher?,
+            gModel: GeckoUtils.GenericModel<T?>,
+        ) : GeoEntityRenderer<T>(rendererDispatcherIn, gModel) where T : LivingEntity?, T : IAnimatable? {
+            init {
+                this.shadowRadius = 0.7F
+            }
+        }
+
+        fun registerEntityRenderer(i: Array<Any>) {
+            EntityRendererRegistry.INSTANCE.register(
+                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<LivingEntity>>).get()
+            ) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context ->
+                GenericEntityRenderImpl(entityRenderDispatcher,
                     GeckoUtils.GenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,

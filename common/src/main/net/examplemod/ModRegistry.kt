@@ -6,6 +6,7 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.block.TestBlockEntity
 import net.examplemod.block.TestBlockWithEntity
 import net.examplemod.integration.geckolib.GeckoUtils
+import net.examplemod.integration.geckolib.GeoExampleEntity2
 import net.examplemod.integration.geckolib.JackInTheBoxItem2
 import net.examplemod.integration.geckolib.PotatoArmor2
 import net.examplemod.items.Ytem
@@ -13,7 +14,12 @@ import net.examplemod.items.YtemGroup
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
+import net.minecraft.entity.SpawnGroup
+import net.minecraft.entity.attribute.DefaultAttributeRegistry
+import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
 import net.minecraft.util.registry.Registry
@@ -25,6 +31,8 @@ object ModRegistry {
     /** Final registry of the content */
     internal fun register() {
         Content
+        Register.entityTypeRegister.register()
+        Register.entityAttributeRegister.register()
         Register.blockRegister.register()
         Register.blockEntityTypeRegister.register()
         Register.itemRegister.register()
@@ -44,6 +52,14 @@ object ModRegistry {
         /** Block Entity Type register */
         val blockEntityTypeRegister: DeferredRegister<BlockEntityType<*>> =
             DeferredRegister.create(ExampleMod.MOD_ID, Registry.BLOCK_ENTITY_TYPE_KEY)
+
+        /** Entity Type register */
+        val entityTypeRegister: DeferredRegister<EntityType<*>> =
+            DeferredRegister.create(ExampleMod.MOD_ID, Registry.ENTITY_TYPE_KEY)
+
+        /** Entity Attribute register */
+        val entityAttributeRegister: DeferredRegister<EntityAttribute> =
+            DeferredRegister.create(ExampleMod.MOD_ID, Registry.ATTRIBUTE_KEY)
 
         /** Item register */
         val itemRegister: DeferredRegister<VanillaItem> =
@@ -116,6 +132,35 @@ object ModRegistry {
                 ).build(null)
             }
         }
+
+        /**
+         * Registers an EntityType
+         *
+         * @param entityTypeId Id of the block entity type
+         * @param entityTypeBuilder The builder used to create the entity
+         * @return A RegistrySupplier for the entity type
+         */
+        fun <T> entityType(
+            entityTypeId: String,
+            entityTypeBuilder: EntityType.Builder<T>,
+            //entityTypeBuilder: Supplier<EntityType<T>>?
+        ): RegistrySupplier<EntityType<T>> where T : Entity {
+            return entityTypeRegister.register(entityTypeId) { entityTypeBuilder.build(entityTypeId) }
+        }
+
+        /**
+         * Registers an EntityAttribute
+         *
+         * @param entityAttributeId Id of the Attribute
+         * @param entityAttribute The Attribute
+         * @return A RegistrySupplier for the entity type
+         */
+        fun <T> entityAttribute(
+            entityAttributeId: String,
+            entityAttribute: Supplier<T>,
+        ): RegistrySupplier<T> where T : EntityAttribute {
+            return entityAttributeRegister.register(entityAttributeId, entityAttribute)
+        }
     }
 
     object Content {
@@ -160,6 +205,15 @@ object ModRegistry {
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
                     "animations/jack.animation.json")
+
+                // Entity
+                GeoExampleEntity2.type =
+                    Register.entityType("geo_ex", EntityType.Builder.create(::GeoExampleEntity2, SpawnGroup.CREATURE))
+                GeckoUtils.Entities.register(GeoExampleEntity2.type!!,
+                    "geo/jack.geo.json",
+                    "textures/item/jack.png",
+                    "animations/jack.animation.json")
+
             }
         }
     }

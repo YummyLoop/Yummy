@@ -6,6 +6,8 @@ import net.examplemod.ExampleMod
 import net.examplemod.ModRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.entity.Entity
+import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable
@@ -178,6 +180,19 @@ object GeckoUtils {
         }
     }
 
+    object Entities {
+        fun <T> register(
+            entityType: RegistrySupplier<EntityType<T>>,
+            modelLocation: String = "geo/${entityType.id}.geo.json",
+            textureLocation: String = "textures/block/${entityType.id}.png",
+            animationFileLocation: String = "animations/${entityType.id}.animation.json",
+            modID: String = ExampleMod.MOD_ID,
+        ) where T : Entity {
+            geckoList.add(Pair(GeckoType.Entity,
+                arrayOf(entityType, modID, modelLocation, textureLocation, animationFileLocation)))
+        }
+    }
+
     /**
      * Gets a platform dependent (forge) Gecko Supplier
      *
@@ -203,6 +218,7 @@ object GeckoUtils {
     enum class GeckoType {
         Item,
         Armor,
-        Block
+        Block,
+        Entity
     }
 }
