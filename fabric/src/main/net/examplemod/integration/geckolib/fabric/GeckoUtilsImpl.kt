@@ -40,37 +40,29 @@ object GeckoUtilsImpl {
         fun registerAll() {
             for (i in GeckoUtils.geckoList) {
                 when (i.first) {
-                    GeckoUtils.GeckoType.Item -> registerItemRenderer(
-                        @Suppress("UNCHECKED_CAST") (i.second[0] as RegistrySupplier<Item>),
-                        modID = i.second[1] as String,
-                        modelLocation = i.second[2] as String,
-                        textureLocation = i.second[3] as String,
-                        animationFileLocation = i.second[4] as String)
-                    GeckoUtils.GeckoType.Armor -> registerArmorRender(i.second)
+                    GeckoUtils.GeckoType.Item -> registerItemRenderer(i.second)
+                    GeckoUtils.GeckoType.Armor -> registerArmorRenderer(i.second)
+                    else -> continue
                 }
             }
             GeckoUtils.geckoList.clear()
         }
 
-        private fun registerItemRenderer(
-            item: RegistrySupplier<Item>,
-            modID: String,
-            modelLocation: String,
-            textureLocation: String,
-            animationFileLocation: String,
-        ): Unit = GeoItemRenderer.registerItemRenderer(
-            item.get(),
-            GenericItemRendererImpl(
-                GeckoUtils.GenericModel(
-                    modID,
-                    modelLocation,
-                    textureLocation,
-                    animationFileLocation
+        private fun registerItemRenderer(i: Array<Any>) {
+            GeoItemRenderer.registerItemRenderer(
+                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<Item>).get(),
+                GenericItemRendererImpl(
+                    GeckoUtils.GenericModel(
+                        modID = i[1] as String,
+                        modelLocation = i[2] as String,
+                        textureLocation = i[3] as String,
+                        animationFileLocation = i[4] as String
+                    )
                 )
             )
-        )
+        }
 
-        private fun registerArmorRender(i: Array<Any>) {
+        private fun registerArmorRenderer(i: Array<Any>) {
             GeoArmorRenderer.registerArmorRenderer(
                 @Suppress("UNCHECKED_CAST") ((i[0] as RegistrySupplier<Item>).get() as ArmorItem).javaClass,
                 GenericArmorRendererImpl(
