@@ -11,7 +11,7 @@ import net.examplemod.integration.geckolib.JackInTheBoxItem2
 import net.examplemod.integration.geckolib.PotatoArmor2
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
-import net.examplemod.registry.Util
+import net.examplemod.registry.EntityAttributeLink
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -34,10 +34,7 @@ object ModRegistry {
         Register.blockRegister.register()
         Register.blockEntityTypeRegister.register()
         Register.itemRegister.register()
-
-        for (i in Register.attributeList){
-            Util.linkEntityAttributes(i.entityType, i.builder)
-        }
+        EntityAttributeLink.register()
     }
 
     /** Initializes the dev content */
@@ -164,17 +161,17 @@ object ModRegistry {
             return entityAttributeRegister.register(entityAttributeId, entityAttribute)
         }
 
-        data class AttributeListItem(
-            var entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
-            var builder: Supplier<DefaultAttributeContainer.Builder>,
-        )
-
-        var attributeList: MutableList<AttributeListItem> = mutableListOf()
-        fun <T> linkEntityAttributes(
-            entity: RegistrySupplier<EntityType<T>>,
-            entityAttributes: Supplier<DefaultAttributeContainer.Builder>,
-        ): Unit where T : LivingEntity {
-            attributeList.add(AttributeListItem(entity, entityAttributes))
+        /**
+         * Links an EntityType with the EntityAttributes
+         *
+         * @param entityType Entity Type
+         * @param entityAttributeBuilder The Attribute builder
+         */
+        fun <T> entityAttributeLink(
+            entityType: RegistrySupplier<EntityType<T>>,
+            entityAttributeBuilder: Supplier<DefaultAttributeContainer.Builder>,
+        ) where T : LivingEntity {
+            EntityAttributeLink.register(entityType, entityAttributeBuilder)
         }
     }
 
@@ -228,7 +225,7 @@ object ModRegistry {
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
                     "animations/jack.animation.json")
-                Register.linkEntityAttributes(GeoExampleEntity2.type!!) {GeoExampleEntity2.createAttributes()}
+                Register.entityAttributeLink(GeoExampleEntity2.type!!) { GeoExampleEntity2.createAttributes() }
             }
         }
     }

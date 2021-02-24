@@ -4,14 +4,11 @@ import me.shedaniel.architectury.platform.forge.EventBuses
 import net.examplemod.ExampleMod
 import net.examplemod.ExampleMod.init
 import net.examplemod.integration.geckolib.forge.GeckoUtilsImpl
-import net.examplemod.registry.forge.UtilImpl
-import net.minecraft.entity.attribute.DefaultAttributeRegistry
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext.Companion.get as KotlinModLoadingContext
 
 @Mod(ExampleMod.MOD_ID)
@@ -30,15 +27,6 @@ object ExampleModForge {
         @SubscribeEvent
         fun registerRenderers(event: FMLClientSetupEvent) {
             GeckoUtilsImpl.registerAll()
-        }
-
-        @SubscribeEvent
-        fun registerEntityAttributes(event: FMLCommonSetupEvent) {
-            event.enqueueWork {
-                for (i in UtilImpl.attributeList) {
-                    DefaultAttributeRegistry.put(i.entityType.get(), i.builder.get().build())
-                }
-            }
         }
     }
 }
