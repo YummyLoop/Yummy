@@ -9,8 +9,14 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 
 object EntityAttributeLinkImpl {
 
-    internal var iAttributeList: MutableList<EntityAttributeLink.AttributeListItem> = mutableListOf()
+    /** Private list of EntityAttributes links */
+    private var iAttributeList: MutableList<EntityAttributeLink.AttributeListItem> = mutableListOf()
 
+    /**
+     * Platform specific implementation of the link registry
+     *
+     * @param attributeList list of the links to register
+     */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     fun linkEntityAttributes(

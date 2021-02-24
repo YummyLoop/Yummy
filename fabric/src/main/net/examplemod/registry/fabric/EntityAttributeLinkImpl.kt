@@ -5,6 +5,11 @@ import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttribute
 
 object EntityAttributeLinkImpl {
 
+    /**
+     * Platform specific implementation of the link registry
+     *
+     * @param attributeList list of the links to register
+     */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     fun linkEntityAttributes(

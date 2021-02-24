@@ -141,10 +141,9 @@ object ModRegistry {
          */
         fun <T> entityType(
             entityTypeId: String,
-            entityTypeBuilder: EntityType.Builder<T>,
-            //entityTypeBuilder: Supplier<EntityType<T>>?
+            entityTypeBuilder: Supplier<EntityType.Builder<T>>,
         ): RegistrySupplier<EntityType<T>> where T : Entity {
-            return entityTypeRegister.register(entityTypeId) { entityTypeBuilder.build(entityTypeId) }
+            return entityTypeRegister.register(entityTypeId) { entityTypeBuilder.get().build(entityTypeId) }
         }
 
         /**
@@ -167,10 +166,10 @@ object ModRegistry {
          * @param entityType Entity Type
          * @param entityAttributeBuilder The Attribute builder
          */
-        fun <T> entityAttributeLink(
-            entityType: RegistrySupplier<EntityType<T>>,
+        fun entityAttributeLink(
+            entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
             entityAttributeBuilder: Supplier<DefaultAttributeContainer.Builder>,
-        ) where T : LivingEntity {
+        ) {
             EntityAttributeLink.register(entityType, entityAttributeBuilder)
         }
     }
@@ -219,8 +218,9 @@ object ModRegistry {
                     "animations/jack.animation.json")
 
                 // Entity
-                GeoExampleEntity2.type =
-                    Register.entityType("geo_ex", EntityType.Builder.create(::GeoExampleEntity2, SpawnGroup.CREATURE))
+                GeoExampleEntity2.type = Register.entityType("geo_ex") {
+                    EntityType.Builder.create(::GeoExampleEntity2, SpawnGroup.CREATURE)
+                }
                 GeckoUtils.Entities.register(GeoExampleEntity2.type!!,
                     "geo/jack.geo.json",
                     "textures/item/jack.png",

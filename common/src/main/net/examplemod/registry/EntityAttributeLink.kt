@@ -14,19 +14,34 @@ object EntityAttributeLink {
         var builder: Supplier<DefaultAttributeContainer.Builder>,
     )
 
+    /** Private list of EntityAttributes links */
     private var attributeList: MutableList<AttributeListItem> = mutableListOf()
 
+    /**
+     * Send all the links currently received to the Expected Platform (fabric/forge) to be registered
+     */
     fun register() {
         linkEntityAttributes(attributeList)
     }
 
-    fun <T> register(
-        entity: RegistrySupplier<EntityType<T>>,
-        entityAttributes: Supplier<DefaultAttributeContainer.Builder>,
-    ) where T : LivingEntity {
-        attributeList.add(AttributeListItem(entity, entityAttributes))
+    /**
+     * Register a EntityAttributes link
+     *
+     * @param entityType EntityType to link
+     * @param entityAttributesBuilder EntityAttributes Builder to link
+     */
+    fun register(
+        entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
+        entityAttributesBuilder: Supplier<DefaultAttributeContainer.Builder>,
+    ) {
+        attributeList.add(AttributeListItem(entityType, entityAttributesBuilder))
     }
 
+    /**
+     * Platform specific implementation of the link registry
+     *
+     * @param attributeList list of the links to register
+     */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
