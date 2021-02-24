@@ -1,8 +1,6 @@
 package net.examplemod.integration.geckolib
 
 import me.shedaniel.architectury.registry.RegistrySupplier
-import net.minecraft.block.entity.BlockEntity
-import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
@@ -23,7 +21,13 @@ class GeoExampleEntity2(
 ) : PathAwareEntity(itype, worldIn), IAnimatable {
     companion object {
         var type: RegistrySupplier<EntityType<PathAwareEntity>>? = null
+
+        fun createAttributes(): DefaultAttributeContainer.Builder {
+            return createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)
+                .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
+        }
     }
+
     private val animationFactory = AnimationFactory(this)
     override fun getFactory(): AnimationFactory = this.animationFactory
 
@@ -44,11 +48,6 @@ class GeoExampleEntity2(
                 animationPredicate
             )
         )
-    }
-
-    fun createAttributes(): DefaultAttributeContainer.Builder? {
-        return createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 10.0)
-            .add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.25)
     }
 
     init {

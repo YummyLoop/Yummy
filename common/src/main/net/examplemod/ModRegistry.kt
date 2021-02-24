@@ -11,14 +11,12 @@ import net.examplemod.integration.geckolib.JackInTheBoxItem2
 import net.examplemod.integration.geckolib.PotatoArmor2
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
+import net.examplemod.registry.Util
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.entity.Entity
-import net.minecraft.entity.EntityType
-import net.minecraft.entity.EquipmentSlot
-import net.minecraft.entity.SpawnGroup
-import net.minecraft.entity.attribute.DefaultAttributeRegistry
+import net.minecraft.entity.*
+import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
@@ -36,6 +34,10 @@ object ModRegistry {
         Register.blockRegister.register()
         Register.blockEntityTypeRegister.register()
         Register.itemRegister.register()
+
+        for (i in Register.attributeList){
+            Util.linkEntityAttributes(i.entityType, i.builder)
+        }
     }
 
     /** Initializes the dev content */
@@ -161,6 +163,19 @@ object ModRegistry {
         ): RegistrySupplier<T> where T : EntityAttribute {
             return entityAttributeRegister.register(entityAttributeId, entityAttribute)
         }
+
+        data class AttributeListItem(
+            var entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
+            var builder: Supplier<DefaultAttributeContainer.Builder>,
+        )
+
+        var attributeList: MutableList<AttributeListItem> = mutableListOf()
+        fun <T> linkEntityAttributes(
+            entity: RegistrySupplier<EntityType<T>>,
+            entityAttributes: Supplier<DefaultAttributeContainer.Builder>,
+        ): Unit where T : LivingEntity {
+            attributeList.add(AttributeListItem(entity, entityAttributes))
+        }
     }
 
     object Content {
@@ -213,7 +228,7 @@ object ModRegistry {
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
                     "animations/jack.animation.json")
-
+                Register.linkEntityAttributes(GeoExampleEntity2.type!!) {GeoExampleEntity2.createAttributes()}
             }
         }
     }

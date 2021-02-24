@@ -9,7 +9,7 @@ import software.bernie.geckolib3.GeckoLib
 
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
-    internal val log: Logger = LogManager.getLogger("Yummy")
+    val log: Logger = LogManager.getLogger("Yummy")
     val modConfig = AutoConfig()
 
     fun init() {
