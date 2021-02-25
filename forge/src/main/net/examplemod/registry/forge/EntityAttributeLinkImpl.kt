@@ -2,10 +2,9 @@ package net.examplemod.registry.forge
 
 import net.examplemod.ExampleMod
 import net.examplemod.registry.EntityAttributeLink
-import net.minecraft.entity.attribute.DefaultAttributeRegistry
+import net.minecraftforge.event.entity.EntityAttributeCreationEvent
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent
 
 object EntityAttributeLinkImpl {
 
@@ -28,11 +27,9 @@ object EntityAttributeLinkImpl {
     @Mod.EventBusSubscriber(modid = ExampleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
     object EntityAttributes {
         @SubscribeEvent
-        fun registerEntityAttributes(event: FMLCommonSetupEvent) {
-            event.enqueueWork {
-                for (i in iAttributeList) {
-                    DefaultAttributeRegistry.put(i.entityType.get(), i.builder.get().build())
-                }
+        fun registerEntityAttributes(event: EntityAttributeCreationEvent) {
+            for (i in iAttributeList) {
+                event.put(i.entityType.get(), i.builder.get().build())
             }
         }
     }
