@@ -2,8 +2,8 @@ package net.examplemod.integration.geckolib.fabric
 
 import me.shedaniel.architectury.registry.BlockEntityRenderers
 import me.shedaniel.architectury.registry.RegistrySupplier
+import me.shedaniel.architectury.registry.entity.EntityRenderers
 import net.examplemod.integration.geckolib.GeckoUtils
-import net.fabricmc.fabric.api.client.rendereregistry.v1.EntityRendererRegistry
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.render.block.entity.BlockEntityRenderDispatcher
@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
+import net.minecraft.world.World
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
@@ -119,11 +120,14 @@ internal object GeckoUtilsImpl {
             }
         }
 
+        private abstract class GeckoEntity(type: EntityType<out LivingEntity>?, worldIn: World?) :
+            LivingEntity(type, worldIn), IAnimatable
+
         fun registerEntityRenderer(i: Array<Any>) {
-            EntityRendererRegistry.INSTANCE.register(
-                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<LivingEntity>>).get()
-            ) { entityRenderDispatcher: EntityRenderDispatcher, context: EntityRendererRegistry.Context ->
-                GenericEntityRenderImpl(entityRenderDispatcher,
+            EntityRenderers.register(
+                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<GeckoEntity>>).get()
+            ) {
+                GenericEntityRenderImpl(it,
                     GeckoUtils.GenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,

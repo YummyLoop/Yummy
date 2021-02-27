@@ -2,6 +2,7 @@ package net.examplemod.integration.geckolib.forge
 
 import me.shedaniel.architectury.registry.BlockEntityRenderers
 import me.shedaniel.architectury.registry.RegistrySupplier
+import me.shedaniel.architectury.registry.entity.EntityRenderers
 import net.examplemod.integration.geckolib.GeckoUtils
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -13,7 +14,6 @@ import net.minecraft.item.ArmorItem
 import net.minecraft.item.Item
 import net.minecraft.util.Identifier
 import net.minecraft.world.World
-import net.minecraftforge.fml.client.registry.RenderingRegistry
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
@@ -113,11 +113,12 @@ internal object GeckoUtilsImpl {
             }
         }
 
-        private abstract class GeckoEntity(type: EntityType<out LivingEntity>?, worldIn: World?) : LivingEntity(type, worldIn), IAnimatable
+        private abstract class GeckoEntity(type: EntityType<out LivingEntity>?, worldIn: World?) :
+            LivingEntity(type, worldIn), IAnimatable
 
         fun registerEntityRenderer(i: Array<Any>) {
-            RenderingRegistry.registerEntityRenderingHandler(
-                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<GeckoEntity>> ).get()
+            EntityRenderers.register(
+                @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<GeckoEntity>>).get()
             ) {
                 GenericEntityRenderImpl(it,
                     GeckoUtils.GenericModel(
