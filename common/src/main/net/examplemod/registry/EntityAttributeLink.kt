@@ -20,7 +20,7 @@ object EntityAttributeLink {
     /**
      * Send all the links currently received to the Expected Platform (fabric/forge) to be registered
      */
-    fun register() {
+    internal fun register() {
         linkEntityAttributes(attributeList)
     }
 
@@ -30,7 +30,7 @@ object EntityAttributeLink {
      * @param entityType EntityType to link
      * @param entityAttributesBuilder EntityAttributes Builder to link
      */
-    fun register(
+    internal fun register(
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
         entityAttributesBuilder: Supplier<DefaultAttributeContainer.Builder>,
     ) {

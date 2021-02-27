@@ -3,7 +3,7 @@ package net.examplemod.integration.geckolib
 import me.shedaniel.architectury.annotations.ExpectPlatform
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
-import net.examplemod.ModRegistry
+import net.examplemod.registry.Register
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
@@ -63,7 +63,7 @@ object GeckoUtils {
             animationFileLocation: String = "animations/$itemID.animation.json",
             modID: String = ExampleMod.MOD_ID,
         ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
-            val myItem = ModRegistry.Register.item(
+            val myItem = Register.item(
                 itemID,
                 geckoItemSupplier(itemFunc, itemSettings, modID, modelLocation, textureLocation, animationFileLocation))
             geckoList.add(Pair(GeckoType.Item,
@@ -157,10 +157,10 @@ object GeckoUtils {
             modID: String = ExampleMod.MOD_ID,
         ): MutableList<RegistrySupplier<Item>> where T : GeoArmorItem {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
-            myList.add(ModRegistry.Register.item(itemID + item0.first, item0.second))
-            if (item1 != null) myList.add(ModRegistry.Register.item(itemID + item1.first, item1.second))
-            if (item2 != null) myList.add(ModRegistry.Register.item(itemID + item2.first, item2.second))
-            if (item3 != null) myList.add(ModRegistry.Register.item(itemID + item3.first, item3.second))
+            myList.add(Register.item(itemID + item0.first, item0.second))
+            if (item1 != null) myList.add(Register.item(itemID + item1.first, item1.second))
+            if (item2 != null) myList.add(Register.item(itemID + item2.first, item2.second))
+            if (item3 != null) myList.add(Register.item(itemID + item3.first, item3.second))
             geckoList.add(Pair(GeckoType.Armor,
                 arrayOf(myList.first(), modID, modelLocation, textureLocation, animationFileLocation)))
             return myList
