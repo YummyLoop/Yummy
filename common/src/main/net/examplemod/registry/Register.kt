@@ -1,15 +1,21 @@
 package net.examplemod.registry
 
+import me.shedaniel.architectury.platform.Platform
 import me.shedaniel.architectury.registry.BlockProperties
 import me.shedaniel.architectury.registry.DeferredRegister
+import me.shedaniel.architectury.registry.MenuRegistry
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
 import net.examplemod.ModContent
 import net.examplemod.items.Ytem
+import net.fabricmc.api.EnvType
+import net.fabricmc.api.Environment
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -17,6 +23,8 @@ import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
 
@@ -54,6 +62,10 @@ object Register {
     /** Item register */
     private val itemRegister: DeferredRegister<Item> =
         DeferredRegister.create(modId, Registry.ITEM_KEY)
+
+    /** Menu register */
+    private val screenHandlerTypeRegister: DeferredRegister<ScreenHandlerType<*>> =
+        DeferredRegister.create(modId, Registry.MENU_KEY)
 
     // We can use this if we don't want to use DeferredRegister
     // val REGISTRIES by lazyOf(Registries.get(ExampleMod.MOD_ID))
@@ -162,5 +174,60 @@ object Register {
         entityAttributeBuilder: Supplier<DefaultAttributeContainer.Builder>,
     ) {
         EntityAttributeLink.register(entityType, entityAttributeBuilder)
+    }
+
+    /**
+     * Registers a ScreenHandlerType
+     *
+     * @param screenHandlerTypeId Id of the ScreenHandlerType
+     * @param factory The factory of the ScreenHandlerType
+     */
+    fun <T> screenHandlerType(
+        screenHandlerTypeId: String,
+        factory: Supplier<ScreenHandlerType<T>>,
+    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+        return screenHandlerTypeRegister.register(screenHandlerTypeId, factory)
+    }
+
+    /**
+     * Registers a Simple ScreenHandlerType
+     *
+     * @param screenHandlerTypeId Id of the ScreenHandlerType
+     * @param factory The factory of the ScreenHandlerType
+     */
+    fun <T> screenHandlerTypeSimple(
+        screenHandlerTypeId: String,
+        factory: MenuRegistry.SimpleMenuTypeFactory<T>
+    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+        return screenHandlerType(screenHandlerTypeId) {MenuRegistry.of(factory)}
+    }
+
+    /**
+     * Registers an Extended ScreenHandlerType
+     *
+     * @param screenHandlerTypeId Id of the ScreenHandlerType
+     * @param factory The factory of the ScreenHandlerType
+     */
+    fun <T> screenHandlerTypeExtended(
+        screenHandlerTypeId: String,
+        factory: MenuRegistry.ExtendedMenuTypeFactory<T>
+    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+        return screenHandlerType(screenHandlerTypeId) {MenuRegistry.ofExtended(factory)}
+    }
+
+    object Client {
+        private val isClient: Boolean by lazy { Platform.getEnv() == EnvType.CLIENT }
+        private val list1: MutableList<Supplier<Any>> = mutableListOf()
+
+        @Environment(EnvType.CLIENT)
+        fun register() {
+            list1.forEach { it.get() }
+            list1.clear()
+        }
+
+        fun <H, S> screen(type: ScreenHandlerType<H>, factory: MenuRegistry.ScreenFactory<H, S>)
+                where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+            list1.add(Supplier { MenuRegistry.registerScreenFactory(type, factory) })
+        }
     }
 }

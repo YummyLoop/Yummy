@@ -4,6 +4,7 @@ import me.shedaniel.architectury.platform.forge.EventBuses
 import net.examplemod.ExampleMod
 import net.examplemod.ExampleMod.init
 import net.examplemod.integration.geckolib.forge.GeckoUtilsImpl
+import net.examplemod.registry.Register
 import net.minecraftforge.api.distmarker.Dist
 import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraftforge.eventbus.api.SubscribeEvent
@@ -25,8 +26,9 @@ object ExampleModForge {
         @Suppress("UNUSED_PARAMETER")
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
-        fun registerRenderers(event: FMLClientSetupEvent) {
+        fun clientSetup(event: FMLClientSetupEvent) {
             GeckoUtilsImpl.registerAll()
+            Register.Client.register()
         }
     }
 }
