@@ -21,12 +21,15 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.text.Text
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
+import kotlin.reflect.KFunction3
 
 /** Contains the declared registers, and the functions to register new content */
 object Register {
@@ -41,6 +44,7 @@ object Register {
         blockEntityTypeRegister.register()
         itemRegister.register()
         EntityAttributeLink.register()
+        screenHandlerTypeRegister.register()
     }
 
     /** Block register */
@@ -197,9 +201,9 @@ object Register {
      */
     fun <T> screenHandlerTypeSimple(
         screenHandlerTypeId: String,
-        factory: MenuRegistry.SimpleMenuTypeFactory<T>
+        factory: MenuRegistry.SimpleMenuTypeFactory<T>,
     ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
-        return screenHandlerType(screenHandlerTypeId) {MenuRegistry.of(factory)}
+        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.of(factory) }
     }
 
     /**
@@ -210,24 +214,40 @@ object Register {
      */
     fun <T> screenHandlerTypeExtended(
         screenHandlerTypeId: String,
-        factory: MenuRegistry.ExtendedMenuTypeFactory<T>
+        factory: MenuRegistry.ExtendedMenuTypeFactory<T>,
     ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
-        return screenHandlerType(screenHandlerTypeId) {MenuRegistry.ofExtended(factory)}
+        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(factory) }
     }
 
     object Client {
         private val isClient: Boolean by lazy { Platform.getEnv() == EnvType.CLIENT }
-        private val list1: MutableList<Supplier<Any>> = mutableListOf()
+        private val lateCallList: MutableList<Supplier<Any>> = mutableListOf()
 
         @Environment(EnvType.CLIENT)
         fun register() {
-            list1.forEach { it.get() }
-            list1.clear()
+            lateCallList.forEach { it.get() }
+            lateCallList.clear()
         }
 
-        fun <H, S> screen(type: ScreenHandlerType<H>, factory: MenuRegistry.ScreenFactory<H, S>)
-                where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-            list1.add(Supplier { MenuRegistry.registerScreenFactory(type, factory) })
+        fun <H, S> screen(
+            screenHandlerType: RegistrySupplier<ScreenHandlerType<H>>,
+            screenFactory: Supplier<*>,
+        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+            if (isClient) lateCallList.add(Supplier {
+                try {//it works with Supplier<KFunction3<H, PlayerInventory, Text, S>>
+                    MenuRegistry.registerScreenFactory(
+                        screenHandlerType.get(),
+                        @Suppress("UNCHECKED_CAST") (screenFactory as Supplier<KFunction3<H, PlayerInventory, Text, S>>).get())
+                } catch (e: Exception) {
+                    try {//but the factory should be ? Supplier<MenuRegistry.ScreenFactory<H, S>>
+                        MenuRegistry.registerScreenFactory(
+                            screenHandlerType.get(),
+                            @Suppress("UNCHECKED_CAST") (screenFactory as Supplier<MenuRegistry.ScreenFactory<H, S>>).get())
+                    } catch (e: Exception) {
+                        throw e
+                    }
+                }
+            })
         }
     }
 }
