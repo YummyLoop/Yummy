@@ -1,6 +1,8 @@
 package net.examplemod
 
 import me.shedaniel.architectury.registry.BlockProperties
+import net.examplemod.block.BoxScreen
+import net.examplemod.block.BoxScreenHandler
 import net.examplemod.block.TestBlockEntity
 import net.examplemod.block.TestBlockWithEntity
 import net.examplemod.integration.geckolib.GeckoUtils
@@ -81,6 +83,12 @@ object ModContent {
                 "textures/item/jack.png",
                 "animations/jack.animation.json")
             Register.entityAttributeLink(GeoExampleEntity2.type!!) { GeoExampleEntity2.createAttributes() }
+
+
+            // Screen stuff
+            BoxScreenHandler.type =
+                Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
+            Register.Client.screen(BoxScreenHandler.type!!, Supplier { ::BoxScreen })
         }
     }
 }
