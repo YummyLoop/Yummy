@@ -1,4 +1,4 @@
-package net.examplemod.integration.geckolib
+package net.examplemod.integration.geckolib.test
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.entity.EntityType

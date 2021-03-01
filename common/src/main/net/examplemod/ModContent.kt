@@ -1,14 +1,14 @@
 package net.examplemod
 
 import me.shedaniel.architectury.registry.BlockProperties
-import net.examplemod.block.BoxScreen
-import net.examplemod.block.BoxScreenHandler
-import net.examplemod.block.TestBlockEntity
-import net.examplemod.block.TestBlockWithEntity
+import net.examplemod.block.test.BoxScreen
+import net.examplemod.block.test.BoxScreenHandler
+import net.examplemod.block.test.TestBlockEntity
+import net.examplemod.block.test.TestBlockWithEntity
 import net.examplemod.integration.geckolib.GeckoUtils
-import net.examplemod.integration.geckolib.GeoExampleEntity2
-import net.examplemod.integration.geckolib.JackInTheBoxItem2
-import net.examplemod.integration.geckolib.PotatoArmor2
+import net.examplemod.integration.geckolib.test.GeoExampleEntity2
+import net.examplemod.integration.geckolib.test.JackInTheBoxItem2
+import net.examplemod.integration.geckolib.test.PotatoArmor2
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
 import net.examplemod.registry.Register

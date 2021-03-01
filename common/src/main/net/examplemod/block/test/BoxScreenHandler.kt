@@ -1,4 +1,4 @@
-package net.examplemod.block
+package net.examplemod.block.test
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.entity.player.PlayerEntity

@@ -1,4 +1,4 @@
-package net.examplemod.integration.geckolib
+package net.examplemod.integration.geckolib.test
 
 import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable

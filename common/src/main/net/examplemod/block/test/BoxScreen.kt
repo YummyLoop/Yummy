@@ -1,4 +1,4 @@
-package net.examplemod.block
+package net.examplemod.block.test
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.ingame.HandledScreen

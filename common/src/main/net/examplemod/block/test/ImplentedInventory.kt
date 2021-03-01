@@ -1,4 +1,4 @@
-package net.examplemod.block
+package net.examplemod.block.test
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories

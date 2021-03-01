@@ -1,4 +1,4 @@
-package net.examplemod.integration.geckolib
+package net.examplemod.integration.geckolib.test
 
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterial
