@@ -1,5 +1,7 @@
 package net.examplemod
 
+import me.shedaniel.architectury.event.events.GuiEvent
+import me.shedaniel.architectury.event.events.PlayerEvent
 import me.shedaniel.architectury.registry.BlockProperties
 import net.examplemod.block.test.BoxScreen
 import net.examplemod.block.test.BoxScreenHandler
@@ -19,6 +21,7 @@ import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
+import net.minecraft.util.ActionResult
 import java.util.function.Supplier
 
 object ModContent {
@@ -88,7 +91,19 @@ object ModContent {
             // Screen stuff
             BoxScreenHandler.type =
                 Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-            Register.Client.screen(BoxScreenHandler.type!!, Supplier { ::BoxScreen })
+            Register.Client { Register.Client.screen(BoxScreenHandler.type!!.get(), ::BoxScreen) }
+
+            // Event
+            PlayerEvent.OPEN_MENU.register { player, menu ->
+                LOG.info("This is message from a Player open menu event")
+            }
+            Register.Client {
+                GuiEvent.INIT_PRE.register { screen, widgets, children ->
+                    LOG.info("This is message from a GUI init pre event")
+                    return@register ActionResult.SUCCESS
+                }
+            }
+
         }
     }
 }

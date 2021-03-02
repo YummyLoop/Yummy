@@ -17,7 +17,7 @@ class BoxScreenHandler(
     var inventory: Inventory,
 ) : ScreenHandler(type?.get(), syncId) {
     companion object {
-        var type: RegistrySupplier<ScreenHandlerType<ScreenHandler>>? = null
+        var type: RegistrySupplier<ScreenHandlerType<out ScreenHandler>?>? = null
     }
 
     //This constructor gets called on the client when the server wants it to open the screenHandler,

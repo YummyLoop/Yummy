@@ -8,9 +8,10 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import software.bernie.geckolib3.GeckoLib
 
+val LOG: Logger = LogManager.getLogger("Yummy")
+
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
-    val log: Logger = LogManager.getLogger("Yummy")
     val modConfig = AutoConfig()
 
     fun init() {
@@ -20,15 +21,15 @@ object ExampleMod {
     }
 
     private fun dev() {
-        log.info("**************************")
-        log.info("     YummY says hello!    ")
-        log.info("**************************")
+        LOG.info("**************************")
+        LOG.info("     YummY says hello!    ")
+        LOG.info("**************************")
         //log.error("logger error")
         //log.warn("logger warn")
         //log.fatal("logger fatal")
 
         if (Platform.getEnv() == EnvType.CLIENT) {
-            log.info("Its client")
+            LOG.info("Its client")
         }
 
         ModContent.Dev

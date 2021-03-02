@@ -21,15 +21,12 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
-import net.minecraft.text.Text
 import net.minecraft.util.registry.Registry
 import java.util.function.Supplier
-import kotlin.reflect.KFunction3
 
 /** Contains the declared registers, and the functions to register new content */
 object Register {
@@ -189,7 +186,7 @@ object Register {
     fun <T> screenHandlerType(
         screenHandlerTypeId: String,
         factory: Supplier<ScreenHandlerType<T>>,
-    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
         return screenHandlerTypeRegister.register(screenHandlerTypeId, factory)
     }
 
@@ -202,7 +199,7 @@ object Register {
     fun <T> screenHandlerTypeSimple(
         screenHandlerTypeId: String,
         factory: MenuRegistry.SimpleMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
         return screenHandlerType(screenHandlerTypeId) { MenuRegistry.of(factory) }
     }
 
@@ -215,7 +212,7 @@ object Register {
     fun <T> screenHandlerTypeExtended(
         screenHandlerTypeId: String,
         factory: MenuRegistry.ExtendedMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<T>> where T : ScreenHandler {
+    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
         return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(factory) }
     }
 
@@ -233,25 +230,12 @@ object Register {
             if (isClient) lateCallList.add(s)
         }
 
+        @Environment(EnvType.CLIENT)
         fun <H, S> screen(
-            screenHandlerType: RegistrySupplier<ScreenHandlerType<H>>,
-            screenFactory: Supplier<Any>,
-        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-            Client {
-                try {//it works with Supplier<KFunction3<H, PlayerInventory, Text, S>>
-                    MenuRegistry.registerScreenFactory(
-                        screenHandlerType.get(),
-                        @Suppress("UNCHECKED_CAST") (screenFactory as Supplier<KFunction3<H, PlayerInventory, Text, S>>).get())
-                } catch (e: Exception) {
-                    try {//but the factory should be ? Supplier<MenuRegistry.ScreenFactory<H, S>>
-                        MenuRegistry.registerScreenFactory(
-                            screenHandlerType.get(),
-                            @Suppress("UNCHECKED_CAST") (screenFactory as Supplier<MenuRegistry.ScreenFactory<H, S>>).get())
-                    } catch (e: Exception) {
-                        throw e
-                    }
-                }
-            }
+            type: ScreenHandlerType<out H>?,
+            factory: MenuRegistry.ScreenFactory<H, S>?,
+        ) where H : ScreenHandler?, S : Screen?, S : ScreenHandlerProvider<H>? {
+            MenuRegistry.registerScreenFactory(type, factory)
         }
     }
 }

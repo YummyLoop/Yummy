@@ -1,7 +1,7 @@
 package net.examplemod.block.test
 
 import me.shedaniel.architectury.registry.RegistrySupplier
-import net.examplemod.ExampleMod
+import net.examplemod.LOG
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
@@ -32,7 +32,7 @@ class TestBlockEntity : BlockEntity(type?.get()), IAnimatable, NamedScreenHandle
     override fun getFactory(): AnimationFactory = this.animationFactory
 
     init {
-        ExampleMod.log.info("Calling from TestBlockEntity")
+        LOG.info("Calling from TestBlockEntity")
 
     }
 
