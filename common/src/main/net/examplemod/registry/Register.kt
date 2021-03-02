@@ -229,11 +229,15 @@ object Register {
             lateCallList.clear()
         }
 
+        operator fun invoke(s: Supplier<Any>) {
+            if (isClient) lateCallList.add(s)
+        }
+
         fun <H, S> screen(
             screenHandlerType: RegistrySupplier<ScreenHandlerType<H>>,
-            screenFactory: Supplier<*>,
+            screenFactory: Supplier<Any>,
         ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-            if (isClient) lateCallList.add(Supplier {
+            Client {
                 try {//it works with Supplier<KFunction3<H, PlayerInventory, Text, S>>
                     MenuRegistry.registerScreenFactory(
                         screenHandlerType.get(),
@@ -247,7 +251,7 @@ object Register {
                         throw e
                     }
                 }
-            })
+            }
         }
     }
 }
