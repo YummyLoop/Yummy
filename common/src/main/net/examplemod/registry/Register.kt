@@ -125,8 +125,8 @@ object Register {
      */
     fun <T> blockEntityType(
         blockEntityTypeId: String,
-        blockEntityTypeSupplier: Supplier<T>,
         vararg blocks: RegistrySupplier<Block>,
+        blockEntityTypeSupplier: Supplier<T>,
     ): RegistrySupplier<BlockEntityType<T>> where T : BlockEntity {
         return blockEntityTypeRegister.register(blockEntityTypeId) {
             BlockEntityType.Builder.create(
@@ -185,7 +185,7 @@ object Register {
      */
     fun <T> screenHandlerType(
         screenHandlerTypeId: String,
-        factory: Supplier<ScreenHandlerType<T>>,
+        factory: Supplier<ScreenHandlerType<out T>?>,
     ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
         return screenHandlerTypeRegister.register(screenHandlerTypeId, factory)
     }

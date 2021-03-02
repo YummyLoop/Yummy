@@ -184,7 +184,7 @@ object GeckoUtils {
         fun <T> register(
             entityType: RegistrySupplier<EntityType<T>>,
             modelLocation: String = "geo/${entityType.id}.geo.json",
-            textureLocation: String = "textures/block/${entityType.id}.png",
+            textureLocation: String = "textures/model/${entityType.id}.png",
             animationFileLocation: String = "animations/${entityType.id}.animation.json",
             modID: String = ExampleMod.MOD_ID,
         ) where T : Entity {

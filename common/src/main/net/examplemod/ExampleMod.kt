@@ -8,7 +8,7 @@ import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import software.bernie.geckolib3.GeckoLib
 
-val LOG: Logger = LogManager.getLogger("Yummy")
+internal val LOG: Logger = LogManager.getLogger("Yummy")
 
 object ExampleMod {
     const val MOD_ID = "yummy" // when changing this forge.toml needs to be changed too
