@@ -7,6 +7,7 @@ import net.examplemod.block.test.BoxScreen
 import net.examplemod.block.test.BoxScreenHandler
 import net.examplemod.block.test.TestBlockEntity
 import net.examplemod.block.test.TestBlockWithEntity
+import net.examplemod.client.gui.screen.addWidget
 import net.examplemod.integration.geckolib.GeckoUtils
 import net.examplemod.integration.geckolib.test.GeoExampleEntity2
 import net.examplemod.integration.geckolib.test.JackInTheBoxItem2
@@ -16,12 +17,16 @@ import net.examplemod.items.YtemGroup
 import net.examplemod.registry.Register
 import net.minecraft.block.Block
 import net.minecraft.block.Material
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.ingame.InventoryScreen
+import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
 import net.minecraft.util.ActionResult
+import net.minecraft.util.Identifier
 import java.util.function.Supplier
 
 object ModContent {
@@ -37,7 +42,28 @@ object ModContent {
         init {
             G2
             G3
-            E1
+            //E1
+            Register.Client {
+                val client = MinecraftClient.getInstance()
+                GuiEvent.INIT_POST.register { screen, widgets, children ->
+                    if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
+                        LOG.info("This is message from a GUI init post event")
+                        LOG.info(screen.javaClass.toGenericString())
+                        val button = TexturedButtonWidget(
+                            screen.width / 2 - 40,
+                            screen.height / 2 - 22,
+                            20,
+                            18,
+                            0,
+                            0,
+                            19,
+                            Identifier("minecraft", "textures/gui/recipe_button.png")) {
+                            LOG.info("A button was pressed!")
+                        }
+                        screen.addWidget(button)
+                    }
+                }
+            }
         }
 
         /** Events */
@@ -123,7 +149,6 @@ object ModContent {
                     "animations/jack.animation.json")
                 Register.entityAttributeLink(GeoExampleEntity2.type!!) { GeoExampleEntity2.createAttributes() }
             }
-
         }
     }
 }
