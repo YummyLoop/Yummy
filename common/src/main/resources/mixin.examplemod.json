@@ -3,10 +3,14 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "package": "net.examplemod.mixin",
+  "plugin": "net.examplemod.mixin.plugin.YummyMixinPlugin",
   "mixins": [
+    "common.PlayerScreenHandlerMixin",
+    "common.SlotMixin"
   ],
   "client": [
-    "ExampleMixin"
+    "client.ExampleMixin",
+    "client.InventoryScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

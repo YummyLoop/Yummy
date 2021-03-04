@@ -17,32 +17,26 @@ import net.examplemod.integration.geckolib.test.PotatoArmor2
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
 import net.examplemod.registry.Register
+import net.examplemod.test.event.Eve
 import net.examplemod.test.gui.Factory1
 import net.examplemod.test.gui.Screen1
 import net.examplemod.test.gui.ScreenHandler1
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.gui.Element
-import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
-import net.minecraft.client.gui.widget.AbstractButtonWidget
 import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
-import net.minecraft.item.Items
 import net.minecraft.network.PacketByteBuf
-import net.minecraft.screen.slot.Slot
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
-import net.minecraft.util.TypedActionResult
 import java.util.function.Supplier
 
 object ModContent {
@@ -60,6 +54,13 @@ object ModContent {
             G3
             //E1
 
+            Eve.PLAYER_SCREEN_HANDLER_POST.register { playerInventory, onServer, playerEntity ->
+                val inv = SimpleInventory(2);
+
+                for (i in 0..1) {
+                    //addSlot()
+                }
+            }
         }
 
         /** Button */
@@ -98,9 +99,9 @@ object ModContent {
                 NetworkManager.registerReceiver(
                     NetworkManager.Side.C2S,
                     Identifier("yummy", "packet")
-                ){ packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+                ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
                     val player: PlayerEntity = packetContext.player
-                    if (player is ServerPlayerEntity){
+                    if (player is ServerPlayerEntity) {
                         player.openHandledScreen(Factory1())
                     }
                 }

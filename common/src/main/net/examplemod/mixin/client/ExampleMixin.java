@@ -1,4 +1,4 @@
-package net.examplemod.mixin;
+package net.examplemod.mixin.client;
 
 import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;

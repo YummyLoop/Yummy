@@ -10,7 +10,7 @@ import net.minecraft.util.Rarity
 import net.minecraft.world.World
 import net.minecraft.item.Item as VanillaItem
 
-class Ytem(settings: VanillaItem.Settings = Settings()) : VanillaItem(settings) {
+open class Ytem(settings: VanillaItem.Settings = Settings()) : VanillaItem(settings) {
 
     private val tooltip by lazy { ArrayList<Text>() }
     fun addTooltip(tooltip: String) = this.tooltip.add(TranslatableText(tooltip))
