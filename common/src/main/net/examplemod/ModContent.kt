@@ -1,7 +1,9 @@
 package net.examplemod
 
+import io.netty.buffer.Unpooled
 import me.shedaniel.architectury.event.events.GuiEvent
 import me.shedaniel.architectury.event.events.PlayerEvent
+import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.registry.BlockProperties
 import net.examplemod.block.test.BoxScreen
 import net.examplemod.block.test.BoxScreenHandler
@@ -15,18 +17,32 @@ import net.examplemod.integration.geckolib.test.PotatoArmor2
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
 import net.examplemod.registry.Register
+import net.examplemod.test.gui.Factory1
+import net.examplemod.test.gui.Screen1
+import net.examplemod.test.gui.ScreenHandler1
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.Element
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
+import net.minecraft.client.gui.widget.AbstractButtonWidget
 import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
+import net.minecraft.item.Items
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.slot.Slot
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
+import net.minecraft.util.TypedActionResult
 import java.util.function.Supplier
 
 object ModContent {
@@ -43,24 +59,61 @@ object ModContent {
             G2
             G3
             //E1
-            Register.Client {
-                val client = MinecraftClient.getInstance()
-                GuiEvent.INIT_POST.register { screen, widgets, children ->
-                    if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
-                        LOG.info("This is message from a GUI init post event")
-                        LOG.info(screen.javaClass.toGenericString())
-                        val button = TexturedButtonWidget(
-                            screen.width / 2 - 40,
-                            screen.height / 2 - 22,
-                            20,
-                            18,
-                            0,
-                            0,
-                            19,
-                            Identifier("minecraft", "textures/gui/recipe_button.png")) {
-                            LOG.info("A button was pressed!")
+
+        }
+
+        /** Button */
+        object B1 {
+            init {
+                Register.Client {
+                    val client = MinecraftClient.getInstance()
+                    GuiEvent.INIT_POST.register { screen, widgets, children ->
+                        if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
+                            LOG.info("This is message from a GUI init post event")
+                            LOG.info(screen.javaClass.toGenericString())
+                            val button = TexturedButtonWidget(
+                                screen.width / 2 - 40,
+                                screen.height / 2 - 22,
+                                20,
+                                18,
+                                0,
+                                0,
+                                19,
+                                Identifier("minecraft", "textures/gui/recipe_button.png")) {
+                                LOG.info("A button was pressed!")
+                            }
+                            screen.addWidget(button)
                         }
-                        screen.addWidget(button)
+                    }
+                }
+            }
+        }
+
+        /** Button with network packets*/
+        object B2 {
+            init {
+                ScreenHandler1.rType = Register.screenHandlerTypeSimple("side_screen", ::ScreenHandler1)
+                Register.Client { Register.Client.screen(ScreenHandler1.rType!!.get(), ::Screen1) }
+
+                NetworkManager.registerReceiver(
+                    NetworkManager.Side.C2S,
+                    Identifier("yummy", "packet")
+                ){ packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+                    val player: PlayerEntity = packetContext.player
+                    if (player is ServerPlayerEntity){
+                        player.openHandledScreen(Factory1())
+                    }
+                }
+
+                Register.Client {
+                    val client = MinecraftClient.getInstance()
+                    GuiEvent.INIT_POST.register { screen, widgets, children ->
+                        if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
+                            LOG.info("This is message from a GUI init post event")
+                            LOG.info(screen.javaClass.toGenericString())
+
+                            NetworkManager.sendToServer(Identifier("yummy", "packet"), PacketByteBuf(Unpooled.buffer()))
+                        }
                     }
                 }
             }
