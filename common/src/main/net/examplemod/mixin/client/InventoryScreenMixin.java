@@ -41,12 +41,6 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
             if (slot instanceof YSlot) {
                 YSlot mySlot = (YSlot) slot;
                 myYummySlots.add(mySlot);
-                if (!mySlot.getVisible() || getRecipeBookWidget().isOpen()) {
-                    ((SlotMixin) slot).setXPosition(Integer.MIN_VALUE);
-                } else {
-                    ((SlotMixin) (Object) mySlot).setXPosition(mySlot.getDefaultX());
-                    ((SlotMixin) (Object) mySlot).setYPosition(mySlot.getDefaultY());
-                }
             }
         }
     }
@@ -57,7 +51,13 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
             if (!mySlot.getVisible() || getRecipeBookWidget().isOpen()) {
                 ((SlotMixin) (Object) mySlot).setXPosition(Integer.MIN_VALUE);
             } else {
-                ((SlotMixin) (Object) mySlot).setXPosition(mySlot.getDefaultX());
+                boolean hasStatusEffects = this.client.player.getStatusEffects().size() != 0;
+                if (hasStatusEffects) {
+                    ((SlotMixin) (Object) mySlot).setXPosition(mySlot.getDefaultX() - 124);
+                } else {
+                    ((SlotMixin) (Object) mySlot).setXPosition(mySlot.getDefaultX());
+                }
+                ((SlotMixin) (Object) mySlot).setYPosition(mySlot.getDefaultY());
             }
         }
     }
@@ -71,31 +71,25 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
             minecraftClient.getTextureManager().bindTexture(texture);
 
             int xdim = (myYummySlots.size() / 9 - 1) * 18 + 6;
+            int xStart = myYummySlots.get(myYummySlots.size() - 1).x + this.x - 8;
 
             this.drawTexture(matrices,
-                    myYummySlots.get(myYummySlots.size() - 1).getDefaultX() + this.x - 8,
-                    myYummySlots.get(0).getDefaultY() + this.y - 8,
+                    xStart,
+                    myYummySlots.get(0).y + this.y - 8,
                     0,
                     0,
                     xdim,
                     175
             );
             this.drawTexture(matrices,
-                    myYummySlots.get(myYummySlots.size() - 1).getDefaultX() + this.x + xdim - 8,
-                    myYummySlots.get(0).getDefaultY() + this.y - 8,
+                    xStart + xdim,
+                    myYummySlots.get(0).y + this.y - 8,
                     150,
                     0,
                     25,
                     175
             );
         }
-    }
-
-    @Inject(at = @At(value = "TAIL"), method = "drawForeground")
-    protected void drawForeground(MatrixStack matrices, int x, int y, CallbackInfo info) {
-        // render ?
-        //super.drawForeground(matrices, x, y);
-        //RenderSystem.disableLighting();
     }
 
     @Inject(at = @At("HEAD"), method = "isClickOutsideBounds", cancellable = true)
@@ -105,10 +99,10 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
     public boolean inBounds(double x, double y) {
         if (getRecipeBookWidget().isOpen()) return false;
-        int x1 = myYummySlots.get(0).getDefaultX();
-        int y1 = myYummySlots.get(0).getDefaultY();
-        int x2 = myYummySlots.get(myYummySlots.size() - 1).getDefaultX();
-        int y2 = myYummySlots.get(myYummySlots.size() - 1).getDefaultY();
+        int x1 = myYummySlots.get(0).x;
+        int y1 = myYummySlots.get(0).y;
+        int x2 = myYummySlots.get(myYummySlots.size() - 1).x;
+        int y2 = myYummySlots.get(myYummySlots.size() - 1).y;
         return x > x2 && y > y1 && x < x1 + 18 && y < y2 + 18;
     }
 }
