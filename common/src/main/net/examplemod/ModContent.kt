@@ -14,8 +14,11 @@ import net.examplemod.integration.geckolib.GeckoUtils
 import net.examplemod.integration.geckolib.test.GeoExampleEntity2
 import net.examplemod.integration.geckolib.test.JackInTheBoxItem2
 import net.examplemod.integration.geckolib.test.PotatoArmor2
+import net.examplemod.items.baa.Ba
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
+import net.examplemod.items.baa.BaHandler
+import net.examplemod.items.baa.BaScreen
 import net.examplemod.registry.Register
 import net.examplemod.test.event.Eve
 import net.examplemod.test.gui.Factory1
@@ -43,10 +46,14 @@ object ModContent {
     var EXAMPLE_ITEM =
         Register.item("example_item") { Ytem(Ytem.Settings().group(YtemGroup.EXAMPLE_TAB)) }
 
+    var ba = Register.item("ba") { Ba() }
+
     init {
         Register.Client.texture("gui/9x9_wood")
         Register.Client.texture("gui/9x9")
 
+        BaHandler.rType = Register.screenHandlerTypeSimple("side_screen", ::BaHandler)
+        Register.Client { Register.Client.screen(BaHandler.rType!!.get(), ::BaScreen) }
     }
 
     /** Dev content */

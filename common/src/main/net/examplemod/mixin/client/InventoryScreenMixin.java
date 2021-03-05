@@ -65,7 +65,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
 
     @Inject(at = @At("TAIL"), method = "drawBackground")
     protected void drawBackground(MatrixStack matrices, float f, int x, int y, CallbackInfo info) {
-        if (!getRecipeBookWidget().isOpen()) {
+        if (!getRecipeBookWidget().isOpen() && myYummySlots.size() > 0) {
             final Identifier texture = new Identifier("yummy", "textures/gui/9x9.png");
             MinecraftClient minecraftClient = MinecraftClient.getInstance();
             minecraftClient.getTextureManager().bindTexture(texture);
@@ -98,7 +98,7 @@ public abstract class InventoryScreenMixin extends AbstractInventoryScreen<Playe
     }
 
     public boolean inBounds(double x, double y) {
-        if (getRecipeBookWidget().isOpen()) return false;
+        if (getRecipeBookWidget().isOpen() || myYummySlots.size() == 0) return false;
         int x1 = myYummySlots.get(0).x;
         int y1 = myYummySlots.get(0).y;
         int x2 = myYummySlots.get(myYummySlots.size() - 1).x;

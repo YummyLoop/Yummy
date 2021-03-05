@@ -26,10 +26,13 @@ public abstract class PlayerScreenHandlerMixin extends AbstractRecipeScreenHandl
 
         int xOffset = -30;
         int yOffset = 2;
+        YSlot tempSlot;
 
         for (int i = 0; i < 3; ++i) {
             for (int j = 0; j < inv.size() / 3; j++) {
-                this.addSlot(new YSlot(inv, i + j * 3, xOffset - i * 18, yOffset + j * 18));
+                tempSlot = new YSlot(inv, i + j * 3, xOffset - i * 18, yOffset + j * 18);
+                this.addSlot(tempSlot);
+                ((SlotMixin) (Object) tempSlot).setXPosition(Integer.MIN_VALUE);
             }
         }
     }
