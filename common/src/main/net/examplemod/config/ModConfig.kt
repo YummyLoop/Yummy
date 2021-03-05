@@ -9,6 +9,7 @@ import net.examplemod.ExampleMod.MOD_ID
 @Config(name = MOD_ID)
 class ModConfig : ConfigData {
     var dev: Boolean = false
+    var mixinSideScreen : Boolean = true
     var a: Boolean = true
     var b: Boolean = false
 }

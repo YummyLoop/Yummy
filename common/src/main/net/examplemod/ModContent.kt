@@ -44,6 +44,8 @@ object ModContent {
         Register.item("example_item") { Ytem(Ytem.Settings().group(YtemGroup.EXAMPLE_TAB)) }
 
     init {
+        Register.Client.texture("gui/9x9_wood")
+        Register.Client.texture("gui/9x9")
 
     }
 

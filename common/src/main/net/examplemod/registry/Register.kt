@@ -1,5 +1,6 @@
 package net.examplemod.registry
 
+import me.shedaniel.architectury.event.events.TextureStitchEvent
 import me.shedaniel.architectury.platform.Platform
 import me.shedaniel.architectury.registry.BlockProperties
 import me.shedaniel.architectury.registry.DeferredRegister
@@ -16,6 +17,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
+import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
@@ -25,7 +27,9 @@ import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import java.util.function.Consumer
 import java.util.function.Supplier
 
 /** Contains the declared registers, and the functions to register new content */
@@ -236,6 +240,22 @@ object Register {
             factory: MenuRegistry.ScreenFactory<H, S>?,
         ) where H : ScreenHandler?, S : Screen?, S : ScreenHandlerProvider<H>? {
             MenuRegistry.registerScreenFactory(type, factory)
+        }
+
+        /**
+         * Registers a texture,
+         * the location is of the format: "textures/$path.png"
+         *
+         * @param path The path to the texture
+         * @return returns an Identifier to the texture
+         */
+        fun texture(path: String): Identifier {
+            Client {
+                TextureStitchEvent.PRE.register { spriteAtlasTexture: SpriteAtlasTexture, consumer: Consumer<Identifier> ->
+                    consumer.accept(Identifier(modId, path))
+                }
+            }
+            return Identifier(modId, "textures/$path.png")
         }
     }
 }

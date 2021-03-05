@@ -1,10 +1,16 @@
 package net.examplemod.mixin.plugin
 
+import me.shedaniel.architectury.platform.Platform
+import net.examplemod.ExampleMod
 import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 
 class YummyMixinPlugin : IMixinConfigPlugin {
+    companion object {
+        private const val mixinPath = "net.examplemod.mixin"
+    }
+
     /**
      * Called after the plugin is instantiated, do any setup here.
      *
@@ -38,6 +44,25 @@ class YummyMixinPlugin : IMixinConfigPlugin {
      * target's mixin set
      */
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
+        fun containsMixinClassName(vararg mixin: String): Boolean = mixin.contains(mixinClassName)
+
+        if (!ExampleMod.modConfig.dev
+            && !Platform.isDevelopmentEnvironment()
+            && containsMixinClassName(
+                "$mixinPath.client.ExampleMixin"
+            )
+        ) {
+            return false
+        }
+        if (!ExampleMod.modConfig.mixinSideScreen
+            && containsMixinClassName(
+                "$mixinPath.client.InventoryScreenMixin",
+                "$mixinPath.common.PlayerScreenHandlerMixin",
+                "$mixinPath.mixin.common.SlotMixin"
+            )
+        ) {
+            return false
+        }
         return true
     }
 
