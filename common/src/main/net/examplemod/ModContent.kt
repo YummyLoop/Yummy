@@ -52,7 +52,7 @@ object ModContent {
         Register.Client.texture("gui/9x9_wood")
         Register.Client.texture("gui/9x9")
 
-        BaHandler.rType = Register.screenHandlerTypeSimple("side_screen", ::BaHandler)
+        BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler)
         Register.Client { Register.Client.screen(BaHandler.rType!!.get(), ::BaScreen) }
     }
 

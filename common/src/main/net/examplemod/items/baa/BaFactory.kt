@@ -1,17 +1,17 @@
 package net.examplemod.items.baa
 
-import net.examplemod.LOG
+import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
+import net.examplemod.network.packets.packetBuffer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 
-class BaFactory(var stack : ItemStack = ItemStack.EMPTY) : NamedScreenHandlerFactory {
-    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity): ScreenHandler? {
-        LOG.info("at the factory:" + stack.item.toString())
-        return BaHandler(syncId, inv, player, stack)
+class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProvider {
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
+        return BaHandler(syncId, inv, packetBuffer(stack, isOffHand), stack)
     }
 
     /**
@@ -20,5 +20,10 @@ class BaFactory(var stack : ItemStack = ItemStack.EMPTY) : NamedScreenHandlerFac
      */
     override fun getDisplayName(): Text {
         return Text.of("backpack?")
+    }
+
+    override fun saveExtraData(buf: PacketByteBuf) {
+        buf.writeItemStack(stack)
+        buf.writeBoolean(isOffHand)
     }
 }
