@@ -4,16 +4,16 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
-import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
 class BaScreen(
-    handler: ScreenHandler,
+    handler: BaHandler,
     inventory: PlayerInventory,
     title: Text,
-) : HandledScreen<ScreenHandler>(handler, inventory, title) {
-    private val texture = Identifier("minecraft", "textures/gui/container/dispenser.png") //Identifier("yummy", "textures/gui/9x9_wood.png")
+) : HandledScreen<BaHandler>(handler, inventory, title) {
+    private val texture = Identifier("minecraft",
+        "textures/gui/container/dispenser.png") //Identifier("yummy", "textures/gui/9x9_wood.png")
 
     override fun drawBackground(matrices: MatrixStack?, delta: Float, mouseX: Int, mouseY: Int) {
         val minecraftClient = MinecraftClient.getInstance()
@@ -40,5 +40,12 @@ class BaScreen(
         super.init()
         // Center the title
         //titleX = (backgroundWidth - textRenderer.getWidth(title)) / 2
+    }
+
+    override fun tick() {
+        super.tick()
+        if (!handler.itemStackExists()) {
+            onClose()
+        }
     }
 }

@@ -1,7 +1,7 @@
 package net.examplemod.items.baa
 
 import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
-import net.examplemod.network.packets.packetBuffer
+import net.examplemod.network.packets.PacketBuffer
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
@@ -12,7 +12,7 @@ import net.minecraft.text.TranslatableText
 
 class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProvider {
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
-        return BaHandler(syncId, inv, packetBuffer(stack, isOffHand), stack)
+        return BaHandler(syncId, inv, PacketBuffer(stack, isOffHand), stack)
     }
 
     /**

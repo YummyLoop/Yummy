@@ -13,39 +13,42 @@ import net.minecraft.util.math.BlockPos
 import java.nio.ByteBuffer
 import java.util.*
 
+class PacketBuffer() : PacketByteBuf(Unpooled.buffer()) {
+    constructor(vararg args: Any) : this() {
+        add(*args)
+    }
 
-fun packetBuffer(): PacketByteBuf = PacketByteBuf(Unpooled.buffer())
-
-fun packetBuffer(vararg args: Any): PacketByteBuf {
-    val buff = packetBuffer()
-    for (i in args) {
-        when (i) {
-            is BlockHitResult -> buff.writeBlockHitResult(i)
-            is BlockPos -> buff.writeBlockPos(i)
-            is Boolean -> buff.writeBoolean(i)
-            is ByteArray -> buff.writeByteArray(i)
-            is ByteBuf -> buff.writeBytes(i)
-            is ByteBuffer -> buff.writeBytes(i)
-            is Char -> buff.writeChar(i.toInt())
-            is CompoundTag -> buff.writeCompoundTag(i)
-            is Date -> buff.writeDate(i)
-            is Double -> buff.writeDouble(i)
-            is Enum<*> -> buff.writeEnumConstant(i)
-            is Float -> buff.writeFloat(i)
-            is Identifier -> buff.writeIdentifier(i)
-            is Int -> buff.writeInt(i)
-            is IntArray -> buff.writeIntArray(i)
-            is ItemStack -> buff.writeItemStack(i)
-            is Long -> buff.writeLong(i)
-            is LongArray -> buff.writeLongArray(i)
-            is String -> buff.writeString(i)
-            is Text -> buff.writeText(i)
-            is UUID -> buff.writeUuid(i)
-            else -> {
-                LOG.error("Incorrect usage of packetBuffer!")
-                throw Exception()
+    fun add(vararg args: Any): PacketBuffer {
+        for (i in args) {
+            when (i) {
+                is BlockHitResult -> this.writeBlockHitResult(i)
+                is BlockPos -> this.writeBlockPos(i)
+                is Boolean -> this.writeBoolean(i)
+                is ByteArray -> this.writeByteArray(i)
+                is ByteBuf -> this.writeBytes(i)
+                is ByteBuffer -> this.writeBytes(i)
+                is Char -> this.writeChar(i.toInt())
+                is CompoundTag -> this.writeCompoundTag(i)
+                is Date -> this.writeDate(i)
+                is Double -> this.writeDouble(i)
+                is Enum<*> -> this.writeEnumConstant(i)
+                is Float -> this.writeFloat(i)
+                is Identifier -> this.writeIdentifier(i)
+                is Int -> this.writeInt(i)
+                is IntArray -> this.writeIntArray(i)
+                is ItemStack -> this.writeItemStack(i)
+                is Long -> this.writeLong(i)
+                is LongArray -> this.writeLongArray(i)
+                is String -> this.writeString(i)
+                is Text -> this.writeText(i)
+                is UUID -> this.writeUuid(i)
+                else -> {
+                    LOG.error("Incorrect usage of PacketBuffer!")
+                    LOG.error("Tried to add:" + i.javaClass.typeName)
+                    throw Exception(i.toString())
+                }
             }
         }
+        return this
     }
-    return buff
 }
