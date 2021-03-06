@@ -1,6 +1,7 @@
 package net.examplemod.items.baa
 
 import me.shedaniel.architectury.registry.RegistrySupplier
+import net.examplemod.screen.defaultTransferSlot
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -87,24 +88,6 @@ class BaHandler(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBu
 
     // Shift + Player Inv Slot
     override fun transferSlot(player: PlayerEntity?, invSlot: Int): ItemStack {
-        var newStack: ItemStack = ItemStack.EMPTY
-        val slot: Slot = this.slots[invSlot]
-        if (slot.hasStack()) {
-            val originalStack: ItemStack = slot.stack
-            newStack = originalStack.copy()
-            if (invSlot < inv.size()) {
-                if (!this.insertItem(originalStack, inv.size(), this.slots.size, true)) {
-                    return ItemStack.EMPTY
-                }
-            } else if (!this.insertItem(originalStack, 0, inv.size(), false)) {
-                return ItemStack.EMPTY
-            }
-            if (originalStack.isEmpty) {
-                slot.stack = ItemStack.EMPTY
-            } else {
-                slot.markDirty()
-            }
-        }
-        return newStack
+        return defaultTransferSlot(player, invSlot, inv, this::insertItem)
     }
 }

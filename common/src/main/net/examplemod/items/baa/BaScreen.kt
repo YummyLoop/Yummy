@@ -13,7 +13,7 @@ class BaScreen(
     inventory: PlayerInventory,
     title: Text,
 ) : HandledScreen<ScreenHandler>(handler, inventory, title) {
-    private val texture = Identifier("yummy", "textures/gui/9x9_wood.png")
+    private val texture = Identifier("minecraft", "textures/gui/container/dispenser.png") //Identifier("yummy", "textures/gui/9x9_wood.png")
 
     override fun drawBackground(matrices: MatrixStack?, delta: Float, mouseX: Int, mouseY: Int) {
         val minecraftClient = MinecraftClient.getInstance()
