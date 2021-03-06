@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 
 class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProvider {
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
@@ -19,7 +20,7 @@ class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProv
      * screen packet sent to the client.
      */
     override fun getDisplayName(): Text {
-        return Text.of("backpack?")
+        return TranslatableText("backpack")
     }
 
     override fun saveExtraData(buf: PacketByteBuf) {
