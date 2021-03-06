@@ -20,7 +20,14 @@ class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProv
      * screen packet sent to the client.
      */
     override fun getDisplayName(): Text {
-        return TranslatableText("backpack")
+        return when {
+            stack.hasCustomName() -> {
+                stack.name
+            }
+            else -> {
+                TranslatableText("backpack")
+            }
+        }
     }
 
     override fun saveExtraData(buf: PacketByteBuf) {
