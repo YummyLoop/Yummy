@@ -29,33 +29,37 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
 
     private var itemStack = buf.readItemStack()
     private var isOffHand = buf.readBoolean()
-    private var invSize = 9
+    private var columns = 9
+    private var rows = 6
+    private var invSize = columns * rows
     private var localInventory = SimpleInventory(invSize)
 
     override fun canUse(player: PlayerEntity?): Boolean = true
 
     init {
         fromTag()
-
+        val offsetY = (this.rows - 4) * 18
         // The Inventory
-        for (m in 0..2) for (l in 0..2) this.addSlot(Slot(localInventory, l + m * 3, 62 + l * 18, 17 + m * 18))
+        for (r in 0 until rows) for (c in 0 until columns)
+            addSlot(Slot(localInventory, c + r * columns, 8 + c * 18, 18 + r * 18))
 
         //The player inventory
-        for (m in 0..2) for (l in 0..8) this.addSlot(Slot(playerInventory, l + m * 9 + 9, 8 + l * 18, 84 + m * 18))
+        for (r in 0 until 3) for (c in 0 until 9)
+            addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * 18, 103 + r * 18 + offsetY))
 
         //The player Hotbar
         var tempSlot: Slot
-        for (m in 0..8) {
+        for (c in 0 until 9) {
             tempSlot =
-                if (playerInventory.selectedSlot == m && !isOffHand) {
-                    object : Slot(playerInventory, m, 8 + m * 18, 142) {
+                if (playerInventory.selectedSlot == c && !isOffHand) {
+                    object : Slot(playerInventory, c, 8 + c * 18, 161 + offsetY) {
                         override fun canInsert(stack: ItemStack?): Boolean = false
                         override fun canTakeItems(playerEntity: PlayerEntity?): Boolean = false
                     }
                 } else {
-                    Slot(playerInventory, m, 8 + m * 18, 142)
+                    Slot(playerInventory, c, 8 + c * 18, 161 + offsetY)
                 }
-            this.addSlot(tempSlot)
+            addSlot(tempSlot)
         }
     }
 
@@ -86,7 +90,7 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     private fun fromTag() {
         val itemStackList = DefaultedList.ofSize(invSize, ItemStack.EMPTY)
         Inventories.fromTag(itemStack.orCreateTag, itemStackList)
-        localInventory = SimpleInventory(*itemStackList.map { it }.toTypedArray())
+        localInventory = SimpleInventory(*itemStackList.toTypedArray())
     }
 
     private fun saveTag() {
