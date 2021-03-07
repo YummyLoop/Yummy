@@ -8,13 +8,17 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
+import java.util.*
 
 class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
-        if (world.isClient) return TypedActionResult.pass(user.getStackInHand(hand))
         val itemStack = user.getStackInHand(hand)
         user.itemCooldownManager[this] = 5
+
+        if (!itemStack.orCreateTag.containsUuid("uuid")) {
+            itemStack.orCreateTag.putUuid("uuid", UUID.randomUUID())
+        }
 
         if (user is ServerPlayerEntity) {
             MenuRegistry.openExtendedMenu(
@@ -23,7 +27,7 @@ class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {
             )
         }
 
-        return TypedActionResult.success(itemStack)
+        return TypedActionResult.success(itemStack, false)
         //return TypedActionResult.fail(itemStack)
     }
 }

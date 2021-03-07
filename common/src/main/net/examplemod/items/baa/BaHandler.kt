@@ -31,7 +31,6 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     private var isOffHand = buf.readBoolean()
     private var invSize = 9
     private var localInventory = SimpleInventory(invSize)
-    private var playerSlotWithStack = playerInventory.getSlotWithStack(itemStack)
 
     override fun canUse(player: PlayerEntity?): Boolean = true
 
@@ -71,7 +70,12 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     }
 
     fun itemStackExists(): Boolean {
-        return playerInventory.getStack(playerSlotWithStack).item == itemStack.item
+        val handStack: ItemStack =
+            if (isOffHand) playerInventory.player.offHandStack else playerInventory.player.mainHandStack
+        if (!handStack.isItemEqual(itemStack)) return false
+        val handStackUuid = handStack.orCreateTag.getUuid("uuid")
+        val stackUuid = itemStack.orCreateTag.getUuid("uuid")
+        return handStackUuid.compareTo(stackUuid) == 0
     }
 
     override fun close(player: PlayerEntity?) {
