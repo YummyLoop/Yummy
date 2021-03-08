@@ -14,7 +14,7 @@ fun ScreenHandler.defaultTransferSlot(
     player: PlayerEntity?,
     invSlot: Int,
     inv: Inventory,
-    insertItem: (ItemStack, Int, Int, Boolean) -> Boolean,
+    insertItem: (stack: ItemStack, startIndex: Int, endIndex: Int, fromLast: Boolean) -> Boolean,
 ): ItemStack {
     var newStack: ItemStack = ItemStack.EMPTY
     val slot: Slot = this.slots[invSlot]

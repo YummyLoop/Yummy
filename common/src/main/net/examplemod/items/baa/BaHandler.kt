@@ -33,38 +33,37 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     private var columns = 9
     private var rows = 6
     private var invSize = columns * rows
-    private var localInventory = SimpleInventory(invSize)
+    private var localInventory = fromTag()
 
-    override fun canUse(player: PlayerEntity?): Boolean = true
+    /** Checks every random tick? */
+    override fun canUse(player: PlayerEntity?): Boolean = itemStackExists()
 
     init {
-        fromTag()
+        // If the itemStack does not contain UUID, somehow it happens the first try from the Offhand
+        if (!itemStack.orCreateTag.contains("uuid")) close(playerInventory.player)
+
         val offsetY = (this.rows - 4) * 18
         // The Inventory
-        for (r in 0 until rows) for (c in 0 until columns) addSlot(
-            object : Slot(localInventory, c + r * columns, 8 + c * 18, 18 + r * 18) {
+        for (r in 0 until rows) for (c in 0 until columns)
+            addSlot(object : Slot(localInventory, c + r * columns, 8 + c * 18, 18 + r * 18) {
                 override fun canInsert(stack: ItemStack?): Boolean =
                     !(stack!!.isItemEqual(this@BaHandler.itemStack))
-            }
-        )
+            })
 
         //The player inventory
         for (r in 0 until 3) for (c in 0 until 9)
             addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * 18, 103 + r * 18 + offsetY))
 
         //The player Hotbar
-        var tempSlot: Slot
         for (c in 0 until 9) {
-            tempSlot =
-                if (playerInventory.selectedSlot == c && !isOffHand) {
-                    object : Slot(playerInventory, c, 8 + c * 18, 161 + offsetY) {
-                        override fun canInsert(stack: ItemStack?): Boolean = false
-                        override fun canTakeItems(playerEntity: PlayerEntity?): Boolean = false
-                    }
-                } else {
-                    Slot(playerInventory, c, 8 + c * 18, 161 + offsetY)
-                }
-            addSlot(tempSlot)
+            if (isOffHand || playerInventory.selectedSlot != c) {
+                addSlot(Slot(playerInventory, c, 8 + c * 18, 161 + offsetY))
+            } else {
+                addSlot(object : Slot(playerInventory, c, 8 + c * 18, 161 + offsetY) {
+                    override fun canInsert(stack: ItemStack?): Boolean = false
+                    override fun canTakeItems(playerEntity: PlayerEntity?): Boolean = false
+                })
+            }
         }
     }
 
@@ -78,11 +77,12 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
         super.onContentChanged(inventory)
     }
 
+    /** It is called every tick the screen is open */
     fun itemStackExists(): Boolean {
         val handStack: ItemStack =
             if (isOffHand) playerInventory.player.offHandStack else playerInventory.player.mainHandStack
 
-        if (!handStack.isItemEqual(itemStack)
+        if (!handStack.isItemEqual(this.itemStack)
             || !handStack.orCreateTag.contains("uuid")
             || !itemStack.orCreateTag.contains("uuid")
         ) return false
@@ -97,10 +97,10 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
         super.close(player)
     }
 
-    private fun fromTag() {
+    private fun fromTag(): Inventory {
         val itemStackList = DefaultedList.ofSize(invSize, ItemStack.EMPTY)
-        Inventories.fromTag(itemStack.orCreateTag, itemStackList)
-        localInventory = SimpleInventory(*itemStackList.toTypedArray())
+        Inventories.fromTag(this.itemStack.orCreateTag, itemStackList)
+        return SimpleInventory(*itemStackList.toTypedArray())
     }
 
     private fun saveTag() {
@@ -108,7 +108,7 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
         for (i in 0 until invSize) {
             myList[i] = localInventory.getStack(i)
         }
-        Inventories.toTag(itemStack.orCreateTag, myList)
+        Inventories.toTag(this.itemStack.orCreateTag, myList)
     }
 
     // Shift + Player Inv Slot
