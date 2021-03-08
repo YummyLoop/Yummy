@@ -1,5 +1,6 @@
 package net.examplemod.client.gui.screen.ingame
 
+import net.examplemod.client.Texture
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -9,7 +10,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 
 @Environment(EnvType.CLIENT)
 open class ScreenWithPlayerInventory<H>(
@@ -66,15 +66,6 @@ open class ScreenWithPlayerInventory<H>(
         renderBackground(matrices)
         super.render(matrices, mouseX, mouseY, delta)
         drawMouseoverTooltip(matrices, mouseX, mouseY)
-    }
-
-    data class Texture(
-        val namespace: String,
-        val path: String,
-        val xSize: Int = 256,
-        val ySize: Int = 256,
-    ) {
-        fun get() = Identifier(namespace, path)
     }
 
     private fun bindTexture(texture: Texture) = MinecraftClient.getInstance().textureManager.bindTexture(texture.get())

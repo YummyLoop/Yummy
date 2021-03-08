@@ -53,7 +53,7 @@ object ModContent {
         Register.Client.texture("gui/9x9")
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler)
-        Register.Client { Register.Client.screen(BaHandler.rType!!.get(), ::BaScreen) }
+        Register.Client { Register.Client.screen(BaHandler.rType!!, ::BaScreen) }
     }
 
     /** Dev content */
@@ -103,7 +103,7 @@ object ModContent {
         object B2 {
             init {
                 ScreenHandler1.rType = Register.screenHandlerTypeSimple("side_screen", ::ScreenHandler1)
-                Register.Client { Register.Client.screen(ScreenHandler1.rType!!.get(), ::Screen1) }
+                Register.Client { Register.Client.screen(ScreenHandler1.rType!!, ::Screen1) }
 
                 NetworkManager.registerReceiver(
                     NetworkManager.Side.C2S,
@@ -195,7 +195,7 @@ object ModContent {
                 // Screen stuff
                 BoxScreenHandler.type =
                     Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-                Register.Client { Register.Client.screen(BoxScreenHandler.type!!.get(), ::BoxScreen) }
+                Register.Client { Register.Client.screen(BoxScreenHandler.type!!, ::BoxScreen) }
             }
         }
 

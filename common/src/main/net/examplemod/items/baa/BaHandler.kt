@@ -25,7 +25,7 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     }
 
     companion object {
-        var rType: RegistrySupplier<ScreenHandlerType<out BaHandler>?>? = null
+        var rType: RegistrySupplier<ScreenHandlerType<out BaHandler>>? = null
     }
 
     private var itemStack = buf.readItemStack()

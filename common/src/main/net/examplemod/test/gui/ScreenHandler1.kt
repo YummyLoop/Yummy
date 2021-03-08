@@ -17,7 +17,7 @@ import net.minecraft.text.Text
 
 class ScreenHandler1(id : Int, playerInventory: PlayerInventory) : CraftingScreenHandler(id, playerInventory) {
     companion object {
-        var rType: RegistrySupplier<ScreenHandlerType<out ScreenHandler1>?>? = null
+        var rType: RegistrySupplier<ScreenHandlerType<out ScreenHandler1>>? = null
     }
     init {
         LOG.info(this.javaClass.toGenericString())

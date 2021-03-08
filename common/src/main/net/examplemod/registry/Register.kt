@@ -8,6 +8,7 @@ import me.shedaniel.architectury.registry.MenuRegistry
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.examplemod.ExampleMod
 import net.examplemod.ModContent
+import net.examplemod.client.Texture
 import net.examplemod.items.Ytem
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -16,6 +17,7 @@ import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.ingame.HandledScreen
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
 import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.Entity
@@ -189,8 +191,8 @@ object Register {
      */
     fun <T> screenHandlerType(
         screenHandlerTypeId: String,
-        factory: Supplier<ScreenHandlerType<out T>?>,
-    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
+        factory: Supplier<ScreenHandlerType<out T>>,
+    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
         return screenHandlerTypeRegister.register(screenHandlerTypeId, factory)
     }
 
@@ -203,7 +205,7 @@ object Register {
     fun <T> screenHandlerTypeSimple(
         screenHandlerTypeId: String,
         factory: MenuRegistry.SimpleMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
+    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
         return screenHandlerType(screenHandlerTypeId) { MenuRegistry.of(factory) }
     }
 
@@ -216,7 +218,7 @@ object Register {
     fun <T> screenHandlerTypeExtended(
         screenHandlerTypeId: String,
         factory: MenuRegistry.ExtendedMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<out T>?> where T : ScreenHandler {
+    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
         return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(factory) }
     }
 
@@ -224,22 +226,38 @@ object Register {
         private val isClient: Boolean by lazy { Platform.getEnv() == EnvType.CLIENT }
         private val lateCallList: MutableList<Supplier<Any>> = mutableListOf()
 
+        /**
+         * Initializes all the client entries
+         */
         @Environment(EnvType.CLIENT)
         fun register() {
             lateCallList.forEach { it.get() }
             lateCallList.clear()
         }
 
+        /**
+         * Adds entries for later initialization in the Client
+         * when not in the client side it does nothing
+         *
+         * @param s Entry supplier
+         */
         operator fun invoke(s: Supplier<Any>) {
             if (isClient) lateCallList.add(s)
         }
 
+        /**
+         * Registers a screen
+         *
+         * @param handlerType the registered type of the screen Handler
+         * @param factory The screen factory
+         * @see HandledScreen
+         */
         @Environment(EnvType.CLIENT)
         fun <H, S> screen(
-            type: ScreenHandlerType<out H>?,
-            factory: MenuRegistry.ScreenFactory<H, S>?,
-        ) where H : ScreenHandler?, S : Screen?, S : ScreenHandlerProvider<H>? {
-            MenuRegistry.registerScreenFactory(type, factory)
+            handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
+            factory: MenuRegistry.ScreenFactory<H, S>,
+        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+            MenuRegistry.registerScreenFactory(handlerType.get(), factory)
         }
 
         /**
@@ -247,15 +265,18 @@ object Register {
          * the location is of the format: "textures/$path.png"
          *
          * @param path The path to the texture
-         * @return returns an Identifier to the texture
+         * @param xSize texture x axis size
+         * @param ySize texture y axis size
+         * @return returns a Texture data class
+         * @see Texture
          */
-        fun texture(path: String): Identifier {
+        fun texture(path: String, xSize: Int = 256, ySize: Int = 256): Texture {
             Client {
                 TextureStitchEvent.PRE.register { spriteAtlasTexture: SpriteAtlasTexture, consumer: Consumer<Identifier> ->
                     consumer.accept(Identifier(modId, path))
                 }
             }
-            return Identifier(modId, "textures/$path.png")
+            return Texture(modId, "textures/$path.png", xSize, ySize)
         }
     }
 }
