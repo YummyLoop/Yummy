@@ -18,37 +18,43 @@ class PacketBuffer() : PacketByteBuf(Unpooled.buffer()) {
         add(*args)
     }
 
-    fun add(vararg args: Any): PacketBuffer {
-        for (i in args) {
-            when (i) {
-                is BlockHitResult -> this.writeBlockHitResult(i)
-                is BlockPos -> this.writeBlockPos(i)
-                is Boolean -> this.writeBoolean(i)
-                is ByteArray -> this.writeByteArray(i)
-                is ByteBuf -> this.writeBytes(i)
-                is ByteBuffer -> this.writeBytes(i)
-                is Char -> this.writeChar(i.toInt())
-                is CompoundTag -> this.writeCompoundTag(i)
-                is Date -> this.writeDate(i)
-                is Double -> this.writeDouble(i)
-                is Enum<*> -> this.writeEnumConstant(i)
-                is Float -> this.writeFloat(i)
-                is Identifier -> this.writeIdentifier(i)
-                is Int -> this.writeInt(i)
-                is IntArray -> this.writeIntArray(i)
-                is ItemStack -> this.writeItemStack(i)
-                is Long -> this.writeLong(i)
-                is LongArray -> this.writeLongArray(i)
-                is String -> this.writeString(i)
-                is Text -> this.writeText(i)
-                is UUID -> this.writeUuid(i)
-                else -> {
-                    LOG.error("Incorrect usage of PacketBuffer!")
-                    LOG.error("Tried to add:" + i.javaClass.typeName)
-                    throw Exception(i.toString())
+    companion object {
+        fun <T> add(obj: T, vararg args: Any): T where T : PacketByteBuf {
+            for (i in args) {
+                when (i) {
+                    is BlockHitResult -> obj.writeBlockHitResult(i)
+                    is BlockPos -> obj.writeBlockPos(i)
+                    is Boolean -> obj.writeBoolean(i)
+                    is ByteArray -> obj.writeByteArray(i)
+                    is ByteBuf -> obj.writeBytes(i)
+                    is ByteBuffer -> obj.writeBytes(i)
+                    is Char -> obj.writeChar(i.toInt())
+                    is CompoundTag -> obj.writeCompoundTag(i)
+                    is Date -> obj.writeDate(i)
+                    is Double -> obj.writeDouble(i)
+                    is Enum<*> -> obj.writeEnumConstant(i)
+                    is Float -> obj.writeFloat(i)
+                    is Identifier -> obj.writeIdentifier(i)
+                    is Int -> obj.writeInt(i)
+                    is IntArray -> obj.writeIntArray(i)
+                    is ItemStack -> obj.writeItemStack(i)
+                    is Long -> obj.writeLong(i)
+                    is LongArray -> obj.writeLongArray(i)
+                    is String -> obj.writeString(i)
+                    is Text -> obj.writeText(i)
+                    is UUID -> obj.writeUuid(i)
+                    else -> {
+                        LOG.error("Incorrect usage of PacketBuffer!")
+                        LOG.error("Tried to add:" + i.javaClass.typeName)
+                        throw Exception(i.toString())
+                    }
                 }
             }
+            return obj
         }
-        return this
     }
+
+    fun add(vararg args: Any): PacketBuffer = PacketBuffer.add(this, *args)
 }
+
+fun PacketByteBuf.add(vararg args: Any): PacketByteBuf = PacketBuffer.add(this, *args)
