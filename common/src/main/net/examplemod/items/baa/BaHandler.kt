@@ -20,6 +20,7 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
 
     constructor(syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf, stack: ItemStack)
             : this(syncId, playerInventory, buf) {
+        //LOG.info("stacks b: ${itemStack.item}, f: ${stack.item}") //the buffer is probably unnecessary?
         if (stack != ItemStack.EMPTY) this.itemStack = stack
     }
 
@@ -40,8 +41,12 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
         fromTag()
         val offsetY = (this.rows - 4) * 18
         // The Inventory
-        for (r in 0 until rows) for (c in 0 until columns)
-            addSlot(Slot(localInventory, c + r * columns, 8 + c * 18, 18 + r * 18))
+        for (r in 0 until rows) for (c in 0 until columns) addSlot(
+            object : Slot(localInventory, c + r * columns, 8 + c * 18, 18 + r * 18) {
+                override fun canInsert(stack: ItemStack?): Boolean =
+                    !(stack!!.isItemEqual(this@BaHandler.itemStack))
+            }
+        )
 
         //The player inventory
         for (r in 0 until 3) for (c in 0 until 9)
@@ -76,7 +81,12 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     fun itemStackExists(): Boolean {
         val handStack: ItemStack =
             if (isOffHand) playerInventory.player.offHandStack else playerInventory.player.mainHandStack
-        if (!handStack.isItemEqual(itemStack)) return false
+
+        if (!handStack.isItemEqual(itemStack)
+            || !handStack.orCreateTag.contains("uuid")
+            || !itemStack.orCreateTag.contains("uuid")
+        ) return false
+
         val handStackUuid = handStack.orCreateTag.getUuid("uuid")
         val stackUuid = itemStack.orCreateTag.getUuid("uuid")
         return handStackUuid.compareTo(stackUuid) == 0

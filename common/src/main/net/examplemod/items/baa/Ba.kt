@@ -14,6 +14,8 @@ class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {
 
     override fun use(world: World, user: PlayerEntity, hand: Hand): TypedActionResult<ItemStack> {
         val itemStack = user.getStackInHand(hand)
+        if (world.isClient) return TypedActionResult.success(itemStack, false)
+
         user.itemCooldownManager[this] = 5
 
         if (!itemStack.orCreateTag.containsUuid("uuid")) {
@@ -27,7 +29,6 @@ class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {
             )
         }
 
-        return TypedActionResult.success(itemStack, false)
-        //return TypedActionResult.fail(itemStack)
+        return TypedActionResult.consume(itemStack)
     }
 }
