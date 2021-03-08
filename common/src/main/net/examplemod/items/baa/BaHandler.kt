@@ -39,7 +39,7 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
     override fun canUse(player: PlayerEntity?): Boolean = itemStackExists()
 
     init {
-        // If the itemStack does not contain UUID, somehow it happens the first try from the Offhand
+        // If the itemStack does not contain UUID, somehow it happens the first try from the Offhand, seems fixed?
         if (!itemStack.orCreateTag.contains("uuid")) close(playerInventory.player)
 
         val offsetY = (this.rows - 4) * 18
@@ -69,6 +69,9 @@ class BaHandler(syncId: Int, val playerInventory: PlayerInventory, buf: PacketBy
 
     override fun onSlotClick(i: Int, j: Int, actionType: SlotActionType?, playerEntity: PlayerEntity?): ItemStack {
         saveTag()
+        if (isOffHand && actionType == SlotActionType.SWAP) {
+            return ItemStack.EMPTY
+        }
         return super.onSlotClick(i, j, actionType, playerEntity)
     }
 

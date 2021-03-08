@@ -18,11 +18,4 @@ class BaScreen(
         // ("minecraft", "textures/gui/container/dispenser.png")
         // ("yummy", "textures/gui/9x9_wood.png")
     }
-
-    override fun tick() {
-        super.tick()
-        if (!handler.itemStackExists()) {
-            onClose()
-        }
-    }
 }
