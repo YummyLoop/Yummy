@@ -71,7 +71,7 @@ object Register {
 
     /** Entity Attribute link register */
     private val entityAttributeLinkRegister : EntityAttributeLinkRegister =
-        EntityAttributeLinkRegister.create()
+        EntityAttributeLinkRegister.create(modId)
 
     /** Item register */
     private val itemRegister: DeferredRegister<Item> =

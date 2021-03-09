@@ -9,25 +9,25 @@ import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import java.util.function.Supplier
 
-class EntityAttributeLinkRegister private constructor() {
+class EntityAttributeLinkRegister private constructor(val modId: String) {
 
     companion object {
-        /** Private list of EntityAttributes links */
-        private var attributeList: MutableList<AttributeListItem> = mutableListOf()
-
-        fun create(): EntityAttributeLinkRegister = EntityAttributeLinkRegister()
+        fun create(modId: String): EntityAttributeLinkRegister = EntityAttributeLinkRegister(modId)
     }
 
-    data class AttributeListItem(
-        var entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
-        var builder: Supplier<DefaultAttributeContainer.Builder>,
-    )
+    /** Private list of EntityAttributes links */
+    private var attributeLinkList: MutableList<Pair<
+            RegistrySupplier<out EntityType<out LivingEntity>>,
+            Supplier<DefaultAttributeContainer.Builder>
+            >> = mutableListOf()
+
+    fun getLinkList() = attributeLinkList
 
     /**
-     * Send all the links currently received to the Expected Platform (fabric/forge) to be registered
+     * Registers all the links currently received in the Expected Platform (fabric/forge) to be registered
      */
     fun register() {
-        EntityAttributeLinkPlatform.linkEntityAttributes(attributeList)
+        EntityAttributeLinkPlatform.register(this)
     }
 
     /**
@@ -40,20 +40,19 @@ class EntityAttributeLinkRegister private constructor() {
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
         entityAttributesBuilder: Supplier<DefaultAttributeContainer.Builder>,
     ) {
-        attributeList.add(AttributeListItem(entityType, entityAttributesBuilder))
+        attributeLinkList.add(Pair(entityType, entityAttributesBuilder))
     }
 }
 
 object EntityAttributeLinkPlatform {
     /**
-     * Platform specific implementation of the link registry
+     * Registers a mod EntityAttributes links,
+     * with platform specific implementation
      *
-     * @param attributeList list of the links to register
+     * @param register A mod Entity Attribute Link register
      */
     @Suppress("UNUSED_PARAMETER")
     @ExpectPlatform
     @JvmStatic
-    fun linkEntityAttributes(
-        attributeList: MutableList<EntityAttributeLinkRegister.AttributeListItem>,
-    ): Unit = throw AssertionError()
+    fun register(register: EntityAttributeLinkRegister): Unit = throw AssertionError()
 }
