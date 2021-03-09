@@ -18,21 +18,20 @@
     "main": [
       {
         "adapter": "kotlin",
-        "value": "net.examplemod.fabric.ExampleModFabric"
+        "value": "yummyloop.yummy.fabric.ExampleModFabric"
       }
     ],
     "client": [
       {
         "adapter": "kotlin",
-        "value": "net.examplemod.fabric.ExampleModFabric"
+        "value": "yummyloop.yummy.fabric.ExampleModFabric"
       }
     ],
     "modmenu": [
-      "net.examplemod.fabric.integration.modmenu.ModMenuIntegration"
+      "yummyloop.yummy.fabric.integration.modmenu.ModMenuIntegration"
     ]
   },
   "mixins": [
-    "mixin.examplemod.json",
     "mixin.examplemod.fabric.json"
   ],
   "depends": {

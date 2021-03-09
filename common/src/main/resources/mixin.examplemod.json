@@ -2,8 +2,8 @@
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "package": "net.examplemod.mixin",
-  "plugin": "net.examplemod.mixin.plugin.YummyMixinPlugin",
+  "package": "yummyloop.yummy.mixin",
+  "plugin": "yummyloop.yummy.mixin.plugin.YummyMixinPlugin",
   "mixins": [
     "common.PlayerScreenHandlerMixin",
     "common.SlotMixin"
