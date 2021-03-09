@@ -1,10 +1,13 @@
-package yummyloop.yummy.registry.fabric
+@file:JvmMultifileClass
+
+package yummyloop.api.archi.entity.attribute.fabric
 
 import net.fabricmc.fabric.api.`object`.builder.v1.entity.FabricDefaultAttributeRegistry
-import yummyloop.yummy.registry.EntityAttributeLink
+import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 
-object EntityAttributeLinkImpl {
+private class EntityAttributeLinkRegisterImpl {}
 
+object EntityAttributeLinkPlatformImpl {
     /**
      * Platform specific implementation of the link registry
      *
@@ -13,7 +16,7 @@ object EntityAttributeLinkImpl {
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     fun linkEntityAttributes(
-        attributeList: MutableList<EntityAttributeLink.AttributeListItem>,
+        attributeList: MutableList<EntityAttributeLinkRegister.AttributeListItem>,
     ): Unit {
         for (i in attributeList) {
             FabricDefaultAttributeRegistry.register(i.entityType.get(), i.builder.get())

@@ -29,6 +29,7 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ModContent
 import yummyloop.yummy.client.Texture
@@ -48,7 +49,7 @@ object Register {
         blockRegister.register()
         blockEntityTypeRegister.register()
         itemRegister.register()
-        EntityAttributeLink.register()
+        entityAttributeLinkRegister.register()
         screenHandlerTypeRegister.register()
     }
 
@@ -67,6 +68,10 @@ object Register {
     /** Entity Attribute register */
     private val entityAttributeRegister: DeferredRegister<EntityAttribute> =
         DeferredRegister.create(modId, Registry.ATTRIBUTE_KEY)
+
+    /** Entity Attribute link register */
+    private val entityAttributeLinkRegister : EntityAttributeLinkRegister =
+        EntityAttributeLinkRegister.create()
 
     /** Item register */
     private val itemRegister: DeferredRegister<Item> =
@@ -182,7 +187,7 @@ object Register {
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
         entityAttributeBuilder: Supplier<DefaultAttributeContainer.Builder>,
     ) {
-        EntityAttributeLink.register(entityType, entityAttributeBuilder)
+        entityAttributeLinkRegister.register(entityType, entityAttributeBuilder)
     }
 
     /**
