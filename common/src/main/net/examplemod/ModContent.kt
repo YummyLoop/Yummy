@@ -14,9 +14,9 @@ import net.examplemod.integration.geckolib.GeckoUtils
 import net.examplemod.integration.geckolib.test.GeoExampleEntity2
 import net.examplemod.integration.geckolib.test.JackInTheBoxItem2
 import net.examplemod.integration.geckolib.test.PotatoArmor2
-import net.examplemod.items.baa.Ba
 import net.examplemod.items.Ytem
 import net.examplemod.items.YtemGroup
+import net.examplemod.items.baa.Ba
 import net.examplemod.items.baa.BaHandler
 import net.examplemod.items.baa.BaScreen
 import net.examplemod.registry.Register
@@ -53,7 +53,7 @@ object ModContent {
         Register.Client.texture("gui/9x9")
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler)
-        Register.Client { Register.Client.screen(BaHandler.rType!!, ::BaScreen) }
+        Register.Client.screen(BaHandler.rType!!) { return@screen ::BaScreen }
     }
 
     /** Dev content */
@@ -103,7 +103,7 @@ object ModContent {
         object B2 {
             init {
                 ScreenHandler1.rType = Register.screenHandlerTypeSimple("side_screen", ::ScreenHandler1)
-                Register.Client { Register.Client.screen(ScreenHandler1.rType!!, ::Screen1) }
+                Register.Client.screen(ScreenHandler1.rType!!) { return@screen ::Screen1 }
 
                 NetworkManager.registerReceiver(
                     NetworkManager.Side.C2S,
@@ -195,7 +195,7 @@ object ModContent {
                 // Screen stuff
                 BoxScreenHandler.type =
                     Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-                Register.Client { Register.Client.screen(BoxScreenHandler.type!!, ::BoxScreen) }
+                Register.Client.screen(BoxScreenHandler.type!!) { return@screen ::BoxScreen }
             }
         }
 

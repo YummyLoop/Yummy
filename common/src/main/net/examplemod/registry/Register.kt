@@ -25,10 +25,12 @@ import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import java.util.function.Consumer
@@ -246,18 +248,34 @@ object Register {
         }
 
         /**
-         * Registers a screen
+         * Registers a screen, can only be called from the client side
          *
          * @param handlerType the registered type of the screen Handler
          * @param factory The screen factory
          * @see HandledScreen
+         * @see screen
          */
         @Environment(EnvType.CLIENT)
-        fun <H, S> screen(
+        fun <H, S> clientScreen(
             handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
             factory: MenuRegistry.ScreenFactory<H, S>,
         ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
             MenuRegistry.registerScreenFactory(handlerType.get(), factory)
+        }
+
+        /**
+         * Registers a screen
+         *
+         * @param handlerType the registered type of the screen Handler
+         * @param factory The screen factory supplier
+         * @see HandledScreen
+         * @see MenuRegistry.ScreenFactory
+         */
+        fun <H, S> screen(
+            handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
+            factory: Supplier<(H, PlayerInventory, Text) -> S>,
+        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+            Client { MenuRegistry.registerScreenFactory(handlerType.get(), factory.get()) }
         }
 
         /**

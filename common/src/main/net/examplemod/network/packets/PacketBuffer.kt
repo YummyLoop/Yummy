@@ -53,8 +53,7 @@ class PacketBuffer() : PacketByteBuf(Unpooled.buffer()) {
             return obj
         }
     }
-
-    fun add(vararg args: Any): PacketBuffer = PacketBuffer.add(this, *args)
 }
 
 fun PacketByteBuf.add(vararg args: Any): PacketByteBuf = PacketBuffer.add(this, *args)
+fun PacketByteBuf.write(vararg args: Any): PacketByteBuf = PacketBuffer.add(this, *args)
