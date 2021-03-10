@@ -1,8 +1,10 @@
 package yummyloop.yummy
 
+import com.mojang.blaze3d.systems.RenderSystem
 import io.netty.buffer.Unpooled
 import me.shedaniel.architectury.event.events.GuiEvent
 import me.shedaniel.architectury.event.events.PlayerEvent
+import me.shedaniel.architectury.event.events.TooltipEvent
 import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.registry.BlockProperties
 import net.minecraft.block.Block
@@ -10,21 +12,31 @@ import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
+import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
+import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
+import net.minecraft.text.OrderedText
+import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import yummyloop.test.block.BoxScreen
 import yummyloop.test.block.BoxScreenHandler
 import yummyloop.test.block.TestBlockEntity
 import yummyloop.test.block.TestBlockWithEntity
+import yummyloop.test.event.Eve
 import yummyloop.test.geckolib.GeoExampleEntity2
 import yummyloop.test.geckolib.JackInTheBoxItem2
 import yummyloop.test.geckolib.PotatoArmor2
@@ -38,6 +50,7 @@ import yummyloop.yummy.items.YtemGroup
 import yummyloop.yummy.items.baa.Ba
 import yummyloop.yummy.items.baa.BaHandler
 import yummyloop.yummy.items.baa.BaScreen
+import yummyloop.yummy.nbt.getSortedInventory
 import yummyloop.yummy.registry.Register
 import java.util.function.Supplier
 
@@ -62,7 +75,95 @@ object ModContent {
             G3
             //E1
 
-            yummyloop.test.event.Eve.PLAYER_SCREEN_HANDLER_POST.register { playerInventory, onServer, playerEntity ->
+            Register.Client {
+                val client = MinecraftClient.getInstance()
+                var stack = ItemStack.EMPTY
+
+                val shulkerList = mutableListOf("shulker_box")
+
+                fun getInv(s: ItemStack): Inventory? {
+                    val tag: CompoundTag? = s.tag
+                    if (s != ItemStack.EMPTY && tag != null) {
+                        // Custom inventories
+                        var inv = tag.getSortedInventory()
+                        if (inv != null) return inv
+
+                        // Vanilla inventories
+                        val subTag = tag.getCompound("BlockEntityTag")
+                        if (!subTag.isEmpty) {
+                            inv = subTag.getSortedInventory()
+                            if (inv != null) return inv
+                        }
+                    }
+                    return null
+                }
+
+                fun renderItem(matrices: MatrixStack, itemStack: ItemStack, x: Int, y: Int) {
+                    val itemRenderer = client.itemRenderer
+                    val textRenderer = client.textRenderer
+
+                    matrices.push()
+
+                    RenderSystem.translatef(0.0f, 0.0f, 32.0f)
+                    //this.setZOffset(200)
+                    itemRenderer.zOffset = 200.0f
+                    itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
+                    itemRenderer.renderGuiItemOverlay(textRenderer,
+                        itemStack,
+                        x,
+                        y,
+                        itemStack.count.toString())
+                    //this.setZOffset(0)
+                    itemRenderer.zOffset = 0.0f
+
+                    matrices.pop()
+                }
+
+                TooltipEvent.ITEM.register { itemStack: ItemStack, mutableList: MutableList<Text>, tooltipContext: TooltipContext ->
+                    if (client.world != null) {
+                        stack = itemStack
+
+                        if (shulkerList.any { Regex(it).containsMatchIn(stack.item.translationKey) }) {
+                            mutableList.removeAll {
+                                if (it == mutableList.first()) return@removeAll false
+                                //if (it == mutableList.last()) return@removeAll false
+                                if (it is TranslatableText
+                                    && (it.toString().contains(Regex("minecraft|shulkerBox")))
+                                ) return@removeAll true
+                                return@removeAll false
+                            }
+                        }
+                    }
+                }
+
+                TooltipEvent.RENDER_VANILLA_PRE.register { matrices: MatrixStack, lines: MutableList<out OrderedText>, x: Int, y: Int ->
+                    if (client.world != null) {
+                        val inv = getInv(stack)
+                        if (inv != null) {
+                            val offsetX = 10
+                            val offsetY = 3 + 10 * (lines.size - 1) + if (lines.size > 1) 2 else 0
+
+                            //LOG.info("lines: ${inv!!.size()}")
+                            //LOG.info("Rendering tooltip: ${stack.item}")
+                            //LOG.info(MinecraftClient.getInstance().player!!.enderChestInventory.getStack(0).item) // needs to be on the server side
+                            for (i in 0 until inv.size()) {
+                                renderItem(matrices,
+                                    inv.getStack(i),
+                                    x + offsetX + (i % 9) * 18,
+                                    y + offsetY + (i / 9) * 18)
+                            }
+                        }
+                    }
+                    return@register ActionResult.SUCCESS
+                }
+                return@Client Unit
+            }
+
+
+
+
+
+            Eve.PLAYER_SCREEN_HANDLER_POST.register { playerInventory, onServer, playerEntity ->
                 val inv = SimpleInventory(2)
 
                 for (i in 0..1) {
