@@ -5,14 +5,17 @@ import io.netty.buffer.Unpooled
 import me.shedaniel.architectury.event.events.GuiEvent
 import me.shedaniel.architectury.event.events.PlayerEvent
 import me.shedaniel.architectury.event.events.TooltipEvent
+import me.shedaniel.architectury.event.events.client.ClientScreenInputEvent
 import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.registry.BlockProperties
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
 import net.minecraft.client.item.TooltipContext
+import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
@@ -23,7 +26,6 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ArmorMaterials
 import net.minecraft.item.BlockItem
 import net.minecraft.item.ItemStack
-import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
@@ -78,10 +80,13 @@ object ModContent {
             Register.Client {
                 val client = MinecraftClient.getInstance()
                 var stack = ItemStack.EMPTY
+                val pressedKeyCode = "key.keyboard.left.shift"
+                var isKeyPressed = false
 
                 val shulkerList = mutableListOf("shulker_box")
 
                 fun getInv(s: ItemStack): Inventory? {
+                    //LOG.info(MinecraftClient.getInstance().player!!.enderChestInventory.getStack(0).item) // needs to be on the server side
                     val tag: CompoundTag? = s.tag
                     if (s != ItemStack.EMPTY && tag != null) {
                         // Custom inventories
@@ -98,24 +103,30 @@ object ModContent {
                     return null
                 }
 
+                /**
+                 * Draws an item
+                 *
+                 * @see HandledScreen
+                 */
                 fun renderItem(matrices: MatrixStack, itemStack: ItemStack, x: Int, y: Int) {
                     val itemRenderer = client.itemRenderer
                     val textRenderer = client.textRenderer
 
-                    matrices.push()
+                    val itemCountString = if (itemStack.count > 99) "+99" else itemStack.count.toString()
+                    val textScale = 0.85F
 
+                    matrices.push()
                     RenderSystem.translatef(0.0f, 0.0f, 32.0f)
-                    //this.setZOffset(200)
                     itemRenderer.zOffset = 200.0f
                     itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
+                    RenderSystem.scalef(textScale, textScale, 1F)
                     itemRenderer.renderGuiItemOverlay(textRenderer,
                         itemStack,
-                        x,
-                        y,
-                        itemStack.count.toString())
-                    //this.setZOffset(0)
+                        (x / textScale).toInt(),
+                        (y / textScale).toInt(),
+                        itemCountString)
+                    RenderSystem.scalef(1 / textScale, 1 / textScale, 1F)
                     itemRenderer.zOffset = 0.0f
-
                     matrices.pop()
                 }
 
@@ -137,15 +148,12 @@ object ModContent {
                 }
 
                 TooltipEvent.RENDER_VANILLA_PRE.register { matrices: MatrixStack, lines: MutableList<out OrderedText>, x: Int, y: Int ->
-                    if (client.world != null) {
+                    if (client.world != null && isKeyPressed) {
                         val inv = getInv(stack)
                         if (inv != null) {
                             val offsetX = 10
                             val offsetY = 3 + 10 * (lines.size - 1) + if (lines.size > 1) 2 else 0
 
-                            //LOG.info("lines: ${inv!!.size()}")
-                            //LOG.info("Rendering tooltip: ${stack.item}")
-                            //LOG.info(MinecraftClient.getInstance().player!!.enderChestInventory.getStack(0).item) // needs to be on the server side
                             for (i in 0 until inv.size()) {
                                 renderItem(matrices,
                                     inv.getStack(i),
@@ -155,6 +163,15 @@ object ModContent {
                         }
                     }
                     return@register ActionResult.SUCCESS
+                }
+
+                ClientScreenInputEvent.KEY_PRESSED_PRE.register { client: MinecraftClient, screen: Screen, keyCode: Int, scanCode: Int, modifiers: Int ->
+                    if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = true
+                    return@register ActionResult.PASS
+                }
+                ClientScreenInputEvent.KEY_RELEASED_PRE.register { client: MinecraftClient, screen: Screen, keyCode: Int, scanCode: Int, modifiers: Int ->
+                    if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = false
+                    return@register ActionResult.PASS
                 }
                 return@Client Unit
             }

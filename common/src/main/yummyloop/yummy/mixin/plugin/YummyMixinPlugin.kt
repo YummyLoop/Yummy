@@ -5,6 +5,7 @@ import org.objectweb.asm.tree.ClassNode
 import org.spongepowered.asm.mixin.extensibility.IMixinConfigPlugin
 import org.spongepowered.asm.mixin.extensibility.IMixinInfo
 import yummyloop.yummy.ExampleMod
+import yummyloop.yummy.LOG
 
 class YummyMixinPlugin : IMixinConfigPlugin {
     companion object {
@@ -17,7 +18,7 @@ class YummyMixinPlugin : IMixinConfigPlugin {
      * @param mixinPackage The mixin root package from the config
      */
     override fun onLoad(mixinPackage: String?) {
-        // ...
+        LOG.info("Loading common mixins")
     }
 
     /**
@@ -46,23 +47,22 @@ class YummyMixinPlugin : IMixinConfigPlugin {
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
         fun containsMixinClassName(vararg mixin: String): Boolean = mixin.contains(mixinClassName)
 
-        if (!ExampleMod.modConfig.dev
-            && !Platform.isDevelopmentEnvironment()
-            && containsMixinClassName(
-                "$mixinPath.client.ExampleMixin"
-            )
-        ) {
-            return false
+        if (ExampleMod.modConfig.dev || Platform.isDevelopmentEnvironment()) {
+            if (containsMixinClassName("$mixinPath.client.ExampleMixin")) {
+                return true
+            }
+            return true
         }
-        if (!ExampleMod.modConfig.mixinSideScreen
-            && containsMixinClassName(
+
+        if (containsMixinClassName(
                 "$mixinPath.client.InventoryScreenMixin",
                 "$mixinPath.common.PlayerScreenHandlerMixin",
                 "$mixinPath.mixin.common.SlotMixin"
             )
         ) {
-            return false
+            return ExampleMod.modConfig.mixinSideScreen
         }
+
         return true
     }
 

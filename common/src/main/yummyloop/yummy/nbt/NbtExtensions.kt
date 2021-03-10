@@ -27,7 +27,7 @@ fun CompoundTag.getInventory(): Inventory? {
         var size = 90
 
         try {
-            size = Regex("""\d+""").find(listTag.last().toString())?.value?.toInt()!!
+            size = Regex("""\d+""").find(listTag.last().toString())?.value?.toInt()!! + 1
         } catch (e: Exception) {
             LOG.warn("Failed to find regex pattern in inventory NBT")
         }
