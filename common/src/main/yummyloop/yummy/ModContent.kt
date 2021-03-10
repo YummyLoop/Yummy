@@ -11,6 +11,7 @@ import me.shedaniel.architectury.registry.BlockProperties
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
+import net.minecraft.client.gui.DrawableHelper
 import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
@@ -55,6 +56,7 @@ import yummyloop.yummy.items.baa.BaScreen
 import yummyloop.yummy.nbt.getSortedInventory
 import yummyloop.yummy.registry.Register
 import java.util.function.Supplier
+import kotlin.math.ceil
 
 object ModContent {
     var EXAMPLE_ITEM =
@@ -82,6 +84,7 @@ object ModContent {
                 var stack = ItemStack.EMPTY
                 val pressedKeyCode = "key.keyboard.left.shift"
                 var isKeyPressed = false
+                var invSize = 1
 
                 val shulkerList = mutableListOf("shulker_box")
 
@@ -130,6 +133,59 @@ object ModContent {
                     matrices.pop()
                 }
 
+                fun renderBackground(matrices: MatrixStack, x: Int, y: Int) {
+                    matrices.push()
+                    client.textureManager.bindTexture(Identifier("yummy", "textures/gui/9x9_wood.png"))
+                    RenderSystem.translatef(0F, 0F, 400F)
+
+                    val maxR = ceil(invSize.toDouble() / 9F).toInt()
+                    val maxC = if (maxR > 1) 9 else invSize % 10
+
+ /*                   for (r in 0 until maxR) {
+                        for (c in 0 until maxC) {
+                            if (r == 0) {// First row
+                                if (c == 0) {
+                                    DrawableHelper.drawTexture(matrices, x, y, 0F, 0F, 25, 25, 256, 256)
+                                } else if (c in 1 until maxC - 1) {
+                                    DrawableHelper.drawTexture(matrices, x + c * 18, y, 25F, 0F, 18, 25, 256, 256)
+                                }
+                                if (c == maxC - 1) {
+                                    DrawableHelper.drawTexture(matrices, x + c * 18, y, 151F, 0F, 24, 25, 256, 256)
+                                }
+                            }
+
+                        }
+                    }*/
+
+/*
+                    for (l in 1 until maxR - 1) {
+                        DrawableHelper.drawTexture(matrices, x, y + l * 18 + 7, 0F, 25F, 25, 18, 256, 256)
+                        for (i in 1 until maxC - 1) DrawableHelper.drawTexture(matrices,
+                            x + i * 18,
+                            y + l * 18 + 7,
+                            25F,
+                            25F,
+                            18,
+                            18,
+                            256,
+                            256)
+                        DrawableHelper.drawTexture(matrices, x, y + l * 18 + 7, 151F, 25F, 24, 18, 256, 256)
+                    }
+
+                    DrawableHelper.drawTexture(matrices, x, y + (maxR - 1) * 18 + 7, 0F, 151F, 25, 24, 256, 256)
+                    for (i in 1 until maxC - 1) DrawableHelper.drawTexture(matrices,
+                        x + i * 18,
+                        y + (maxR - 1) * 18 + 7,
+                        25F,
+                        151F,
+                        18,
+                        24,
+                        256,
+                        256)
+                    DrawableHelper.drawTexture(matrices, x, y + (maxR - 1) * 18 + 7, 151F, 151F, 24, 24, 256, 256)*/
+                    matrices.pop()
+                }
+
                 TooltipEvent.ITEM.register { itemStack: ItemStack, mutableList: MutableList<Text>, tooltipContext: TooltipContext ->
                     if (client.world != null) {
                         stack = itemStack
@@ -153,6 +209,9 @@ object ModContent {
                         if (inv != null) {
                             val offsetX = 10
                             val offsetY = 3 + 10 * (lines.size - 1) + if (lines.size > 1) 2 else 0
+
+                            invSize = inv.size()
+                            renderBackground(matrices, x, y)
 
                             for (i in 0 until inv.size()) {
                                 renderItem(matrices,
