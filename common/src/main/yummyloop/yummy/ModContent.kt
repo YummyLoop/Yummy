@@ -33,7 +33,7 @@ import yummyloop.test.gui.Factory1
 import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.client.ToolTipPreview
-import yummyloop.yummy.client.gui.screen.addWidget
+import yummyloop.common.client.screen.addWidget
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.items.Ytem
 import yummyloop.yummy.items.YtemGroup

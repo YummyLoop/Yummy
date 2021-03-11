@@ -1,4 +1,4 @@
-package yummyloop.yummy.client.gui.screen.ingame
+package yummyloop.common.client.screen.ingame
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
@@ -9,7 +9,7 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import yummyloop.yummy.client.Texture
+import yummyloop.common.client.Texture
 
 @Environment(EnvType.CLIENT)
 open class ScreenWithPlayerInventory<H>(

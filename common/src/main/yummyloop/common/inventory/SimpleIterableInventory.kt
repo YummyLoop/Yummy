@@ -1,4 +1,4 @@
-package yummyloop.yummy.inventory
+package yummyloop.common.inventory
 
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack

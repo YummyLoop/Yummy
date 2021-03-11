@@ -25,9 +25,10 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
+import yummyloop.common.client.Texture
 import yummyloop.yummy.LOG
-import yummyloop.yummy.nbt.getSortedInventory
-import yummyloop.yummy.network.packets.PacketBuffer
+import yummyloop.common.nbt.getSortedInventory
+import yummyloop.common.packets.PacketBuffer
 import yummyloop.yummy.registry.Register
 import kotlin.math.ceil
 

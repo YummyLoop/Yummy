@@ -1,4 +1,4 @@
-package yummyloop.yummy.screen.slot
+package yummyloop.common.screen.slot
 
 import net.minecraft.inventory.Inventory
 import net.minecraft.screen.slot.Slot

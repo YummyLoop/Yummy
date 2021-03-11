@@ -1,4 +1,4 @@
-package yummyloop.yummy.nbt
+package yummyloop.common.nbt
 
 import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
@@ -8,8 +8,8 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.util.collection.DefaultedList
 import yummyloop.yummy.LOG
-import yummyloop.yummy.inventory.getCompressedInventory
-import yummyloop.yummy.inventory.getSortedInventory
+import yummyloop.common.inventory.getCompressedInventory
+import yummyloop.common.inventory.getSortedInventory
 
 fun CompoundTag.getCompressedInventory(): Inventory? {
     val inv = this.getInventory() ?: return null

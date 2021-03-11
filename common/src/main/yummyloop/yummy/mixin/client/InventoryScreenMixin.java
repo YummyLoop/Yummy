@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yummyloop.yummy.mixin.common.SlotMixin;
-import yummyloop.yummy.screen.slot.YSlot;
+import yummyloop.common.screen.slot.YSlot;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,8 +8,8 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
-import yummyloop.yummy.network.packets.PacketBuffer
-import yummyloop.yummy.network.packets.add
+import yummyloop.common.packets.PacketBuffer
+import yummyloop.common.packets.add
 
 class BaFactory(var stack: ItemStack, var isOffHand: Boolean) : ExtendedMenuProvider {
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {

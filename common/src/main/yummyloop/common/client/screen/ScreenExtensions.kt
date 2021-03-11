@@ -1,4 +1,4 @@
-package yummyloop.yummy.client.gui.screen
+package yummyloop.common.client.screen
 
 import me.shedaniel.architectury.hooks.ScreenHooks
 import net.fabricmc.api.EnvType

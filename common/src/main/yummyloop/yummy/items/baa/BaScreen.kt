@@ -5,8 +5,8 @@ import net.fabricmc.api.Environment
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
-import yummyloop.yummy.client.Texture
-import yummyloop.yummy.client.gui.screen.ingame.ScreenWithPlayerInventory
+import yummyloop.common.client.Texture
+import yummyloop.common.client.screen.ingame.ScreenWithPlayerInventory
 
 @Environment(EnvType.CLIENT)
 class BaScreen<H>(

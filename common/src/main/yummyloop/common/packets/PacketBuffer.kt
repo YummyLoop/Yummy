@@ -1,4 +1,4 @@
-package yummyloop.yummy.network.packets
+package yummyloop.common.packets
 
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled

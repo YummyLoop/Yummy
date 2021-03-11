@@ -32,7 +32,7 @@ import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ModContent
-import yummyloop.yummy.client.Texture
+import yummyloop.common.client.Texture
 import yummyloop.yummy.items.Ytem
 import java.util.function.Consumer
 import java.util.function.Supplier

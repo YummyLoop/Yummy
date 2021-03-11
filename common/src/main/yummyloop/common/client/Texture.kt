@@ -1,4 +1,4 @@
-package yummyloop.yummy.client
+package yummyloop.common.client
 
 import net.minecraft.util.Identifier
 

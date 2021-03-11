@@ -5,7 +5,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandlerType
-import yummyloop.yummy.screen.handler.ItemScreenHandler
+import yummyloop.common.screen.handler.ItemScreenHandler
 
 class BaHandler(
     syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf,

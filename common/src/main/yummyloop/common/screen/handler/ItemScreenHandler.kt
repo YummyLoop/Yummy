@@ -1,4 +1,4 @@
-package yummyloop.yummy.screen.handler
+package yummyloop.common.screen.handler
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
