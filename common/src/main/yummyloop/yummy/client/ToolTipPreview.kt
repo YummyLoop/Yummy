@@ -32,15 +32,12 @@ import yummyloop.yummy.registry.Register
 import kotlin.math.ceil
 
 object ToolTipPreview {
-    private var enderInventoryTag = CompoundTag()
-
     init {
-        a()
+        serverPacket()
         Register.Client { Client }
     }
 
-    fun a() {
-
+    private fun serverPacket() {
         NetworkManager.registerReceiver(
             NetworkManager.Side.C2S,
             Identifier("yummy", "packet_tooltip_c2s")
@@ -58,18 +55,6 @@ object ToolTipPreview {
                 NetworkManager.sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"), PacketBuffer(tag))
             }
         }
-
-        NetworkManager.registerReceiver(
-            NetworkManager.Side.S2C,
-            Identifier("yummy", "packet_tooltip_s2c")
-        ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
-            // Client Side
-            try {
-                enderInventoryTag = packetByteBuf.readCompoundTag()!!
-            } catch (e: Exception) {
-                LOG.warn("Received malformed packet: packet_tooltip_s2c !")
-            }
-        }
     }
 
 
@@ -85,11 +70,27 @@ object ToolTipPreview {
         private var backgroundTexture: Texture = Texture("yummy", "textures/gui/grid.png", 300, 300)
         private var tooltipOffsetX = 0
         private var tooltipOffsetY = 0
+        private var enderInventoryTag = CompoundTag()
 
         init {
             captureTooltip()
             captureRender()
             captureKey()
+            clientPacket()
+        }
+
+        fun clientPacket() {
+            NetworkManager.registerReceiver(
+                NetworkManager.Side.S2C,
+                Identifier("yummy", "packet_tooltip_s2c")
+            ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+                // Client Side
+                try {
+                    enderInventoryTag = packetByteBuf.readCompoundTag()!!
+                } catch (e: Exception) {
+                    LOG.warn("Received malformed packet: packet_tooltip_s2c !")
+                }
+            }
         }
 
         fun captureTooltip() = TooltipEvent.ITEM.register(this@Client::onAppendTooltip)
