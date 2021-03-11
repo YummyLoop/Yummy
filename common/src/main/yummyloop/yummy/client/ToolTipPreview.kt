@@ -14,7 +14,6 @@ import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.text.OrderedText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
@@ -45,12 +44,21 @@ object ToolTipPreview {
         }
 
         fun captureTooltip() = TooltipEvent.ITEM.register(this@Client::onAppendTooltip)
-        fun captureRender() = TooltipEvent.RENDER_VANILLA_PRE.register(this@Client::onRenderTooltip)
+        fun captureRender() {
+            TooltipEvent.RENDER_VANILLA_PRE.register { matrices, lines, x, y ->
+                this@Client.onRenderTooltip(matrices, lines.size, x, y)
+            }
+            TooltipEvent.RENDER_FORGE_PRE.register { matrices, lines, x, y ->
+                this@Client.onRenderTooltip(matrices, lines.size, x, y)
+            }
+        }
+
         fun captureKey() {
             ClientScreenInputEvent.KEY_PRESSED_PRE.register(this@Client::onKeyPressed)
             ClientScreenInputEvent.KEY_RELEASED_PRE.register(this@Client::onKeyReleased)
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun onAppendTooltip(itemStack: ItemStack, lines: MutableList<Text>, tooltipContext: TooltipContext) {
             if (client.world != null) {
                 stack = itemStack
@@ -69,12 +77,12 @@ object ToolTipPreview {
             }
         }
 
-        fun onRenderTooltip(matrices: MatrixStack, lines: MutableList<out OrderedText>, x: Int, y: Int): ActionResult {
+        fun onRenderTooltip(matrices: MatrixStack, lines: Int, x: Int, y: Int): ActionResult {
             if (client.world != null && isKeyPressed) {
                 val inv = getInv(stack)
                 if (inv != null) {
                     val offsetX = 14
-                    val offsetY = 3 + 10 * (lines.size - 1) + (if (lines.size > 1) 2 else 0) + 3
+                    val offsetY = 3 + 10 * (lines - 1) + (if (lines > 1) 2 else 0) + 3
 
                     val maxSize = 15
                     invSize = if (inv.size() <= maxSize) inv.size() else maxSize
@@ -87,6 +95,7 @@ object ToolTipPreview {
             return ActionResult.SUCCESS
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun onKeyPressed(
             client: MinecraftClient,
             screen: Screen,
@@ -98,6 +107,7 @@ object ToolTipPreview {
             return ActionResult.PASS
         }
 
+        @Suppress("UNUSED_PARAMETER")
         fun onKeyReleased(
             client: MinecraftClient,
             screen: Screen,
