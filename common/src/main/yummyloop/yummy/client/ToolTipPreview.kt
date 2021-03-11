@@ -3,6 +3,7 @@ package yummyloop.yummy.client
 import com.mojang.blaze3d.systems.RenderSystem
 import me.shedaniel.architectury.event.events.TooltipEvent
 import me.shedaniel.architectury.event.events.client.ClientScreenInputEvent
+import me.shedaniel.architectury.networking.NetworkManager
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -11,31 +12,79 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.client.util.InputUtil
 import net.minecraft.client.util.math.MatrixStack
+import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
+import net.minecraft.item.Items
 import net.minecraft.nbt.CompoundTag
+import net.minecraft.network.PacketByteBuf
+import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
+import net.minecraft.util.collection.DefaultedList
+import yummyloop.yummy.LOG
 import yummyloop.yummy.nbt.getSortedInventory
+import yummyloop.yummy.network.packets.PacketBuffer
 import yummyloop.yummy.registry.Register
 import kotlin.math.ceil
 
 object ToolTipPreview {
+    private var enderInventoryTag = CompoundTag()
+
     init {
+        a()
         Register.Client { Client }
     }
+
+    fun a() {
+
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.C2S,
+            Identifier("yummy", "packet_tooltip_c2s")
+        ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+            // Server Side
+            val player: PlayerEntity = packetContext.player
+            if (player is ServerPlayerEntity) {
+                val enderInventory = player.enderChestInventory
+                val list = DefaultedList.ofSize(enderInventory.size(), ItemStack.EMPTY)
+                list.forEachIndexed { index, _ -> list[index] = enderInventory.getStack(index) }
+
+                val tag: CompoundTag = CompoundTag()
+                Inventories.toTag(tag, list)
+
+                NetworkManager.sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"), PacketBuffer(tag))
+            }
+        }
+
+        NetworkManager.registerReceiver(
+            NetworkManager.Side.S2C,
+            Identifier("yummy", "packet_tooltip_s2c")
+        ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+            // Client Side
+            try {
+                enderInventoryTag = packetByteBuf.readCompoundTag()!!
+            } catch (e: Exception) {
+                LOG.warn("Received malformed packet: packet_tooltip_s2c !")
+            }
+        }
+    }
+
 
     @Environment(EnvType.CLIENT)
     private object Client {
         private var client: MinecraftClient = MinecraftClient.getInstance()
-        private var stack: ItemStack = ItemStack.EMPTY
+        private var hoveredStack: ItemStack = ItemStack.EMPTY
         private var pressedKeyCode: String = "key.keyboard.left.shift"
         private var isKeyPressed: Boolean = false
         private var invSize: Int = 1
         private var itemToolTipFilter: Regex = Regex("shulker_box")
         private var toolTipFilter: Regex = Regex("minecraft|shulkerBox")
+        private var backgroundTexture: Texture = Texture("yummy", "textures/gui/grid.png", 300, 300)
+        private var tooltipOffsetX = 0
+        private var tooltipOffsetY = 0
 
         init {
             captureTooltip()
@@ -61,9 +110,9 @@ object ToolTipPreview {
         @Suppress("UNUSED_PARAMETER")
         fun onAppendTooltip(itemStack: ItemStack, lines: MutableList<Text>, tooltipContext: TooltipContext) {
             if (client.world != null) {
-                stack = itemStack
+                hoveredStack = itemStack
 
-                if (itemToolTipFilter.containsMatchIn(stack.item.translationKey)) {
+                if (itemToolTipFilter.containsMatchIn(hoveredStack.item.translationKey)) {
                     lines.removeAll {
                         if (it == lines.first()) return@removeAll false
 
@@ -79,10 +128,10 @@ object ToolTipPreview {
 
         fun onRenderTooltip(matrices: MatrixStack, lines: Int, x: Int, y: Int): ActionResult {
             if (client.world != null && isKeyPressed) {
-                val inv = getInv(stack)
+                val inv = getInventoryFromStack(hoveredStack)
                 if (inv != null) {
-                    val offsetX = 14
-                    val offsetY = 3 + 10 * (lines - 1) + (if (lines > 1) 2 else 0) + 3
+                    val offsetX = 14 + tooltipOffsetX
+                    val offsetY = 3 + 10 * (lines - 1) + (if (lines > 1) 2 else 0) + 3 + tooltipOffsetY
 
                     val maxSize = 15
                     invSize = if (inv.size() <= maxSize) inv.size() else maxSize
@@ -91,7 +140,7 @@ object ToolTipPreview {
                     renderItems(matrices, inv, x + offsetX, y + offsetY)
                 }
             }
-            stack = ItemStack.EMPTY
+            hoveredStack = ItemStack.EMPTY
             return ActionResult.SUCCESS
         }
 
@@ -119,19 +168,24 @@ object ToolTipPreview {
             return ActionResult.PASS
         }
 
-        fun getInv(s: ItemStack): Inventory? {
-            //LOG.info(MinecraftClient.getInstance().player!!.enderChestInventory.getStack(0).item) // needs to be on the server side
-            val tag: CompoundTag? = s.tag
-            if (s != ItemStack.EMPTY && tag != null) {
-                // Custom inventories
-                var inv = tag.getSortedInventory()
-                if (inv != null) return inv
+        fun getInventoryFromStack(itemStack: ItemStack): Inventory? {
+            if (itemStack != ItemStack.EMPTY) {
+                var tag: CompoundTag? = itemStack.tag
+                if (itemStack.item == Items.ENDER_CHEST) {
+                    NetworkManager.sendToServer(Identifier("yummy", "packet_tooltip_c2s"), PacketBuffer())
+                    tag = enderInventoryTag
+                }
+                if (tag != null) {
+                    // Custom inventories
+                    var inventory = tag.getSortedInventory()
+                    if (inventory != null) return inventory
 
-                // Vanilla inventories
-                val subTag = tag.getCompound("BlockEntityTag")
-                if (!subTag.isEmpty) {
-                    inv = subTag.getSortedInventory()
-                    if (inv != null) return inv
+                    // Vanilla inventories
+                    val subTag = tag.getCompound("BlockEntityTag")
+                    if (!subTag.isEmpty) {
+                        inventory = subTag.getSortedInventory()
+                        if (inventory != null) return inventory
+                    }
                 }
             }
             return null
@@ -143,7 +197,6 @@ object ToolTipPreview {
          * @see HandledScreen
          */
         fun renderItem(matrices: MatrixStack, itemStack: ItemStack, x: Int, y: Int) {
-            val client = MinecraftClient.getInstance()
             val itemRenderer = client.itemRenderer
             val textRenderer = client.textRenderer
 
@@ -171,7 +224,6 @@ object ToolTipPreview {
         }
 
         fun renderItems(matrices: MatrixStack, inv: Inventory, x: Int, y: Int) {
-            val client = MinecraftClient.getInstance()
             val itemRenderer = client.itemRenderer
             val maxSize = 15
 
@@ -234,7 +286,7 @@ object ToolTipPreview {
 
         fun renderBackground(matrices: MatrixStack, x: Int, y: Int) {
             matrices.push()
-            client.textureManager.bindTexture(Identifier("yummy", "textures/gui/grid.png"))
+            client.textureManager.bindTexture(backgroundTexture.get())
             RenderSystem.translatef(0F, 0F, 400F)
 
             val offSetX = -8
@@ -248,8 +300,8 @@ object ToolTipPreview {
                     v,
                     width,
                     height,
-                    300,
-                    300)
+                    backgroundTexture.xSize,
+                    backgroundTexture.ySize)
 
             fun draw(u: Float, v: Float, width: Int, height: Int) = draw(0, 0, u, v, width, height)
             when (invSize) {
