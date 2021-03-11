@@ -30,72 +30,87 @@ object ToolTipPreview {
 
     @Environment(EnvType.CLIENT)
     private object Client {
-        var client: MinecraftClient = MinecraftClient.getInstance()
+        private var client: MinecraftClient = MinecraftClient.getInstance()
         private var stack: ItemStack = ItemStack.EMPTY
         private var pressedKeyCode: String = "key.keyboard.left.shift"
         private var isKeyPressed: Boolean = false
         private var invSize: Int = 1
-        private var shulkerList = mutableListOf("shulker_box")
+        private var itemToolTipFilter = mutableListOf("shulker_box")
+        private var toolTipFilter: Regex = Regex("minecraft|shulkerBox")
 
         init {
             captureTooltip()
-            render()
+            captureRender()
             captureKey()
         }
 
-        fun captureTooltip() {
-            TooltipEvent.ITEM.register { itemStack: ItemStack, lines: MutableList<Text>, tooltipContext: TooltipContext ->
-                if (client.world != null) {
-                    stack = itemStack
+        fun captureTooltip() = TooltipEvent.ITEM.register(this@Client::onAppendTooltip)
+        fun captureRender() = TooltipEvent.RENDER_VANILLA_PRE.register(this@Client::onRenderTooltip)
+        fun captureKey() {
+            ClientScreenInputEvent.KEY_PRESSED_PRE.register(this@Client::onKeyPressed)
+            ClientScreenInputEvent.KEY_RELEASED_PRE.register(this@Client::onKeyReleased)
+        }
 
-                    if (shulkerList.any { Regex(it).containsMatchIn(stack.item.translationKey) }) {
-                        lines.removeAll {
-                            if (it == lines.first()) {
-                                //LOG.info("skipped: $it")
-                                return@removeAll false
-                            }
-                            if (it is TranslatableText
-                                && (it.toString().contains(Regex("minecraft|shulkerBox")))
-                            ) {
-                                //LOG.info("removed : $it")
-                                return@removeAll true
-                            }
+        fun onAppendTooltip(itemStack: ItemStack, lines: MutableList<Text>, tooltipContext: TooltipContext) {
+            if (client.world != null) {
+                stack = itemStack
+
+                if (itemToolTipFilter.any { Regex(it).containsMatchIn(stack.item.translationKey) }) {
+                    lines.removeAll {
+                        if (it == lines.first()) {
+                            //LOG.info("skipped: $it")
                             return@removeAll false
                         }
+                        if (it is TranslatableText
+                            && (it.toString().contains(toolTipFilter))
+                        ) {
+                            //LOG.info("removed : $it")
+                            return@removeAll true
+                        }
+                        return@removeAll false
                     }
                 }
             }
         }
 
-        fun render() {
-            TooltipEvent.RENDER_VANILLA_PRE.register { matrices: MatrixStack, lines: MutableList<out OrderedText>, x: Int, y: Int ->
-                if (client.world != null && isKeyPressed) {
-                    val inv = getInv(stack)
-                    if (inv != null) {
-                        val offsetX = 14
-                        val offsetY = 3 + 10 * (lines.size - 1) + (if (lines.size > 1) 2 else 0) + 3
+        fun onRenderTooltip(matrices: MatrixStack, lines: MutableList<out OrderedText>, x: Int, y: Int): ActionResult {
+            if (client.world != null && isKeyPressed) {
+                val inv = getInv(stack)
+                if (inv != null) {
+                    val offsetX = 14
+                    val offsetY = 3 + 10 * (lines.size - 1) + (if (lines.size > 1) 2 else 0) + 3
 
-                        val maxSize = 15
-                        invSize = if (inv.size() <= maxSize) inv.size() else maxSize
+                    val maxSize = 15
+                    invSize = if (inv.size() <= maxSize) inv.size() else maxSize
 
-                        renderBackground(matrices, x + offsetX, y + offsetY)
-                        renderItems(matrices, inv, x + offsetX, y + offsetY)
-                    }
+                    renderBackground(matrices, x + offsetX, y + offsetY)
+                    renderItems(matrices, inv, x + offsetX, y + offsetY)
                 }
-                stack = ItemStack.EMPTY
-                return@register ActionResult.SUCCESS
             }
+            stack = ItemStack.EMPTY
+            return ActionResult.SUCCESS
         }
 
-        fun captureKey() {
-            ClientScreenInputEvent.KEY_PRESSED_PRE.register { client: MinecraftClient, screen: Screen, keyCode: Int, scanCode: Int, modifiers: Int ->
-                if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = true
-                return@register ActionResult.PASS
-            }
-            ClientScreenInputEvent.KEY_RELEASED_PRE.register { client: MinecraftClient, screen: Screen, keyCode: Int, scanCode: Int, modifiers: Int ->
-                if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = false
-                return@register ActionResult.PASS
-            }
+        fun onKeyPressed(
+            client: MinecraftClient,
+            screen: Screen,
+            keyCode: Int,
+            scanCode: Int,
+            modifiers: Int,
+        ): ActionResult {
+            if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = true
+            return ActionResult.PASS
+        }
+
+        fun onKeyReleased(
+            client: MinecraftClient,
+            screen: Screen,
+            keyCode: Int,
+            scanCode: Int,
+            modifiers: Int,
+        ): ActionResult {
+            if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = false
+            return ActionResult.PASS
         }
 
         fun getInv(s: ItemStack): Inventory? {
