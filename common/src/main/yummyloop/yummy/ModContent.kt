@@ -56,7 +56,6 @@ import yummyloop.yummy.items.baa.BaScreen
 import yummyloop.yummy.nbt.getSortedInventory
 import yummyloop.yummy.registry.Register
 import java.util.function.Supplier
-import kotlin.math.ceil
 
 object ModContent {
     var EXAMPLE_ITEM =
@@ -65,7 +64,7 @@ object ModContent {
     var ba = Register.item("ba") { Ba() }
 
     init {
-        Register.Client.texture("gui/9x9_wood")
+        Register.Client.texture("gui/grid")
         Register.Client.texture("gui/9x9")
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler)
@@ -112,11 +111,12 @@ object ModContent {
                  * @see HandledScreen
                  */
                 fun renderItem(matrices: MatrixStack, itemStack: ItemStack, x: Int, y: Int) {
+                    val client = MinecraftClient.getInstance()
                     val itemRenderer = client.itemRenderer
                     val textRenderer = client.textRenderer
 
                     val itemCountString = if (itemStack.count > 99) "+99" else itemStack.count.toString()
-                    val textScale = 0.85F
+                    val textScale = 1F //0.85F
 
                     matrices.push()
                     RenderSystem.translatef(0.0f, 0.0f, 32.0f)
@@ -135,68 +135,64 @@ object ModContent {
 
                 fun renderBackground(matrices: MatrixStack, x: Int, y: Int) {
                     matrices.push()
-                    client.textureManager.bindTexture(Identifier("yummy", "textures/gui/9x9_wood.png"))
+                    client.textureManager.bindTexture(Identifier("yummy", "textures/gui/grid.png"))
                     RenderSystem.translatef(0F, 0F, 400F)
 
-                    val maxR = ceil(invSize.toDouble() / 9F).toInt()
-                    val maxC = if (maxR > 1) 9 else invSize % 10
+                    val offSetX = -8
+                    val offSetY = -3
 
- /*                   for (r in 0 until maxR) {
-                        for (c in 0 until maxC) {
-                            if (r == 0) {// First row
-                                if (c == 0) {
-                                    DrawableHelper.drawTexture(matrices, x, y, 0F, 0F, 25, 25, 256, 256)
-                                } else if (c in 1 until maxC - 1) {
-                                    DrawableHelper.drawTexture(matrices, x + c * 18, y, 25F, 0F, 18, 25, 256, 256)
-                                }
-                                if (c == maxC - 1) {
-                                    DrawableHelper.drawTexture(matrices, x + c * 18, y, 151F, 0F, 24, 25, 256, 256)
-                                }
-                            }
+                    fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
+                        DrawableHelper.drawTexture(matrices,
+                            x + offSetX + xOffset,
+                            y + offSetY + yOffset,
+                            u,
+                            v,
+                            width,
+                            height,
+                            300,
+                            300)
 
+                    fun draw(u: Float, v: Float, width: Int, height: Int) = draw(0, 0, u, v, width, height)
+                    when (invSize) {
+                        1 -> draw(0F, 0F, 32, 32)
+                        2 -> draw(33F, 0F, 50, 32)
+                        3 -> draw(84F, 0F, 68, 32)
+                        4 -> draw(0F, 33F, 50, 50)
+                        5 -> draw(51F, 33F, 68, 50)
+                        6 -> draw(120F, 33F, 68, 50)
+                        7 -> draw(0F, 84F, 86, 50)
+                        8 -> draw(87F, 84F, 68, 68)
+                        9 -> draw(156F, 84F, 68, 68)
+                        10 -> draw(0F, 135F, 86, 68)
+                        11 -> draw(87F, 153F, 86, 68)
+                        12 -> draw(174F, 153F, 86, 68)
+                        13 -> {
+                            draw(105F, 223F, 79, 68)
+                            draw(79, 68, 148F, 153F, 25, 68)
                         }
-                    }*/
-
-/*
-                    for (l in 1 until maxR - 1) {
-                        DrawableHelper.drawTexture(matrices, x, y + l * 18 + 7, 0F, 25F, 25, 18, 256, 256)
-                        for (i in 1 until maxC - 1) DrawableHelper.drawTexture(matrices,
-                            x + i * 18,
-                            y + l * 18 + 7,
-                            25F,
-                            25F,
-                            18,
-                            18,
-                            256,
-                            256)
-                        DrawableHelper.drawTexture(matrices, x, y + l * 18 + 7, 151F, 25F, 24, 18, 256, 256)
+                        14 -> draw(105F, 223F, 104, 68)
+                        else -> draw(0F, 223F, 104, 68)
                     }
 
-                    DrawableHelper.drawTexture(matrices, x, y + (maxR - 1) * 18 + 7, 0F, 151F, 25, 24, 256, 256)
-                    for (i in 1 until maxC - 1) DrawableHelper.drawTexture(matrices,
-                        x + i * 18,
-                        y + (maxR - 1) * 18 + 7,
-                        25F,
-                        151F,
-                        18,
-                        24,
-                        256,
-                        256)
-                    DrawableHelper.drawTexture(matrices, x, y + (maxR - 1) * 18 + 7, 151F, 151F, 24, 24, 256, 256)*/
                     matrices.pop()
                 }
 
-                TooltipEvent.ITEM.register { itemStack: ItemStack, mutableList: MutableList<Text>, tooltipContext: TooltipContext ->
+                TooltipEvent.ITEM.register { itemStack: ItemStack, lines: MutableList<Text>, tooltipContext: TooltipContext ->
                     if (client.world != null) {
                         stack = itemStack
 
                         if (shulkerList.any { Regex(it).containsMatchIn(stack.item.translationKey) }) {
-                            mutableList.removeAll {
-                                if (it == mutableList.first()) return@removeAll false
-                                //if (it == mutableList.last()) return@removeAll false
+                            lines.removeAll {
+                                if (it == lines.first()) {
+                                    //LOG.info("skipped: $it")
+                                    return@removeAll false
+                                }
                                 if (it is TranslatableText
                                     && (it.toString().contains(Regex("minecraft|shulkerBox")))
-                                ) return@removeAll true
+                                ) {
+                                    //LOG.info("removed : $it")
+                                    return@removeAll true
+                                }
                                 return@removeAll false
                             }
                         }
@@ -208,17 +204,50 @@ object ModContent {
                         val inv = getInv(stack)
                         if (inv != null) {
                             val offsetX = 10
-                            val offsetY = 3 + 10 * (lines.size - 1) + if (lines.size > 1) 2 else 0
+                            val offsetY = 3 + 10 * (lines.size - 1) + (if (lines.size > 1) 2 else 0) + 3
 
-                            invSize = inv.size()
-                            renderBackground(matrices, x, y)
+                            val maxSize = 15
+                            invSize = if (inv.size() <= maxSize) inv.size() else maxSize
 
-                            for (i in 0 until inv.size()) {
-                                renderItem(matrices,
-                                    inv.getStack(i),
-                                    x + offsetX + (i % 9) * 18,
-                                    y + offsetY + (i / 9) * 18)
+                            renderBackground(matrices, x + offsetX, y + offsetY)
+
+                            matrices.push()
+                            fun renderI(col: Int) {
+                                for (i in 0 until invSize) {
+                                    if (i >= maxSize - 1) break
+                                    renderItem(matrices,
+                                        inv.getStack(i),
+                                        x + offsetX + (i % col) * 18,
+                                        y + offsetY + (i / col) * 18)
+                                }
                             }
+
+                            when (invSize) {
+                                4 -> renderI(2)
+                                5 -> renderI(3)
+                                6 -> renderI(3)
+                                7 -> renderI(4)
+                                8 -> renderI(3)
+                                9 -> renderI(3)
+                                10 -> {
+                                    for (i in 0 until 7) {
+                                        renderItem(matrices,
+                                            inv.getStack(i),
+                                            x + offsetX + (i % 4) * 18,
+                                            y + offsetY + (i / 4) * 18)
+                                    }
+                                    for (i in 7 until 10) {
+                                        renderItem(matrices,
+                                            inv.getStack(i),
+                                            x + offsetX + ((i-7) % 3) * 18,
+                                            y + offsetY + ((i-7) / 3) * 18 + 2*18)
+                                    }
+                                }
+                                11 -> renderI(4)
+                                12 -> renderI(4)
+                                else -> renderI(5)
+                            }
+                            matrices.pop()
                         }
                     }
                     return@register ActionResult.SUCCESS
