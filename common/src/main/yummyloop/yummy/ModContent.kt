@@ -56,6 +56,7 @@ import yummyloop.yummy.items.baa.BaScreen
 import yummyloop.yummy.nbt.getSortedInventory
 import yummyloop.yummy.registry.Register
 import java.util.function.Supplier
+import kotlin.math.ceil
 
 object ModContent {
     var EXAMPLE_ITEM =
@@ -115,14 +116,26 @@ object ModContent {
                     val itemRenderer = client.itemRenderer
                     val textRenderer = client.textRenderer
 
-                    val itemCountString = if (itemStack.count > 99) "+99" else itemStack.count.toString()
+                    val itemCountString : String = itemStack.count.let {
+                        if (it > 999) return@let "${itemStack.count/1000}k"
+                        if (it > 9999) return@let "+9k"
+                        return@let "${itemStack.count}"
+                    }
 
                     matrices.push()
                     itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
+                    RenderSystem.pushMatrix()
+                    var scale = 1F
+                    if (itemStack.count in 100..999) {
+                        scale = 0.8F
+                        RenderSystem.translatef(1 / scale,1 / scale, 1F)
+                        RenderSystem.scalef(scale, scale, 1F)
+                    }
                     itemRenderer.renderGuiItemOverlay(textRenderer, itemStack,
-                        x,
-                        y,
+                        ceil(x/scale).toInt(),
+                        ceil(y/scale).toInt(),
                         itemCountString)
+                    RenderSystem.popMatrix()
                     matrices.pop()
                 }
 
@@ -168,6 +181,20 @@ object ModContent {
                         }
                         11 -> renderI(4)
                         12 -> renderI(4)
+                        13 -> {
+                            for (i in 0 until 9) {
+                                renderItem(matrices,
+                                    inv.getStack(i),
+                                    x + (i % 5) * 18,
+                                    y + (i / 5) * 18)
+                            }
+                            for (i in 9 until 13) {
+                                renderItem(matrices,
+                                    inv.getStack(i),
+                                    x + ((i - 9) % 4) * 18,
+                                    y + ((i - 9) / 4) * 18 + 2 * 18)
+                            }
+                        }
                         else -> renderI(5)
                     }
                     itemRenderer.zOffset = 0.0f
@@ -180,7 +207,7 @@ object ModContent {
                     RenderSystem.translatef(0F, 0F, 400F)
 
                     val offSetX = -8
-                    val offSetY = -5
+                    val offSetY = -8
 
                     fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
                         DrawableHelper.drawTexture(matrices,
@@ -209,7 +236,7 @@ object ModContent {
                         12 -> draw(174F, 153F, 86, 68)
                         13 -> {
                             draw(105F, 223F, 79, 68)
-                            draw(79, 68, 148F, 153F, 25, 68)
+                            draw(79, 0, 61F, 135F, 25, 68)
                         }
                         14 -> draw(105F, 223F, 104, 68)
                         else -> draw(0F, 223F, 104, 68)
@@ -244,7 +271,7 @@ object ModContent {
                     if (client.world != null && isKeyPressed) {
                         val inv = getInv(stack)
                         if (inv != null) {
-                            val offsetX = 10
+                            val offsetX = 14
                             val offsetY = 3 + 10 * (lines.size - 1) + (if (lines.size > 1) 2 else 0) + 3
 
                             val maxSize = 15
@@ -254,6 +281,7 @@ object ModContent {
                             renderItems(matrices, inv, x + offsetX, y + offsetY)
                         }
                     }
+                    stack= ItemStack.EMPTY
                     return@register ActionResult.SUCCESS
                 }
 
