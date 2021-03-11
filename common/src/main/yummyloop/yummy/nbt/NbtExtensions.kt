@@ -24,7 +24,7 @@ fun CompoundTag.getSortedInventory(): Inventory? {
 fun CompoundTag.getInventory(): Inventory? {
     val listTag: ListTag = this.getList("Items", 10)
     if (!listTag.isEmpty()) {
-        var size = 90
+        var size = 69
 
         try {
             size = Regex("""\d+""").find(listTag.last().toString())?.value?.toInt()!! + 1
@@ -32,8 +32,7 @@ fun CompoundTag.getInventory(): Inventory? {
             LOG.warn("Failed to find regex pattern in inventory NBT")
         }
 
-        val stackList = DefaultedList.ofSize(size, ItemStack.EMPTY)
-        Inventories.fromTag(this, stackList)
+        val stackList = DefaultedList.ofSize(size, ItemStack.EMPTY).also { Inventories.fromTag(this, it) }
         return SimpleInventory(*stackList.toTypedArray())
     }
     return null

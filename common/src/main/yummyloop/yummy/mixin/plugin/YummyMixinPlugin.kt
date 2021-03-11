@@ -45,16 +45,16 @@ class YummyMixinPlugin : IMixinConfigPlugin {
      * target's mixin set
      */
     override fun shouldApplyMixin(targetClassName: String?, mixinClassName: String?): Boolean {
-        fun containsMixinClassName(vararg mixin: String): Boolean = mixin.contains(mixinClassName)
+        fun mixinEqualsAny(vararg mixin: String): Boolean = mixin.contains(mixinClassName)
 
         if (ExampleMod.modConfig.dev || Platform.isDevelopmentEnvironment()) {
-            if (containsMixinClassName("$mixinPath.client.ExampleMixin")) {
+            if (mixinEqualsAny("$mixinPath.client.ExampleMixin")) {
                 return true
             }
             return true
         }
 
-        if (containsMixinClassName(
+        if (mixinEqualsAny(
                 "$mixinPath.client.InventoryScreenMixin",
                 "$mixinPath.common.PlayerScreenHandlerMixin",
                 "$mixinPath.mixin.common.SlotMixin"
