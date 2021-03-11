@@ -35,7 +35,7 @@ object ToolTipPreview {
         private var pressedKeyCode: String = "key.keyboard.left.shift"
         private var isKeyPressed: Boolean = false
         private var invSize: Int = 1
-        private var itemToolTipFilter = mutableListOf("shulker_box")
+        private var itemToolTipFilter: Regex = Regex("shulker_box")
         private var toolTipFilter: Regex = Regex("minecraft|shulkerBox")
 
         init {
@@ -55,18 +55,14 @@ object ToolTipPreview {
             if (client.world != null) {
                 stack = itemStack
 
-                if (itemToolTipFilter.any { Regex(it).containsMatchIn(stack.item.translationKey) }) {
+                if (itemToolTipFilter.containsMatchIn(stack.item.translationKey)) {
                     lines.removeAll {
-                        if (it == lines.first()) {
-                            //LOG.info("skipped: $it")
-                            return@removeAll false
-                        }
+                        if (it == lines.first()) return@removeAll false
+
                         if (it is TranslatableText
                             && (it.toString().contains(toolTipFilter))
-                        ) {
-                            //LOG.info("removed : $it")
-                            return@removeAll true
-                        }
+                        ) return@removeAll true
+
                         return@removeAll false
                     }
                 }
