@@ -116,19 +116,60 @@ object ModContent {
                     val textRenderer = client.textRenderer
 
                     val itemCountString = if (itemStack.count > 99) "+99" else itemStack.count.toString()
-                    val textScale = 1F //0.85F
 
                     matrices.push()
+                    itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
+                    itemRenderer.renderGuiItemOverlay(textRenderer, itemStack,
+                        x,
+                        y,
+                        itemCountString)
+                    matrices.pop()
+                }
+
+                fun renderItems(matrices: MatrixStack, inv: Inventory, x: Int, y: Int) {
+                    val client = MinecraftClient.getInstance()
+                    val itemRenderer = client.itemRenderer
+                    val maxSize = 15
+
+                    matrices.push()
+                    fun renderI(col: Int) {
+                        for (i in 0 until invSize) {
+                            if (i >= maxSize - 1) break
+                            renderItem(matrices,
+                                inv.getStack(i),
+                                x + (i % col) * 18,
+                                y + (i / col) * 18)
+                        }
+                    }
+
                     RenderSystem.translatef(0.0f, 0.0f, 32.0f)
                     itemRenderer.zOffset = 200.0f
-                    itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
-                    RenderSystem.scalef(textScale, textScale, 1F)
-                    itemRenderer.renderGuiItemOverlay(textRenderer,
-                        itemStack,
-                        (x / textScale).toInt(),
-                        (y / textScale).toInt(),
-                        itemCountString)
-                    RenderSystem.scalef(1 / textScale, 1 / textScale, 1F)
+
+                    when (invSize) {
+                        4 -> renderI(2)
+                        5 -> renderI(3)
+                        6 -> renderI(3)
+                        7 -> renderI(4)
+                        8 -> renderI(3)
+                        9 -> renderI(3)
+                        10 -> {
+                            for (i in 0 until 7) {
+                                renderItem(matrices,
+                                    inv.getStack(i),
+                                    x + (i % 4) * 18,
+                                    y + (i / 4) * 18)
+                            }
+                            for (i in 7 until 10) {
+                                renderItem(matrices,
+                                    inv.getStack(i),
+                                    x + ((i - 7) % 3) * 18,
+                                    y + ((i - 7) / 3) * 18 + 2 * 18)
+                            }
+                        }
+                        11 -> renderI(4)
+                        12 -> renderI(4)
+                        else -> renderI(5)
+                    }
                     itemRenderer.zOffset = 0.0f
                     matrices.pop()
                 }
@@ -139,7 +180,7 @@ object ModContent {
                     RenderSystem.translatef(0F, 0F, 400F)
 
                     val offSetX = -8
-                    val offSetY = -3
+                    val offSetY = -5
 
                     fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
                         DrawableHelper.drawTexture(matrices,
@@ -210,44 +251,7 @@ object ModContent {
                             invSize = if (inv.size() <= maxSize) inv.size() else maxSize
 
                             renderBackground(matrices, x + offsetX, y + offsetY)
-
-                            matrices.push()
-                            fun renderI(col: Int) {
-                                for (i in 0 until invSize) {
-                                    if (i >= maxSize - 1) break
-                                    renderItem(matrices,
-                                        inv.getStack(i),
-                                        x + offsetX + (i % col) * 18,
-                                        y + offsetY + (i / col) * 18)
-                                }
-                            }
-
-                            when (invSize) {
-                                4 -> renderI(2)
-                                5 -> renderI(3)
-                                6 -> renderI(3)
-                                7 -> renderI(4)
-                                8 -> renderI(3)
-                                9 -> renderI(3)
-                                10 -> {
-                                    for (i in 0 until 7) {
-                                        renderItem(matrices,
-                                            inv.getStack(i),
-                                            x + offsetX + (i % 4) * 18,
-                                            y + offsetY + (i / 4) * 18)
-                                    }
-                                    for (i in 7 until 10) {
-                                        renderItem(matrices,
-                                            inv.getStack(i),
-                                            x + offsetX + ((i-7) % 3) * 18,
-                                            y + offsetY + ((i-7) / 3) * 18 + 2*18)
-                                    }
-                                }
-                                11 -> renderI(4)
-                                12 -> renderI(4)
-                                else -> renderI(5)
-                            }
-                            matrices.pop()
+                            renderItems(matrices, inv, x + offsetX, y + offsetY)
                         }
                     }
                     return@register ActionResult.SUCCESS
