@@ -1,4 +1,4 @@
-package yummyloop.yummy.forge
+package yummyloop.yummy
 
 import me.shedaniel.architectury.platform.forge.EventBuses
 import net.minecraftforge.api.distmarker.Dist
@@ -6,8 +6,6 @@ import net.minecraftforge.api.distmarker.OnlyIn
 import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
-import yummyloop.yummy.ExampleMod
-import yummyloop.yummy.ExampleMod.onInitialize
 import yummyloop.yummy.integration.geckolib.forge.GeckoUtilsImpl
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext.Companion.get as KotlinModLoadingContext
 
@@ -17,7 +15,7 @@ object ExampleModForge {
         // Submit our event bus to let architectury register our content on the right time
         //EventBuses.registerModEventBus(ExampleMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         EventBuses.registerModEventBus(ExampleMod.MOD_ID, KotlinModLoadingContext().getKEventBus())
-        onInitialize()
+        ExampleMod.onInitialize()
     }
 
     @Mod.EventBusSubscriber(modid = ExampleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)

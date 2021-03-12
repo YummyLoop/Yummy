@@ -27,7 +27,7 @@ import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import yummyloop.common.client.Texture
 import yummyloop.common.nbt.getSortedInventory
-import yummyloop.common.packets.PacketBuffer
+import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.LOG
 import kotlin.math.ceil

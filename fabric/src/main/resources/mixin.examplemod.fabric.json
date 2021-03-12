@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "package": "yummyloop.yummy.fabric.mixin",
+  "package": "yummyloop.yummy.mixin.fabric",
   "mixins": [
   ],
   "client": [

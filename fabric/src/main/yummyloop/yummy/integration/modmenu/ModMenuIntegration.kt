@@ -1,4 +1,4 @@
-package yummyloop.yummy.fabric.integration.modmenu
+package yummyloop.yummy.integration.modmenu
 
 import com.terraformersmc.modmenu.api.ConfigScreenFactory
 import com.terraformersmc.modmenu.api.ModMenuApi

@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.nbt.ListTag
 import net.minecraft.util.collection.DefaultedList
-import yummyloop.yummy.LOG
+import yummyloop.common.Common.LOG
 import yummyloop.common.inventory.getCompressedInventory
 import yummyloop.common.inventory.getSortedInventory
 

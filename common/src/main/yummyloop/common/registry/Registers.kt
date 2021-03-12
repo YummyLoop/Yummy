@@ -19,7 +19,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
-import yummyloop.yummy.LOG
+import yummyloop.common.Common.LOG
 import yummyloop.yummy.items.Ytem
 import java.util.function.Supplier
 
@@ -47,7 +47,7 @@ class Registers(private val modId: String) {
     }
 
     /** Entity Type register */
-    private val entityTypeRegister by lazy {
+    private val entityTypeRegister: DeferredRegister<EntityType<*>> by lazy {
         DeferredRegister.create(modId, Registry.ENTITY_TYPE_KEY).also { registerMap[2] = it::register }
     }
 

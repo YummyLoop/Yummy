@@ -1,4 +1,4 @@
-package yummyloop.common.packets
+package yummyloop.common.network.packets
 
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
@@ -9,7 +9,7 @@ import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
-import yummyloop.yummy.LOG
+import yummyloop.common.Common.LOG
 import java.nio.ByteBuffer
 import java.util.*
 

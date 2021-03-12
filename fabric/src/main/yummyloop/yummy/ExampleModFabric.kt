@@ -1,8 +1,7 @@
-package yummyloop.yummy.fabric
+package yummyloop.yummy
 
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
-import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.integration.geckolib.fabric.GeckoUtilsImpl
 
 object ExampleModFabric : ModInitializer, ClientModInitializer {

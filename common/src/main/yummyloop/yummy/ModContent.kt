@@ -10,7 +10,6 @@ import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
-import net.minecraft.data.client.model.Texture.texture
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
@@ -22,6 +21,7 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
+import yummyloop.common.client.screen.addWidget
 import yummyloop.test.block.BoxScreen
 import yummyloop.test.block.BoxScreenHandler
 import yummyloop.test.block.TestBlockEntity
@@ -33,9 +33,8 @@ import yummyloop.test.geckolib.PotatoArmor2
 import yummyloop.test.gui.Factory1
 import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
-import yummyloop.yummy.client.ToolTipPreview
-import yummyloop.common.client.screen.addWidget
 import yummyloop.yummy.ExampleMod.Register
+import yummyloop.yummy.client.ToolTipPreview
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.items.Ytem
 import yummyloop.yummy.items.YtemGroup
