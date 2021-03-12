@@ -1,49 +1,34 @@
-package yummyloop.yummy.registry
+package yummyloop.common.registry
 
-import me.shedaniel.architectury.event.events.TextureStitchEvent
-import me.shedaniel.architectury.platform.Platform
 import me.shedaniel.architectury.registry.BlockProperties
 import me.shedaniel.architectury.registry.DeferredRegister
 import me.shedaniel.architectury.registry.MenuRegistry
 import me.shedaniel.architectury.registry.RegistrySupplier
-import net.fabricmc.api.EnvType
-import net.fabricmc.api.Environment
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
-import net.minecraft.client.gui.screen.Screen
-import net.minecraft.client.gui.screen.ingame.HandledScreen
-import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
-import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
-import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
-import net.minecraft.text.Text
-import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
-import yummyloop.yummy.ExampleMod
-import yummyloop.yummy.ModContent
-import yummyloop.common.client.Texture
 import yummyloop.yummy.items.Ytem
-import java.util.function.Consumer
 import java.util.function.Supplier
 
 /** Contains the declared registers, and the functions to register new content */
-object Register {
-    private const val modId = ExampleMod.MOD_ID
+class Registers(private val modId: String) {
+    val client by lazy { ClientRegisters(modId) }
 
     /** Final registry of the content */
     internal fun register() {
-        ModContent
+        //ModContent
         entityTypeRegister.register()
         entityAttributeRegister.register()
         blockRegister.register()
@@ -54,37 +39,39 @@ object Register {
     }
 
     /** Block register */
-    private val blockRegister: DeferredRegister<Block> =
+    private val blockRegister: DeferredRegister<Block> by lazy {
         DeferredRegister.create(modId, Registry.BLOCK_KEY)
+    }
 
     /** Block Entity Type register */
-    private val blockEntityTypeRegister: DeferredRegister<BlockEntityType<*>> =
+    private val blockEntityTypeRegister: DeferredRegister<BlockEntityType<*>> by lazy {
         DeferredRegister.create(modId, Registry.BLOCK_ENTITY_TYPE_KEY)
+    }
 
     /** Entity Type register */
-    private val entityTypeRegister: DeferredRegister<EntityType<*>> =
+    private val entityTypeRegister: DeferredRegister<EntityType<*>> by lazy {
         DeferredRegister.create(modId, Registry.ENTITY_TYPE_KEY)
+    }
 
     /** Entity Attribute register */
-    private val entityAttributeRegister: DeferredRegister<EntityAttribute> =
+    private val entityAttributeRegister: DeferredRegister<EntityAttribute> by lazy {
         DeferredRegister.create(modId, Registry.ATTRIBUTE_KEY)
+    }
 
     /** Entity Attribute link register */
-    private val entityAttributeLinkRegister : EntityAttributeLinkRegister =
+    private val entityAttributeLinkRegister: EntityAttributeLinkRegister by lazy {
         EntityAttributeLinkRegister.create(modId)
+    }
 
     /** Item register */
-    private val itemRegister: DeferredRegister<Item> =
+    private val itemRegister: DeferredRegister<Item> by lazy {
         DeferredRegister.create(modId, Registry.ITEM_KEY)
+    }
 
     /** Menu register */
-    private val screenHandlerTypeRegister: DeferredRegister<ScreenHandlerType<*>> =
+    private val screenHandlerTypeRegister: DeferredRegister<ScreenHandlerType<*>> by lazy {
         DeferredRegister.create(modId, Registry.MENU_KEY)
-
-    // We can use this if we don't want to use DeferredRegister
-    // val REGISTRIES by lazyOf(Registries.get(ExampleMod.MOD_ID))
-    // var lazyItems = REGISTRIES.get(Registry.ITEM_KEY)
-    // var lazyItem = lazyItems.registerSupplied(Identifier(ExampleMod.MOD_ID, "example_lazy_item"), ::Ytem)}
+    }
 
     /**
      * Registers a new item
@@ -227,79 +214,5 @@ object Register {
         factory: MenuRegistry.ExtendedMenuTypeFactory<T>,
     ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
         return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(factory) }
-    }
-
-    object Client {
-        private val isClient: Boolean by lazy { Platform.getEnv() == EnvType.CLIENT }
-        private val lateCallList: MutableList<Supplier<Any>> = mutableListOf()
-
-        /**
-         * Initializes all the client entries
-         */
-        @Environment(EnvType.CLIENT)
-        fun register() {
-            lateCallList.forEach { it.get() }
-            lateCallList.clear()
-        }
-
-        /**
-         * Adds entries for later initialization in the Client
-         * when not in the client side it does nothing
-         *
-         * @param s Entry supplier
-         */
-        operator fun invoke(s: Supplier<Any>) {
-            if (isClient) lateCallList.add(s)
-        }
-
-        /**
-         * Registers a screen, can only be called from the client side
-         *
-         * @param handlerType the registered type of the screen Handler
-         * @param factory The screen factory
-         * @see HandledScreen
-         * @see screen
-         */
-        @Environment(EnvType.CLIENT)
-        fun <H, S> clientScreen(
-            handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
-            factory: MenuRegistry.ScreenFactory<H, S>,
-        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-            MenuRegistry.registerScreenFactory(handlerType.get(), factory)
-        }
-
-        /**
-         * Registers a screen
-         *
-         * @param handlerType the registered type of the screen Handler
-         * @param factory The screen factory supplier
-         * @see HandledScreen
-         * @see MenuRegistry.ScreenFactory
-         */
-        fun <H, S> screen(
-            handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
-            factory: Supplier<(H, PlayerInventory, Text) -> S>,
-        ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-            Client { MenuRegistry.registerScreenFactory(handlerType.get(), factory.get()) }
-        }
-
-        /**
-         * Registers a texture,
-         * the location is of the format: "textures/$path.png"
-         *
-         * @param path The path to the texture
-         * @param xSize texture x axis size
-         * @param ySize texture y axis size
-         * @return returns a Texture data class
-         * @see Texture
-         */
-        fun texture(path: String, xSize: Int = 256, ySize: Int = 256): Texture {
-            Client {
-                TextureStitchEvent.PRE.register { spriteAtlasTexture: SpriteAtlasTexture, consumer: Consumer<Identifier> ->
-                    consumer.accept(Identifier(modId, path))
-                }
-            }
-            return Texture(modId, "textures/$path.png", xSize, ySize)
-        }
     }
 }

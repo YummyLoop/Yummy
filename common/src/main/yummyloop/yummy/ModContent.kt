@@ -10,6 +10,7 @@ import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
+import net.minecraft.data.client.model.Texture.texture
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
@@ -34,13 +35,13 @@ import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.client.ToolTipPreview
 import yummyloop.common.client.screen.addWidget
+import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.items.Ytem
 import yummyloop.yummy.items.YtemGroup
 import yummyloop.yummy.items.baa.Ba
 import yummyloop.yummy.items.baa.BaHandler
 import yummyloop.yummy.items.baa.BaScreen
-import yummyloop.yummy.registry.Register
 import java.util.function.Supplier
 
 object ModContent {
@@ -50,11 +51,11 @@ object ModContent {
     var ba = Register.item("ba") { Ba() }
 
     init {
-        Register.Client.texture("gui/grid")
-        Register.Client.texture("gui/9x9")
+        Register.client.texture("gui/grid")
+        Register.client.texture("gui/9x9")
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler)
-        Register.Client.screen(BaHandler.rType!!) { return@screen ::BaScreen }
+        Register.client.screen(BaHandler.rType!!) { return@screen ::BaScreen }
 
         ToolTipPreview // Initialize tooltip
     }
@@ -78,7 +79,7 @@ object ModContent {
         /** Button */
         object B1 {
             init {
-                Register.Client {
+                Register.client {
                     val client = MinecraftClient.getInstance()
                     GuiEvent.INIT_POST.register { screen, widgets, children ->
                         if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
@@ -106,7 +107,7 @@ object ModContent {
         object B2 {
             init {
                 ScreenHandler1.rType = Register.screenHandlerTypeSimple("side_screen", ::ScreenHandler1)
-                Register.Client.screen(ScreenHandler1.rType!!) { return@screen ::Screen1 }
+                Register.client.screen(ScreenHandler1.rType!!) { return@screen ::Screen1 }
 
                 NetworkManager.registerReceiver(
                     NetworkManager.Side.C2S,
@@ -118,7 +119,7 @@ object ModContent {
                     }
                 }
 
-                Register.Client {
+                Register.client {
                     val client = MinecraftClient.getInstance()
                     GuiEvent.INIT_POST.register { screen, widgets, children ->
                         if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
@@ -139,7 +140,7 @@ object ModContent {
                 PlayerEvent.OPEN_MENU.register { player, menu ->
                     LOG.info("This is message from a Player open menu event")
                 }
-                Register.Client {
+                Register.client {
                     GuiEvent.INIT_PRE.register { screen, widgets, children ->
                         LOG.info("This is message from a GUI init pre event")
                         return@register ActionResult.SUCCESS
@@ -198,7 +199,7 @@ object ModContent {
                 // Screen stuff
                 BoxScreenHandler.type =
                     Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-                Register.Client.screen(BoxScreenHandler.type!!) { return@screen ::BoxScreen }
+                Register.client.screen(BoxScreenHandler.type!!) { return@screen ::BoxScreen }
             }
         }
 

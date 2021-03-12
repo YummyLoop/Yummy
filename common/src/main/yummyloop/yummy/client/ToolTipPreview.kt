@@ -26,16 +26,16 @@ import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
 import yummyloop.common.client.Texture
-import yummyloop.yummy.LOG
 import yummyloop.common.nbt.getSortedInventory
 import yummyloop.common.packets.PacketBuffer
-import yummyloop.yummy.registry.Register
+import yummyloop.yummy.ExampleMod.Register
+import yummyloop.yummy.LOG
 import kotlin.math.ceil
 
 object ToolTipPreview {
     init {
         serverPacket()
-        Register.Client { Client }
+        Register.client { Client }
     }
 
     private fun serverPacket() {
@@ -61,7 +61,7 @@ object ToolTipPreview {
 
     @Environment(EnvType.CLIENT)
     private object Client {
-        private var client: MinecraftClient = MinecraftClient.getInstance()
+        private val client by lazy { MinecraftClient.getInstance() }
         private var hoveredStack: ItemStack = ItemStack.EMPTY
         private var pressedKeyCode: String = "key.keyboard.left.shift"
         private var isKeyPressed: Boolean = false

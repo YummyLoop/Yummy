@@ -12,7 +12,7 @@ import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.yummy.ExampleMod
-import yummyloop.yummy.registry.Register
+import yummyloop.yummy.ExampleMod.Register
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 

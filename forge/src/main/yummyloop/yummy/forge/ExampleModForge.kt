@@ -7,9 +7,8 @@ import net.minecraftforge.eventbus.api.SubscribeEvent
 import net.minecraftforge.fml.common.Mod
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent
 import yummyloop.yummy.ExampleMod
-import yummyloop.yummy.ExampleMod.init
+import yummyloop.yummy.ExampleMod.onInitialize
 import yummyloop.yummy.integration.geckolib.forge.GeckoUtilsImpl
-import yummyloop.yummy.registry.Register
 import thedarkcolour.kotlinforforge.KotlinModLoadingContext.Companion.get as KotlinModLoadingContext
 
 @Mod(ExampleMod.MOD_ID)
@@ -18,7 +17,7 @@ object ExampleModForge {
         // Submit our event bus to let architectury register our content on the right time
         //EventBuses.registerModEventBus(ExampleMod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
         EventBuses.registerModEventBus(ExampleMod.MOD_ID, KotlinModLoadingContext().getKEventBus())
-        init()
+        onInitialize()
     }
 
     @Mod.EventBusSubscriber(modid = ExampleMod.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
@@ -26,9 +25,9 @@ object ExampleModForge {
         @Suppress("UNUSED_PARAMETER")
         @OnlyIn(Dist.CLIENT)
         @SubscribeEvent
-        fun clientSetup(event: FMLClientSetupEvent) {
+        fun onInitializeClient(event: FMLClientSetupEvent) {
             GeckoUtilsImpl.registerAll()
-            Register.Client.register()
+            ExampleMod.onInitializeClient()
         }
     }
 }
