@@ -19,6 +19,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
+import yummyloop.yummy.LOG
 import yummyloop.yummy.items.Ytem
 import java.util.function.Supplier
 
@@ -26,51 +27,48 @@ import java.util.function.Supplier
 class Registers(private val modId: String) {
     val client by lazy { ClientRegisters(modId) }
 
+    /** Register map, with priority, and register function */
+    private val registerMap by lazy { mutableMapOf<Int, () -> Unit>() }
+
     /** Final registry of the content */
     internal fun register() {
-        //ModContent
-        entityTypeRegister.register()
-        entityAttributeRegister.register()
-        blockRegister.register()
-        blockEntityTypeRegister.register()
-        itemRegister.register()
-        entityAttributeLinkRegister.register()
-        screenHandlerTypeRegister.register()
+        LOG.info("Registering mod content")
+        registerMap.toSortedMap().forEach { it.value.invoke() }
     }
 
     /** Block register */
     private val blockRegister: DeferredRegister<Block> by lazy {
-        DeferredRegister.create(modId, Registry.BLOCK_KEY)
+        DeferredRegister.create(modId, Registry.BLOCK_KEY).also { registerMap[3] = it::register }
     }
 
     /** Block Entity Type register */
     private val blockEntityTypeRegister: DeferredRegister<BlockEntityType<*>> by lazy {
-        DeferredRegister.create(modId, Registry.BLOCK_ENTITY_TYPE_KEY)
+        DeferredRegister.create(modId, Registry.BLOCK_ENTITY_TYPE_KEY).also { registerMap[4] = it::register }
     }
 
     /** Entity Type register */
-    private val entityTypeRegister: DeferredRegister<EntityType<*>> by lazy {
-        DeferredRegister.create(modId, Registry.ENTITY_TYPE_KEY)
+    private val entityTypeRegister by lazy {
+        DeferredRegister.create(modId, Registry.ENTITY_TYPE_KEY).also { registerMap[2] = it::register }
     }
 
     /** Entity Attribute register */
     private val entityAttributeRegister: DeferredRegister<EntityAttribute> by lazy {
-        DeferredRegister.create(modId, Registry.ATTRIBUTE_KEY)
+        DeferredRegister.create(modId, Registry.ATTRIBUTE_KEY).also { registerMap[1] = it::register }
     }
 
     /** Entity Attribute link register */
     private val entityAttributeLinkRegister: EntityAttributeLinkRegister by lazy {
-        EntityAttributeLinkRegister.create(modId)
+        EntityAttributeLinkRegister.create(modId).also { registerMap[6] = it::register }
     }
 
     /** Item register */
     private val itemRegister: DeferredRegister<Item> by lazy {
-        DeferredRegister.create(modId, Registry.ITEM_KEY)
+        DeferredRegister.create(modId, Registry.ITEM_KEY).also { registerMap[5] = it::register }
     }
 
     /** Menu register */
     private val screenHandlerTypeRegister: DeferredRegister<ScreenHandlerType<*>> by lazy {
-        DeferredRegister.create(modId, Registry.MENU_KEY)
+        DeferredRegister.create(modId, Registry.MENU_KEY).also { registerMap[7] = it::register }
     }
 
     /**
