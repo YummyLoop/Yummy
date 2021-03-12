@@ -33,7 +33,7 @@ class Registers(private val modId: String) {
     /** Final registry of the content */
     internal fun register() {
         LOG.info("Registering mod content")
-        registerMap.toSortedMap().forEach { it.value.invoke() }
+        registerMap.toSortedMap().onEach { it.value.invoke() }.clear()
     }
 
     /** Block register */
