@@ -11,7 +11,7 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 import net.minecraft.screen.slot.SlotActionType
 import net.minecraft.util.collection.DefaultedList
-import yummyloop.yummy.screen.defaultTransferSlot
+import yummyloop.common.screen.defaultTransferSlot
 
 abstract class ItemScreenHandler(
     handlerType: ScreenHandlerType<*>,
