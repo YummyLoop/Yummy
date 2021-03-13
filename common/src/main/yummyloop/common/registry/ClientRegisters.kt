@@ -1,6 +1,7 @@
 package yummyloop.common.registry
 
 import me.shedaniel.architectury.event.events.TextureStitchEvent
+import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.platform.Platform
 import me.shedaniel.architectury.registry.MenuRegistry
 import me.shedaniel.architectury.registry.RegistrySupplier
@@ -10,11 +11,13 @@ import net.minecraft.client.gui.screen.Screen
 import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
 import net.minecraft.client.texture.SpriteAtlasTexture
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import yummyloop.common.client.Texture
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.function.Consumer
 import java.util.function.Supplier
 
@@ -25,15 +28,15 @@ import java.util.function.Supplier
  */
 class ClientRegisters(private val modId: String) {
     private val isClient: Boolean by lazy { Platform.getEnv() == EnvType.CLIENT }
-    private val lateCallList: MutableList<Supplier<Any>> by lazy { mutableListOf() }
+    private val lateCallQueue: ConcurrentLinkedQueue<Supplier<Any>> = ConcurrentLinkedQueue()
 
     /**
      * Initializes all the client entries
      */
     @Environment(EnvType.CLIENT)
+    @Synchronized
     fun register() {
-        lateCallList.forEach { it.get() }
-        lateCallList.clear()
+        while (lateCallQueue.isNotEmpty()) lateCallQueue.poll().get()
     }
 
     /**
@@ -42,8 +45,9 @@ class ClientRegisters(private val modId: String) {
      *
      * @param s Entry supplier
      */
+    @Synchronized
     operator fun invoke(s: Supplier<Any>) {
-        if (isClient) lateCallList.add(s)
+        if (isClient) lateCallQueue.add(s)
     }
 
     /**
@@ -92,5 +96,25 @@ class ClientRegisters(private val modId: String) {
             }
         }
         return Texture(modId, "textures/$path.png", xSize, ySize)
+    }
+
+    /**
+     * Registers behaviour ([receiver]) to take when the Client receives a named packet ([packetName]) from the Server
+     *
+     * @param packetName the name of the received packet
+     * @param receiver the actions to take when the packet is received
+     */
+    fun onReceivePacketFromServer(packetName: String, receiver: NetworkManager.NetworkReceiver) {
+        this { NetworkManager.registerReceiver(NetworkManager.Side.S2C, Identifier(modId, packetName), receiver) }
+    }
+
+    /**
+     * Registers behaviour ([receiver]) to take when the Client receives a named packet ([packetName]) from the Server
+     *
+     * @param packetName the name of the received packet
+     * @param receiver the actions to take when the packet is received
+     */
+    fun onReceivePacketFromServer(packetName: String, receiver: (PacketByteBuf, NetworkManager.PacketContext) -> Unit) {
+        this { NetworkManager.registerReceiver(NetworkManager.Side.S2C, Identifier(modId, packetName), receiver) }
     }
 }

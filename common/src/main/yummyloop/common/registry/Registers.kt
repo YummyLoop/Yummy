@@ -1,5 +1,6 @@
 package yummyloop.common.registry
 
+import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.registry.BlockProperties
 import me.shedaniel.architectury.registry.DeferredRegister
 import me.shedaniel.architectury.registry.MenuRegistry
@@ -18,9 +19,11 @@ import net.minecraft.entity.attribute.EntityAttribute
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.text.Text
+import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.common.Common.LOG
@@ -251,5 +254,25 @@ class Registers(private val modId: String) {
         screenFactory: (H, PlayerInventory, Text) -> S,
     ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
         return screenHandlerTypeExtended(screenHandlerTypeId, handlerFactory).also { client.screen(it, screenFactory) }
+    }
+
+    /**
+     * Registers behaviour ([receiver]) to take when the Server receives a named packet ([packetName]) from a Client
+     *
+     * @param packetName the name of the received packet
+     * @param receiver the actions to take when the packet is received
+     */
+    fun onReceivePacketFromClient(packetName: String, receiver: NetworkManager.NetworkReceiver) {
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, Identifier(modId, packetName), receiver)
+    }
+
+    /**
+     * Registers behaviour ([receiver]) to take when the Server receives a named packet ([packetName]) from a Client
+     *
+     * @param packetName the name of the received packet
+     * @param receiver the actions to take when the packet is received
+     */
+    fun onReceivePacketFromClient(packetName: String, receiver: (PacketByteBuf, NetworkManager.PacketContext) -> Unit) {
+        NetworkManager.registerReceiver(NetworkManager.Side.C2S, Identifier(modId, packetName), receiver)
     }
 }
