@@ -39,10 +39,8 @@ object ToolTipPreview {
     }
 
     private fun serverPacket() {
-        NetworkManager.registerReceiver(
-            NetworkManager.Side.C2S,
-            Identifier("yummy", "packet_tooltip_c2s")
-        ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+        Register.onReceivePacketFromClient("packet_tooltip_c2s")
+        { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
             // Server Side
             val player: PlayerEntity = packetContext.player
             if (player is ServerPlayerEntity) {
@@ -50,7 +48,7 @@ object ToolTipPreview {
                 val list = DefaultedList.ofSize(enderInventory.size(), ItemStack.EMPTY)
                 list.forEachIndexed { index, _ -> list[index] = enderInventory.getStack(index) }
 
-                val tag: CompoundTag = CompoundTag()
+                val tag = CompoundTag()
                 Inventories.toTag(tag, list)
 
                 NetworkManager.sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"), PacketBuffer(tag))
@@ -81,10 +79,8 @@ object ToolTipPreview {
         }
 
         fun clientPacket() {
-            NetworkManager.registerReceiver(
-                NetworkManager.Side.S2C,
-                Identifier("yummy", "packet_tooltip_s2c")
-            ) { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
+            Register.client.onReceivePacketFromServer("packet_tooltip_s2c")
+            { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
                 // Client Side
                 try {
                     enderInventoryTag = packetByteBuf.readCompoundTag()!!
