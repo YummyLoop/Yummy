@@ -13,6 +13,7 @@ architectury {
 subprojects {
     apply plugin: "forgified-fabric-loom"
     apply plugin: "org.jetbrains.kotlin.jvm"
+    apply plugin: "org.jetbrains.kotlin.plugin.serialization"
     apply plugin: "com.github.johnrengelman.shadow"
 
     //libsDirName = "../out" // Output location of jar instead of default build/libs

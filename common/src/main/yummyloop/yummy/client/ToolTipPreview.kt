@@ -28,6 +28,8 @@ import net.minecraft.util.collection.DefaultedList
 import yummyloop.common.client.Texture
 import yummyloop.common.nbt.getSortedInventory
 import yummyloop.common.network.packets.PacketBuffer
+import yummyloop.common.network.packets.sendToPlayer
+import yummyloop.common.network.packets.sendToServer
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.LOG
 import kotlin.math.ceil
@@ -51,7 +53,7 @@ object ToolTipPreview {
                 val tag = CompoundTag()
                 Inventories.toTag(tag, list)
 
-                NetworkManager.sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"), PacketBuffer(tag))
+                PacketBuffer(tag).sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"))
             }
         }
     }
@@ -170,7 +172,7 @@ object ToolTipPreview {
             if (itemStack != ItemStack.EMPTY) {
                 var tag: CompoundTag? = itemStack.tag
                 if (itemStack.item == Items.ENDER_CHEST) {
-                    NetworkManager.sendToServer(Identifier("yummy", "packet_tooltip_c2s"), PacketBuffer())
+                    PacketBuffer().sendToServer(Identifier("yummy", "packet_tooltip_c2s"))
                     tag = enderInventoryTag
                 }
                 if (tag != null) {
