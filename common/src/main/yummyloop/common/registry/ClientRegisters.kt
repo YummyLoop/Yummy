@@ -54,29 +54,15 @@ class ClientRegisters(private val modId: String) {
      * Registers a screen
      *
      * @param handlerType the registered type of the screen Handler
-     * @param screenFactory The screen factory
-     * @see HandledScreen
-     */
-    fun <H, S> screen(
-        handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
-        screenFactory: MenuRegistry.ScreenFactory<H, S>,
-    ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-        this { MenuRegistry.registerScreenFactory(handlerType.get(), screenFactory) }
-    }
-
-    /**
-     * Registers a screen
-     *
-     * @param handlerType the registered type of the screen Handler
      * @param screenFactory The screen factory supplier
      * @see HandledScreen
      * @see MenuRegistry.ScreenFactory
      */
     fun <H, S> screen(
         handlerType: RegistrySupplier<ScreenHandlerType<out H>>,
-        screenFactory: (H, PlayerInventory, Text) -> S,
+        screenFactory: () -> ((H, PlayerInventory, Text) -> S),
     ) where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
-        this { MenuRegistry.registerScreenFactory(handlerType.get(), screenFactory) }
+        this { MenuRegistry.registerScreenFactory(handlerType.get(), screenFactory.invoke()) }
     }
 
     /**

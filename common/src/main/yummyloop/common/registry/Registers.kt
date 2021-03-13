@@ -221,7 +221,7 @@ class Registers(private val modId: String) {
     fun <H, S> screenHandlerTypeSimple(
         screenHandlerTypeId: String,
         handlerFactory: MenuRegistry.SimpleMenuTypeFactory<H>,
-        screenFactory: (H, PlayerInventory, Text) -> S,
+        screenFactory: () -> ((H, PlayerInventory, Text) -> S),
     ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
         return screenHandlerTypeSimple(screenHandlerTypeId, handlerFactory).also { client.screen(it, screenFactory) }
     }
@@ -251,7 +251,7 @@ class Registers(private val modId: String) {
     fun <H, S> screenHandlerTypeExtended(
         screenHandlerTypeId: String,
         handlerFactory: MenuRegistry.ExtendedMenuTypeFactory<H>,
-        screenFactory: (H, PlayerInventory, Text) -> S,
+        screenFactory: () -> ((H, PlayerInventory, Text) -> S),
     ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
         return screenHandlerTypeExtended(screenHandlerTypeId, handlerFactory).also { client.screen(it, screenFactory) }
     }

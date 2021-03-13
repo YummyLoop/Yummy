@@ -53,7 +53,7 @@ object ModContent {
         Register.client.texture("gui/grid")
         Register.client.texture("gui/9x9")
 
-        BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler, ::BaScreen)
+        BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler) { ::BaScreen }
 
         ToolTipPreview // Initialize tooltip
     }
@@ -105,7 +105,7 @@ object ModContent {
         object B2 {
             init {
                 ScreenHandler1.rType = Register.screenHandlerTypeSimple("side_screen", ::ScreenHandler1)
-                Register.client.screen(ScreenHandler1.rType!!, ::Screen1)
+                Register.client.screen(ScreenHandler1.rType!!) { ::Screen1 }
 
                 NetworkManager.registerReceiver(
                     NetworkManager.Side.C2S,
@@ -197,7 +197,7 @@ object ModContent {
                 // Screen stuff
                 BoxScreenHandler.type =
                     Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-                Register.client.screen(BoxScreenHandler.type!!, ::BoxScreen)
+                Register.client.screen(BoxScreenHandler.type!!) { ::BoxScreen }
             }
         }
 
