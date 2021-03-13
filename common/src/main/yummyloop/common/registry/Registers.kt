@@ -8,15 +8,19 @@ import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.gui.screen.Screen
+import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
+import net.minecraft.text.Text
 import net.minecraft.util.registry.Registry
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.common.Common.LOG
@@ -179,38 +183,73 @@ class Registers(private val modId: String) {
      * Registers a ScreenHandlerType
      *
      * @param screenHandlerTypeId Id of the ScreenHandlerType
-     * @param factory The factory of the ScreenHandlerType
+     * @param handlerFactory The factory of the ScreenHandler [H]
+     * @return RegistrySupplier of the type of the screenHandler [H]
      */
-    fun <T> screenHandlerType(
+    fun <H> screenHandlerType(
         screenHandlerTypeId: String,
-        factory: Supplier<ScreenHandlerType<out T>>,
-    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
-        return screenHandlerTypeRegister.register(screenHandlerTypeId, factory)
+        handlerFactory: Supplier<ScreenHandlerType<out H>>,
+    ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler {
+        return screenHandlerTypeRegister.register(screenHandlerTypeId, handlerFactory)
     }
 
     /**
      * Registers a Simple ScreenHandlerType
      *
      * @param screenHandlerTypeId Id of the ScreenHandlerType
-     * @param factory The factory of the ScreenHandlerType
+     * @param handlerFactory The factory of the ScreenHandler [H]
+     * @return RegistrySupplier of the type of the screenHandler [H]
      */
-    fun <T> screenHandlerTypeSimple(
+    fun <H> screenHandlerTypeSimple(
         screenHandlerTypeId: String,
-        factory: MenuRegistry.SimpleMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
-        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.of(factory) }
+        handlerFactory: MenuRegistry.SimpleMenuTypeFactory<H>,
+    ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler {
+        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.of(handlerFactory) }
+    }
+
+    /**
+     * Registers a Simple ScreenHandlerType, ScreenHandler and Screen
+     *
+     * @param screenHandlerTypeId Id of the ScreenHandlerType
+     * @param handlerFactory The factory of the ScreenHandler [H]
+     * @param screenFactory The factory of the Screen [S]
+     * @return RegistrySupplier of the type of the screenHandler [H]
+     */
+    fun <H, S> screenHandlerTypeSimple(
+        screenHandlerTypeId: String,
+        handlerFactory: MenuRegistry.SimpleMenuTypeFactory<H>,
+        screenFactory: (H, PlayerInventory, Text) -> S,
+    ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+        return screenHandlerTypeSimple(screenHandlerTypeId, handlerFactory).also { client.screen(it, screenFactory) }
     }
 
     /**
      * Registers an Extended ScreenHandlerType
      *
      * @param screenHandlerTypeId Id of the ScreenHandlerType
-     * @param factory The factory of the ScreenHandlerType
+     * @param handlerFactory The factory of the ScreenHandler [H]
+     * @return RegistrySupplier of the type of the screenHandler [H]
      */
-    fun <T> screenHandlerTypeExtended(
+    fun <H> screenHandlerTypeExtended(
         screenHandlerTypeId: String,
-        factory: MenuRegistry.ExtendedMenuTypeFactory<T>,
-    ): RegistrySupplier<ScreenHandlerType<out T>> where T : ScreenHandler {
-        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(factory) }
+        handlerFactory: MenuRegistry.ExtendedMenuTypeFactory<H>,
+    ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler {
+        return screenHandlerType(screenHandlerTypeId) { MenuRegistry.ofExtended(handlerFactory) }
+    }
+
+    /**
+     * Registers an Extended ScreenHandlerType, ScreenHandler and Screen
+     *
+     * @param screenHandlerTypeId Id of the ScreenHandlerType
+     * @param handlerFactory The factory of the ScreenHandler [H]
+     * @param screenFactory The factory of the Screen [S]
+     * @return RegistrySupplier of the type of the screenHandler [H]
+     */
+    fun <H, S> screenHandlerTypeExtended(
+        screenHandlerTypeId: String,
+        handlerFactory: MenuRegistry.ExtendedMenuTypeFactory<H>,
+        screenFactory: (H, PlayerInventory, Text) -> S,
+    ): RegistrySupplier<ScreenHandlerType<out H>> where H : ScreenHandler, S : Screen, S : ScreenHandlerProvider<H> {
+        return screenHandlerTypeExtended(screenHandlerTypeId, handlerFactory).also { client.screen(it, screenFactory) }
     }
 }
