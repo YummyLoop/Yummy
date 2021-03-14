@@ -18,6 +18,11 @@ object Render {
         inline get() = MinecraftClient.getInstance()
     val itemRenderer: ItemRenderer
         inline get() = client.itemRenderer
+    var itemZOffset: Float
+        inline get() = itemRenderer.zOffset
+        inline set(value) {
+            itemRenderer.zOffset = value
+        }
     val textRenderer: TextRenderer
         inline get() = client.textRenderer
     val textureManager: TextureManager
@@ -64,24 +69,15 @@ object Render {
 
     fun bindTexture(texture: Texture) = bindTexture(texture.get())
 
-    object Item {
-        var zOffset: Float
-            inline get() = itemRenderer.zOffset
-            inline set(value) {
-                itemRenderer.zOffset = value
-            }
-
-        fun inGuiWithOverrides(stack: ItemStack, x: Int, y: Int) {
-            itemRenderer.renderInGuiWithOverrides(stack, x, y)
-        }
-
-        fun guiOverlay(renderer: TextRenderer, stack: ItemStack, x: Int, y: Int, countLabel: String? = null) {
-            itemRenderer.renderGuiItemOverlay(renderer, stack, x, y, countLabel)
-        }
-
-        fun guiOverlay(stack: ItemStack, x: Int, y: Int, countLabel: String? = null) {
-            itemRenderer.renderGuiItemOverlay(textRenderer, stack, x, y, countLabel)
-        }
+    fun itemInGuiWithOverrides(stack: ItemStack, x: Int, y: Int) {
+        itemRenderer.renderInGuiWithOverrides(stack, x, y)
     }
 
+    fun itemGuiOverlay(renderer: TextRenderer, stack: ItemStack, x: Int, y: Int, countLabel: String? = null) {
+        itemRenderer.renderGuiItemOverlay(renderer, stack, x, y, countLabel)
+    }
+
+    fun itemGuiOverlay(stack: ItemStack, x: Int, y: Int, countLabel: String? = null) {
+        itemRenderer.renderGuiItemOverlay(textRenderer, stack, x, y, countLabel)
+    }
 }

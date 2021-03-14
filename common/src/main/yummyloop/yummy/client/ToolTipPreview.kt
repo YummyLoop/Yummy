@@ -24,8 +24,7 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
-import yummyloop.common.client.Render
-import yummyloop.common.client.Texture
+import yummyloop.common.client.*
 import yummyloop.common.nbt.getSortedInventory
 import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.common.network.packets.sendToPlayer
@@ -204,8 +203,8 @@ object ToolTipPreview {
             }
 
             Render(matrices) {
-                Render.Item.zOffset = 400.0f
-                Render.Item.inGuiWithOverrides(itemStack, x, y)
+                itemZOffset = 400.0f
+                itemInGuiWithOverrides(itemStack, x, y)
 
                 var scale = 1F
                 if (itemStack.count in 100..999) {
@@ -213,12 +212,12 @@ object ToolTipPreview {
                     this.translate(1 / scale, 1 / scale, 1F)
                     this.scale(scale, scale, 1F)
                 }
-                Render.Item.guiOverlay(itemStack,
+                itemGuiOverlay(itemStack,
                     ceil(x / scale).toInt(),
                     ceil(y / scale).toInt(),
                     itemCountString)
 
-                Render.Item.zOffset = 0.0f
+                itemZOffset = 0.0f
             }
         }
 
@@ -237,7 +236,7 @@ object ToolTipPreview {
 
             Render(matrices) {
                 this.translate(0.0f, 0.0f, 32.0f)
-                Render.Item.zOffset = 200.0f
+                itemZOffset = 200.0f
 
                 when (invSize) {
                     4 -> renderI(2)
@@ -278,7 +277,7 @@ object ToolTipPreview {
                     }
                     else -> renderI(5)
                 }
-                Render.Item.zOffset = 0.0f
+                itemZOffset = 0.0f
             }
         }
 
