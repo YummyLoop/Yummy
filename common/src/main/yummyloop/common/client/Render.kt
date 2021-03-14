@@ -14,11 +14,14 @@ import com.mojang.blaze3d.systems.RenderSystem as renderSystem
 @Environment(EnvType.CLIENT)
 object Render {
 
-    private val client: MinecraftClient by lazy { MinecraftClient.getInstance() }
-    private val itemRenderer: ItemRenderer by lazy { client.itemRenderer }
-    private val textRenderer: TextRenderer by lazy { client.textRenderer }
-    private val textureManager: TextureManager by lazy { client.textureManager }
-
+    val client: MinecraftClient
+        inline get() = MinecraftClient.getInstance()
+    val itemRenderer: ItemRenderer
+        inline get() = client.itemRenderer
+    val textRenderer: TextRenderer
+        inline get() = client.textRenderer
+    val textureManager: TextureManager
+        inline get() = client.textureManager
 
     fun push() = renderSystem.pushMatrix()
     fun pop() = renderSystem.popMatrix()
@@ -33,13 +36,13 @@ object Render {
         pop()
     }
 
-    inline operator fun invoke(supplier: (Render) -> Unit) {
+    inline operator fun invoke(supplier: Render.() -> Unit) {
         push()
         supplier.invoke(this)
         pop()
     }
 
-    inline operator fun invoke(matrix: MatrixStack, supplier: (Render) -> Unit) {
+    inline operator fun invoke(matrix: MatrixStack, supplier: Render.() -> Unit) {
         push(matrix)
         supplier.invoke(this)
         pop(matrix)
@@ -51,11 +54,23 @@ object Render {
         else renderSystem.translated(x.toDouble(), y.toDouble(), z.toDouble())
     }
 
+    inline fun <reified N> scale(x: N, y: N, z: N) where N : Number {
+        if (x is Float && y is Float && z is Float) renderSystem.scalef(x, y, z)
+        else if (x is Double && y is Double && z is Double) renderSystem.scaled(x, y, z)
+        else renderSystem.scaled(x.toDouble(), y.toDouble(), z.toDouble())
+    }
+
     fun bindTexture(id: Identifier) = textureManager.bindTexture(id)
 
     fun bindTexture(texture: Texture) = bindTexture(texture.get())
 
     object Item {
+        var zOffset: Float
+            inline get() = itemRenderer.zOffset
+            inline set(value) {
+                itemRenderer.zOffset = value
+            }
+
         fun inGuiWithOverrides(stack: ItemStack, x: Int, y: Int) {
             itemRenderer.renderInGuiWithOverrides(stack, x, y)
         }

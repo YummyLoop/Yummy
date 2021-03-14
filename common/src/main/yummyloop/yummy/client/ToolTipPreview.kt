@@ -1,6 +1,5 @@
 package yummyloop.yummy.client
 
-import com.mojang.blaze3d.systems.RenderSystem
 import me.shedaniel.architectury.event.events.TooltipEvent
 import me.shedaniel.architectury.event.events.client.ClientScreenInputEvent
 import me.shedaniel.architectury.networking.NetworkManager
@@ -25,6 +24,7 @@ import net.minecraft.text.TranslatableText
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.collection.DefaultedList
+import yummyloop.common.client.Render
 import yummyloop.common.client.Texture
 import yummyloop.common.nbt.getSortedInventory
 import yummyloop.common.network.packets.PacketBuffer
@@ -197,37 +197,34 @@ object ToolTipPreview {
          * @see HandledScreen
          */
         fun renderItem(matrices: MatrixStack, itemStack: ItemStack, x: Int, y: Int) {
-            val itemRenderer = client.itemRenderer
-            val textRenderer = client.textRenderer
-
             val itemCountString: String = itemStack.count.let {
                 if (it > 999) return@let "${itemStack.count / 1000}k"
                 if (it > 9999) return@let "+9k"
                 return@let "${itemStack.count}"
             }
 
-            matrices.push()
-            itemRenderer.renderInGuiWithOverrides(itemStack, x, y)
-            RenderSystem.pushMatrix()
-            var scale = 1F
-            if (itemStack.count in 100..999) {
-                scale = 0.8F
-                RenderSystem.translatef(1 / scale, 1 / scale, 1F)
-                RenderSystem.scalef(scale, scale, 1F)
+            Render(matrices) {
+                Render.Item.zOffset = 400.0f
+                Render.Item.inGuiWithOverrides(itemStack, x, y)
+
+                var scale = 1F
+                if (itemStack.count in 100..999) {
+                    scale = 0.8F
+                    this.translate(1 / scale, 1 / scale, 1F)
+                    this.scale(scale, scale, 1F)
+                }
+                Render.Item.guiOverlay(itemStack,
+                    ceil(x / scale).toInt(),
+                    ceil(y / scale).toInt(),
+                    itemCountString)
+
+                Render.Item.zOffset = 0.0f
             }
-            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack,
-                ceil(x / scale).toInt(),
-                ceil(y / scale).toInt(),
-                itemCountString)
-            RenderSystem.popMatrix()
-            matrices.pop()
         }
 
         fun renderItems(matrices: MatrixStack, inv: Inventory, x: Int, y: Int) {
-            val itemRenderer = client.itemRenderer
             val maxSize = 15
 
-            matrices.push()
             fun renderI(col: Int) {
                 for (i in 0 until invSize) {
                     if (i >= maxSize - 1) break
@@ -238,94 +235,94 @@ object ToolTipPreview {
                 }
             }
 
-            RenderSystem.translatef(0.0f, 0.0f, 32.0f)
-            itemRenderer.zOffset = 200.0f
+            Render(matrices) {
+                this.translate(0.0f, 0.0f, 32.0f)
+                Render.Item.zOffset = 200.0f
 
-            when (invSize) {
-                4 -> renderI(2)
-                5 -> renderI(3)
-                6 -> renderI(3)
-                7 -> renderI(4)
-                8 -> renderI(3)
-                9 -> renderI(3)
-                10 -> {
-                    for (i in 0 until 7) {
-                        renderItem(matrices,
-                            inv.getStack(i),
-                            x + (i % 4) * 18,
-                            y + (i / 4) * 18)
+                when (invSize) {
+                    4 -> renderI(2)
+                    5 -> renderI(3)
+                    6 -> renderI(3)
+                    7 -> renderI(4)
+                    8 -> renderI(3)
+                    9 -> renderI(3)
+                    10 -> {
+                        for (i in 0 until 7) {
+                            renderItem(matrices,
+                                inv.getStack(i),
+                                x + (i % 4) * 18,
+                                y + (i / 4) * 18)
+                        }
+                        for (i in 7 until 10) {
+                            renderItem(matrices,
+                                inv.getStack(i),
+                                x + ((i - 7) % 3) * 18,
+                                y + ((i - 7) / 3) * 18 + 2 * 18)
+                        }
                     }
-                    for (i in 7 until 10) {
-                        renderItem(matrices,
-                            inv.getStack(i),
-                            x + ((i - 7) % 3) * 18,
-                            y + ((i - 7) / 3) * 18 + 2 * 18)
+                    11 -> renderI(4)
+                    12 -> renderI(4)
+                    13 -> {
+                        for (i in 0 until 9) {
+                            renderItem(matrices,
+                                inv.getStack(i),
+                                x + (i % 5) * 18,
+                                y + (i / 5) * 18)
+                        }
+                        for (i in 9 until 13) {
+                            renderItem(matrices,
+                                inv.getStack(i),
+                                x + ((i - 9) % 4) * 18,
+                                y + ((i - 9) / 4) * 18 + 2 * 18)
+                        }
                     }
+                    else -> renderI(5)
                 }
-                11 -> renderI(4)
-                12 -> renderI(4)
-                13 -> {
-                    for (i in 0 until 9) {
-                        renderItem(matrices,
-                            inv.getStack(i),
-                            x + (i % 5) * 18,
-                            y + (i / 5) * 18)
-                    }
-                    for (i in 9 until 13) {
-                        renderItem(matrices,
-                            inv.getStack(i),
-                            x + ((i - 9) % 4) * 18,
-                            y + ((i - 9) / 4) * 18 + 2 * 18)
-                    }
-                }
-                else -> renderI(5)
+                Render.Item.zOffset = 0.0f
             }
-            itemRenderer.zOffset = 0.0f
-            matrices.pop()
         }
 
         fun renderBackground(matrices: MatrixStack, x: Int, y: Int) {
-            matrices.push()
-            client.textureManager.bindTexture(backgroundTexture.get())
-            RenderSystem.translatef(0F, 0F, 400F)
+            Render(matrices) {
+                this.bindTexture(backgroundTexture)
+                this.translate(0F, 0F, 400F)
 
-            val offSetX = -8
-            val offSetY = -8
+                val offSetX = -8
+                val offSetY = -8
 
-            fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
-                DrawableHelper.drawTexture(matrices,
-                    x + offSetX + xOffset,
-                    y + offSetY + yOffset,
-                    u,
-                    v,
-                    width,
-                    height,
-                    backgroundTexture.xSize,
-                    backgroundTexture.ySize)
+                fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
+                    DrawableHelper.drawTexture(matrices,
+                        x + offSetX + xOffset,
+                        y + offSetY + yOffset,
+                        u,
+                        v,
+                        width,
+                        height,
+                        backgroundTexture.xSize,
+                        backgroundTexture.ySize)
 
-            fun draw(u: Float, v: Float, width: Int, height: Int) = draw(0, 0, u, v, width, height)
-            when (invSize) {
-                1 -> draw(0F, 0F, 32, 32)
-                2 -> draw(33F, 0F, 50, 32)
-                3 -> draw(84F, 0F, 68, 32)
-                4 -> draw(0F, 33F, 50, 50)
-                5 -> draw(51F, 33F, 68, 50)
-                6 -> draw(120F, 33F, 68, 50)
-                7 -> draw(0F, 84F, 86, 50)
-                8 -> draw(87F, 84F, 68, 68)
-                9 -> draw(156F, 84F, 68, 68)
-                10 -> draw(0F, 135F, 86, 68)
-                11 -> draw(87F, 153F, 86, 68)
-                12 -> draw(174F, 153F, 86, 68)
-                13 -> {
-                    draw(105F, 223F, 79, 68)
-                    draw(79, 0, 61F, 135F, 25, 68)
+                fun draw(u: Float, v: Float, width: Int, height: Int) = draw(0, 0, u, v, width, height)
+                when (invSize) {
+                    1 -> draw(0F, 0F, 32, 32)
+                    2 -> draw(33F, 0F, 50, 32)
+                    3 -> draw(84F, 0F, 68, 32)
+                    4 -> draw(0F, 33F, 50, 50)
+                    5 -> draw(51F, 33F, 68, 50)
+                    6 -> draw(120F, 33F, 68, 50)
+                    7 -> draw(0F, 84F, 86, 50)
+                    8 -> draw(87F, 84F, 68, 68)
+                    9 -> draw(156F, 84F, 68, 68)
+                    10 -> draw(0F, 135F, 86, 68)
+                    11 -> draw(87F, 153F, 86, 68)
+                    12 -> draw(174F, 153F, 86, 68)
+                    13 -> {
+                        draw(105F, 223F, 79, 68)
+                        draw(79, 0, 61F, 135F, 25, 68)
+                    }
+                    14 -> draw(105F, 223F, 104, 68)
+                    else -> draw(0F, 223F, 104, 68)
                 }
-                14 -> draw(105F, 223F, 104, 68)
-                else -> draw(0F, 223F, 104, 68)
             }
-
-            matrices.pop()
         }
     }
 }
