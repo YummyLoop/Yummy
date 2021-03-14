@@ -10,7 +10,6 @@ import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.gui.screen.ingame.InventoryScreen
 import net.minecraft.client.gui.widget.TexturedButtonWidget
-import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.player.PlayerEntity
@@ -204,15 +203,20 @@ object ModContent {
         /** Gecko entity */
         object G3 {
             init {
-                GeoExampleEntity2.type = Register.entityType("geo_ex") {
-                    EntityType.Builder.create(::GeoExampleEntity2, SpawnGroup.CREATURE)
-                }
+                //GeoExampleEntity2.type = Register.entityType("geo_ex", ::GeoExampleEntity2, SpawnGroup.CREATURE)
+                //Register.entityAttributeLink(GeoExampleEntity2.type!!) { GeoExampleEntity2.createAttributes() }
+                GeoExampleEntity2.type = Register.entityTypeWithAttributes(
+                    "geo_ex",
+                    ::GeoExampleEntity2,
+                    SpawnGroup.CREATURE,
+                    GeoExampleEntity2.createAttributes()
+                )
 
                 GeckoUtils.Entities.register(GeoExampleEntity2.type!!,
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
                     "animations/jack.animation.json")
-                Register.entityAttributeLink(GeoExampleEntity2.type!!) { GeoExampleEntity2.createAttributes() }
+
             }
         }
     }

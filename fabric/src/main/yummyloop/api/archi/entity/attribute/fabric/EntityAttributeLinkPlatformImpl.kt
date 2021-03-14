@@ -13,6 +13,6 @@ object EntityAttributeLinkPlatformImpl {
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     fun register(register: EntityAttributeLinkRegister): Unit {
-        for (l in register.getLinkList()) FabricDefaultAttributeRegistry.register(l.first.get(), l.second.get())
+        for (l in register.getLinkList()) FabricDefaultAttributeRegistry.register(l.first.get(), l.second)
     }
 }

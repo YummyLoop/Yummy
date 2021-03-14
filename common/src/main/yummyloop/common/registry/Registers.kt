@@ -14,8 +14,10 @@ import net.minecraft.client.gui.screen.ingame.ScreenHandlerProvider
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
+import net.minecraft.entity.SpawnGroup
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttribute
+import net.minecraft.entity.mob.MobEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
@@ -25,6 +27,7 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
+import net.minecraft.world.World
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.common.Common.LOG
 import yummyloop.yummy.items.Ytem
@@ -144,15 +147,56 @@ class Registers(private val modId: String) {
     /**
      * Registers an EntityType
      *
-     * @param entityTypeId Id of the block entity type
+     * @param entityTypeId Id of the entity
      * @param entityTypeBuilder The builder used to create the entity
      * @return A RegistrySupplier for the entity type
      */
     fun <T> entityType(
         entityTypeId: String,
-        entityTypeBuilder: Supplier<EntityType.Builder<T>>,
+        entityTypeBuilder: () -> (EntityType.Builder<T>),
     ): RegistrySupplier<EntityType<T>> where T : Entity {
-        return entityTypeRegister.register(entityTypeId) { entityTypeBuilder.get().build(entityTypeId) }
+        return entityTypeRegister.register(entityTypeId) { entityTypeBuilder.invoke().build(entityTypeId) }
+    }
+
+    /**
+     * Registers an EntityType
+     *
+     * @param entityId Id of the entity
+     * @param entityFactory The factory used to create the entity
+     * @param spawnGroup The entity spawnGroup
+     * @param entityBuilderModifications The optional options to append to the entity builder
+     * @return A RegistrySupplier for the entity type
+     */
+    fun <T> entityType(
+        entityId: String,
+        entityFactory: (type: EntityType<T>, world: World) -> (T),
+        spawnGroup: SpawnGroup = SpawnGroup.CREATURE,
+        entityBuilderModifications: (append: EntityType.Builder<T>) -> (EntityType.Builder<T>) = { it },
+    ): RegistrySupplier<EntityType<T>> where T : Entity {
+        val create = EntityType.Builder.create(entityFactory, spawnGroup)
+        val append = entityBuilderModifications.invoke(create)
+        return entityTypeRegister.register(entityId) { append.build(entityId) }
+    }
+
+    /**
+     * Registers an EntityType with attributes
+     *
+     * @param entityId Id of the entity
+     * @param entityFactory The factory used to create the entity
+     * @param spawnGroup The entity spawnGroup
+     * @param entityAttributeBuilder The entity attribute builder
+     * @param entityBuilderModifications The optional options to append to the entity builder
+     * @return A RegistrySupplier for the entity type
+     */
+    fun <T> entityTypeWithAttributes(
+        entityId: String,
+        entityFactory: (type: EntityType<T>, world: World) -> (T),
+        spawnGroup: SpawnGroup = SpawnGroup.CREATURE,
+        entityAttributeBuilder: DefaultAttributeContainer.Builder = MobEntity.createMobAttributes(),
+        entityBuilderModifications: (append: EntityType.Builder<T>) -> (EntityType.Builder<T>) = { it },
+    ): RegistrySupplier<EntityType<T>> where T : LivingEntity {
+        return entityType(entityId, entityFactory, spawnGroup, entityBuilderModifications)
+            .also { entityAttributeLink(it, entityAttributeBuilder) }
     }
 
     /**
@@ -177,7 +221,7 @@ class Registers(private val modId: String) {
      */
     fun entityAttributeLink(
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
-        entityAttributeBuilder: Supplier<DefaultAttributeContainer.Builder>,
+        entityAttributeBuilder: DefaultAttributeContainer.Builder = MobEntity.createMobAttributes(),
     ) {
         entityAttributeLinkRegister.register(entityType, entityAttributeBuilder)
     }
