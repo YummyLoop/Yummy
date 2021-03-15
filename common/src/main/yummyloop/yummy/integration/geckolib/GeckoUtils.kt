@@ -7,10 +7,11 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
-import net.minecraft.world.World
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
+import yummyloop.common.gecko.AnimatableBlockEntity
+import yummyloop.common.gecko.AnimatableLivingEntity
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
 import java.util.function.Supplier
@@ -132,22 +133,19 @@ object GeckoUtils {
     }
 
     object Blocks {
-        abstract class AnimatableBlockEntity(type: BlockEntityType<*>) : BlockEntity(type), IAnimatable
-
         fun <T, A> register(
             blockEntityType: RegistrySupplier<BlockEntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
-        ) where T : BlockEntity, A : AnimatableBlockEntity {
+        ) where T : BlockEntity, A : AnimatableBlockEntity<T> {
             geckoEntryList.add(Entry(GeckoType.Block, blockEntityType, model))
         }
     }
 
-    abstract class AnimatableEntity(type: EntityType<*>, world: World?) : Entity(type, world), IAnimatable
     object Entities {
         fun <T, A> register(
             entityType: RegistrySupplier<EntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.entity(entityType.id.namespace, entityType.id.path),
-        ) where T : Entity, A : AnimatableEntity {
+        ) where T : Entity, A : AnimatableLivingEntity<T> {
             geckoEntryList.add(Entry(GeckoType.Entity, entityType, model))
         }
     }

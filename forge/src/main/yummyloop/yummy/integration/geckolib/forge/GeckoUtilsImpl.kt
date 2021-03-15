@@ -21,6 +21,9 @@ import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 import software.bernie.geckolib3.renderers.geo.GeoBlockRenderer
 import software.bernie.geckolib3.renderers.geo.GeoEntityRenderer
 import software.bernie.geckolib3.renderers.geo.GeoItemRenderer
+import yummyloop.common.gecko.AnimatableArmor
+import yummyloop.common.gecko.AnimatableBlockEntity
+import yummyloop.common.gecko.AnimatableLivingEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.concurrent.Callable
 import java.util.function.Supplier
@@ -63,9 +66,6 @@ internal object GeckoUtilsImpl {
             }
         }
 
-        abstract class AnimatableArmor(materialIn: ArmorMaterial, slot: EquipmentSlot, builder: Settings) :
-            GeoArmorItem(materialIn, slot, builder), IAnimatable
-
         fun registerArmorRenderer(i: GeckoUtils.Entry<*>) {
             GeoArmorRenderer.registerArmorRenderer(
                 @Suppress("UNCHECKED_CAST") ((i.obj as RegistrySupplier<Item>).get() as GeoArmorItem).javaClass,
@@ -80,14 +80,12 @@ internal object GeckoUtilsImpl {
             gModel: AnimatedGeoModel<T>,
         ) : GeoBlockRenderer<T>(rendererDispatcherIn, gModel) where T : BlockEntity, T : IAnimatable
 
-        abstract class AnimatableBlockEntity(type: BlockEntityType<*>) : BlockEntity(type), IAnimatable
-
         fun registerBlockRenderer(i: GeckoUtils.Entry<*>) {
             BlockEntityRenderers.registerRenderer(
                 @Suppress("UNCHECKED_CAST") (i.obj as RegistrySupplier<BlockEntityType<BlockEntity>>).get()
             ) {
                 GenericBlockRenderImpl(it,
-                    @Suppress("UNCHECKED_CAST") (i.model as AnimatedGeoModel<AnimatableBlockEntity>)
+                    @Suppress("UNCHECKED_CAST") (i.model as AnimatedGeoModel<AnimatableBlockEntity<BlockEntity>>)
                 )
             }
         }
@@ -107,15 +105,12 @@ internal object GeckoUtilsImpl {
             }
         }
 
-        private abstract class GeckoEntity(type: EntityType<out LivingEntity>?, worldIn: World?) :
-            LivingEntity(type, worldIn), IAnimatable
-
         fun registerEntityRenderer(i: GeckoUtils.Entry<*>) {
             EntityRenderers.register(
-                @Suppress("UNCHECKED_CAST") (i.obj as RegistrySupplier<EntityType<GeckoEntity>>).get()
+                @Suppress("UNCHECKED_CAST") (i.obj as RegistrySupplier<EntityType<AnimatableLivingEntity<LivingEntity>>>).get()
             ) {
                 GenericEntityRenderImpl(it,
-                    @Suppress("UNCHECKED_CAST") (i.model as AnimatedGeoModel<GeckoEntity>)
+                    @Suppress("UNCHECKED_CAST") (i.model as AnimatedGeoModel<AnimatableLivingEntity<LivingEntity>>)
                 )
             }
         }
