@@ -7,34 +7,14 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
 import net.minecraft.item.Item
-import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
-import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
 object GeckoUtils {
-    /**
-     * Generic Model for gecko
-     *
-     * @param modID Mod id
-     * @param modelLocation Model location
-     * @param textureLocation Texture location
-     * @param animationFileLocation Animation location
-     */
-    open class GenericModel<T>(
-        private val modID: String,
-        private val modelLocation: String,
-        private val textureLocation: String,
-        private val animationFileLocation: String,
-    ) : AnimatedGeoModel<T>() where T : IAnimatable? { // Crashes if it has a null check
-        override fun getModelLocation(obj: T) = Identifier(modID, modelLocation)
-        override fun getTextureLocation(obj: T) = Identifier(modID, textureLocation)
-        override fun getAnimationFileLocation(obj: T) = Identifier(modID, animationFileLocation)
-    }
 
     /**
      * List of gecko items for late render registry on different platforms (forge/fabric)

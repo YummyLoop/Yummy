@@ -18,6 +18,7 @@ import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
 import software.bernie.geckolib3.renderer.geo.GeoBlockRenderer
 import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
+import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
@@ -38,10 +39,10 @@ internal object GeckoUtilsImpl {
     }
 
     object Items {
-        open class GenericItemRendererImpl<T>(gModel: GeckoUtils.GenericModel<T>) :
+        open class GenericItemRendererImpl<T>(gModel: GeckoGenericModel<T>) :
             GeoItemRenderer<T>(gModel) where T : IAnimatable, T : Item
 
-        open class GenericArmorRendererImpl<T>(gModel: GeckoUtils.GenericModel<T>) :
+        open class GenericArmorRendererImpl<T>(gModel: GeckoGenericModel<T>) :
             GeoArmorRenderer<T>(gModel) where T : IAnimatable, T : GeoArmorItem {
             init {
                 //These values are what each bone name is in blockbench. So if your head bone is named "bone545",
@@ -63,7 +64,7 @@ internal object GeckoUtilsImpl {
             GeoItemRenderer.registerItemRenderer(
                 @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<Item>).get(),
                 GenericItemRendererImpl(
-                    GeckoUtils.GenericModel(
+                    GeckoGenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,
                         textureLocation = i[3] as String,
@@ -77,7 +78,7 @@ internal object GeckoUtilsImpl {
             GeoArmorRenderer.registerArmorRenderer(
                 @Suppress("UNCHECKED_CAST") ((i[0] as RegistrySupplier<Item>).get() as ArmorItem).javaClass,
                 GenericArmorRendererImpl(
-                    GeckoUtils.GenericModel(
+                    GeckoGenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,
                         textureLocation = i[3] as String,
@@ -91,7 +92,7 @@ internal object GeckoUtilsImpl {
     object Blocks {
         class GenericBlockRenderImpl<T>(
             rendererDispatcherIn: BlockEntityRenderDispatcher?,
-            gModel: GeckoUtils.GenericModel<T?>,
+            gModel: GeckoGenericModel<T?>,
         ) : GeoBlockRenderer<T>(rendererDispatcherIn, gModel) where T : BlockEntity?, T : IAnimatable?
 
         fun registerBlockRenderer(i: Array<Any>) {
@@ -99,7 +100,7 @@ internal object GeckoUtilsImpl {
                 @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<BlockEntityType<BlockEntity>>).get()
             ) {
                 GenericBlockRenderImpl(it,
-                    GeckoUtils.GenericModel(
+                    GeckoGenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,
                         textureLocation = i[3] as String,
@@ -113,7 +114,7 @@ internal object GeckoUtilsImpl {
     object Entities {
         class GenericEntityRenderImpl<T>(
             rendererDispatcherIn: EntityRenderDispatcher?,
-            gModel: GeckoUtils.GenericModel<T?>,
+            gModel: GeckoGenericModel<T?>,
         ) : GeoEntityRenderer<T>(rendererDispatcherIn, gModel) where T : LivingEntity?, T : IAnimatable? {
             init {
                 this.shadowRadius = 0.7F
@@ -128,7 +129,7 @@ internal object GeckoUtilsImpl {
                 @Suppress("UNCHECKED_CAST") (i[0] as RegistrySupplier<EntityType<GeckoEntity>>).get()
             ) {
                 GenericEntityRenderImpl(it,
-                    GeckoUtils.GenericModel(
+                    GeckoGenericModel(
                         modID = i[1] as String,
                         modelLocation = i[2] as String,
                         textureLocation = i[3] as String,
