@@ -27,26 +27,25 @@ object GeckoUtils {
     ) where T : IAnimatable
 
     /**
-     * List of gecko items for late render registry on different platforms (forge/fabric)
+     * List of gecko entries for late renderer registry on different platforms (forge/fabric)
      */
     val geckoEntryList: MutableList<Entry<*>> = mutableListOf()
 
     object Items {
 
         /**
-         * Registers a Gecko Item
+         * Registers the Item [itemID] and the gecko item renderer for it
          *
          * @param itemID Base item name
          * @param itemFunc Constructor of the item Class
          * @param itemSettings Pair of ItemName to append + the item settings for said item
-         * @param modID Mod id
+         * @param model the item model
          */
         fun <I> register(
             itemID: String,
             itemFunc: KFunction1<Item.Settings, I>,
             itemSettings: Item.Settings,
-            modID: String = MOD_ID,
-            model: AnimatedGeoModel<I> = GeckoGenericModel.item(modID, itemID),
+            model: AnimatedGeoModel<I> = GeckoGenericModel.item(MOD_ID, itemID),
         ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
             val myItem = Register.item(itemID, geckoItemSupplier(itemFunc, itemSettings, model))
             geckoEntryList.add(Entry(GeckoType.Item, myItem, model))
@@ -55,7 +54,7 @@ object GeckoUtils {
 
 
         /**
-         * Registers a gecko Armor + their items as Gecko Items
+         * Registers a gecko Armor + their items with gecko renderers
          *
          * @param itemID Base item name
          * @param itemFunc Constructor of the item Class
@@ -63,10 +62,7 @@ object GeckoUtils {
          * @param itemSettings1 Pair of ItemName to append + the item settings for said item
          * @param itemSettings2 Pair of ItemName to append + the item settings for said item
          * @param itemSettings3 Pair of ItemName to append + the item settings for said item
-         * @param modelLocation Model location
-         * @param textureLocation Texture location
-         * @param animationFileLocation Animation location
-         * @param modID Mod id
+         * @param model the armor model
          */
         fun <I> registerArmor(
             itemID: String,
@@ -75,26 +71,16 @@ object GeckoUtils {
             itemSettings1: Pair<String, Item.Settings>? = null,
             itemSettings2: Pair<String, Item.Settings>? = null,
             itemSettings3: Pair<String, Item.Settings>? = null,
-            modID: String = MOD_ID,
-            model: AnimatedGeoModel<I> = GeckoGenericModel.armor(modID, itemID),
+            model: AnimatedGeoModel<I> = GeckoGenericModel.armor(MOD_ID, itemID),
         ): MutableList<RegistrySupplier<Item>> where I : Item, I : IAnimatable {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
-            myList.add(register(itemID + itemSettings0.first,
-                itemFunc,
-                itemSettings0.second,
-                modID, model))
-            if (itemSettings1 != null) myList.add(register(itemID + itemSettings1.first,
-                itemFunc,
-                itemSettings1.second,
-                modID, model))
-            if (itemSettings2 != null) myList.add(register(itemID + itemSettings2.first,
-                itemFunc,
-                itemSettings2.second,
-                modID, model))
-            if (itemSettings3 != null) myList.add(register(itemID + itemSettings3.first,
-                itemFunc,
-                itemSettings3.second,
-                modID, model))
+            myList.add(register(itemID + itemSettings0.first, itemFunc, itemSettings0.second, model))
+            if (itemSettings1 != null)
+                myList.add(register(itemID + itemSettings1.first, itemFunc, itemSettings1.second, model))
+            if (itemSettings2 != null)
+                myList.add(register(itemID + itemSettings2.first, itemFunc, itemSettings2.second, model))
+            if (itemSettings3 != null)
+                myList.add(register(itemID + itemSettings3.first, itemFunc, itemSettings3.second, model))
 
             geckoEntryList.add(Entry(GeckoType.Armor, myList.first(), model))
             return myList
@@ -108,10 +94,7 @@ object GeckoUtils {
          * @param item1 Pair of ItemName to append + the item supplier for said item
          * @param item2 Pair of ItemName to append + the item supplier for said item
          * @param item3 Pair of ItemName to append + the item supplier for said item
-         * @param modelLocation Model location
-         * @param textureLocation Texture location
-         * @param animationFileLocation Animation location
-         * @param modID Mod id
+         * @param model the armor model
          */
         fun <T> registerArmor(
             itemID: String,
@@ -119,20 +102,29 @@ object GeckoUtils {
             item1: Pair<String, Supplier<T>>? = null,
             item2: Pair<String, Supplier<T>>? = null,
             item3: Pair<String, Supplier<T>>? = null,
-            modID: String = MOD_ID,
-            model: AnimatedGeoModel<T> = GeckoGenericModel.armor(modID, itemID),
+            model: AnimatedGeoModel<T> = GeckoGenericModel.armor(MOD_ID, itemID),
         ): MutableList<RegistrySupplier<Item>> where T : GeoArmorItem, T : IAnimatable {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
             myList.add(Register.item(itemID + item0.first, item0.second))
-            if (item1 != null) myList.add(Register.item(itemID + item1.first, item1.second))
-            if (item2 != null) myList.add(Register.item(itemID + item2.first, item2.second))
-            if (item3 != null) myList.add(Register.item(itemID + item3.first, item3.second))
+            if (item1 != null)
+                myList.add(Register.item(itemID + item1.first, item1.second))
+            if (item2 != null)
+                myList.add(Register.item(itemID + item2.first, item2.second))
+            if (item3 != null)
+                myList.add(Register.item(itemID + item3.first, item3.second))
+
             geckoEntryList.add(Entry(GeckoType.Armor, myList.first(), model))
             return myList
         }
     }
 
     object Blocks {
+        /**
+         * Registers a gecko Block Entity renderer for the [blockEntityType] with [model]
+         *
+         * @param blockEntityType the blockEntityType registrySupplier
+         * @param model the Block Entity Model
+         */
         fun <T, A> register(
             blockEntityType: RegistrySupplier<BlockEntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
@@ -142,6 +134,12 @@ object GeckoUtils {
     }
 
     object Entities {
+        /**
+         * Registers a gecko Living Entity renderer for the [entityType] with [model]
+         *
+         * @param entityType the entityType registrySupplier
+         * @param model the Living Entity Model
+         */
         fun <T, A> register(
             entityType: RegistrySupplier<EntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.entity(entityType.id.namespace, entityType.id.path),
@@ -155,10 +153,6 @@ object GeckoUtils {
      *
      * @param itemFunc Constructor of the item Class
      * @param itemSettings Pair of ItemName to append + the item settings for said item
-     * @param modelLocation Model location
-     * @param textureLocation Texture location
-     * @param animationFileLocation Animation location
-     * @param modID Mod id
      */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic

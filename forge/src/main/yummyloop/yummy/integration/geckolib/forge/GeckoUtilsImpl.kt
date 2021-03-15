@@ -22,6 +22,9 @@ import kotlin.reflect.KFunction1
 
 internal object GeckoUtilsImpl {
 
+    /**
+     * Registers all the gecko renderers, stored for late registry
+     */
     fun registerAll() {
         for (i in GeckoUtils.geckoEntryList) {
             when (i.type) {
@@ -35,6 +38,9 @@ internal object GeckoUtilsImpl {
     }
 
     object Items {
+        /**
+         * Registers a Armor Renderer
+         */
         @Suppress("UNCHECKED_CAST")
         fun registerArmorRenderer(i: GeckoUtils.Entry<*>) {
             GeoArmorRenderer.registerArmorRenderer(
@@ -45,6 +51,9 @@ internal object GeckoUtilsImpl {
     }
 
     object Blocks {
+        /**
+         * Registers a Block Entity Renderer
+         */
         @Suppress("UNCHECKED_CAST")
         fun registerBlockRenderer(i: GeckoUtils.Entry<*>) {
             BlockEntityRenderers.registerRenderer(
@@ -55,6 +64,9 @@ internal object GeckoUtilsImpl {
     }
 
     object Entities {
+        /**
+         * Registers a Entity Renderer
+         */
         @Suppress("UNCHECKED_CAST")
         fun registerEntityRenderer(i: GeckoUtils.Entry<*>) {
             EntityRenderers.register(
@@ -64,6 +76,9 @@ internal object GeckoUtilsImpl {
         }
     }
 
+    /**
+     * Returns the item supplier after applying the gecko item renderer with forge
+     */
     @JvmStatic
     fun <I> geckoItemSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
