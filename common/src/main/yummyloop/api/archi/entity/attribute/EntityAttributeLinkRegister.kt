@@ -18,7 +18,7 @@ class EntityAttributeLinkRegister private constructor(val modId: String) {
     /** Private list of EntityAttributes links */
     private var attributeLinkList: MutableList<Pair<
             RegistrySupplier<out EntityType<out LivingEntity>>,
-            DefaultAttributeContainer.Builder
+                () -> DefaultAttributeContainer.Builder
             >> = mutableListOf()
 
     fun getLinkList() = attributeLinkList
@@ -38,7 +38,7 @@ class EntityAttributeLinkRegister private constructor(val modId: String) {
      */
     fun register(
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
-        entityAttributesBuilder: DefaultAttributeContainer.Builder,
+        entityAttributesBuilder: () -> DefaultAttributeContainer.Builder,
     ) {
         attributeLinkList.add(Pair(entityType, entityAttributesBuilder))
     }

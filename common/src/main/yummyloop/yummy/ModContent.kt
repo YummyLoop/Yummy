@@ -219,7 +219,7 @@ object ModContent {
                     "geo_ex",
                     ::GeoExampleEntity2,
                     SpawnGroup.CREATURE,
-                    GeoExampleEntity2.createAttributes()
+                    GeoExampleEntity2.Companion::createAttributes
                 )
 
                 GeckoUtils.Entities.register(GeoExampleEntity2.type!!,GeckoGenericModel(ExampleMod.MOD_ID,

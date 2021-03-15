@@ -26,7 +26,7 @@ object EntityAttributeLinkPlatformImpl {
     private object EntityAttributes {
         @SubscribeEvent
         fun registerEntityAttributes(event: EntityAttributeCreationEvent) {
-            for (i in attributeLinkList) for (l in i.getLinkList()) event.put(l.first.get(), l.second.build())
+            for (i in attributeLinkList) for (l in i.getLinkList()) event.put(l.first.get(), l.second.invoke().build())
         }
     }
 }

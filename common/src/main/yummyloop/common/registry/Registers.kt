@@ -192,7 +192,7 @@ class Registers(private val modId: String) {
         entityId: String,
         entityFactory: (type: EntityType<T>, world: World) -> (T),
         spawnGroup: SpawnGroup = SpawnGroup.CREATURE,
-        entityAttributeBuilder: DefaultAttributeContainer.Builder = MobEntity.createMobAttributes(),
+        entityAttributeBuilder: () -> DefaultAttributeContainer.Builder = MobEntity::createMobAttributes,
         entityBuilderModifications: (append: EntityType.Builder<T>) -> (EntityType.Builder<T>) = { it },
     ): RegistrySupplier<EntityType<T>> where T : LivingEntity {
         return entityType(entityId, entityFactory, spawnGroup, entityBuilderModifications)
@@ -221,7 +221,7 @@ class Registers(private val modId: String) {
      */
     fun entityAttributeLink(
         entityType: RegistrySupplier<out EntityType<out LivingEntity>>,
-        entityAttributeBuilder: DefaultAttributeContainer.Builder = MobEntity.createMobAttributes(),
+        entityAttributeBuilder: () -> DefaultAttributeContainer.Builder = MobEntity::createMobAttributes,
     ) {
         entityAttributeLinkRegister.register(entityType, entityAttributeBuilder)
     }
