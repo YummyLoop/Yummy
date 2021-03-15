@@ -9,6 +9,7 @@ import net.minecraft.client.texture.TextureManager
 import net.minecraft.client.util.math.MatrixStack
 import net.minecraft.item.ItemStack
 import net.minecraft.util.Identifier
+import java.awt.Color
 import com.mojang.blaze3d.systems.RenderSystem as renderSystem
 
 @Environment(EnvType.CLIENT)
@@ -47,9 +48,9 @@ object Render {
         pop()
     }
 
-    inline operator fun invoke(matrix: MatrixStack, supplier: Render.() -> Unit) {
+    inline operator fun invoke(matrix: MatrixStack, supplier: Render.(MatrixStack) -> Unit) {
         push(matrix)
-        supplier.invoke(this)
+        supplier.invoke(this, matrix)
         pop(matrix)
     }
 
@@ -63,6 +64,28 @@ object Render {
         if (x is Float && y is Float && z is Float) renderSystem.scalef(x, y, z)
         else if (x is Double && y is Double && z is Double) renderSystem.scaled(x, y, z)
         else renderSystem.scaled(x.toDouble(), y.toDouble(), z.toDouble())
+    }
+
+    /**
+     * Applies a RGB color with the specified red, green, and blue values in the range (0 - 1).
+     * Alpha is defaulted to 1.
+     *
+     * @param red  the red component of the color
+     * @param green the green component of the color
+     * @param blue the blue component of the color
+     * @param alpha the alpha component of the color
+     */
+    fun color(red: Float, green: Float, blue: Float, alpha: Float = 1F) {
+        renderSystem.color4f(red, green, blue, alpha)
+    }
+
+    /**
+     * Applies a RGB color with the specified [Color].
+     *
+     * @param rgb the specified [Color]
+     */
+    fun color(rgb: Color) {
+        color(rgb.red / 255F, rgb.green / 255F, rgb.blue / 255F, rgb.alpha / 255F)
     }
 
     fun bindTexture(id: Identifier) = textureManager.bindTexture(id)

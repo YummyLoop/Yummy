@@ -31,6 +31,7 @@ import yummyloop.common.network.packets.sendToPlayer
 import yummyloop.common.network.packets.sendToServer
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.LOG
+import java.awt.Color
 import kotlin.math.ceil
 
 object ToolTipPreview {
@@ -247,13 +248,13 @@ object ToolTipPreview {
                     9 -> renderI(3)
                     10 -> {
                         for (i in 0 until 7) {
-                            renderItem(matrices,
+                            renderItem(it,
                                 inv.getStack(i),
                                 x + (i % 4) * 18,
                                 y + (i / 4) * 18)
                         }
                         for (i in 7 until 10) {
-                            renderItem(matrices,
+                            renderItem(it,
                                 inv.getStack(i),
                                 x + ((i - 7) % 3) * 18,
                                 y + ((i - 7) / 3) * 18 + 2 * 18)
@@ -263,13 +264,13 @@ object ToolTipPreview {
                     12 -> renderI(4)
                     13 -> {
                         for (i in 0 until 9) {
-                            renderItem(matrices,
+                            renderItem(it,
                                 inv.getStack(i),
                                 x + (i % 5) * 18,
                                 y + (i / 5) * 18)
                         }
                         for (i in 9 until 13) {
-                            renderItem(matrices,
+                            renderItem(it,
                                 inv.getStack(i),
                                 x + ((i - 9) % 4) * 18,
                                 y + ((i - 9) / 4) * 18 + 2 * 18)
@@ -285,12 +286,13 @@ object ToolTipPreview {
             Render(matrices) {
                 this.bindTexture(backgroundTexture)
                 this.translate(0F, 0F, 400F)
+                this.color(getColor())
 
                 val offSetX = -8
                 val offSetY = -8
 
                 fun draw(xOffset: Int, yOffset: Int, u: Float, v: Float, width: Int, height: Int) =
-                    DrawableHelper.drawTexture(matrices,
+                    DrawableHelper.drawTexture(it,
                         x + offSetX + xOffset,
                         y + offSetY + yOffset,
                         u,
@@ -321,6 +323,31 @@ object ToolTipPreview {
                     14 -> draw(105F, 223F, 104, 68)
                     else -> draw(0F, 223F, 104, 68)
                 }
+            }
+        }
+
+        fun getColor(): Color {
+            //LOG.info(hoveredStack.item.translationKey)
+            return when (hoveredStack.item.translationKey) {
+                "block.minecraft.shulker_box" -> Color(150, 100, 150)
+                "block.minecraft.white_shulker_box" -> Color(225, 230, 230)
+                "block.minecraft.orange_shulker_box" -> Color(240, 110, 10)
+                "block.minecraft.magenta_shulker_box" -> Color(180, 60, 170)
+                "block.minecraft.light_blue_shulker_box" -> Color(55, 175, 215)
+                "block.minecraft.yellow_shulker_box" -> Color(255, 200, 40)
+                "block.minecraft.lime_shulker_box" -> Color(110, 185, 25)
+                "block.minecraft.pink_shulker_box" -> Color(240, 130, 165)
+                "block.minecraft.gray_shulker_box" -> Color(60, 65, 70)
+                "block.minecraft.light_gray_shulker_box" -> Color(140, 140, 130)
+                "block.minecraft.cyan_shulker_box" -> Color(20, 130, 140)
+                "block.minecraft.purple_shulker_box" -> Color(115, 40, 170)
+                "block.minecraft.blue_shulker_box" -> Color(50, 50, 150)
+                "block.minecraft.brown_shulker_box" -> Color(110, 70, 40)
+                "block.minecraft.green_shulker_box" -> Color(85, 105, 30)
+                "block.minecraft.red_shulker_box" -> Color(155, 35, 35)
+                "block.minecraft.black_shulker_box" -> Color(40, 40, 40)
+                "block.minecraft.ender_chest" -> Color(50, 70, 70)
+                else -> Color(255, 255, 255, 255)
             }
         }
     }
