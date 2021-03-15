@@ -10,8 +10,8 @@ import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
-import yummyloop.common.gecko.AnimatableBlockEntity
-import yummyloop.common.gecko.AnimatableLivingEntity
+import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
 import java.util.function.Supplier

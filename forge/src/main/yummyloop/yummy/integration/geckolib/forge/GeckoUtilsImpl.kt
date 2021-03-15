@@ -12,9 +12,9 @@ import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
-import yummyloop.common.gecko.AnimatableArmor
-import yummyloop.common.gecko.AnimatableBlockEntity
-import yummyloop.common.gecko.AnimatableLivingEntity
+import yummyloop.common.integration.gecko.AnimatableArmor
+import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.concurrent.Callable
 import java.util.function.Supplier

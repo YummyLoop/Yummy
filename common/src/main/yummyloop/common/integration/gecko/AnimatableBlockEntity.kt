@@ -1,4 +1,4 @@
-package yummyloop.common.gecko
+package yummyloop.common.integration.gecko
 
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
