@@ -34,6 +34,7 @@ import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.client.ToolTipPreview
+import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.items.Ytem
 import yummyloop.yummy.items.YtemGroup
@@ -60,9 +61,12 @@ object ModContent {
     /** Dev content */
     internal object Dev {
         init {
+            G0
+            G1
             G2
             G3
             //E1
+
 
             Eve.PLAYER_SCREEN_HANDLER_POST.register { playerInventory, onServer, playerEntity ->
                 val inv = SimpleInventory(2)
@@ -160,10 +164,13 @@ object ModContent {
             var test_ITEM = Register.item("test_item")
         }
 
-        /** Gecko Item and armor */
-        object G1 {
+        /** Gecko Item */
+        object G0 {
             var JACK_IN_THE_BOX2 = GeckoUtils.Items.register("jack", ::JackInTheBoxItem2, Ytem.Settings())
+        }
 
+        /** Gecko armor */
+        object G1 {
             var armor = GeckoUtils.Items.registerArmor(
                 "potato_armor",
                 "_head" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, Ytem.Settings()) },
@@ -188,10 +195,13 @@ object ModContent {
                     testBlockEntity_block.first
                 ) { TestBlockEntity() }
 
-                GeckoUtils.Blocks.register(TestBlockEntity.type!!,
-                    "geo/jack.geo.json",
-                    "textures/item/jack.png",
-                    "animations/jack.animation.json")
+                GeckoUtils.Blocks.register(
+                    TestBlockEntity.type!!,
+                    GeckoGenericModel(ExampleMod.MOD_ID,
+                        "geo/jack.geo.json",
+                        "textures/item/jack.png",
+                        "animations/jack.animation.json")
+                )
 
                 // Screen stuff
                 BoxScreenHandler.type =
@@ -212,10 +222,10 @@ object ModContent {
                     GeoExampleEntity2.createAttributes()
                 )
 
-                GeckoUtils.Entities.register(GeoExampleEntity2.type!!,
+                GeckoUtils.Entities.register(GeoExampleEntity2.type!!,GeckoGenericModel(ExampleMod.MOD_ID,
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
-                    "animations/jack.animation.json")
+                    "animations/jack.animation.json"))
 
             }
         }
