@@ -10,7 +10,6 @@ import net.minecraft.client.render.entity.EntityRenderDispatcher
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.entity.LivingEntity
-import net.minecraft.item.ArmorItem
 import net.minecraft.item.ArmorMaterial
 import net.minecraft.item.Item
 import net.minecraft.world.World
@@ -21,7 +20,6 @@ import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
 import software.bernie.geckolib3.renderer.geo.GeoBlockRenderer
 import software.bernie.geckolib3.renderer.geo.GeoEntityRenderer
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
-import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
@@ -29,8 +27,8 @@ import kotlin.reflect.KFunction1
 internal object GeckoUtilsImpl {
 
     fun registerAll() {
-        for (i in GeckoUtils.geckoEntryList){
-            when (i.type){
+        for (i in GeckoUtils.geckoEntryList) {
+            when (i.type) {
                 GeckoUtils.GeckoType.Item -> Items.registerItemRenderer(i)
                 GeckoUtils.GeckoType.Armor -> Items.registerArmorRenderer(i)
                 GeckoUtils.GeckoType.Block -> Blocks.registerBlockRenderer(i)
@@ -65,15 +63,18 @@ internal object GeckoUtilsImpl {
 
 
         abstract class AnimatableItem(settings: Settings?) : Item(settings), IAnimatable
-        fun registerItemRenderer(i: GeckoUtils.Entry<*>){
+
+        fun registerItemRenderer(i: GeckoUtils.Entry<*>) {
             GeoItemRenderer.registerItemRenderer(
                 @Suppress("UNCHECKED_CAST") (i.obj as RegistrySupplier<Item>).get(),
-                @Suppress("UNCHECKED_CAST") GenericItemRendererImpl(i.model as AnimatedGeoModel<AnimatableItem> )
+                @Suppress("UNCHECKED_CAST") GenericItemRendererImpl(i.model as AnimatedGeoModel<AnimatableItem>)
             )
         }
 
-        abstract class AnimatableArmor(materialIn: ArmorMaterial, slot: EquipmentSlot, builder: Settings,) : GeoArmorItem(materialIn, slot, builder), IAnimatable
-        fun registerArmorRenderer(i: GeckoUtils.Entry<*>){
+        abstract class AnimatableArmor(materialIn: ArmorMaterial, slot: EquipmentSlot, builder: Settings) :
+            GeoArmorItem(materialIn, slot, builder), IAnimatable
+
+        fun registerArmorRenderer(i: GeckoUtils.Entry<*>) {
             GeoArmorRenderer.registerArmorRenderer(
                 @Suppress("UNCHECKED_CAST") ((i.obj as RegistrySupplier<Item>).get() as GeoArmorItem).javaClass,
                 @Suppress("UNCHECKED_CAST") GenericArmorRendererImpl(i.model as AnimatedGeoModel<AnimatableArmor>)
@@ -88,6 +89,7 @@ internal object GeckoUtilsImpl {
         ) : GeoBlockRenderer<T>(rendererDispatcherIn, gModel) where T : BlockEntity, T : IAnimatable
 
         abstract class AnimatableBlockEntity(type: BlockEntityType<*>) : BlockEntity(type), IAnimatable
+
         fun registerBlockRenderer(i: GeckoUtils.Entry<*>) {
             BlockEntityRenderers.registerRenderer(
                 @Suppress("UNCHECKED_CAST") (i.obj as RegistrySupplier<BlockEntityType<BlockEntity>>).get()
@@ -128,7 +130,7 @@ internal object GeckoUtilsImpl {
     fun <I> geckoItemSupplier(
         itemFunc: KFunction1<Item.Settings, I>,
         itemSettings: Item.Settings,
-        model : AnimatedGeoModel<I>
+        model: AnimatedGeoModel<I>,
     ): Supplier<out I> where I : Item, I : IAnimatable {
         return Supplier { itemFunc(itemSettings) }
     }

@@ -21,7 +21,6 @@ object GeckoUtils {
 
     data class Entry<T>(
         val type: GeckoType,
-        val modID: String,
         val obj: RegistrySupplier<*>,
         val model: AnimatedGeoModel<T>,
     ) where T : IAnimatable
@@ -49,7 +48,7 @@ object GeckoUtils {
             model: AnimatedGeoModel<I> = GeckoGenericModel.item(modID, itemID),
         ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
             val myItem = Register.item(itemID, geckoItemSupplier(itemFunc, itemSettings, model))
-            geckoEntryList.add(Entry(GeckoType.Item, modID, myItem, model))
+            geckoEntryList.add(Entry(GeckoType.Item, myItem, model))
             return myItem
         }
 
@@ -96,7 +95,7 @@ object GeckoUtils {
                 itemSettings3.second,
                 modID, model))
 
-            geckoEntryList.add(Entry(GeckoType.Armor, modID, myList.first(), model))
+            geckoEntryList.add(Entry(GeckoType.Armor, myList.first(), model))
             return myList
         }
 
@@ -127,18 +126,19 @@ object GeckoUtils {
             if (item1 != null) myList.add(Register.item(itemID + item1.first, item1.second))
             if (item2 != null) myList.add(Register.item(itemID + item2.first, item2.second))
             if (item3 != null) myList.add(Register.item(itemID + item3.first, item3.second))
-            geckoEntryList.add(Entry(GeckoType.Armor, modID, myList.first(), model))
+            geckoEntryList.add(Entry(GeckoType.Armor, myList.first(), model))
             return myList
         }
     }
 
     object Blocks {
         abstract class AnimatableBlockEntity(type: BlockEntityType<*>) : BlockEntity(type), IAnimatable
+
         fun <T, A> register(
             blockEntityType: RegistrySupplier<BlockEntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
-        ) where T : BlockEntity , A :AnimatableBlockEntity{
-            geckoEntryList.add(Entry(GeckoType.Block, blockEntityType.id.namespace, blockEntityType, model))
+        ) where T : BlockEntity, A : AnimatableBlockEntity {
+            geckoEntryList.add(Entry(GeckoType.Block, blockEntityType, model))
         }
     }
 
@@ -148,7 +148,7 @@ object GeckoUtils {
             entityType: RegistrySupplier<EntityType<T>>,
             model: AnimatedGeoModel<A> = GeckoGenericModel.entity(entityType.id.namespace, entityType.id.path),
         ) where T : Entity, A : AnimatableEntity {
-            geckoEntryList.add(Entry(GeckoType.Entity, entityType.id.namespace, entityType, model))
+            geckoEntryList.add(Entry(GeckoType.Entity, entityType, model))
         }
     }
 
