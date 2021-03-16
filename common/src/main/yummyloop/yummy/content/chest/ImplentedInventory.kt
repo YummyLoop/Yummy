@@ -1,4 +1,4 @@
-package yummyloop.test.block
+package yummyloop.yummy.content.chest
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventories

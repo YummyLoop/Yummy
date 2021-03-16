@@ -2,7 +2,6 @@ package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.block.BlockState
-import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
@@ -22,12 +21,12 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
-import yummyloop.test.block.ImplementedInventory
 import yummyloop.yummy.LOG
 
 class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFactory, ImplementedInventory {
     companion object {
         var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
+        private var isOpen = false
     }
 
     private val animationFactory = AnimationFactory(this)
@@ -37,29 +36,51 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFacto
         LOG.info("Calling from TestBlockEntity")
     }
 
-    private fun <P : IAnimatable> predicate(event: AnimationEvent<P>): PlayState {
-        event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
+    private var playedAnimation = true
+
+    override fun onOpen(player: PlayerEntity?) {
+        isOpen = true
+        super.onOpen(player)
+
+        playedAnimation = false
+        LOG.info("event on open")
+    }
+
+    override fun onClose(player: PlayerEntity?) {
+        super.onClose(player)
+       // isOpen = false
+        playedAnimation = false
+        LOG.info("event on close")
+    }
+
+    private fun <P : IAnimatable> openPredicate(event: AnimationEvent<P>): PlayState {
+        if (isOpen){
+            LOG.info("event")
+            event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
+        }else {
+            LOG.info("event false")
+            event.controller.setAnimation(AnimationBuilder().addAnimation("close_chest", false))
+        }
+
         return PlayState.CONTINUE
     }
 
     override fun registerControllers(data: AnimationData) {
         val animationPredicate = object : AnimationController.IAnimationPredicate<IAnimatable> {
-            override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState = predicate(event)
+            override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState = openPredicate(event)
         }
+
         data.addAnimationController(
             AnimationController(
                 this,
                 "controller",
-                20F,
+                0F,
                 animationPredicate
             )
         )
     }
 
-    private val inventory: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
-
-    override val items: DefaultedList<ItemStack>
-        get() = this.inventory
+    override val items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
 
     /**
      * Marks the state as dirty.
@@ -86,12 +107,12 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFacto
 
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
         super.fromTag(state, tag)
-        Inventories.fromTag(tag, inventory)
+        Inventories.fromTag(tag, items)
     }
 
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
-        Inventories.toTag(tag, inventory)
+        Inventories.toTag(tag, items)
         return tag
     }
 }

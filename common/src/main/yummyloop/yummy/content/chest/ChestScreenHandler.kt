@@ -14,7 +14,7 @@ import net.minecraft.screen.slot.Slot
 class ChestScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
-    var inventory: Inventory,
+    var inventory: ChestEntity,
 ) : ScreenHandler(type?.get(), syncId) {
     companion object {
         var type: RegistrySupplier<ScreenHandlerType<out ScreenHandler>>? = null
@@ -23,7 +23,7 @@ class ChestScreenHandler(
     //This constructor gets called on the client when the server wants it to open the screenHandler,
     //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
     //sync this empty inventory with the inventory on the server.
-    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory, SimpleInventory(9))
+    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory, ChestEntity())
 
     override fun canUse(player: PlayerEntity?): Boolean {
         return inventory.canPlayerUse(player)
@@ -69,6 +69,11 @@ class ChestScreenHandler(
 
         //The player Hotbar
         for (m in 0..8) this.addSlot(Slot(playerInventory, m, 8 + m * 18, 142))
+    }
+
+    override fun close(player: PlayerEntity?) {
+        super.close(player)
+        inventory.onClose(player)
     }
 }
 
