@@ -1,4 +1,4 @@
-package yummyloop.test.block
+package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.block.BlockState
@@ -21,11 +21,13 @@ import software.bernie.geckolib3.core.controller.AnimationController
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
+import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.test.block.ImplementedInventory
 import yummyloop.yummy.LOG
 
-class TestBlockEntity : BlockEntity(type?.get()), IAnimatable, NamedScreenHandlerFactory, ImplementedInventory {
+class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFactory, ImplementedInventory {
     companion object {
-        var type: RegistrySupplier<BlockEntityType<BlockEntity>>? = null
+        var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
     }
 
     private val animationFactory = AnimationFactory(this)
@@ -33,11 +35,10 @@ class TestBlockEntity : BlockEntity(type?.get()), IAnimatable, NamedScreenHandle
 
     init {
         LOG.info("Calling from TestBlockEntity")
-
     }
 
     private fun <P : IAnimatable> predicate(event: AnimationEvent<P>): PlayState {
-        event.controller.setAnimation(AnimationBuilder().addAnimation("Soaryn_chest_popup", true))
+        event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
         return PlayState.CONTINUE
     }
 
@@ -66,14 +67,15 @@ class TestBlockEntity : BlockEntity(type?.get()), IAnimatable, NamedScreenHandle
      * the inventory contents and notify neighboring blocks of inventory changes.
      */
     override fun markDirty() {
-        super<BlockEntity>.markDirty()
+        super<AnimatableBlockEntity>.markDirty()
+        super<ImplementedInventory>.markDirty()
     }
 
 
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-        return BoxScreenHandler(syncId, inv, this)
+        return ChestScreenHandler(syncId, inv, this)
     }
 
     /**

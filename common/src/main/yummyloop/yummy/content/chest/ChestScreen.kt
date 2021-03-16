@@ -1,4 +1,4 @@
-package yummyloop.test.block
+package yummyloop.yummy.content.chest
 
 import com.mojang.blaze3d.systems.RenderSystem
 import net.minecraft.client.gui.screen.ingame.HandledScreen
@@ -8,7 +8,7 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.util.Identifier
 
-class BoxScreen(
+class ChestScreen(
     handler: ScreenHandler,
     inventory: PlayerInventory,
     title: Text,

@@ -1,4 +1,4 @@
-package yummyloop.test.block
+package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.entity.player.PlayerEntity
@@ -11,7 +11,7 @@ import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 
 
-class BoxScreenHandler(
+class ChestScreenHandler(
     syncId: Int,
     playerInventory: PlayerInventory,
     var inventory: Inventory,

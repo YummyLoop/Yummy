@@ -44,7 +44,7 @@ internal object GeckoUtilsImpl {
          * Registers a Item Renderer
          */
         @Suppress("UNCHECKED_CAST")
-        fun registerItemRenderer(i: GeckoUtils.Entry<*>) {
+        fun registerItemRenderer(i: GeckoUtils.Entry) {
             GeoItemRenderer.registerItemRenderer(
                 (i.obj as RegistrySupplier<Item>).get(),
                 GeckoGenericItemRendererImpl(i.model as AnimatedGeoModel<AnimatableItem>)
@@ -55,7 +55,7 @@ internal object GeckoUtilsImpl {
          * Registers a Armor Renderer
          */
         @Suppress("UNCHECKED_CAST")
-        fun registerArmorRenderer(i: GeckoUtils.Entry<*>) {
+        fun registerArmorRenderer(i: GeckoUtils.Entry) {
             GeoArmorRenderer.registerArmorRenderer(
                 ((i.obj as RegistrySupplier<Item>).get() as GeoArmorItem).javaClass,
                 GeckoGenericArmorRendererImpl(i.model as AnimatedGeoModel<AnimatableArmor>)
@@ -68,10 +68,10 @@ internal object GeckoUtilsImpl {
          * Registers a Block Entity Renderer
          */
         @Suppress("UNCHECKED_CAST")
-        fun registerBlockRenderer(i: GeckoUtils.Entry<*>) {
+        fun registerBlockRenderer(i: GeckoUtils.Entry) {
             BlockEntityRenderers.registerRenderer(
                 (i.obj as RegistrySupplier<BlockEntityType<BlockEntity>>).get()) {
-                GeckoGenericBlockRenderImpl(it, i.model as AnimatedGeoModel<AnimatableBlockEntity<BlockEntity>>)
+                GeckoGenericBlockRenderImpl(it, i.model as AnimatedGeoModel<AnimatableBlockEntity>)
             }
         }
     }
@@ -81,7 +81,7 @@ internal object GeckoUtilsImpl {
          * Registers a Entity Renderer
          */
         @Suppress("UNCHECKED_CAST")
-        fun registerEntityRenderer(i: GeckoUtils.Entry<*>) {
+        fun registerEntityRenderer(i: GeckoUtils.Entry) {
             EntityRenderers.register(
                 (i.obj as RegistrySupplier<EntityType<AnimatableLivingEntity<LivingEntity>>>).get()) {
                 GeckoGenericEntityRenderImpl(it, i.model as AnimatedGeoModel<AnimatableLivingEntity<LivingEntity>>)

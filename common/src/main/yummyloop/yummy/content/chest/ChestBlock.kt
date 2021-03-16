@@ -1,4 +1,4 @@
-package yummyloop.test.block
+package yummyloop.yummy.content.chest
 
 import net.minecraft.block.BlockRenderType
 import net.minecraft.block.BlockState
@@ -12,9 +12,9 @@ import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
-class TestBlockWithEntity(settings: Settings) : BlockWithEntity(settings) {
+class ChestBlock(settings: Settings) : BlockWithEntity(settings) {
     override fun createBlockEntity(world: BlockView?): BlockEntity {
-        return TestBlockEntity()
+        return ChestEntity()
     }
 
     override fun getRenderType(state: BlockState?): BlockRenderType {

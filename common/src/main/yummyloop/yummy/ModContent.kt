@@ -21,19 +21,15 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import yummyloop.common.client.screen.addWidget
-import yummyloop.test.block.BoxScreen
-import yummyloop.test.block.BoxScreenHandler
-import yummyloop.test.block.TestBlockEntity
-import yummyloop.test.block.TestBlockWithEntity
 import yummyloop.test.event.Eve
 import yummyloop.test.geckolib.GeoExampleEntity2
-import yummyloop.test.geckolib.JackInTheBoxItem2
 import yummyloop.test.geckolib.PotatoArmor2
 import yummyloop.test.gui.Factory1
 import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.client.ToolTipPreview
+import yummyloop.yummy.content.chest.*
 import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.items.Ytem
@@ -61,10 +57,9 @@ object ModContent {
     /** Dev content */
     internal object Dev {
         init {
-            G0
-            G1
-            G2
-            G3
+            Chest
+            //G1
+            //G3
             //E1
 
 
@@ -164,11 +159,6 @@ object ModContent {
             var test_ITEM = Register.item("test_item")
         }
 
-        /** Gecko Item */
-        object G0 {
-            var JACK_IN_THE_BOX2 = GeckoUtils.Items.register("jack", ::JackInTheBoxItem2, Ytem.Settings())
-        }
-
         /** Gecko armor */
         object G1 {
             var armor = GeckoUtils.Items.registerArmor(
@@ -182,32 +172,6 @@ object ModContent {
                 "_leggings" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, Ytem.Settings()) },
                 "_boots" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.FEET, Ytem.Settings()) },
             )
-        }
-
-        /** Gecko Block Entity */
-        object G2 {
-            val testBlockEntity_block = Register.blockItem(
-                "test_block_e", { TestBlockWithEntity(BlockProperties.of(Material.METAL).strength(1F).nonOpaque()) })
-
-            init {
-                TestBlockEntity.type = Register.blockEntityType(
-                    "test_block_ee",
-                    testBlockEntity_block.first
-                ) { TestBlockEntity() }
-
-                GeckoUtils.Blocks.register(
-                    TestBlockEntity.type!!,
-                    GeckoGenericModel(ExampleMod.MOD_ID,
-                        "geo/jack.geo.json",
-                        "textures/item/jack.png",
-                        "animations/jack.animation.json")
-                )
-
-                // Screen stuff
-                BoxScreenHandler.type =
-                    Register.screenHandlerTypeSimple("test_screen_type", ::BoxScreenHandler)
-                Register.client.screen(BoxScreenHandler.type!!) { ::BoxScreen }
-            }
         }
 
         /** Gecko entity */

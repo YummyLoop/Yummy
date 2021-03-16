@@ -20,16 +20,16 @@ import kotlin.reflect.KFunction1
 object GeckoUtils {
     private const val MOD_ID = ExampleMod.MOD_ID
 
-    data class Entry<T>(
+    data class Entry(
         val type: GeckoType,
         val obj: RegistrySupplier<*>,
-        val model: AnimatedGeoModel<T>,
-    ) where T : IAnimatable
+        val model: AnimatedGeoModel<out IAnimatable>,
+    )
 
     /**
      * List of gecko entries for late renderer registry on different platforms (forge/fabric)
      */
-    val geckoEntryList: MutableList<Entry<*>> = mutableListOf()
+    val geckoEntryList: MutableList<Entry> = mutableListOf()
 
     object Items {
 
@@ -125,10 +125,11 @@ object GeckoUtils {
          * @param blockEntityType the blockEntityType registrySupplier
          * @param model the Block Entity Model
          */
-        fun <T, A> register(
-            blockEntityType: RegistrySupplier<BlockEntityType<T>>,
-            model: AnimatedGeoModel<A> = GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
-        ) where T : BlockEntity, A : AnimatableBlockEntity<T> {
+        fun register(
+            blockEntityType: RegistrySupplier<out BlockEntityType<out BlockEntity>>,
+            model: AnimatedGeoModel<out AnimatableBlockEntity> =
+                GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
+        ) {
             geckoEntryList.add(Entry(GeckoType.Block, blockEntityType, model))
         }
     }
