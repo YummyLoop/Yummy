@@ -1,6 +1,5 @@
 package yummyloop.yummy.content.chest
 
-import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
@@ -8,8 +7,9 @@ import software.bernie.geckolib3.core.controller.AnimationController
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
+import yummyloop.common.integration.gecko.AnimatableItem
 
-class ChestItem(properties: Settings) : Item(properties), IAnimatable {
+class ChestItem(properties: Settings) : AnimatableItem(properties) {
     private val animationFactory = AnimationFactory(this)
     override fun getFactory(): AnimationFactory = this.animationFactory
 

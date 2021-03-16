@@ -11,6 +11,7 @@ import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimatableItem
 import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
@@ -41,12 +42,12 @@ object GeckoUtils {
          * @param itemSettings Pair of ItemName to append + the item settings for said item
          * @param model the item model
          */
-        fun <I> register(
+        fun register(
             itemID: String,
-            itemFunc: KFunction1<Item.Settings, I>,
+            itemFunc: KFunction1<Item.Settings, AnimatableItem>,
             itemSettings: Item.Settings,
-            model: AnimatedGeoModel<I> = GeckoGenericModel.item(MOD_ID, itemID),
-        ): RegistrySupplier<Item> where I : Item, I : IAnimatable {
+            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.item(MOD_ID, itemID),
+        ): RegistrySupplier<Item> {
             val myItem = Register.item(itemID, geckoItemSupplier(itemFunc, itemSettings, model))
             geckoEntryList.add(Entry(GeckoType.Item, myItem, model))
             return myItem
@@ -64,15 +65,15 @@ object GeckoUtils {
          * @param itemSettings3 Pair of ItemName to append + the item settings for said item
          * @param model the armor model
          */
-        fun <I> registerArmor(
+        fun registerArmor(
             itemID: String,
-            itemFunc: KFunction1<Item.Settings, I>,
+            itemFunc: KFunction1<Item.Settings, AnimatableItem>,
             itemSettings0: Pair<String, Item.Settings>,
             itemSettings1: Pair<String, Item.Settings>? = null,
             itemSettings2: Pair<String, Item.Settings>? = null,
             itemSettings3: Pair<String, Item.Settings>? = null,
-            model: AnimatedGeoModel<I> = GeckoGenericModel.armor(MOD_ID, itemID),
-        ): MutableList<RegistrySupplier<Item>> where I : Item, I : IAnimatable {
+            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.armor(MOD_ID, itemID),
+        ): MutableList<RegistrySupplier<Item>> {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
             myList.add(register(itemID + itemSettings0.first, itemFunc, itemSettings0.second, model))
             if (itemSettings1 != null)
@@ -158,11 +159,11 @@ object GeckoUtils {
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
-    fun <I> geckoItemSupplier(
-        itemFunc: KFunction1<Item.Settings, I>,
+    fun geckoItemSupplier(
+        itemFunc: KFunction1<Item.Settings, AnimatableItem>,
         itemSettings: Item.Settings,
-        model: AnimatedGeoModel<I>,
-    ): Supplier<out I> where I : Item, I : IAnimatable = throw AssertionError()
+        model: AnimatedGeoModel<out AnimatableItem>,
+    ): Supplier<out AnimatableItem> = throw AssertionError()
 
     enum class GeckoType {
         Item,

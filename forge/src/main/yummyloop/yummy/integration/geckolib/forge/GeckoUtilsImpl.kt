@@ -8,12 +8,12 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
-import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
 import yummyloop.common.integration.gecko.AnimatableArmor
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimatableItem
 import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.concurrent.Callable
@@ -80,11 +80,11 @@ internal object GeckoUtilsImpl {
      * Returns the item supplier after applying the gecko item renderer with forge
      */
     @JvmStatic
-    fun <I> geckoItemSupplier(
-        itemFunc: KFunction1<Item.Settings, I>,
+    fun geckoItemSupplier(
+        itemFunc: KFunction1<Item.Settings, AnimatableItem>,
         itemSettings: Item.Settings,
-        model: AnimatedGeoModel<I>,
-    ): Supplier<out I> where I : Item, I : IAnimatable {
+        model: AnimatedGeoModel<out AnimatableItem>,
+    ): Supplier<out AnimatableItem> {
         val newItem = itemFunc(itemSettings.setISTER { Callable { GeckoGenericItemRendererImpl(model) } })
         return Supplier { newItem }
     }
