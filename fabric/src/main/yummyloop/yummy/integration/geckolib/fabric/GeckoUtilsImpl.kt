@@ -94,12 +94,11 @@ internal object GeckoUtilsImpl {
      */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
-    fun geckoItemSupplier(
-        itemFunc: KFunction1<Item.Settings, AnimatableItem>,
+    fun geckoItemSettings(
         itemSettings: Item.Settings,
         model: AnimatedGeoModel<out AnimatableItem>,
-    ): Supplier<out AnimatableItem> {
-        return Supplier { itemFunc(itemSettings) }
+    ): Item.Settings  {
+        return itemSettings
     }
 }
 

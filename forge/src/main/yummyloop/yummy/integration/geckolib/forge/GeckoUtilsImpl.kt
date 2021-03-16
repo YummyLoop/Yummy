@@ -17,7 +17,6 @@ import yummyloop.common.integration.gecko.AnimatableItem
 import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import java.util.concurrent.Callable
-import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
 internal object GeckoUtilsImpl {
@@ -80,13 +79,11 @@ internal object GeckoUtilsImpl {
      * Returns the item supplier after applying the gecko item renderer with forge
      */
     @JvmStatic
-    fun geckoItemSupplier(
-        itemFunc: KFunction1<Item.Settings, AnimatableItem>,
+    fun geckoItemSettings(
         itemSettings: Item.Settings,
         model: AnimatedGeoModel<out AnimatableItem>,
-    ): Supplier<out AnimatableItem> {
-        val newItem = itemFunc(itemSettings.setISTER { Callable { GeckoGenericItemRendererImpl(model) } })
-        return Supplier { newItem }
+    ): Item.Settings {
+        return itemSettings.setISTER { Callable { GeckoGenericItemRendererImpl(model) } }
     }
 }
 

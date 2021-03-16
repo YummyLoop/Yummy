@@ -1,7 +1,10 @@
 package yummyloop.yummy.integration.geckolib
 
 import me.shedaniel.architectury.annotations.ExpectPlatform
+import me.shedaniel.architectury.registry.BlockProperties
 import me.shedaniel.architectury.registry.RegistrySupplier
+import net.minecraft.block.Block
+import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
@@ -11,10 +14,12 @@ import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimatableBlockItem
 import yummyloop.common.integration.gecko.AnimatableItem
 import yummyloop.common.integration.gecko.AnimatableLivingEntity
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
+import yummyloop.yummy.items.Ytem
 import java.util.function.Supplier
 import kotlin.reflect.KFunction1
 
@@ -48,9 +53,26 @@ object GeckoUtils {
             itemSettings: Item.Settings,
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.item(MOD_ID, itemID),
         ): RegistrySupplier<Item> {
-            val myItem = Register.item(itemID, geckoItemSupplier(itemFunc, itemSettings, model))
+            val myItem = Register.item(itemID) { itemFunc.invoke(geckoItemSettings(itemSettings, model)) }
             geckoEntryList.add(Entry(GeckoType.Item, myItem, model))
             return myItem
+        }
+
+        fun registerBlockItem(
+            blockItemId: String,
+            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            itemSettings: Item.Settings = Ytem.Settings(),
+            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
+        ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
+            val myBlockItem =
+                Register.blockItem(
+                    blockItemId,
+                    blockSupplier,
+                    ::AnimatableBlockItem,
+                    geckoItemSettings(itemSettings, model)
+                )
+            geckoEntryList.add(Entry(GeckoType.Item, myBlockItem.second, model))
+            return myBlockItem
         }
 
 
@@ -153,17 +175,15 @@ object GeckoUtils {
     /**
      * Gets a platform dependent (forge) Gecko Supplier
      *
-     * @param itemFunc Constructor of the item Class
-     * @param itemSettings Pair of ItemName to append + the item settings for said item
+     * @param itemSettings the item settings for the item
      */
     @Suppress("UNUSED_PARAMETER")
     @JvmStatic
     @ExpectPlatform
-    fun geckoItemSupplier(
-        itemFunc: KFunction1<Item.Settings, AnimatableItem>,
+    fun geckoItemSettings(
         itemSettings: Item.Settings,
         model: AnimatedGeoModel<out AnimatableItem>,
-    ): Supplier<out AnimatableItem> = throw AssertionError()
+    ): Item.Settings = throw AssertionError()
 
     enum class GeckoType {
         Item,
