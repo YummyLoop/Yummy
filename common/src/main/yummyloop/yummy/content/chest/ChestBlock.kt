@@ -14,6 +14,7 @@ import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import java.util.concurrent.TimeUnit
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings) {
 
@@ -34,9 +35,8 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings) {
         hand: Hand?,
         hit: BlockHitResult?,
     ): ActionResult {
-        //(world.getBlockEntity(pos) as ChestEntity).isOpen = true
-
         return if (world.isClient) {
+            (world.getBlockEntity(pos) as ChestEntity).isOpen = 1
             ActionResult.SUCCESS
         } else {
 

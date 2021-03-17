@@ -32,17 +32,16 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
 
     companion object {
         var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
-        //private var openSet = mutableSetOf<BlockPos>()
     }
 
-    var isOpen = false
+    var isOpen = 0
 
     init {
         LOG.info("Calling from TestBlockEntity")
     }
 
-    private fun <P> openPredicate(event: AnimationEvent<P>): PlayState  where P : AnimatableBlockEntity {
-        if (isOpen || event.animatable.world!!.isRaining) {
+    private fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : ChestEntity {
+        if (isOpen == 1) {
             //LOG.info("event")
             event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
         } else {
@@ -52,9 +51,11 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
         return PlayState.CONTINUE
     }
 
-    inner class IAnimationPredicate<I>(private val v : (AnimationEvent<I>)  -> PlayState ) : AnimationController.IAnimationPredicate<I> where I : IAnimatable{
-        override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState {
-            return (v as (AnimationEvent<P>)  -> PlayState ).invoke(event)
+
+    inner class IAnimationPredicate<I>(private val v: (AnimationEvent<I>) -> PlayState) :
+        AnimationController.IAnimationPredicate<I> where I : IAnimatable {
+        override fun <P> test(event: AnimationEvent<P>): PlayState where P : IAnimatable {
+            return (v as (AnimationEvent<P>) -> PlayState).invoke(event)
         }
     }
 
@@ -71,16 +72,37 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
 
     override fun onOpen(player: PlayerEntity?) {
         super.onOpen(player)
-        //LOG.info("open ${this.pos}")
+        //isOpen=true
         //LOG.info("event on open ")
     }
 
     override fun onClose(player: PlayerEntity?) {
         super.onClose(player)
-        //(this.world!!.getBlockEntity(this.pos) as ChestEntity).isOpen=false
+        isOpen=0
+        onInvOpenOrClose()
         LOG.info("event on close ${this.pos}")
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    // Sync between server -> client
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    protected fun onInvOpenOrClose() {
+        val block = cachedState.block
+        if (block is ChestBlock) {
+            world!!.addSyncedBlockEvent(pos, block, 1, this.isOpen)
+            world!!.updateNeighborsAlways(pos, block)
+        }
+    }
+
+    override fun onSyncedBlockEvent(type: Int, data: Int): Boolean {
+        return if (type == 1) {
+            this.isOpen = data
+            true
+        } else {
+            super.onSyncedBlockEvent(type, data)
+        }
+    }
+    ////////////////////////////////////////////////////////////////////////////////////////////
     /**
      * Marks the state as dirty.
      * Must be called after changes in the inventory, so that the game can properly save
@@ -117,6 +139,4 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
 
     override fun saveExtraData(buf: PacketByteBuf?) {
     }
-
-
 }
