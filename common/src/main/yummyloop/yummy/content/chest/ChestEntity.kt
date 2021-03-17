@@ -4,6 +4,8 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.MinecraftClient
+import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
@@ -11,17 +13,20 @@ import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
+import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.collection.DefaultedList
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
 import software.bernie.geckolib3.core.controller.AnimationController
+import software.bernie.geckolib3.core.event.SoundKeyframeEvent
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
 import yummyloop.common.integration.gecko.AnimationPredicate
+import yummyloop.common.integration.gecko.SoundListener
 import yummyloop.common.network.packets.PacketBuffer
 
 class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, ExtendedMenuProvider {
@@ -34,7 +39,7 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
         var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
     }
 
-    private var isOpen = 0
+    private var isOpen = -1
 
     init {
         //LOG.info("Calling from TestBlockEntity")
@@ -46,22 +51,48 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
             1 -> event.controller.setAnimation(AnimationBuilder()
                 .addAnimation("open_chest", false)
                 .addAnimation("open_chest_idle", true))
-            2 -> event.controller.setAnimation(AnimationBuilder()
+            0 -> event.controller.setAnimation(AnimationBuilder()
                 .addAnimation("close_chest", false))
-            else -> return PlayState.STOP
+            else -> {}
         }
         return PlayState.CONTINUE
     }
 
+
+    private var playedSound = 0
+
+    /** Gecko sound event listener */
+    private fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : ChestEntity {
+        val player: ClientPlayerEntity = MinecraftClient.getInstance().player!!
+        when (isOpen) {
+            1 -> {
+                if (playedSound != 1) player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
+                    0.5F,
+                    0.9F + 0.1F * this.world!!.random.nextFloat())
+                playedSound = 1
+            }
+            0 -> {
+                if (playedSound != 2) player.playSound(SoundEvents.BLOCK_CHEST_CLOSE,
+                    0.5F,
+                    0.9F + 0.1F * this.world!!.random.nextFloat())
+                playedSound = 2
+            }
+            else -> {
+                playedSound = 0
+            }
+        }
+    }
+
     /** Gecko animation controller registry */
     override fun registerControllers(data: AnimationData) {
+        animationController.registerSoundListener(SoundListener(::soundListener))
         data.addAnimationController(animationController)
     }
 
     /** On Inventory Open*/
     override fun onOpen(player: PlayerEntity?) {
         super.onOpen(player)
-        isOpen = 1
+        if (isOpen <= 0) isOpen = 1 else isOpen += 1
         onInvOpenOrClose()
         //LOG.info("event on open ")
     }
@@ -69,7 +100,7 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
     /** On Inventory Close*/
     override fun onClose(player: PlayerEntity?) {
         super.onClose(player)
-        isOpen = 2
+        isOpen -= 1
         onInvOpenOrClose()
         //LOG.info("event on close ${this.pos}")
     }
