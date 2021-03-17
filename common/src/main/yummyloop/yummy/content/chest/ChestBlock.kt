@@ -36,22 +36,14 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings) {
         hit: BlockHitResult?,
     ): ActionResult {
         return if (world.isClient) {
-            (world.getBlockEntity(pos) as ChestEntity).isOpen = 1
             ActionResult.SUCCESS
         } else {
 
-            //This will call the createScreenHandlerFactory method from BlockWithEntity, which will return our blockEntity casted to
-            //a namedScreenHandlerFactory. If your block class does not extend BlockWithEntity, it needs to implement createScreenHandlerFactory.
-
+            // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
-            //if (screenHandlerFactory != null) {
-            //With this call the server will request the client to open the appropriate Screenhandler
-            // player.openHandledScreen(screenHandlerFactory)
-            // }
             if (player is ServerPlayerEntity) {
                 MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { }
             }
-
 
             ActionResult.CONSUME
         }

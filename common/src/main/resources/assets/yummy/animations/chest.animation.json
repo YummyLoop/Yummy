@@ -47,6 +47,17 @@
 					"effect": "close.ogg"
 				}
 			}
+		},
+		"open_chest_idle": {
+			"loop": true,
+			"override_previous_animation": true,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					}
+				}
+			}
 		}
 	}
 }

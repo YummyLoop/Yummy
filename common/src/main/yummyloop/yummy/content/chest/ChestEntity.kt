@@ -14,7 +14,6 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.collection.DefaultedList
-import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
 import software.bernie.geckolib3.core.controller.AnimationController
@@ -22,71 +21,61 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.network.packets.PacketBuffer
-import yummyloop.yummy.LOG
 
 class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, ExtendedMenuProvider {
     override val items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
     private val animationFactory = AnimationFactory(this)
+    private val animationController = AnimationController(this, "controller", 0F, AnimationPredicate(::openPredicate))
     override fun getFactory(): AnimationFactory = this.animationFactory
 
     companion object {
         var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
     }
 
-    var isOpen = 0
+    private var isOpen = 0
 
     init {
-        LOG.info("Calling from TestBlockEntity")
+        //LOG.info("Calling from TestBlockEntity")
     }
 
+    /** Gecko animation predicate */
     private fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : ChestEntity {
-        if (isOpen == 1) {
-            //LOG.info("event")
-            event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
-        } else {
-            event.controller.setAnimation(AnimationBuilder().addAnimation("close_chest", false))
+        when (isOpen) {
+            1 -> event.controller.setAnimation(AnimationBuilder()
+                .addAnimation("open_chest", false)
+                .addAnimation("open_chest_idle", true))
+            2 -> event.controller.setAnimation(AnimationBuilder()
+                .addAnimation("close_chest", false))
+            else -> return PlayState.STOP
         }
-
         return PlayState.CONTINUE
     }
 
-
-    inner class IAnimationPredicate<I>(private val v: (AnimationEvent<I>) -> PlayState) :
-        AnimationController.IAnimationPredicate<I> where I : IAnimatable {
-        override fun <P> test(event: AnimationEvent<P>): PlayState where P : IAnimatable {
-            return (v as (AnimationEvent<P>) -> PlayState).invoke(event)
-        }
-    }
-
+    /** Gecko animation controller registry */
     override fun registerControllers(data: AnimationData) {
-        data.addAnimationController(
-            AnimationController(
-                this,
-                "controller",
-                0F,
-                IAnimationPredicate(::openPredicate)
-            )
-        )
+        data.addAnimationController(animationController)
     }
 
+    /** On Inventory Open*/
     override fun onOpen(player: PlayerEntity?) {
         super.onOpen(player)
-        //isOpen=true
+        isOpen = 1
+        onInvOpenOrClose()
         //LOG.info("event on open ")
     }
 
+    /** On Inventory Close*/
     override fun onClose(player: PlayerEntity?) {
         super.onClose(player)
-        isOpen=0
+        isOpen = 2
         onInvOpenOrClose()
-        LOG.info("event on close ${this.pos}")
+        //LOG.info("event on close ${this.pos}")
     }
 
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    // Sync between server -> client
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    protected fun onInvOpenOrClose() {
+    /** Request data sync when an inventory is open or closed */
+    private fun onInvOpenOrClose() {
         val block = cachedState.block
         if (block is ChestBlock) {
             world!!.addSyncedBlockEvent(pos, block, 1, this.isOpen)
@@ -94,6 +83,7 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
         }
     }
 
+    /** Sync data between the server, and other client versions of the Block Entity */
     override fun onSyncedBlockEvent(type: Int, data: Int): Boolean {
         return if (type == 1) {
             this.isOpen = data
@@ -102,7 +92,7 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
             super.onSyncedBlockEvent(type, data)
         }
     }
-    ////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Marks the state as dirty.
      * Must be called after changes in the inventory, so that the game can properly save
@@ -113,18 +103,20 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
         super<ImplementedInventory>.markDirty()
     }
 
+    /** Load blockEntity from tag */
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
         super.fromTag(state, tag)
         Inventories.fromTag(tag, items)
     }
 
+    /** Save blockEntity to tag */
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
         Inventories.toTag(tag, items)
         return tag
     }
 
-
+    /** Screen provider, create menu */
     override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler {
         //We provide *this* to the screenHandler as our class Implements Inventory
         //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
@@ -137,6 +129,7 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
      */
     override fun getDisplayName(): Text = TranslatableText("a_chest")
 
+    /** Screen provider, packet extra data */
     override fun saveExtraData(buf: PacketByteBuf?) {
     }
 }
