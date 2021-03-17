@@ -1,29 +1,25 @@
 package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
+import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 
 
 class ChestScreenHandler(
-    syncId: Int,
-    playerInventory: PlayerInventory,
-    var inventory: ChestEntity,
+    syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf,
+    var inventory: Inventory = SimpleInventory(9),
 ) : ScreenHandler(type?.get(), syncId) {
     companion object {
         var type: RegistrySupplier<ScreenHandlerType<out ScreenHandler>>? = null
     }
-
-    //This constructor gets called on the client when the server wants it to open the screenHandler,
-    //The client will call the other constructor with an empty Inventory and the screenHandler will automatically
-    //sync this empty inventory with the inventory on the server.
-    constructor(syncId: Int, playerInventory: PlayerInventory) : this(syncId, playerInventory, ChestEntity())
 
     override fun canUse(player: PlayerEntity?): Boolean {
         return inventory.canPlayerUse(player)

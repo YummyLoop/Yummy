@@ -1,6 +1,7 @@
 package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
+import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerEntity
@@ -8,7 +9,7 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
-import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
@@ -21,66 +22,64 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimatableBlockEntity
+import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.yummy.LOG
 
-class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFactory, ImplementedInventory {
-    companion object {
-        var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
-        private var isOpen = false
-    }
-
+class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, ExtendedMenuProvider {
+    override val items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
     private val animationFactory = AnimationFactory(this)
     override fun getFactory(): AnimationFactory = this.animationFactory
+
+    companion object {
+        var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
+        //private var openSet = mutableSetOf<BlockPos>()
+    }
+
+    var isOpen = false
 
     init {
         LOG.info("Calling from TestBlockEntity")
     }
 
-    private var playedAnimation = true
-
-    override fun onOpen(player: PlayerEntity?) {
-        isOpen = true
-        super.onOpen(player)
-
-        playedAnimation = false
-        LOG.info("event on open")
-    }
-
-    override fun onClose(player: PlayerEntity?) {
-        super.onClose(player)
-       // isOpen = false
-        playedAnimation = false
-        LOG.info("event on close")
-    }
-
-    private fun <P : IAnimatable> openPredicate(event: AnimationEvent<P>): PlayState {
-        if (isOpen){
-            LOG.info("event")
+    private fun <P> openPredicate(event: AnimationEvent<P>): PlayState  where P : AnimatableBlockEntity {
+        if (isOpen || event.animatable.world!!.isRaining) {
+            //LOG.info("event")
             event.controller.setAnimation(AnimationBuilder().addAnimation("open_chest", true))
-        }else {
-            LOG.info("event false")
+        } else {
             event.controller.setAnimation(AnimationBuilder().addAnimation("close_chest", false))
         }
 
         return PlayState.CONTINUE
     }
 
-    override fun registerControllers(data: AnimationData) {
-        val animationPredicate = object : AnimationController.IAnimationPredicate<IAnimatable> {
-            override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState = openPredicate(event)
+    inner class IAnimationPredicate<I>(private val v : (AnimationEvent<I>)  -> PlayState ) : AnimationController.IAnimationPredicate<I> where I : IAnimatable{
+        override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState {
+            return (v as (AnimationEvent<P>)  -> PlayState ).invoke(event)
         }
+    }
 
+    override fun registerControllers(data: AnimationData) {
         data.addAnimationController(
             AnimationController(
                 this,
                 "controller",
                 0F,
-                animationPredicate
+                IAnimationPredicate(::openPredicate)
             )
         )
     }
 
-    override val items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
+    override fun onOpen(player: PlayerEntity?) {
+        super.onOpen(player)
+        //LOG.info("open ${this.pos}")
+        //LOG.info("event on open ")
+    }
+
+    override fun onClose(player: PlayerEntity?) {
+        super.onClose(player)
+        //(this.world!!.getBlockEntity(this.pos) as ChestEntity).isOpen=false
+        LOG.info("event on close ${this.pos}")
+    }
 
     /**
      * Marks the state as dirty.
@@ -92,19 +91,6 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFacto
         super<ImplementedInventory>.markDirty()
     }
 
-
-    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler? {
-        //We provide *this* to the screenHandler as our class Implements Inventory
-        //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-        return ChestScreenHandler(syncId, inv, this)
-    }
-
-    /**
-     * Returns the title of this screen handler; will be a part of the open
-     * screen packet sent to the client.
-     */
-    override fun getDisplayName(): Text = TranslatableText(cachedState.block.translationKey)
-
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
         super.fromTag(state, tag)
         Inventories.fromTag(tag, items)
@@ -115,4 +101,22 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), NamedScreenHandlerFacto
         Inventories.toTag(tag, items)
         return tag
     }
+
+
+    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler {
+        //We provide *this* to the screenHandler as our class Implements Inventory
+        //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
+        return ChestScreenHandler(syncId, inv, PacketBuffer(), this)
+    }
+
+    /**
+     * Returns the title of this screen handler; will be a part of the open
+     * screen packet sent to the client.
+     */
+    override fun getDisplayName(): Text = TranslatableText("a_chest")
+
+    override fun saveExtraData(buf: PacketByteBuf?) {
+    }
+
+
 }

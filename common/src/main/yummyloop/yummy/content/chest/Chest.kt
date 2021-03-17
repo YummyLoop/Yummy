@@ -17,8 +17,7 @@ object Chest {
 
 
         // Screen stuff
-        ChestScreenHandler.type =
-            ExampleMod.Register.screenHandlerTypeSimple("chest", ::ChestScreenHandler)
+        ChestScreenHandler.type = ExampleMod.Register.screenHandlerTypeExtended("chest", ::ChestScreenHandler )
         ExampleMod.Register.client.screen(ChestScreenHandler.type!!) { ::ChestScreen }
     }
 }
