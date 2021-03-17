@@ -2,9 +2,10 @@ package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.block.*
-import net.minecraft.block.ChestBlock
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.player.PlayerEntity
+import net.minecraft.fluid.FluidState
+import net.minecraft.fluid.Fluids
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.StateManager
@@ -18,6 +19,8 @@ import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.shape.VoxelShape
+import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 
@@ -27,6 +30,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
         val WATERLOGGED: BooleanProperty = Properties.WATERLOGGED
     }
+
     init {
         defaultState = this.stateManager.defaultState
             .with(FACING, Direction.NORTH)
@@ -34,7 +38,10 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
-        return this.defaultState.with(FACING, ctx.playerFacing.opposite)
+        val fluidState = ctx.world.getFluidState(ctx.blockPos)
+        return this.defaultState
+            .with(FACING, ctx.playerFacing.opposite)
+            .with(WATERLOGGED, fluidState.fluid == Fluids.WATER);
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block?, BlockState?>) {
@@ -47,6 +54,20 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
 
     override fun mirror(state: BlockState, mirror: BlockMirror): BlockState? {
         return state.rotate(mirror.getRotation(state.get(FACING) as Direction))
+    }
+
+    override fun getFluidState(state: BlockState): FluidState? {
+        return if (state.get(WATERLOGGED) as Boolean) Fluids.WATER.getStill(false) else super.getFluidState(state)
+    }
+
+    override fun getOutlineShape(state: BlockState, view: BlockView?, pos: BlockPos?, ctx: ShapeContext?): VoxelShape {
+        return when (state[FACING]) {
+            Direction.NORTH -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
+            Direction.SOUTH -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
+            Direction.EAST -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
+            Direction.WEST -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
+            else -> VoxelShapes.fullCube()
+        }
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity = ChestEntity()
