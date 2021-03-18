@@ -13,30 +13,30 @@
 			"bones": [
 				{
 					"name": "Chest",
-					"pivot": [0, -1, 0]
+					"pivot": [0, 0, 0]
 				},
 				{
 					"name": "Top",
 					"parent": "Chest",
-					"pivot": [0.5, 9, 7.5],
+					"pivot": [0, 9, 7],
 					"cubes": [
-						{"origin": [-7, 9, -6.5], "size": [14, 5, 14], "uv": [0, 0]}
+						{"origin": [-7, 9, -7], "size": [14, 5, 14], "uv": [0, 0]}
 					]
 				},
 				{
 					"name": "Lock",
 					"parent": "Top",
-					"pivot": [0.5, 10, 7.5],
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-1, 7.5, -7.5], "size": [2, 4, 1], "uv": [0, 0]}
+						{"origin": [-1, 7.5, -8], "size": [2, 4, 1], "uv": [0, 0]}
 					]
 				},
 				{
 					"name": "Botttom",
 					"parent": "Chest",
-					"pivot": [0, 4.5, 0.5],
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, 0, -6.5], "size": [14, 9, 14], "uv": [0, 20]}
+						{"origin": [-7, 0, -7], "size": [14, 9, 14], "uv": [0, 20]}
 					]
 				}
 			]

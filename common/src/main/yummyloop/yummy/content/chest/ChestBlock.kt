@@ -62,10 +62,10 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
 
     override fun getOutlineShape(state: BlockState, view: BlockView?, pos: BlockPos?, ctx: ShapeContext?): VoxelShape {
         return when (state[FACING]) {
-            Direction.NORTH -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
-            Direction.SOUTH -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
-            Direction.EAST -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
-            Direction.WEST -> Block.createCuboidShape(1.0, 1.0, 1.0, 14.5, 14.0, 14.5)
+            Direction.NORTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
+            Direction.SOUTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
+            Direction.EAST -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
+            Direction.WEST -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
             else -> VoxelShapes.fullCube()
         }
     }
