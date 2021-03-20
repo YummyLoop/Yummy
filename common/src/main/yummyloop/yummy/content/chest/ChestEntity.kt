@@ -12,7 +12,7 @@ import yummyloop.common.network.packets.PacketBuffer
 
 open class ChestEntity(type: BlockEntityType<*>, size: Int) : AnimatableChestContainerBlockEntity(type, size) {
     constructor(size: Int) : this(rType!!.get(), size)
-    constructor() : this(9)
+    constructor() : this(54)
 
     companion object {
         var rType: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
