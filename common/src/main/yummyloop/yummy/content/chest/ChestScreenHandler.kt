@@ -1,7 +1,6 @@
 package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
-import net.minecraft.advancement.criterion.InventoryChangedCriterion
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
@@ -12,13 +11,12 @@ import net.minecraft.screen.ScreenHandler
 import net.minecraft.screen.ScreenHandlerType
 import net.minecraft.screen.slot.Slot
 
-
 class ChestScreenHandler(
     syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf,
     var inventory: Inventory = SimpleInventory(9),
-) : ScreenHandler(type?.get(), syncId) {
+) : ScreenHandler(rType?.get(), syncId) {
     companion object {
-        var type: RegistrySupplier<ScreenHandlerType<out ScreenHandler>>? = null
+        var rType: RegistrySupplier<ScreenHandlerType<out ScreenHandler>>? = null
     }
 
     override fun canUse(player: PlayerEntity?): Boolean {
