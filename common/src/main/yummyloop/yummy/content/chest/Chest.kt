@@ -11,9 +11,9 @@ object Chest {
 
         val chestBlock = GeckoUtils.Items.registerBlockItem("chest", { ChestBlock(BlockProperties.of(Material.METAL).strength(1F).nonOpaque()) })
 
-        ChestEntity.type = ExampleMod.Register.blockEntityType("chest", chestBlock.first) { ChestEntity() }
+        ChestEntity.rType = ExampleMod.Register.blockEntityType("chest", chestBlock.first) { ChestEntity() }
 
-        GeckoUtils.Blocks.register(ChestEntity.type!!)
+        GeckoUtils.Blocks.register(ChestEntity.rType!!)
 
 
         // Screen stuff
