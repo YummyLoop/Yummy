@@ -61,54 +61,25 @@
 		},
 		"expand": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 1,
 			"override_previous_animation": true,
 			"bones": {
 				"Chest": {
 					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [7, 0, 0]
-						}
+						"vector": [8, 0, 0]
 					},
 					"scale": {
-						"0.0": {
-							"vector": [1, 1, 1]
-						},
-						"1.0": {
-							"vector": [2, 1, 1]
-						}
+						"vector": [2.14, 1, 1]
 					}
 				}
 			}
 		},
 		"vanish": {
 			"loop": "hold_on_last_frame",
-			"animation_length": 1.04,
 			"override_previous_animation": true,
 			"bones": {
 				"Chest": {
-					"position": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [-7, 0, 0]
-						}
-					},
 					"scale": {
-						"0.0": {
-							"vector": [1, 1, 1]
-						},
-						"0.96": {
-							"vector": [2, 1, 1]
-						},
-						"1.0": {
-							"vector": [0, 0, 0],
-							"easing": "linear"
-						}
+						"vector": [0, 0, 0]
 					}
 				}
 			}

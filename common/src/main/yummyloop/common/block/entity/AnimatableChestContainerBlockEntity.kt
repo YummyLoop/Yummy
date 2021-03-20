@@ -33,9 +33,11 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
 
     /** Gecko animation predicate */
     protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
+        val animationBuilder = AnimationBuilder()
         val world = event.animatable.world
         val pos = event.animatable.pos
         var isDoubleChest = 0
+
         if (world != null) {
             val state = world.getBlockState(pos)
             if (state.isOf(Chest.chestBlock.first.get())) {//todo : Change type check
@@ -47,28 +49,26 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             }
         }
 
-        when (isDoubleChest) {
-            1 -> {
-                event.controller.setAnimation(AnimationBuilder()
-                    .addAnimation("expand", false))
-            }
-            2 -> {
-                event.controller.setAnimation(AnimationBuilder()
-                    .addAnimation("vanish", false))
-            }
+        when (isOpen) {
+            1 -> animationBuilder
+                .addAnimation("open_chest", false)
+                .addAnimation("open_chest_idle", true)
+            0 -> animationBuilder
+                .addAnimation("close_chest", false)
             else -> {
-                when (isOpen) {
-                    1 -> event.controller.setAnimation(AnimationBuilder()
-                        .addAnimation("open_chest", false)
-                        .addAnimation("open_chest_idle", true))
-                    0 -> event.controller.setAnimation(AnimationBuilder()
-                        .addAnimation("close_chest", false))
-                    else -> {
-                    }
-                }
             }
         }
 
+        when (isDoubleChest) {//todo : fix/redo animations
+            1 -> animationBuilder
+                .addAnimation("expand", false)
+            2 -> animationBuilder
+                .addAnimation("vanish", false)
+            else -> {
+            }
+        }
+
+        event.controller.setAnimation(animationBuilder)
 
         return PlayState.CONTINUE
     }
