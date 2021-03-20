@@ -3,12 +3,14 @@ package yummyloop.yummy.content.chest
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.FluidState
 import net.minecraft.fluid.Fluids
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemPlacementContext
+import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.StateManager
@@ -23,6 +25,7 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
 import yummyloop.common.network.packets.add
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
@@ -134,5 +137,18 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         type: NavigationType?,
     ): Boolean {
         return false
+    }
+
+    override fun onPlaced(
+        world: World,
+        pos: BlockPos?,
+        state: BlockState?,
+        placer: LivingEntity?,
+        itemStack: ItemStack,
+    ) {
+        if (itemStack.hasCustomName()) {
+            val blockEntity = world.getBlockEntity(pos)
+            if (blockEntity is ExtendedLootableContainerBlockEntity) blockEntity.customName = itemStack.name
+        }
     }
 }

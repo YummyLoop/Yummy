@@ -18,7 +18,7 @@ import yummyloop.common.integration.gecko.SoundListener
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
     ExtendedLootableContainerBlockEntity(type, size) {
-    protected var isOpen = -1
+    var isOpen = -1
     protected var playedSound = 0
     protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
     protected val animationController: AnimationController<*> by lazy {
