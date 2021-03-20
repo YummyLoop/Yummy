@@ -4,6 +4,7 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.entity.LootableContainerBlockEntity
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -17,6 +18,7 @@ import net.minecraft.sound.SoundEvents
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.collection.DefaultedList
+import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
 import software.bernie.geckolib3.core.controller.AnimationController
@@ -24,13 +26,14 @@ import software.bernie.geckolib3.core.event.SoundKeyframeEvent
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
-import yummyloop.common.integration.gecko.AnimatableBlockEntity
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
 import yummyloop.common.network.packets.PacketBuffer
 
-class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, ExtendedMenuProvider {
-    override val items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
+class ChestEntity : LootableContainerBlockEntity(type!!.get()), IAnimatable, ExtendedMenuProvider {
+    private var items: DefaultedList<ItemStack> = DefaultedList.ofSize(9, ItemStack.EMPTY)
+    private var isOpen = -1
+    private var playedSound = 0
     private val animationFactory = AnimationFactory(this)
     private val animationController = AnimationController(this, "controller", 0F, AnimationPredicate(::openPredicate))
     override fun getFactory(): AnimationFactory = this.animationFactory
@@ -38,8 +41,6 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
     companion object {
         var type: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
     }
-
-    private var isOpen = -1
 
     init {
         //LOG.info("Calling from TestBlockEntity")
@@ -53,13 +54,11 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
                 .addAnimation("open_chest_idle", true))
             0 -> event.controller.setAnimation(AnimationBuilder()
                 .addAnimation("close_chest", false))
-            else -> {}
+            else -> {
+            }
         }
         return PlayState.CONTINUE
     }
-
-
-    private var playedSound = 0
 
     /** Gecko sound event listener */
     private fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : ChestEntity {
@@ -124,43 +123,40 @@ class ChestEntity : AnimatableBlockEntity(type!!.get()), ImplementedInventory, E
         }
     }
 
-    /**
-     * Marks the state as dirty.
-     * Must be called after changes in the inventory, so that the game can properly save
-     * the inventory contents and notify neighboring blocks of inventory changes.
-     */
-    override fun markDirty() {
-        super<AnimatableBlockEntity>.markDirty()
-        super<ImplementedInventory>.markDirty()
-    }
+    override fun size(): Int = items.size
 
     /** Load blockEntity from tag */
     override fun fromTag(state: BlockState?, tag: CompoundTag?) {
         super.fromTag(state, tag)
-        Inventories.fromTag(tag, items)
+        this.items = DefaultedList.ofSize(size(), ItemStack.EMPTY)
+        if (!deserializeLootTable(tag)) {
+            Inventories.fromTag(tag, this.items)
+        }
     }
 
     /** Save blockEntity to tag */
     override fun toTag(tag: CompoundTag?): CompoundTag? {
         super.toTag(tag)
-        Inventories.toTag(tag, items)
+        if (!serializeLootTable(tag)) {
+            Inventories.toTag(tag, this.items)
+        }
+
         return tag
     }
 
     /** Screen provider, create menu */
-    override fun createMenu(syncId: Int, inv: PlayerInventory, player: PlayerEntity?): ScreenHandler {
-        //We provide *this* to the screenHandler as our class Implements Inventory
-        //Only the Server has the Inventory at the start, this will be synced to the client in the ScreenHandler
-        return ChestScreenHandler(syncId, inv, PacketBuffer(), this)
-    }
-
-    /**
-     * Returns the title of this screen handler; will be a part of the open
-     * screen packet sent to the client.
-     */
-    override fun getDisplayName(): Text = TranslatableText("a_chest")
+    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler =
+        ChestScreenHandler(syncId, playerInventory, PacketBuffer(), this)
 
     /** Screen provider, packet extra data */
     override fun saveExtraData(buf: PacketByteBuf?) {
+    }
+
+    override fun getContainerName(): Text = TranslatableText("a_chest")
+
+    override fun getInvStackList(): DefaultedList<ItemStack> = this.items
+
+    override fun setInvStackList(list: DefaultedList<ItemStack>) {
+        this.items = list
     }
 }
