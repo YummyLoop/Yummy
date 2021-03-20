@@ -1,4 +1,4 @@
-package yummyloop.yummy.items.baa
+package yummyloop.yummy.item.baa
 
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.entity.player.PlayerEntity
@@ -7,7 +7,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.Hand
 import net.minecraft.util.TypedActionResult
 import net.minecraft.world.World
-import yummyloop.yummy.items.Ytem
+import yummyloop.yummy.item.Ytem
 import java.util.*
 
 class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {

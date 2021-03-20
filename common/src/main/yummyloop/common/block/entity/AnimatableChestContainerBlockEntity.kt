@@ -5,6 +5,7 @@ import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundEvents
+import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
 import software.bernie.geckolib3.core.controller.AnimationController
@@ -15,8 +16,8 @@ import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
 
-abstract class AnimatableChestContainerEntity(type: BlockEntityType<*>, size: Int) :
-    AnimatableBlockContainerEntity(type, size) {
+abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
+    ExtendedLootableContainerBlockEntity(type, size) {
     protected var isOpen = -1
     protected var playedSound = 0
     protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
@@ -28,7 +29,7 @@ abstract class AnimatableChestContainerEntity(type: BlockEntityType<*>, size: In
     override fun getFactory(): AnimationFactory = this.animationFactory
 
     /** Gecko animation predicate */
-    protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerEntity {
+    protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
         when (isOpen) {
             1 -> event.controller.setAnimation(AnimationBuilder()
                 .addAnimation("open_chest", false)
@@ -42,7 +43,7 @@ abstract class AnimatableChestContainerEntity(type: BlockEntityType<*>, size: In
     }
 
     /** Gecko sound event listener */
-    protected fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : AnimatableChestContainerEntity {
+    protected fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : AnimatableChestContainerBlockEntity {
         val player: ClientPlayerEntity = MinecraftClient.getInstance().player!!
         when (isOpen) {
             1 -> {

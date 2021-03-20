@@ -1,4 +1,4 @@
-package yummyloop.common.integration.gecko
+package yummyloop.common.entity
 
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity

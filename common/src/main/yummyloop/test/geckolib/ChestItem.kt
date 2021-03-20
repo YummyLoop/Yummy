@@ -7,7 +7,7 @@ import software.bernie.geckolib3.core.controller.AnimationController
 import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
-import yummyloop.common.integration.gecko.AnimatableItem
+import yummyloop.common.item.AnimatableItem
 
 class ChestItem(properties: Settings) : AnimatableItem(properties) {
     private val animationFactory = AnimationFactory(this)

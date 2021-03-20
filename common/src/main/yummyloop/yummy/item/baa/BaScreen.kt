@@ -1,4 +1,4 @@
-package yummyloop.yummy.items.baa
+package yummyloop.yummy.item.baa
 
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment

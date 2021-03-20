@@ -1,4 +1,4 @@
-package yummyloop.yummy.items
+package yummyloop.yummy.item
 
 import net.minecraft.client.item.TooltipContext
 import net.minecraft.item.FoodComponent

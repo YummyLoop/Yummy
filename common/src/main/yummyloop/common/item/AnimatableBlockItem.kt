@@ -1,4 +1,4 @@
-package yummyloop.common.integration.gecko
+package yummyloop.common.item
 
 import net.minecraft.block.Block
 import net.minecraft.item.BlockItem

@@ -30,7 +30,7 @@ import net.minecraft.util.registry.Registry
 import net.minecraft.world.World
 import yummyloop.api.archi.entity.attribute.EntityAttributeLinkRegister
 import yummyloop.common.Common.LOG
-import yummyloop.yummy.items.Ytem
+import yummyloop.yummy.item.Ytem
 import java.util.function.Supplier
 
 /** Contains the declared registers, and the functions to register new content */

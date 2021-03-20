@@ -1,6 +1,5 @@
 package yummyloop.yummy
 
-import io.netty.buffer.Unpooled
 import me.shedaniel.architectury.event.events.GuiEvent
 import me.shedaniel.architectury.event.events.PlayerEvent
 import me.shedaniel.architectury.networking.NetworkManager
@@ -21,6 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import yummyloop.common.client.screen.addWidget
+import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.test.event.Eve
 import yummyloop.test.geckolib.GeoExampleEntity2
 import yummyloop.test.geckolib.PotatoArmor2
@@ -29,14 +29,14 @@ import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.client.ToolTipPreview
-import yummyloop.yummy.content.chest.*
+import yummyloop.yummy.content.chest.Chest
 import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
-import yummyloop.yummy.items.Ytem
-import yummyloop.yummy.items.YtemGroup
-import yummyloop.yummy.items.baa.Ba
-import yummyloop.yummy.items.baa.BaHandler
-import yummyloop.yummy.items.baa.BaScreen
+import yummyloop.yummy.item.Ytem
+import yummyloop.yummy.item.YtemGroup
+import yummyloop.yummy.item.baa.Ba
+import yummyloop.yummy.item.baa.BaHandler
+import yummyloop.yummy.item.baa.BaScreen
 import java.util.function.Supplier
 
 object ModContent {
@@ -52,12 +52,13 @@ object ModContent {
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler) { ::BaScreen }
 
         ToolTipPreview // Initialize tooltip
+
+        Chest
     }
 
     /** Dev content */
     internal object Dev {
         init {
-            Chest
             //G1
             //G3
             //E1
@@ -122,7 +123,7 @@ object ModContent {
                             LOG.info("This is message from a GUI init post event")
                             LOG.info(screen.javaClass.toGenericString())
 
-                            NetworkManager.sendToServer(Identifier("yummy", "packet"), PacketByteBuf(Unpooled.buffer()))
+                            NetworkManager.sendToServer(Identifier("yummy", "packet"), PacketBuffer())
                         }
                     }
                 }
@@ -186,7 +187,7 @@ object ModContent {
                     GeoExampleEntity2.Companion::createAttributes
                 )
 
-                GeckoUtils.Entities.register(GeoExampleEntity2.type!!,GeckoGenericModel(ExampleMod.MOD_ID,
+                GeckoUtils.Entities.register(GeoExampleEntity2.type!!, GeckoGenericModel(ExampleMod.MOD_ID,
                     "geo/jack.geo.json",
                     "textures/item/jack.png",
                     "animations/jack.animation.json"))

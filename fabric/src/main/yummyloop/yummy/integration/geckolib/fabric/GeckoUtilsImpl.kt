@@ -12,13 +12,11 @@ import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
 import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
-import yummyloop.common.integration.gecko.AnimatableArmor
-import yummyloop.common.integration.gecko.AnimatableBlockEntity
-import yummyloop.common.integration.gecko.AnimatableItem
-import yummyloop.common.integration.gecko.AnimatableLivingEntity
+import yummyloop.common.item.AnimatableArmor
+import yummyloop.common.block.entity.AnimatableBlockEntity
+import yummyloop.common.item.AnimatableItem
+import yummyloop.common.entity.AnimatableLivingEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
-import java.util.function.Supplier
-import kotlin.reflect.KFunction1
 
 internal object GeckoUtilsImpl {
 

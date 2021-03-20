@@ -7,10 +7,10 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
-import yummyloop.common.block.entity.AnimatableChestContainerEntity
+import yummyloop.common.block.entity.AnimatableChestContainerBlockEntity
 import yummyloop.common.network.packets.PacketBuffer
 
-open class ChestEntity(type: BlockEntityType<*>, size: Int) : AnimatableChestContainerEntity(type, size) {
+open class ChestEntity(type: BlockEntityType<*>, size: Int) : AnimatableChestContainerBlockEntity(type, size) {
     constructor(size: Int) : this(rType!!.get(), size)
     constructor() : this(9)
 

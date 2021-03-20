@@ -1,4 +1,4 @@
-package yummyloop.yummy.items.baa
+package yummyloop.yummy.item.baa
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.entity.player.PlayerInventory

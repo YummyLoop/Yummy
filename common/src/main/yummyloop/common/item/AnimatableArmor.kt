@@ -1,4 +1,4 @@
-package yummyloop.common.integration.gecko
+package yummyloop.common.item
 
 import net.minecraft.entity.EquipmentSlot
 import net.minecraft.item.ArmorMaterial

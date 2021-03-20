@@ -1,4 +1,4 @@
-package yummyloop.yummy.items
+package yummyloop.yummy.item
 
 import me.shedaniel.architectury.registry.CreativeTabs
 import net.minecraft.item.ItemGroup

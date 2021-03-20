@@ -8,10 +8,9 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.util.collection.DefaultedList
-import software.bernie.geckolib3.core.IAnimatable
 
-abstract class AnimatableBlockContainerEntity(type: BlockEntityType<*>, size: Int) : LootableContainerBlockEntity(type),
-    IAnimatable, ExtendedMenuProvider {
+abstract class ExtendedLootableContainerBlockEntity(type: BlockEntityType<*>, size: Int) :
+    LootableContainerBlockEntity(type), ExtendedMenuProvider {
     protected var items: DefaultedList<ItemStack> = DefaultedList.ofSize(size, ItemStack.EMPTY)
 
     override fun size(): Int = this.items.size
