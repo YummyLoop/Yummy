@@ -75,6 +75,15 @@ object GeckoUtils {
             return myBlockItem
         }
 
+        fun registerBlockItem(
+            blockItemId: String,
+            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            //itemSettings: Item.Settings = Ytem.Settings(),
+            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
+        ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
+            return registerBlockItem(blockItemId, blockSupplier, Ytem.Settings(), model)
+        }
+
 
         /**
          * Registers a gecko Armor + their items with gecko renderers

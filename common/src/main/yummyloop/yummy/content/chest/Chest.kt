@@ -9,13 +9,19 @@ object Chest {
     init {
         //var chestItem = GeckoUtils.Items.register("chest2", ::ChestItem, Ytem.Settings())
 
-        val chestBlock = GeckoUtils.Items.registerBlockItem("chest",
-            { ChestBlock(BlockProperties.of(Material.METAL).strength(1F).nonOpaque()) })
+        val ironChest = GeckoUtils.Items.registerBlockItem("iron_chest", {
+            IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
+        })
+        IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
+        GeckoUtils.Blocks.register(IronChestEntity.rType!!)
 
+
+
+        val chestBlock = GeckoUtils.Items.registerBlockItem("chest", {
+            ChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque())
+        })
         ChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { ChestEntity() }
-
         GeckoUtils.Blocks.register(ChestEntity.rType!!)
-
 
         // Screen stuff
         ChestScreenHandler.rType =

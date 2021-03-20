@@ -26,8 +26,8 @@ import net.minecraft.world.World
 import yummyloop.common.network.packets.add
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
-    val rows = 3
-    val columns = 9
+    open val columns = 9
+    open val rows = 3
 
     companion object {
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
