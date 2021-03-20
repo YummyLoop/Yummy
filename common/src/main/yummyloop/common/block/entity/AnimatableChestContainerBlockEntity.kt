@@ -1,6 +1,7 @@
 package yummyloop.common.block.entity
 
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.enums.ChestType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerEntity
@@ -15,6 +16,8 @@ import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
+import yummyloop.yummy.content.chest.Chest
+import yummyloop.yummy.content.chest.ChestBlock
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
     ExtendedLootableContainerBlockEntity(type, size) {
@@ -30,15 +33,43 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
 
     /** Gecko animation predicate */
     protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
-        when (isOpen) {
-            1 -> event.controller.setAnimation(AnimationBuilder()
-                .addAnimation("open_chest", false)
-                .addAnimation("open_chest_idle", true))
-            0 -> event.controller.setAnimation(AnimationBuilder()
-                .addAnimation("close_chest", false))
-            else -> {
+        val world = event.animatable.world
+        val pos = event.animatable.pos
+        var isDoubleChest = 0
+        if (world != null) {
+            val state = world.getBlockState(pos)
+            if (state.isOf(Chest.chestBlock.first.get())) {//todo : Change type check
+                when (state.get(ChestBlock.CHEST_TYPE)) {
+                    ChestType.RIGHT -> isDoubleChest = 2
+                    ChestType.LEFT -> isDoubleChest = 1
+                    else -> isDoubleChest = 0
+                }
             }
         }
+
+        when (isDoubleChest) {
+            1 -> {
+                event.controller.setAnimation(AnimationBuilder()
+                    .addAnimation("expand", false))
+            }
+            2 -> {
+                event.controller.setAnimation(AnimationBuilder()
+                    .addAnimation("vanish", false))
+            }
+            else -> {
+                when (isOpen) {
+                    1 -> event.controller.setAnimation(AnimationBuilder()
+                        .addAnimation("open_chest", false)
+                        .addAnimation("open_chest_idle", true))
+                    0 -> event.controller.setAnimation(AnimationBuilder()
+                        .addAnimation("close_chest", false))
+                    else -> {
+                    }
+                }
+            }
+        }
+
+
         return PlayState.CONTINUE
     }
 
@@ -87,10 +118,10 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     /** Request data sync when an inventory is open or closed */
     protected fun onInvOpenOrClose() {
         val block = cachedState.block
-        //if (block is ChestBlock) {
-        world!!.addSyncedBlockEvent(pos, block, 1, this.isOpen)
-        world!!.updateNeighborsAlways(pos, block)
-        //}
+        if (block is ChestBlock) {
+            world!!.addSyncedBlockEvent(pos, block, 1, this.isOpen)
+            world!!.updateNeighborsAlways(pos, block)
+        }
     }
 
     /** Sync data between the server, and other client versions of the Block Entity */

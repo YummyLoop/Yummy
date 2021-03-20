@@ -2,7 +2,9 @@ package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.block.*
+import net.minecraft.block.ChestBlock
 import net.minecraft.block.entity.BlockEntity
+import net.minecraft.block.enums.ChestType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
@@ -16,6 +18,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.StateManager
 import net.minecraft.state.property.BooleanProperty
 import net.minecraft.state.property.DirectionProperty
+import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
 import net.minecraft.util.*
 import net.minecraft.util.hit.BlockHitResult
@@ -27,6 +30,7 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
 import yummyloop.common.network.packets.add
+import yummyloop.yummy.LOG
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
     open val columns = 9
@@ -35,23 +39,73 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
     companion object {
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
         val WATERLOGGED: BooleanProperty = Properties.WATERLOGGED
+        var CHEST_TYPE: EnumProperty<ChestType> = Properties.CHEST_TYPE
+    }
+
+    override fun appendProperties(builder: StateManager.Builder<Block?, BlockState?>) {
+        builder.add(FACING, WATERLOGGED, CHEST_TYPE)
     }
 
     init {
         defaultState = this.stateManager.defaultState
             .with(FACING, Direction.NORTH)
             .with(WATERLOGGED, false)
+            .with(ChestBlock.CHEST_TYPE, ChestType.SINGLE)
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
+        var chestType = ChestType.SINGLE
+        var facingDirection = ctx.playerFacing.opposite
         val fluidState = ctx.world.getFluidState(ctx.blockPos)
+        val sideDirection = ctx.side
+
+        //if Player is sneaking
+        if (ctx.shouldCancelInteraction()) {
+            //if Player is placing the block while point to the side of a block
+            if (sideDirection.axis.isHorizontal) {
+                val neighborChestDirection: Direction? = this.getNeighborChestDirection(ctx, sideDirection.opposite)
+                // if there a chest in the pointing direction
+                if (neighborChestDirection != null) {
+                    // if the block is not facing or against the player/pointing direction (is sideways)
+                    if (neighborChestDirection.axis !== sideDirection.axis) {
+                        facingDirection = neighborChestDirection
+                        if (neighborChestDirection.rotateYCounterclockwise() == sideDirection.opposite) {
+                            chestType = ChestType.LEFT
+                        } else chestType = ChestType.RIGHT
+                    }
+                }
+            }
+        } else {
+            if (chestType == ChestType.SINGLE) {
+                // if the chest at the left is facing the same direction
+                if (facingDirection == this.getNeighborChestDirection(ctx, facingDirection.rotateYClockwise())) {
+                    chestType = ChestType.RIGHT
+                } else {
+                    // if the chest at the right is facing the same direction
+                    if (facingDirection == this.getNeighborChestDirection(ctx,
+                            facingDirection.rotateYCounterclockwise())
+                    ) {
+                        chestType = ChestType.LEFT
+                    }
+                }
+            }
+        }
+
         return this.defaultState
-            .with(FACING, ctx.playerFacing.opposite)
-            .with(WATERLOGGED, fluidState.fluid == Fluids.WATER);
+            .with(FACING, facingDirection)
+            .with(WATERLOGGED, fluidState.fluid == Fluids.WATER)
+            .with(CHEST_TYPE, chestType)
     }
 
-    override fun appendProperties(builder: StateManager.Builder<Block?, BlockState?>) {
-        builder.add(FACING, WATERLOGGED)
+    private fun getNeighborChestDirection(ctx: ItemPlacementContext, dir: Direction): Direction? {
+        val sideBlockState = ctx.world.getBlockState(ctx.blockPos.offset(dir))
+
+        if (sideBlockState.isOf(this)) {
+            if (sideBlockState.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
+                return sideBlockState.get(ChestBlock.FACING)
+            }
+        }
+        return null
     }
 
     override fun rotate(state: BlockState, rotation: BlockRotation): BlockState? {
@@ -90,6 +144,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         hit: BlockHitResult?,
     ): ActionResult {
         return if (world.isClient) {
+            if (state.isOf(this)) LOG.info("chestType : ${state.get(CHEST_TYPE).name}") //Todo : remove this
             ActionResult.SUCCESS
         } else {
 
