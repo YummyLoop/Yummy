@@ -23,8 +23,11 @@ import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import yummyloop.common.network.packets.add
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
+    val rows = 3
+    val columns = 9
 
     companion object {
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
@@ -70,7 +73,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         }
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity = ChestEntity()
+    override fun createBlockEntity(world: BlockView?): BlockEntity = ChestEntity(columns, rows)
 
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
 
@@ -90,7 +93,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
             // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
-                MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { }
+                MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
             }
 
             ActionResult.CONSUME

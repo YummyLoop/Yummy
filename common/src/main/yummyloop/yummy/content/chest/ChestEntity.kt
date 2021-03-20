@@ -1,18 +1,23 @@
 package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
+import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.collection.DefaultedList
 import yummyloop.common.block.entity.AnimatableChestContainerBlockEntity
 import yummyloop.common.network.packets.PacketBuffer
+import yummyloop.common.network.packets.add
 
-open class ChestEntity(type: BlockEntityType<*>, size: Int) : AnimatableChestContainerBlockEntity(type, size) {
-    constructor(size: Int) : this(rType!!.get(), size)
-    constructor() : this(54)
+open class ChestEntity(type: BlockEntityType<*>, var columns : Int, var rows : Int) : AnimatableChestContainerBlockEntity(type, columns * rows) {
+    constructor(columns : Int, rows : Int) : this(rType!!.get(), columns, rows)
+    constructor() : this(9, 3)
 
     companion object {
         var rType: RegistrySupplier<BlockEntityType<ChestEntity>>? = null
@@ -24,10 +29,12 @@ open class ChestEntity(type: BlockEntityType<*>, size: Int) : AnimatableChestCon
 
     /** Screen provider, create menu */
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler =
-        ChestScreenHandler(syncId, playerInventory, PacketBuffer(), this)
+        ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
 
     /** Screen provider, packet extra data */
-    override fun saveExtraData(buf: PacketByteBuf?) {}
+    override fun saveExtraData(buf: PacketByteBuf) {
+        buf.add(columns, rows)
+    }
 
-    override fun getContainerName(): Text = TranslatableText("a_chest")
+    override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())
 }
