@@ -11,6 +11,8 @@ import yummyloop.yummy.content.chest.doubleChest.DoubleChestEntity
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestItem
 import yummyloop.yummy.content.chest.iron.IronChest
 import yummyloop.yummy.content.chest.iron.IronChestEntity
+import yummyloop.yummy.content.chest.remake.RemakeBlock
+import yummyloop.yummy.content.chest.remake.RemakeEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 
 object Chest {
@@ -32,6 +34,16 @@ object Chest {
         }, ::DoubleChestItem)
         DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
         GeckoUtils.Blocks.register(DoubleChestEntity.rType!!)
+
+
+        //val remake = GeckoUtils.Items.registerBlockItem("remake", {
+        //    RemakeBlock(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
+        //}, ::DoubleChestItem)
+        val remake = Register.blockItem("remake", {
+            RemakeBlock(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
+        })
+        RemakeEntity.rType = Register.blockEntityType("remake", remake.first) { RemakeEntity() }
+        //GeckoUtils.Blocks.register(RemakeEntity.rType!!)
 
         // Screen stuff
         ChestScreenHandler.rType =

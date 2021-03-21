@@ -1,8 +1,11 @@
 package yummyloop.common.inventory
 
+import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
+import net.minecraft.nbt.CompoundTag
+import net.minecraft.util.collection.DefaultedList
 
 fun Inventory.getCompressedInventory(): Inventory {
     val list = mutableListOf<ItemStack>()
@@ -29,4 +32,17 @@ fun Inventory.getSortedInventory(): Inventory {
     }
     if (list.isEmpty()) list.add(ItemStack.EMPTY)
     return SimpleInventory(*list.toTypedArray())
+}
+
+fun Inventory.toTag(tag : CompoundTag) : CompoundTag {
+    val list = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
+    for (i in 0 until this.size()) list[i] = this.getStack(i)
+    Inventories.toTag(tag, list)
+    return tag
+}
+
+fun Inventory.fromTag(tag : CompoundTag){
+    val list = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
+    Inventories.fromTag(tag, list)
+    for (i in 0 until this.size()) this.setStack(i, list[i])
 }
