@@ -9,15 +9,14 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
-import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.common.block.entity.AnimatableBlockEntity
+import yummyloop.common.entity.AnimatableLivingEntity
 import yummyloop.common.item.AnimatableBlockItem
 import yummyloop.common.item.AnimatableItem
-import yummyloop.common.entity.AnimatableLivingEntity
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.item.Ytem
@@ -61,7 +60,7 @@ object GeckoUtils {
 
         fun registerBlockItem(
             blockItemId: String,
-            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
             blockItemSupplier: (Block, Item.Settings) -> AnimatableBlockItem = ::AnimatableBlockItem,
             itemSettings: Item.Settings = Ytem.Settings(),
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
@@ -79,7 +78,7 @@ object GeckoUtils {
 
         fun registerBlockItem(
             blockItemId: String,
-            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
             itemSettings: Item.Settings = Ytem.Settings(),
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
         ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
@@ -88,7 +87,7 @@ object GeckoUtils {
 
         fun registerBlockItem(
             blockItemId: String,
-            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
             //itemSettings: Item.Settings = Ytem.Settings(),
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
         ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
