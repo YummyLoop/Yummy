@@ -23,16 +23,20 @@ open class ChestEntity(type: BlockEntityType<*>, var columns: Int, var rows: Int
     }
 
     init {
-        //LOG.info("Calling from TestBlockEntity")
+        //
     }
 
     /** Screen provider, create menu */
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
         val state = world?.getBlockState(pos)
-        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT){
+        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT) {
             val doubleChestPos = pos!!.offset(ChestBlock.getDoubleChestDirection(state))
             val mergedInventory = MergedInventory(this, world?.getBlockEntity(doubleChestPos) as Inventory)
-            return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, 2* rows), columns, 2* rows, mergedInventory)
+            return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, 2 * rows),
+                columns,
+                2 * rows,
+                mergedInventory
+            )
         }
 
         return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
@@ -42,12 +46,28 @@ open class ChestEntity(type: BlockEntityType<*>, var columns: Int, var rows: Int
     /** Screen provider, packet extra data */
     override fun saveExtraData(buf: PacketByteBuf) {
         val state = world?.getBlockState(pos)
-        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT){
+        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT) {
             buf.add(columns, 2 * rows)
-        }else{
+        } else {
             buf.add(columns, rows)
         }
     }
 
     override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())
+
+    fun isDoubleChest(): Boolean {
+        val state = world?.getBlockState(pos)
+        val chestType = state?.get(ChestBlock.CHEST_TYPE)
+        return chestType != ChestType.SINGLE
+    }
+
+    fun getOtherInv(): Inventory {
+        val state = world?.getBlockState(pos)
+        if (state?.get(ChestBlock.CHEST_TYPE) != ChestType.SINGLE) {
+            val doubleChestPos = pos!!.offset(ChestBlock.getDoubleChestDirection(state!!))
+            return world?.getBlockEntity(doubleChestPos) as Inventory
+        }
+        return this
+    }
+
 }
