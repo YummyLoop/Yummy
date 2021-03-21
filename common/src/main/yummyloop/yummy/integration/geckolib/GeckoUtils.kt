@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.entity.Entity
 import net.minecraft.entity.EntityType
+import net.minecraft.item.BlockItem
 import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
@@ -61,6 +62,7 @@ object GeckoUtils {
         fun registerBlockItem(
             blockItemId: String,
             blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            blockItemSupplier: (Block, Item.Settings) -> AnimatableBlockItem = ::AnimatableBlockItem,
             itemSettings: Item.Settings = Ytem.Settings(),
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
         ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
@@ -68,11 +70,20 @@ object GeckoUtils {
                 Register.blockItem(
                     blockItemId,
                     blockSupplier,
-                    ::AnimatableBlockItem,
+                    blockItemSupplier,
                     geckoItemSettings(itemSettings, model)
                 )
             geckoEntryList.add(Entry(GeckoType.Item, myBlockItem.second, model))
             return myBlockItem
+        }
+
+        fun registerBlockItem(
+            blockItemId: String,
+            blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+            itemSettings: Item.Settings = Ytem.Settings(),
+            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
+        ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
+            return registerBlockItem(blockItemId, blockSupplier, ::AnimatableBlockItem, itemSettings, model)
         }
 
         fun registerBlockItem(

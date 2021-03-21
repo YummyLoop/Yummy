@@ -14,11 +14,9 @@ object Chest {
     init {
         //var chestItem = GeckoUtils.Items.register("chest2", ::ChestItem, Ytem.Settings())
 
-        // todo: fix item, appearing the double and single chest at the same time
-
         val ironChest = GeckoUtils.Items.registerBlockItem("iron_chest", {
             IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
-        })
+        }, ::ChestItem)
         IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
         GeckoUtils.Blocks.register(IronChestEntity.rType!!)
 
@@ -26,7 +24,7 @@ object Chest {
 
         chestBlock = GeckoUtils.Items.registerBlockItem("chest", {
             ChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque())
-        })
+        }, ::ChestItem)
         ChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { ChestEntity() }
         GeckoUtils.Blocks.register(ChestEntity.rType!!)
 
