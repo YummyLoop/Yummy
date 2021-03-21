@@ -36,19 +36,19 @@ abstract class ContainerScreenHandler(
     }
 
     /** The container inventory slots */
-    protected fun addInventorySlots(){
+    protected open fun addInventorySlots(){
         for (r in 0 until rows) for (c in 0 until columns)
             addSlot(Slot(inventory, c + r * columns, 8 + c * slotSize, 18 + r * slotSize))
     }
 
     /** The player inventory slots */
-    protected fun addPlayerInventorySlots(){
+    protected open fun addPlayerInventorySlots(){
         for (r in 0 until 3) for (c in 0 until 9)
             addSlot(Slot(playerInventory, c + r * 9 + 9, 8 + c * slotSize, 31 + r * slotSize + offsetY))
     }
 
     /** The player Hotbar slots */
-    protected fun addPlayerInventoryHotBar(){
+    protected open fun addPlayerInventoryHotBar(){
         for (c in 0 until 9)
             addSlot(Slot(playerInventory, c, 8 + c * slotSize, 35 + 3 * slotSize + offsetY))
     }

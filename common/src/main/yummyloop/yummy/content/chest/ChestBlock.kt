@@ -206,16 +206,19 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
                 )
             )
             return ActionResult.CONSUME
-        }//todo : add behavior to open chests merged when left chest
+        }
 
         return if (world.isClient) {
-            //if (state.isOf(this)) LOG.info("chestType : ${state.get(CHEST_TYPE).name}")
             ActionResult.SUCCESS
         } else {
             // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
-                MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
+                if (state.get(CHEST_TYPE) == ChestType.LEFT){
+                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, 2* rows) }
+                }else{
+                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
+                }
             }
 
             ActionResult.CONSUME

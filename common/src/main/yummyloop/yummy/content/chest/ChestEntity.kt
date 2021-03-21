@@ -2,7 +2,9 @@ package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.block.enums.ChestType
 import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.Inventory
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
@@ -25,12 +27,26 @@ open class ChestEntity(type: BlockEntityType<*>, var columns: Int, var rows: Int
     }
 
     /** Screen provider, create menu */
-    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler =
-        ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
+    override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
+        val state = world?.getBlockState(pos)
+        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT){
+            val doubleChestPos = pos!!.offset(ChestBlock.getDoubleChestDirection(state))
+            val mergedInventory = MergedInventory(this, world?.getBlockEntity(doubleChestPos) as Inventory)
+            return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, 2* rows), columns, 2* rows, mergedInventory)
+        }
+
+        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
+    }
+
 
     /** Screen provider, packet extra data */
     override fun saveExtraData(buf: PacketByteBuf) {
-        buf.add(columns, rows)
+        val state = world?.getBlockState(pos)
+        if (state?.get(ChestBlock.CHEST_TYPE) == ChestType.LEFT){
+            buf.add(columns, 2 * rows)
+        }else{
+            buf.add(columns, rows)
+        }
     }
 
     override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())
