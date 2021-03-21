@@ -1,7 +1,61 @@
 {
 	"format_version": "1.8.0",
 	"animations": {
-		"open_chest": {
+		"idle": {
+			"loop": "hold_on_last_frame",
+			"override_previous_animation": true,
+			"bones": {
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"double_idle": {
+			"loop": "hold_on_last_frame",
+			"override_previous_animation": true,
+			"bones": {
+				"Chest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"idle_open": {
+			"loop": "hold_on_last_frame",
+			"override_previous_animation": true,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"double_idle_open": {
+			"loop": "hold_on_last_frame",
+			"override_previous_animation": true,
+			"bones": {
+				"DoubleChestTop": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					}
+				},
+				"Chest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"override_previous_animation": true,
@@ -13,18 +67,23 @@
 						},
 						"1.0": {
 							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
+							"easing": "easeInElastic"
 						}
+					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
 					}
 				}
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "open.ogg"
+					"effect": "open_sound"
 				}
 			}
 		},
-		"close_chest": {
+		"close": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"override_previous_animation": true,
@@ -40,36 +99,73 @@
 							"easingArgs": [0.1]
 						}
 					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			},
 			"sound_effects": {
 				"0.0": {
-					"effect": "close.ogg"
+					"effect": "close_sound"
 				}
 			}
 		},
-		"open_chest_idle": {
-			"loop": true,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				}
-			}
-		},
-		"expand": {
+		"double_open": {
 			"loop": "hold_on_last_frame",
+			"animation_length": 1,
 			"override_previous_animation": true,
 			"bones": {
-				"Chest": {
-					"position": {
-						"vector": [8, 0, 0]
-					},
-					"scale": {
-						"vector": [2.14, 1, 1]
+				"DoubleChestTop": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-90, 0, 0],
+							"easing": "easeOutBack"
+						}
 					}
+				},
+				"Chest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "open_sound"
+				}
+			}
+		},
+		"double_close": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"override_previous_animation": true,
+			"bones": {
+				"DoubleChestTop": {
+					"rotation": {
+						"0.0": {
+							"vector": [-90, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInBounce",
+							"easingArgs": [0.1]
+						}
+					}
+				},
+				"Chest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "close_sound"
 				}
 			}
 		},
@@ -78,6 +174,11 @@
 			"override_previous_animation": true,
 			"bones": {
 				"Chest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"DoubleChest": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}

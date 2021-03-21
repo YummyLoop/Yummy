@@ -27,7 +27,7 @@ open class IronChest(settings: Settings) : ChestBlock(settings) {
         if (world.isClient){
             val b = world.getBlockEntity(pos!!.add(1,0,0))
 
-            if (b is IronChestEntity){ b.isOpen = 1 }
+            if (b is IronChestEntity){ b.isOpen = 1 } //todo : remove this, merge inventories on open
         }
 
         return super.onUse(state, world, pos, player, hand, hit)

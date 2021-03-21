@@ -13,7 +13,9 @@ object Chest {
 
     init {
         //var chestItem = GeckoUtils.Items.register("chest2", ::ChestItem, Ytem.Settings())
-        
+
+        // todo: fix item, appearing the double and single chest at the same time
+
         val ironChest = GeckoUtils.Items.registerBlockItem("iron_chest", {
             IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
         })

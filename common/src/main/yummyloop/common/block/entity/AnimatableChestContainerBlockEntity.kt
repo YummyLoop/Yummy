@@ -49,22 +49,31 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             }
         }
 
-        when (isOpen) {
-            1 -> animationBuilder
-                .addAnimation("open_chest", false)
-                .addAnimation("open_chest_idle", true)
-            0 -> animationBuilder
-                .addAnimation("close_chest", false)
-            else -> {
-            }
-        }
+        when (isDoubleChest) {
+            1 -> {
+                when (isOpen) {
+                    1 -> animationBuilder
+                        .addAnimation("double_open", false)
+                        .addAnimation("double_idle_open", true)
+                    0 -> animationBuilder
+                        .addAnimation("double_close", false)
+                        .addAnimation("double_idle", true)
+                    else -> animationBuilder.addAnimation("double_idle", true)
+                }
 
-        when (isDoubleChest) {//todo : fix/redo animations
-            1 -> animationBuilder
-                .addAnimation("expand", false)
-            2 -> animationBuilder
-                .addAnimation("vanish", false)
+            }
+            2 -> animationBuilder.addAnimation("vanish", true)
+
             else -> {
+                when (isOpen) {
+                    1 -> animationBuilder
+                        .addAnimation("open", false)
+                        .addAnimation("idle_open", true)
+                    0 -> animationBuilder
+                        .addAnimation("close", false)
+                        .addAnimation("idle", true)
+                    else ->  animationBuilder.addAnimation("idle", true)
+                }
             }
         }
 

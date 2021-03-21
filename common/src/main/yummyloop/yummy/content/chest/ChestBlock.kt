@@ -2,7 +2,6 @@ package yummyloop.yummy.content.chest
 
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.block.*
-import net.minecraft.block.ChestBlock
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.enums.ChestType
 import net.minecraft.entity.LivingEntity
@@ -24,13 +23,14 @@ import net.minecraft.util.*
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
+import net.minecraft.util.math.Vec3d
 import net.minecraft.util.shape.VoxelShape
 import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
+import net.minecraft.world.WorldAccess
 import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
 import yummyloop.common.network.packets.add
-import yummyloop.yummy.LOG
 
 open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
     open val columns = 9
@@ -40,6 +40,11 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
         val WATERLOGGED: BooleanProperty = Properties.WATERLOGGED
         var CHEST_TYPE: EnumProperty<ChestType> = Properties.CHEST_TYPE
+
+        fun getDoubleChestDirection(state: BlockState): Direction {
+            val direction = state.get(FACING) as Direction
+            return if (state.get(CHEST_TYPE) == ChestType.LEFT) direction.rotateYCounterclockwise() else direction.rotateYClockwise()
+        }
     }
 
     override fun appendProperties(builder: StateManager.Builder<Block?, BlockState?>) {
@@ -50,7 +55,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         defaultState = this.stateManager.defaultState
             .with(FACING, Direction.NORTH)
             .with(WATERLOGGED, false)
-            .with(ChestBlock.CHEST_TYPE, ChestType.SINGLE)
+            .with(CHEST_TYPE, ChestType.SINGLE)
     }
 
     override fun getPlacementState(ctx: ItemPlacementContext): BlockState {
@@ -71,7 +76,9 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
                         facingDirection = neighborChestDirection
                         if (neighborChestDirection.rotateYCounterclockwise() == sideDirection.opposite) {
                             chestType = ChestType.LEFT
-                        } else chestType = ChestType.RIGHT
+                        } else {
+                            chestType = ChestType.RIGHT
+                        }
                     }
                 }
             }
@@ -101,11 +108,51 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         val sideBlockState = ctx.world.getBlockState(ctx.blockPos.offset(dir))
 
         if (sideBlockState.isOf(this)) {
-            if (sideBlockState.get(ChestBlock.CHEST_TYPE) == ChestType.SINGLE) {
-                return sideBlockState.get(ChestBlock.FACING)
+            if (sideBlockState.get(CHEST_TYPE) == ChestType.SINGLE) {
+                return sideBlockState.get(FACING)
             }
         }
         return null
+    }
+
+    /** Update this block when the neighbor changes*/
+    override fun getStateForNeighborUpdate(
+        state: BlockState,
+        direction: Direction,
+        neighborState: BlockState,
+        world: WorldAccess,
+        pos: BlockPos?,
+        posFrom: BlockPos?,
+    ): BlockState? {
+        if (state.get(WATERLOGGED) as Boolean) {
+            world.fluidTickScheduler.schedule(pos, Fluids.WATER, Fluids.WATER.getTickRate(world))
+        }
+
+        /** If updated block is a chest block and is in the horizontal axis*/
+        if (neighborState.isOf(this) && direction.axis.isHorizontal) {
+            val neighborChestType = neighborState.get(CHEST_TYPE) as ChestType
+
+            /** This chest is single type chest */
+            if (state.get(CHEST_TYPE) == ChestType.SINGLE) {
+                /** This updated chest is not a single type chest */
+                if (neighborChestType != ChestType.SINGLE) {
+                    /** Both chests are facing the same direction */
+                    if (state.get(FACING) == neighborState.get(FACING)) {
+                        /** The updated chest corresponds to the corresponding double chest */
+                        if (getDoubleChestDirection(neighborState) == direction.opposite) {
+                            return state.with(CHEST_TYPE, neighborChestType.opposite)
+                        }
+                    }
+                }
+            }
+        } else {
+            /** The updated block corresponds to the complementary block of the double chest */
+            if (getDoubleChestDirection(state) == direction) {
+                return state.with(CHEST_TYPE, ChestType.SINGLE)
+            }
+        }
+
+        return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, posFrom)
     }
 
     override fun rotate(state: BlockState, rotation: BlockRotation): BlockState? {
@@ -143,11 +190,28 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         hand: Hand?,
         hit: BlockHitResult?,
     ): ActionResult {
+        if (state.get(CHEST_TYPE) == ChestType.RIGHT) {
+            val doubleChestPos = pos!!.offset(getDoubleChestDirection(state))
+
+            world.getBlockState(doubleChestPos).onUse(world, player, hand,
+                BlockHitResult(
+                    Vec3d(
+                        doubleChestPos.x.toDouble(),
+                        doubleChestPos.y.toDouble(),
+                        doubleChestPos.z.toDouble()
+                    ),
+                    getDoubleChestDirection(state),
+                    doubleChestPos,
+                    false
+                )
+            )
+            return ActionResult.CONSUME
+        }//todo : add behavior to open chests merged when left chest
+
         return if (world.isClient) {
-            if (state.isOf(this)) LOG.info("chestType : ${state.get(CHEST_TYPE).name}") //Todo : remove this
+            //if (state.isOf(this)) LOG.info("chestType : ${state.get(CHEST_TYPE).name}")
             ActionResult.SUCCESS
         } else {
-
             // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
