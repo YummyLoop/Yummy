@@ -1,4 +1,4 @@
-package yummyloop.yummy.content.chest
+package yummyloop.yummy.content.chest.doubleChest
 
 import me.shedaniel.architectury.registry.MenuRegistry
 import net.minecraft.block.*
@@ -32,7 +32,7 @@ import net.minecraft.world.WorldAccess
 import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
 import yummyloop.common.network.packets.add
 
-open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
+open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
     open val columns = 9
     open val rows = 3
 
@@ -177,7 +177,7 @@ open class ChestBlock(settings: Settings) : BlockWithEntity(settings), Waterlogg
         }
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity = ChestEntity(columns, rows)
+    override fun createBlockEntity(world: BlockView?): BlockEntity = DoubleChestEntity(columns, rows)
 
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
 

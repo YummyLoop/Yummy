@@ -1,4 +1,4 @@
-package yummyloop.yummy.content.chest
+package yummyloop.common.inventory
 
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.inventory.Inventory
@@ -9,7 +9,7 @@ interface IMergedInventory : Inventory {
 
     val inventoryList: MutableList<Inventory>
 
-    fun add(inv: Inventory): Boolean {
+    fun append(inv: Inventory): Boolean {
         if (inv != this) return inventoryList.add(inv)
         return false
     }
@@ -85,7 +85,7 @@ interface IMergedInventory : Inventory {
         return ItemStack.EMPTY
     }
 
-    override fun setStack(slot: Int, stack: ItemStack?) {
+    override fun setStack(slot: Int, stack: ItemStack) {
         var index = 0
 
         for (i in inventoryList) {
@@ -101,16 +101,16 @@ interface IMergedInventory : Inventory {
 
     override fun markDirty() = inventoryList.forEach { it.markDirty() }
 
-    override fun canPlayerUse(player: PlayerEntity?): Boolean = inventoryList.all { it.canPlayerUse(player) }
+    override fun canPlayerUse(player: PlayerEntity): Boolean = inventoryList.all { it.canPlayerUse(player) }
 
-    override fun onOpen(player: PlayerEntity?) = inventoryList.forEach { it.onOpen(player) }
+    override fun onOpen(player: PlayerEntity) = inventoryList.forEach { it.onOpen(player) }
 
-    override fun onClose(player: PlayerEntity?) = inventoryList.forEach { it.onClose(player) }
+    override fun onClose(player: PlayerEntity) = inventoryList.forEach { it.onClose(player) }
 
     /**
      * Returns the number of times the specified item occurs in this inventory across all stored stacks.
      */
-    override fun count(item: Item?): Int {
+    override fun count(item: Item): Int {
         var count = 0
         inventoryList.forEach { count += it.count(item) }
         return count
@@ -119,7 +119,7 @@ interface IMergedInventory : Inventory {
     /**
      * Determines whether this inventory contains any of the given candidate items.
      */
-    override fun containsAny(items: MutableSet<Item>?): Boolean = inventoryList.any { it.containsAny(items) }
+    override fun containsAny(items: MutableSet<Item>): Boolean = inventoryList.any { it.containsAny(items) }
 
     /**
      * Returns the maximum number of items a stack can contain when placed inside this inventory.
@@ -135,7 +135,7 @@ interface IMergedInventory : Inventory {
     /**
      * Returns whether the given stack is a valid for the indicated slot position.
      */
-    override fun isValid(slot: Int, stack: ItemStack?): Boolean {
+    override fun isValid(slot: Int, stack: ItemStack): Boolean {
         return true
     }
 }

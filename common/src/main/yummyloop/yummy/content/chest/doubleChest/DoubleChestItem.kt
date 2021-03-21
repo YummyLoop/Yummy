@@ -1,4 +1,4 @@
-package yummyloop.yummy.content.chest
+package yummyloop.yummy.content.chest.doubleChest
 
 import net.minecraft.block.Block
 import software.bernie.geckolib3.core.PlayState
@@ -9,13 +9,13 @@ import software.bernie.geckolib3.core.manager.AnimationData
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.item.AnimatableBlockItem
 
-open class ChestItem(block: Block, settings: Settings) : AnimatableBlockItem(block, settings) {
+open class DoubleChestItem(block: Block, settings: Settings) : AnimatableBlockItem(block, settings) {
 
     protected val animationController: AnimationController<*> by lazy {
         AnimationController(this, "controller", 0F, AnimationPredicate(this::predicate))
     }
 
-    protected fun <P> predicate(event: AnimationEvent<P>): PlayState where P : ChestItem {
+    protected fun <P> predicate(event: AnimationEvent<P>): PlayState where P : DoubleChestItem {
         val animationBuilder = AnimationBuilder()
         animationBuilder.addAnimation("idle", true)
         event.controller.setAnimation(animationBuilder)

@@ -1,4 +1,4 @@
-package yummyloop.yummy.content.chest
+package yummyloop.common.inventory
 
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
