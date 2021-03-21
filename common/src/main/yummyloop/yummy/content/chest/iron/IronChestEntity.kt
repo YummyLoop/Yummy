@@ -4,9 +4,9 @@ import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
-import yummyloop.yummy.content.chest.doubleChest.DoubleChestEntity
+import yummyloop.yummy.content.chest.singleChest.SingleChestEntity
 
-class IronChestEntity(columns: Int, rows: Int) : DoubleChestEntity(rType!!.get(), columns, rows) {
+class IronChestEntity(columns: Int, rows: Int) : SingleChestEntity(rType!!.get(), columns, rows) {
     constructor() : this(9, 6)
 
     companion object {
