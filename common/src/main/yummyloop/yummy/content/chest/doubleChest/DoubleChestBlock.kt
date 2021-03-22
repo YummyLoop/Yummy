@@ -10,6 +10,7 @@ import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.fluid.FluidState
 import net.minecraft.fluid.Fluids
 import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemPlacementContext
 import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
@@ -30,9 +31,10 @@ import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
 import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
+import yummyloop.common.inventory.MergedInventory
 import yummyloop.common.network.packets.add
 
-open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
+open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable, InventoryProvider {
     open val columns = 9
     open val rows = 3
 
@@ -271,6 +273,21 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         if (itemStack.hasCustomName()) {
             val blockEntity = world.getBlockEntity(pos)
             if (blockEntity is ExtendedLootableContainerBlockEntity) blockEntity.customName = itemStack.name
+        }
+    }
+
+    override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
+        val chestType = state.get(CHEST_TYPE)
+        if (chestType == ChestType.LEFT || chestType == ChestType.RIGHT){
+            return object : MergedInventory(
+                world.getBlockEntity(pos) as DoubleChestEntity,
+                world.getBlockEntity(pos.offset(getDoubleChestDirection(state))) as DoubleChestEntity), SidedInventory{
+                override fun getAvailableSlots(side: Direction?): IntArray = IntArray(this.size()) {it}
+                override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?): Boolean = true
+                override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?): Boolean = true
+            }
+        }else{
+            return world.getBlockEntity(pos) as DoubleChestEntity
         }
     }
 }

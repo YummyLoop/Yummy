@@ -3,7 +3,7 @@ package yummyloop.common.inventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 
-class MergedInventory(vararg inventories: Inventory) : IMergedInventory {
+open class MergedInventory(vararg inventories: Inventory) : IMergedInventory {
 
     override val inventoryList = inventories.toMutableList()
 

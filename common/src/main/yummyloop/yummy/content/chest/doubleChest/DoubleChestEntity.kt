@@ -5,10 +5,13 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.enums.ChestType
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
+import net.minecraft.inventory.SidedInventory
+import net.minecraft.item.ItemStack
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.math.Direction
 import yummyloop.common.block.entity.AnimatableChestContainerBlockEntity
 import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.common.network.packets.add
@@ -17,7 +20,7 @@ import yummyloop.common.inventory.MergedInventory
 
 
 open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var rows: Int) :
-    AnimatableChestContainerBlockEntity(type, columns * rows) {
+    AnimatableChestContainerBlockEntity(type, columns * rows), SidedInventory {
     constructor(columns: Int, rows: Int) : this(rType!!.get(), columns, rows)
     constructor() : this(9, 3)
 
@@ -71,6 +74,27 @@ open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var row
             return world?.getBlockEntity(doubleChestPos) as Inventory
         }
         return this
+    }
+
+    /**
+     * Gets the available slot positions that are reachable from a given side.
+     */
+    override fun getAvailableSlots(side: Direction?): IntArray {
+        return IntArray(this.size()){it}
+    }
+
+    /**
+     * Determines whether the given stack can be inserted into this inventory at the specified slot position from the given direction.
+     */
+    override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?): Boolean {
+        return true
+    }
+
+    /**
+     * Determines whether the given stack can be removed from this inventory at the specified slot position from the given direction.
+     */
+    override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?): Boolean {
+        return true
     }
 
 }
