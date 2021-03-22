@@ -53,31 +53,50 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
         }
 
         when (isDoubleChest) {
-            1 -> when {
+            2 -> when {
                 isOpen >= 2 -> {
                     animationBuilder
-                        .addAnimation("double_idle_open", true)
+                        .addAnimation("double_idle_open_right", true)
                 }
                 isOpen == 1 -> {
                     animationBuilder
-                        .addAnimation("double_open", false)
-                        .addAnimation("double_idle_open", true)
+                        .addAnimation("double_open_right", false)
+                        .addAnimation("double_idle_open_right", true)
                 }
                 isOpen == 0 -> {
                     animationBuilder
-                        .addAnimation("double_close", false)
-                        .addAnimation("double_idle", true)
-                    if (animationController.isCurrentAnimation("double_idle")) {
+                        .addAnimation("double_close_right", false)
+                        .addAnimation("double_idle_right", true)
+                    if (animationController.isCurrentAnimation("double_idle_right")) {
                         isOpen = -1
                     }
                 }
                 else -> {
-                    animationBuilder.addAnimation("double_idle", true)
+                    animationBuilder.addAnimation("double_idle_right", true)
                 }
             }
 
-            2 -> {
-                animationBuilder.addAnimation("vanish", true)
+            1 -> when {
+                isOpen >= 2 -> {
+                    animationBuilder
+                        .addAnimation("double_idle_open_left", true)
+                }
+                isOpen == 1 -> {
+                    animationBuilder
+                        .addAnimation("double_open_left", false)
+                        .addAnimation("double_idle_open_left", true)
+                }
+                isOpen == 0 -> {
+                    animationBuilder
+                        .addAnimation("double_close_left", false)
+                        .addAnimation("double_idle_left", true)
+                    if (animationController.isCurrentAnimation("double_idle_left")) {
+                        isOpen = -1
+                    }
+                }
+                else -> {
+                    animationBuilder.addAnimation("double_idle_left", true)
+                }
             }
 
             else -> when {
