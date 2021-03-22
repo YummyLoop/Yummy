@@ -30,7 +30,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
+import yummyloop.common.block.entity.LootableContainerBlockEntityImpl
 import yummyloop.common.inventory.MergedInventory
 import yummyloop.common.network.packets.add
 
@@ -169,7 +169,7 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         return if (state.get(WATERLOGGED) as Boolean) Fluids.WATER.getStill(false) else super.getFluidState(state)
     }
 
-    override fun getOutlineShape(state: BlockState, view: BlockView?, pos: BlockPos?, ctx: ShapeContext?): VoxelShape {
+    override fun getOutlineShape(state: BlockState, view: BlockView, pos: BlockPos, ctx: ShapeContext): VoxelShape {
         return when (state[FACING]) {
             Direction.NORTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
             Direction.SOUTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
@@ -216,9 +216,9 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
-                if (state.get(CHEST_TYPE) == ChestType.LEFT){
-                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, 2* rows) }
-                }else{
+                if (state.get(CHEST_TYPE) == ChestType.LEFT) {
+                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, 2 * rows) }
+                } else {
                     MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
                 }
             }
@@ -247,11 +247,16 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
 
     override fun hasComparatorOutput(state: BlockState?): Boolean = true
 
-    override fun getComparatorOutput(state: BlockState?, world: World?, pos: BlockPos?): Int {
-        val blockEntity = world!!.getBlockEntity(pos)
-        return if (blockEntity is Inventory) {
-            ScreenHandler.calculateComparatorOutput(blockEntity as Inventory)
-        } else ScreenHandler.calculateComparatorOutput(null as Inventory?)
+    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
+        val chestType = state.get(CHEST_TYPE)
+        if (chestType == ChestType.LEFT || chestType == ChestType.RIGHT) {
+            return ScreenHandler.calculateComparatorOutput(MergedInventory(
+                world.getBlockEntity(pos) as DoubleChestEntity,
+                world.getBlockEntity(pos.offset(getDoubleChestDirection(state))) as DoubleChestEntity)
+            )
+        } else {
+            return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos) as Inventory)
+        }
     }
 
     override fun canPathfindThrough(
@@ -272,21 +277,21 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
     ) {
         if (itemStack.hasCustomName()) {
             val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is ExtendedLootableContainerBlockEntity) blockEntity.customName = itemStack.name
+            if (blockEntity is LootableContainerBlockEntityImpl) blockEntity.customName = itemStack.name
         }
     }
 
     override fun getInventory(state: BlockState, world: WorldAccess, pos: BlockPos): SidedInventory {
         val chestType = state.get(CHEST_TYPE)
-        if (chestType == ChestType.LEFT || chestType == ChestType.RIGHT){
+        if (chestType == ChestType.LEFT || chestType == ChestType.RIGHT) {
             return object : MergedInventory(
                 world.getBlockEntity(pos) as DoubleChestEntity,
-                world.getBlockEntity(pos.offset(getDoubleChestDirection(state))) as DoubleChestEntity), SidedInventory{
-                override fun getAvailableSlots(side: Direction?): IntArray = IntArray(this.size()) {it}
+                world.getBlockEntity(pos.offset(getDoubleChestDirection(state))) as DoubleChestEntity), SidedInventory {
+                override fun getAvailableSlots(side: Direction?): IntArray = IntArray(this.size()) { it }
                 override fun canInsert(slot: Int, stack: ItemStack?, dir: Direction?): Boolean = true
                 override fun canExtract(slot: Int, stack: ItemStack?, dir: Direction?): Boolean = true
             }
-        }else{
+        } else {
             return world.getBlockEntity(pos) as DoubleChestEntity
         }
     }

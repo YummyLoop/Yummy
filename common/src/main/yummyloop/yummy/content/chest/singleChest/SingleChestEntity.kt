@@ -27,13 +27,7 @@ open class SingleChestEntity(type: BlockEntityType<*>, var columns: Int, var row
 
     /** Screen provider, create menu */
     override fun createScreenHandler(syncId: Int, playerInventory: PlayerInventory): ScreenHandler {
-        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
-    }
-
-
-    /** Screen provider, packet extra data */
-    override fun saveExtraData(buf: PacketByteBuf) {
-        buf.add(columns, rows)
+        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(), columns, rows, this)
     }
 
     override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())

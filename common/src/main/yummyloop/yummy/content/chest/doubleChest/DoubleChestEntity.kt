@@ -38,43 +38,17 @@ open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var row
         if (state?.get(DoubleChestBlock.CHEST_TYPE) == ChestType.LEFT) {
             val doubleChestPos = pos!!.offset(DoubleChestBlock.getDoubleChestDirection(state))
             val mergedInventory = MergedInventory(this, world?.getBlockEntity(doubleChestPos) as Inventory)
-            return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, 2 * rows),
+            return ChestScreenHandler(syncId, playerInventory, PacketBuffer(),
                 columns,
                 2 * rows,
                 mergedInventory
             )
         }
 
-        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(columns, rows), columns, rows, this)
-    }
-
-
-    /** Screen provider, packet extra data */
-    override fun saveExtraData(buf: PacketByteBuf) {
-        val state = world?.getBlockState(pos)
-        if (state?.get(DoubleChestBlock.CHEST_TYPE) == ChestType.LEFT) {
-            buf.add(columns, 2 * rows)
-        } else {
-            buf.add(columns, rows)
-        }
+        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(), columns, rows, this)
     }
 
     override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())
-
-    fun isDoubleChest(): Boolean {
-        val state = world?.getBlockState(pos)
-        val chestType = state?.get(DoubleChestBlock.CHEST_TYPE)
-        return chestType != ChestType.SINGLE
-    }
-
-    fun getOtherInv(): Inventory {
-        val state = world?.getBlockState(pos)
-        if (state?.get(DoubleChestBlock.CHEST_TYPE) != ChestType.SINGLE) {
-            val doubleChestPos = pos!!.offset(DoubleChestBlock.getDoubleChestDirection(state!!))
-            return world?.getBlockEntity(doubleChestPos) as Inventory
-        }
-        return this
-    }
 
     /**
      * Gets the available slot positions that are reachable from a given side.

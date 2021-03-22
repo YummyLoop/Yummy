@@ -26,7 +26,7 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import yummyloop.common.block.entity.ExtendedLootableContainerBlockEntity
+import yummyloop.common.block.entity.LootableContainerBlockEntityImpl
 import yummyloop.common.network.packets.add
 
 open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
@@ -190,7 +190,7 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
     ) {
         if (itemStack.hasCustomName()) {
             val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is ExtendedLootableContainerBlockEntity) blockEntity.customName = itemStack.name
+            if (blockEntity is LootableContainerBlockEntityImpl) blockEntity.customName = itemStack.name
         }
     }
 }

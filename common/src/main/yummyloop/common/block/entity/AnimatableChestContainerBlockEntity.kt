@@ -17,13 +17,10 @@ import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
-import yummyloop.yummy.LOG
-import yummyloop.yummy.content.chest.Chest
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
-import yummyloop.yummy.content.chest.singleChest.SingleChestBlock
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
-    ExtendedLootableContainerBlockEntity(type, size) {
+    LootableContainerBlockEntityImpl(type, size) {
     var isOpen = -1
     protected var playedSound = 0
     protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }

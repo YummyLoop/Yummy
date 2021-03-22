@@ -1,6 +1,5 @@
-package yummyloop.yummy.content.chest.remake
+package yummyloop.yummy.content.chest
 
-import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
 import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.LootableContainerBlockEntity
@@ -16,11 +15,11 @@ import yummyloop.common.inventory.IMergedInventory
 import yummyloop.common.inventory.fromTag
 import yummyloop.common.inventory.toTag
 
-abstract class ExtendedMergedLootableContainerBlockEntity(blockEntityType: BlockEntityType<*>) :
-    LootableContainerBlockEntity(blockEntityType), ExtendedMenuProvider, SidedInventory, IMergedInventory {
+abstract class MergedLootableContainerBlockEntity(blockEntityType: BlockEntityType<*>) :
+    LootableContainerBlockEntity(blockEntityType), SidedInventory, IMergedInventory {
 
     override val inventoryList = mutableListOf<Inventory>()
-    abstract val internalInventory : Inventory
+    abstract val internalInventory: Inventory
 
     override fun markDirty() {
         super<IMergedInventory>.markDirty()
@@ -64,9 +63,9 @@ abstract class ExtendedMergedLootableContainerBlockEntity(blockEntityType: Block
     }
 
     override fun getInvStackList(): DefaultedList<ItemStack> {
-        val itemStackList : DefaultedList<ItemStack> = DefaultedList.of()
+        val itemStackList: DefaultedList<ItemStack> = DefaultedList.of()
         inventoryList.forEach {
-            for (i in 0 until it.size()){
+            for (i in 0 until it.size()) {
                 itemStackList.add(it.getStack(i))
             }
         }
@@ -92,7 +91,7 @@ abstract class ExtendedMergedLootableContainerBlockEntity(blockEntityType: Block
     }
 
     override fun getAvailableSlots(side: Direction): IntArray {
-        return IntArray(this.size()) {it}
+        return IntArray(this.size()) { it }
     }
 
     /**
