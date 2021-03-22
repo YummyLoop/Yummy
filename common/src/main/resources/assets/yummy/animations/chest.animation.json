@@ -5,19 +5,29 @@
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
-				"dtop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
+				"dlbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				}
 			}
 		},
-		"double_idle": {
+		"double_idle_left": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
@@ -26,12 +36,22 @@
 						"vector": [8, 0, 0]
 					}
 				},
-				"ctop": {
+				"crtop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"crbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -45,63 +65,22 @@
 				"Lock": {
 					"position": {
 						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"Chest": {
-					"position": {
-						"vector": [-16, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
 					},
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"ctop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dbottom": {
+				"cltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -117,38 +96,22 @@
 						"vector": [-90, 0, 0]
 					}
 				},
-				"dtop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_open": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -167,68 +130,27 @@
 				"Lock": {
 					"position": {
 						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"Chest": {
-					"position": {
-						"vector": [-16, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_open_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
 					},
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"ctop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dtop": {
+				"cltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
+				"clbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -250,49 +172,22 @@
 						}
 					}
 				},
-				"dtop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "open_sound"
-				}
-			}
-		},
-		"double_open": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -322,79 +217,27 @@
 				"Lock": {
 					"position": {
 						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"Chest": {
-					"position": {
-						"vector": [-16, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "open_sound"
-				}
-			}
-		},
-		"double_open_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
 					},
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"ctop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dtop": {
+				"cltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
+				"clbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -422,12 +265,22 @@
 						}
 					}
 				},
-				"dtop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
+				"dlbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -439,7 +292,7 @@
 				}
 			}
 		},
-		"double_close": {
+		"double_close_left": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
 			"bones": {
@@ -460,12 +313,22 @@
 						"vector": [8, 0, 0]
 					}
 				},
-				"ctop": {
+				"crtop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"crbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -496,80 +359,27 @@
 				"Lock": {
 					"position": {
 						"vector": [8, 0, 0]
-					}
-				},
-				"ctop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"mbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"Chest": {
-					"position": {
-						"vector": [-16, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "close_sound"
-				}
-			}
-		},
-		"double_close_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [-90, 0, 0]
-						},
-						"1.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeInBounce",
-							"easingArgs": [0.1]
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
 					},
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"ctop": {
+				"dltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"cbottom": {
+				"dlbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dtop": {
+				"cltop": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
 				},
-				"dbottom": {
+				"clbottom": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}

@@ -25,7 +25,7 @@
 					"parent": "Top",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, 9, -7], "size": [13, 5, 14], "uv": [0, 0]}
+						{"origin": [-6, 9, -7], "size": [12, 5, 14], "uv": [44, 7]}
 					]
 				},
 				{
@@ -33,23 +33,39 @@
 					"parent": "Top",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-1, 7.5, -8], "size": [2, 4, 1], "uv": [0, 0]}
+						{"origin": [-1, 7.5, -8], "size": [2, 4, 1], "uv": [1, 1]}
 					]
 				},
 				{
-					"name": "ctop",
+					"name": "crtop",
 					"parent": "Top",
 					"pivot": [0, 9, 7],
 					"cubes": [
-						{"origin": [6, 9, -7], "size": [1, 5, 14], "uv": [55, 0]}
+						{"origin": [6, 9, -7], "size": [1, 5, 14], "uv": [97, 7]}
 					]
 				},
 				{
-					"name": "dtop",
+					"name": "cltop",
+					"parent": "Top",
+					"pivot": [0, 9, 7],
+					"cubes": [
+						{"origin": [-7, 9, -7], "size": [1, 5, 14], "uv": [13, 7]}
+					]
+				},
+				{
+					"name": "dltop",
 					"parent": "Top",
 					"pivot": [7, 9, 7],
 					"cubes": [
-						{"origin": [6, 9, -7], "size": [17, 5, 14], "uv": [0, 44]}
+						{"origin": [6, 9, -7], "size": [2, 5, 14], "uv": [95, 28]}
+					]
+				},
+				{
+					"name": "drtop",
+					"parent": "Top",
+					"pivot": [-7, 9, 7],
+					"cubes": [
+						{"origin": [-8, 9, -7], "size": [2, 5, 14], "uv": [13, 27]}
 					]
 				},
 				{
@@ -62,23 +78,39 @@
 					"parent": "Botttom",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, 0, -7], "size": [13, 9, 14], "uv": [0, 20]}
+						{"origin": [-6, 0, -7], "size": [12, 9, 14], "uv": [44, 59]}
 					]
 				},
 				{
-					"name": "cbottom",
+					"name": "crbottom",
 					"parent": "Botttom",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [6, 0, -7], "size": [1, 9, 14], "uv": [55, 20]}
+						{"origin": [6, 0, -7], "size": [1, 9, 14], "uv": [97, 59]}
 					]
 				},
 				{
-					"name": "dbottom",
+					"name": "clbottom",
 					"parent": "Botttom",
 					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [6, 0, -7], "size": [17, 9, 14], "uv": [0, 64]}
+						{"origin": [-7, 0, -7], "size": [1, 9, 14], "uv": [13, 59]}
+					]
+				},
+				{
+					"name": "dlbottom",
+					"parent": "Botttom",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [6, 0, -7], "size": [2, 9, 14], "uv": [95, 83]}
+					]
+				},
+				{
+					"name": "drbottom",
+					"parent": "Botttom",
+					"pivot": [0, 0, 0],
+					"cubes": [
+						{"origin": [-8, 0, -7], "size": [2, 9, 14], "uv": [13, 84]}
 					]
 				}
 			]
