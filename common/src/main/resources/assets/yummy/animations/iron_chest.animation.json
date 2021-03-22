@@ -3,7 +3,7 @@
 	"animations": {
 		"idle": {
 			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
+			"animation_length": 1,
 			"bones": {
 				"DoubleChest": {
 					"scale": {
@@ -14,18 +14,23 @@
 		},
 		"double_idle": {
 			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
+			"animation_length": 1,
 			"bones": {
 				"Chest": {
 					"scale": {
-						"vector": [0, 0, 0]
+						"vector": [0.1, 0.1, 0.1]
+					}
+				},
+				"DoubleChest": {
+					"position": {
+						"vector": [0, 49, 0]
 					}
 				}
 			}
 		},
 		"idle_open": {
 			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
+			"animation_length": 1,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -41,7 +46,7 @@
 		},
 		"double_idle_open": {
 			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
+			"animation_length": 1,
 			"bones": {
 				"DoubleChestTop": {
 					"rotation": {
@@ -52,13 +57,17 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"DoubleChest": {
+					"position": {
+						"vector": [0, 49, 0]
+					}
 				}
 			}
 		},
 		"open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -86,7 +95,6 @@
 		"close": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -115,7 +123,6 @@
 		"double_open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"DoubleChestTop": {
 					"rotation": {
@@ -132,6 +139,11 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"DoubleChest": {
+					"position": {
+						"vector": [0, 49, 0]
+					}
 				}
 			},
 			"sound_effects": {
@@ -143,7 +155,6 @@
 		"double_close": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"DoubleChestTop": {
 					"rotation": {
@@ -161,6 +172,11 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"DoubleChest": {
+					"position": {
+						"vector": [0, 49, 0]
+					}
 				}
 			},
 			"sound_effects": {
@@ -171,11 +187,11 @@
 		},
 		"vanish": {
 			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
+			"animation_length": 1,
 			"bones": {
 				"Chest": {
 					"scale": {
-						"vector": [0, 0, 0]
+						"vector": [0.01, 0.01, 0.01]
 					}
 				},
 				"DoubleChest": {

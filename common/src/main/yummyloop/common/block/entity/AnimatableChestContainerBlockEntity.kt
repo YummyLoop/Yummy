@@ -17,6 +17,7 @@ import software.bernie.geckolib3.core.manager.AnimationData
 import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
+import yummyloop.common.integration.gecko.isCurrentAnimation
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
@@ -25,7 +26,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     protected var playedSound = 0
     protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
     protected val animationController: AnimationController<*> by lazy {
-        AnimationController(this, "controller", 0F,
+        AnimationController(this, "controller", 1F,
             AnimationPredicate(this::openPredicate))
     }
 
@@ -46,34 +47,56 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     ChestType.LEFT -> isDoubleChest = 1
                     else -> isDoubleChest = 0
                 }
-            } catch (e: Exception) { }
+            } catch (e: Exception) {
+                //...
+            }
         }
 
         when (isDoubleChest) {
-            1 -> {
-                when (isOpen) {
-                    1 -> animationBuilder
+            1 -> when {
+                isOpen >= 2 -> {
+                    animationBuilder
+                        .addAnimation("double_idle_open", true)
+                }
+                isOpen == 1 -> {
+                    animationBuilder
                         .addAnimation("double_open", false)
                         .addAnimation("double_idle_open", true)
-                    0 -> animationBuilder
+                }
+                isOpen == 0 -> {
+                    animationBuilder
                         .addAnimation("double_close", false)
                         .addAnimation("double_idle", true)
-                    else -> animationBuilder.addAnimation("double_idle", true)
+                    if (animationController.isCurrentAnimation("double_idle")) {
+                        isOpen = -1
+                    }
                 }
-
+                else -> {
+                    animationBuilder.addAnimation("double_idle", true)
+                }
             }
+
             2 -> animationBuilder.addAnimation("vanish", true)
 
-            else -> {
-                when (isOpen) {
-                    1 -> animationBuilder
+            else -> when {
+                isOpen >= 2 -> {
+                    animationBuilder
+                        .addAnimation("idle_open", true)
+                }
+                isOpen == 1 -> {
+                    animationBuilder
                         .addAnimation("open", false)
                         .addAnimation("idle_open", true)
-                    0 -> animationBuilder
+                }
+                isOpen == 0 -> {
+                    animationBuilder
                         .addAnimation("close", false)
                         .addAnimation("idle", true)
-                    else -> animationBuilder.addAnimation("idle", true)
+                    if (animationController.isCurrentAnimation("idle")) {
+                        isOpen = -1
+                    }
                 }
+                else -> animationBuilder.addAnimation("idle", true)
             }
         }
 
