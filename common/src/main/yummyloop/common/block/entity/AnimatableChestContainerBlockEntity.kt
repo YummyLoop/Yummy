@@ -26,7 +26,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     protected var playedSound = 0
     protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
     protected val animationController: AnimationController<*> by lazy {
-        AnimationController(this, "controller", 1F,
+        AnimationController(this, "controller", 0F,
             AnimationPredicate(this::openPredicate))
     }
 
@@ -76,7 +76,9 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                 }
             }
 
-            2 -> animationBuilder.addAnimation("vanish", true)
+            2 -> {
+                animationBuilder.addAnimation("vanish", true)
+            }
 
             else -> when {
                 isOpen >= 2 -> {

@@ -7,8 +7,8 @@
 				"texture_width": 128,
 				"texture_height": 128,
 				"visible_bounds_width": 3,
-				"visible_bounds_height": 5,
-				"visible_bounds_offset": [0, -0.5, 0]
+				"visible_bounds_height": 2.5,
+				"visible_bounds_offset": [0, 0.75, 0]
 			},
 			"bones": [
 				{
@@ -18,9 +18,14 @@
 				{
 					"name": "Top",
 					"parent": "Chest",
-					"pivot": [0, 9, 7],
+					"pivot": [0, 9, 7]
+				},
+				{
+					"name": "mtop",
+					"parent": "Top",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, 9, -7], "size": [14, 5, 14], "uv": [0, 0]}
+						{"origin": [-7, 9, -7], "size": [13, 5, 14], "uv": [0, 0]}
 					]
 				},
 				{
@@ -32,44 +37,48 @@
 					]
 				},
 				{
-					"name": "Botttom",
-					"parent": "Chest",
-					"pivot": [0, 0, 0],
+					"name": "ctop",
+					"parent": "Top",
+					"pivot": [0, 9, 7],
 					"cubes": [
-						{"origin": [-7, 0, -7], "size": [14, 9, 14], "uv": [0, 20]}
+						{"origin": [6, 9, -7], "size": [1, 5, 14], "uv": [55, 0]}
 					]
 				},
 				{
-					"name": "DoubleChest",
+					"name": "dtop",
+					"parent": "Top",
+					"pivot": [7, 9, 7],
+					"cubes": [
+						{"origin": [6, 9, -7], "size": [17, 5, 14], "uv": [0, 44]}
+					]
+				},
+				{
+					"name": "Botttom",
+					"parent": "Chest",
 					"pivot": [0, 0, 0]
 				},
 				{
-					"name": "DoubleChestTop",
-					"parent": "DoubleChest",
-					"pivot": [8, -40, 7]
-				},
-				{
-					"name": "DoubleChestTopCover",
-					"parent": "DoubleChestTop",
-					"pivot": [8, -37.5, 0],
+					"name": "mbottom",
+					"parent": "Botttom",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, -40, -7], "size": [30, 5, 14], "uv": [0, 44]}
+						{"origin": [-7, 0, -7], "size": [13, 9, 14], "uv": [0, 20]}
 					]
 				},
 				{
-					"name": "DoubleChestLock",
-					"parent": "DoubleChestTop",
-					"pivot": [8, -39.5, -7.5],
+					"name": "cbottom",
+					"parent": "Botttom",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [7, -41.5, -8], "size": [2, 4, 1], "uv": [0, 0]}
+						{"origin": [6, 0, -7], "size": [1, 9, 14], "uv": [55, 20]}
 					]
 				},
 				{
-					"name": "DoubleChestBotttom",
-					"parent": "DoubleChest",
-					"pivot": [8, -44.5, 0],
+					"name": "dbottom",
+					"parent": "Botttom",
+					"pivot": [0, 0, 0],
 					"cubes": [
-						{"origin": [-7, -49, -7], "size": [30, 9, 14], "uv": [0, 64]}
+						{"origin": [6, 0, -7], "size": [17, 9, 14], "uv": [0, 64]}
 					]
 				}
 			]
