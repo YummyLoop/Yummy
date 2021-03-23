@@ -63,7 +63,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("double_close_right", false)
                         .addAnimation("double_idle_right", true)
-                    if (event.controller.isCurrentAnimation("double_idle_right")) {
+                    if (event.isCurrentAnimation("double_idle_right")) {
                         isOpen = -1
                     }
                 }
@@ -86,7 +86,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("double_close_left", false)
                         .addAnimation("double_idle_left", true)
-                    if (event.controller.isCurrentAnimation("double_idle_left")) {
+                    if (event.isCurrentAnimation("double_idle_left")) {
                         isOpen = -1
                     }
                 }
@@ -109,7 +109,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("close", false)
                         .addAnimation("idle", true)
-                    if (event.controller.isCurrentAnimation("idle")) {
+                    if (event.isCurrentAnimation("idle")) {
                         isOpen = -1
                     }
                 }
