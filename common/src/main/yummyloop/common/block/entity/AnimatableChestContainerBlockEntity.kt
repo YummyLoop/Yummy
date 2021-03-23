@@ -24,11 +24,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     LootableContainerBlockEntityImpl(type, size) {
     var isOpen = -1
     protected var playedSound = 0
-    protected val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
-    protected val animationController: AnimationController<*> by lazy {
-        AnimationController(this, "controller", 0F,
-            AnimationPredicate(this::openPredicate))
-    }
+    protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
 
     override fun getFactory(): AnimationFactory = this.animationFactory
 
@@ -67,7 +63,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("double_close_right", false)
                         .addAnimation("double_idle_right", true)
-                    if (animationController.isCurrentAnimation("double_idle_right")) {
+                    if (event.controller.isCurrentAnimation("double_idle_right")) {
                         isOpen = -1
                     }
                 }
@@ -90,7 +86,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("double_close_left", false)
                         .addAnimation("double_idle_left", true)
-                    if (animationController.isCurrentAnimation("double_idle_left")) {
+                    if (event.controller.isCurrentAnimation("double_idle_left")) {
                         isOpen = -1
                     }
                 }
@@ -113,7 +109,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                     animationBuilder
                         .addAnimation("close", false)
                         .addAnimation("idle", true)
-                    if (animationController.isCurrentAnimation("idle")) {
+                    if (event.controller.isCurrentAnimation("idle")) {
                         isOpen = -1
                     }
                 }
@@ -121,6 +117,8 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             }
         }
 
+
+        //event.controller.clearAnimationCache()
         event.controller.setAnimation(animationBuilder)
 
         return PlayState.CONTINUE
@@ -129,6 +127,18 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     /** Gecko sound event listener */
     protected fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : AnimatableChestContainerBlockEntity {
         val player: ClientPlayerEntity = MinecraftClient.getInstance().player!!
+        val world = event.entity.world
+
+        if (world != null) {
+            val pos = event.entity.pos
+            val state = world.getBlockState(pos)
+            try {
+                if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.RIGHT) return
+            } catch (e: Exception) {
+                //...
+            }
+        }
+
         when (isOpen) {
             1 -> {
                 if (playedSound != 1) player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
@@ -150,6 +160,12 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
 
     /** Gecko animation controller registry */
     override fun registerControllers(data: AnimationData) {
+        val animationController = AnimationController(
+            this,
+            "controller",
+            0F,
+            AnimationPredicate(this::openPredicate)
+        )
         animationController.registerSoundListener(SoundListener(::soundListener))
         data.addAnimationController(animationController)
     }

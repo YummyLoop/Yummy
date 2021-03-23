@@ -11,11 +11,7 @@ import yummyloop.common.item.AnimatableBlockItem
 
 open class DoubleChestItem(block: Block, settings: Settings) : AnimatableBlockItem(block, settings) {
 
-    protected val animationController: AnimationController<*> by lazy {
-        AnimationController(this, "controller", 0F, AnimationPredicate(this::predicate))
-    }
-
-    protected fun <P> predicate(event: AnimationEvent<P>): PlayState where P : DoubleChestItem {
+    protected open fun <P> predicate(event: AnimationEvent<P>): PlayState where P : DoubleChestItem {
         val animationBuilder = AnimationBuilder()
         animationBuilder.addAnimation("idle", true)
         event.controller.setAnimation(animationBuilder)
@@ -23,6 +19,13 @@ open class DoubleChestItem(block: Block, settings: Settings) : AnimatableBlockIt
     }
 
     override fun registerControllers(data: AnimationData) {
+        val animationController = AnimationController(
+            this,
+            "controller",
+            1F,
+            AnimationPredicate(this::predicate)
+        )
         data.addAnimationController(animationController)
+        animationController.markNeedsReload()
     }
 }

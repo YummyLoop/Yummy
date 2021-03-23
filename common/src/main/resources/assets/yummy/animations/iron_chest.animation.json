@@ -4,6 +4,7 @@
 		"idle": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"dltop": {
 					"scale": {
@@ -27,40 +28,10 @@
 				}
 			}
 		},
-		"double_idle_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"bones": {
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"crtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"crbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
 		"double_idle_right": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Lock": {
 					"position": {
@@ -84,12 +55,18 @@
 					"scale": {
 						"vector": [0, 0, 0]
 					}
+				},
+				"clbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
 				}
 			}
 		},
 		"idle_open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -118,9 +95,79 @@
 				}
 			}
 		},
+		"double_idle_left": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"override_previous_animation": true,
+			"bones": {
+				"Lock": {
+					"position": {
+						"vector": [8, 0, 0]
+					}
+				},
+				"crtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"crbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"double_idle_open_left": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"override_previous_animation": true,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					}
+				},
+				"Lock": {
+					"position": {
+						"vector": [8, 0, 0]
+					}
+				},
+				"crtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"crbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
 		"double_idle_open_right": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -160,6 +207,7 @@
 		"open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -199,9 +247,58 @@
 				}
 			}
 		},
+		"double_open_left": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"override_previous_animation": true,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-90, 0, 0],
+							"easing": "easeOutBack"
+						}
+					}
+				},
+				"Lock": {
+					"position": {
+						"vector": [8, 0, 0]
+					}
+				},
+				"crtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"crbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drtop": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				},
+				"drbottom": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "open_sound"
+				}
+			}
+		},
 		"double_open_right": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -252,6 +349,7 @@
 		"close": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -295,6 +393,7 @@
 		"double_close_left": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -343,6 +442,7 @@
 		"double_close_right": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
+			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
