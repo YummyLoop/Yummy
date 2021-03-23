@@ -23,6 +23,7 @@ import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
     LootableContainerBlockEntityImpl(type, size) {
     var isOpen = -1
+    private var first = true
     protected var playedSound = 0
     protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
 
@@ -47,6 +48,8 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
                 //...
             }
         }
+
+        if (!first) event.controller.transitionLengthTicks = 2.0 else first=false
 
         when (isDoubleChest) {
             2 -> when {
@@ -168,6 +171,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
         )
         animationController.registerSoundListener(SoundListener(::soundListener))
         data.addAnimationController(animationController)
+        animationController.markNeedsReload()
     }
 
     /** On Inventory Open*/
