@@ -9,6 +9,7 @@ import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestEntity
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestItem
+import yummyloop.yummy.content.chest.doubleChest.DoubleChestModel
 import yummyloop.yummy.content.chest.iron.IronChest
 import yummyloop.yummy.content.chest.iron.IronChestEntity
 import yummyloop.yummy.integration.geckolib.GeckoUtils
@@ -26,12 +27,11 @@ object Chest {
         GeckoUtils.Blocks.register(IronChestEntity.rType!!)
 
 
-
         chestBlock = GeckoUtils.Items.registerBlockItem("chest", {
             DoubleChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque())
         }, ::DoubleChestItem)
         DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
-        GeckoUtils.Blocks.register(DoubleChestEntity.rType!!)
+        GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel())
 
         // Screen stuff
         ChestScreenHandler.rType =

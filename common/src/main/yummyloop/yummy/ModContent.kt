@@ -37,7 +37,6 @@ import yummyloop.yummy.item.YtemGroup
 import yummyloop.yummy.item.baa.Ba
 import yummyloop.yummy.item.baa.BaHandler
 import yummyloop.yummy.item.baa.BaScreen
-import java.util.function.Supplier
 
 object ModContent {
     var EXAMPLE_ITEM =
@@ -164,14 +163,10 @@ object ModContent {
         object G1 {
             var armor = GeckoUtils.Items.registerArmor(
                 "potato_armor",
-                "_head" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, Ytem.Settings()) },
-                "_chestplate" to Supplier {
-                    PotatoArmor2(ArmorMaterials.DIAMOND,
-                        EquipmentSlot.CHEST,
-                        Ytem.Settings())
-                },
-                "_leggings" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, Ytem.Settings()) },
-                "_boots" to Supplier { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.FEET, Ytem.Settings()) },
+                "_head" to { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.HEAD, Ytem.Settings()) },
+                "_chestplate" to { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.CHEST, Ytem.Settings()) },
+                "_leggings" to { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.LEGS, Ytem.Settings()) },
+                "_boots" to { PotatoArmor2(ArmorMaterials.DIAMOND, EquipmentSlot.FEET, Ytem.Settings()) },
             )
         }
 

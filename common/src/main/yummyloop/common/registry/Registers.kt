@@ -102,24 +102,8 @@ class Registers(private val modId: String) {
      */
     fun block(
         blockId: String,
-        blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+        blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
     ): RegistrySupplier<Block> = blockRegister.register(blockId, blockSupplier)
-
-    /**
-     * Registers a new block and a corresponding item
-     *
-     * @param blockItemId Id of the block and item
-     * @param blockSupplier The supplier used to create the block
-     * @param itemSettings The item settings used to create the item
-     * @return A Pair of RegistrySuppliers for the block and item
-     */
-    fun blockItem(
-        blockItemId: String,
-        blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
-        itemSettings: Item.Settings = Ytem.Settings(),
-    ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
-        return blockItem(blockItemId, blockSupplier, ::BlockItem, itemSettings)
-    }
 
     /**
      * Registers a new block and a corresponding custom item
@@ -131,13 +115,27 @@ class Registers(private val modId: String) {
      */
     fun blockItem(
         blockItemId: String,
-        blockSupplier: Supplier<out Block> = Supplier { Block(BlockProperties.of(Material.SOIL)) },
+        blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
         blockItemSupplier: (Block, Item.Settings) -> BlockItem = ::BlockItem,
-        itemSettings: Item.Settings = Ytem.Settings(),
     ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
         val block = this.block(blockItemId, blockSupplier)
-        val item = this.item(blockItemId) { blockItemSupplier.invoke(block.get(), itemSettings) }
+        val item = this.item(blockItemId) { blockItemSupplier.invoke(block.get(), Ytem.Settings()) }
         return Pair(block, item)
+    }
+
+    /**
+     * Registers a new block and a corresponding item
+     *
+     * @param blockItemId Id of the block and item
+     * @param blockSupplier The supplier used to create the block
+     * @param itemSettings The item settings used to create the item
+     * @return A Pair of RegistrySuppliers for the block and item
+     */
+    fun blockItem(
+        blockItemId: String,
+        blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
+    ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
+        return blockItem(blockItemId, blockSupplier, ::BlockItem)
     }
 
     /**

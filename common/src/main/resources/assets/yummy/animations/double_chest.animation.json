@@ -1,0 +1,87 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"idle": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"idle_open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"vector": [-90, 0, 0]
+					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			}
+		},
+		"open": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"0.0": {
+							"vector": [0, 0, 0]
+						},
+						"1.0": {
+							"vector": [-90, 0, 0],
+							"easing": "easeInElastic"
+						}
+					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "open_sound"
+				}
+			}
+		},
+		"close": {
+			"loop": "hold_on_last_frame",
+			"animation_length": 1,
+			"bones": {
+				"Top": {
+					"rotation": {
+						"0.0": {
+							"vector": [-90, 0, 0]
+						},
+						"1.0": {
+							"vector": [0, 0, 0],
+							"easing": "easeInBounce",
+							"easingArgs": [0.1]
+						}
+					}
+				},
+				"DoubleChest": {
+					"scale": {
+						"vector": [0, 0, 0]
+					}
+				}
+			},
+			"sound_effects": {
+				"0.0": {
+					"effect": "close_sound"
+				}
+			}
+		}
+	}
+}

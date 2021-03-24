@@ -13,15 +13,12 @@ import net.minecraft.item.Item
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
-import yummyloop.common.block.entity.AnimatableBlockEntity
 import yummyloop.common.entity.AnimatableLivingEntity
 import yummyloop.common.item.AnimatableBlockItem
 import yummyloop.common.item.AnimatableItem
 import yummyloop.yummy.ExampleMod
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.item.Ytem
-import java.util.function.Supplier
-import kotlin.reflect.KFunction1
 
 object GeckoUtils {
     private const val MOD_ID = ExampleMod.MOD_ID
@@ -44,16 +41,14 @@ object GeckoUtils {
          *
          * @param itemID Base item name
          * @param itemFunc Constructor of the item Class
-         * @param itemSettings Pair of ItemName to append + the item settings for said item
          * @param model the item model
          */
         fun register(
             itemID: String,
-            itemFunc: KFunction1<Item.Settings, AnimatableItem>,
-            itemSettings: Item.Settings,
+            itemFunc: (Item.Settings) -> AnimatableItem,
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.item(MOD_ID, itemID),
         ): RegistrySupplier<Item> {
-            val myItem = Register.item(itemID) { itemFunc.invoke(geckoItemSettings(itemSettings, model)) }
+            val myItem = Register.item(itemID) { itemFunc.invoke(geckoItemSettings(Ytem.Settings(), model)) }
             geckoEntryList.add(Entry(GeckoType.Item, myItem, model))
             return myItem
         }
@@ -62,36 +57,27 @@ object GeckoUtils {
             blockItemId: String,
             blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
             blockItemSupplier: (Block, Item.Settings) -> AnimatableBlockItem = ::AnimatableBlockItem,
-            itemSettings: Item.Settings = Ytem.Settings(),
-            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
+            itemModel: AnimatedGeoModel<out AnimatableBlockItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
         ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
             val myBlockItem =
                 Register.blockItem(
                     blockItemId,
-                    blockSupplier,
-                    blockItemSupplier,
-                    geckoItemSettings(itemSettings, model)
-                )
-            geckoEntryList.add(Entry(GeckoType.Item, myBlockItem.second, model))
+                    blockSupplier
+                ) { block, settings ->
+                    blockItemSupplier(block,
+                        geckoItemSettings(settings, itemModel as AnimatedGeoModel<AnimatableItem>))
+                }
+
+            geckoEntryList.add(Entry(GeckoType.Item, myBlockItem.second, itemModel))
             return myBlockItem
         }
 
         fun registerBlockItem(
             blockItemId: String,
             blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
-            itemSettings: Item.Settings = Ytem.Settings(),
-            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
+            model: AnimatedGeoModel<out AnimatableBlockItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
         ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
-            return registerBlockItem(blockItemId, blockSupplier, ::AnimatableBlockItem, itemSettings, model)
-        }
-
-        fun registerBlockItem(
-            blockItemId: String,
-            blockSupplier: () -> Block = { Block(BlockProperties.of(Material.SOIL)) },
-            //itemSettings: Item.Settings = Ytem.Settings(),
-            model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.block(MOD_ID, blockItemId),
-        ): Pair<RegistrySupplier<Block>, RegistrySupplier<Item>> {
-            return registerBlockItem(blockItemId, blockSupplier, Ytem.Settings(), model)
+            return registerBlockItem(blockItemId, blockSupplier, ::AnimatableBlockItem, model)
         }
 
 
@@ -99,30 +85,28 @@ object GeckoUtils {
          * Registers a gecko Armor + their items with gecko renderers
          *
          * @param itemID Base item name
-         * @param itemFunc Constructor of the item Class
-         * @param itemSettings0 Pair of ItemName to append + the item settings for said item
-         * @param itemSettings1 Pair of ItemName to append + the item settings for said item
-         * @param itemSettings2 Pair of ItemName to append + the item settings for said item
-         * @param itemSettings3 Pair of ItemName to append + the item settings for said item
+         * @param item0 Pair of ItemName to append + the item
+         * @param item1 Pair of ItemName to append + the item
+         * @param item2 Pair of ItemName to append + the item
+         * @param item3 Pair of ItemName to append + the item
          * @param model the armor model
          */
-        fun registerArmor(
+        fun registerArmorWithItems(
             itemID: String,
-            itemFunc: KFunction1<Item.Settings, AnimatableItem>,
-            itemSettings0: Pair<String, Item.Settings>,
-            itemSettings1: Pair<String, Item.Settings>? = null,
-            itemSettings2: Pair<String, Item.Settings>? = null,
-            itemSettings3: Pair<String, Item.Settings>? = null,
+            item0: Pair<String, (Item.Settings) -> AnimatableItem>,
+            item1: Pair<String, (Item.Settings) -> AnimatableItem>? = null,
+            item2: Pair<String, (Item.Settings) -> AnimatableItem>? = null,
+            item3: Pair<String, (Item.Settings) -> AnimatableItem>? = null,
             model: AnimatedGeoModel<out AnimatableItem> = GeckoGenericModel.armor(MOD_ID, itemID),
         ): MutableList<RegistrySupplier<Item>> {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
-            myList.add(register(itemID + itemSettings0.first, itemFunc, itemSettings0.second, model))
-            if (itemSettings1 != null)
-                myList.add(register(itemID + itemSettings1.first, itemFunc, itemSettings1.second, model))
-            if (itemSettings2 != null)
-                myList.add(register(itemID + itemSettings2.first, itemFunc, itemSettings2.second, model))
-            if (itemSettings3 != null)
-                myList.add(register(itemID + itemSettings3.first, itemFunc, itemSettings3.second, model))
+            myList.add(register(itemID + item0.first, item0.second, model))
+            if (item1 != null)
+                myList.add(register(itemID + item1.first, item1.second, model))
+            if (item2 != null)
+                myList.add(register(itemID + item2.first, item2.second, model))
+            if (item3 != null)
+                myList.add(register(itemID + item3.first, item3.second, model))
 
             geckoEntryList.add(Entry(GeckoType.Armor, myList.first(), model))
             return myList
@@ -140,10 +124,10 @@ object GeckoUtils {
          */
         fun <T> registerArmor(
             itemID: String,
-            item0: Pair<String, Supplier<T>>,
-            item1: Pair<String, Supplier<T>>? = null,
-            item2: Pair<String, Supplier<T>>? = null,
-            item3: Pair<String, Supplier<T>>? = null,
+            item0: Pair<String, () -> T>,
+            item1: Pair<String, () -> T>? = null,
+            item2: Pair<String, () -> T>? = null,
+            item3: Pair<String, () -> T>? = null,
             model: AnimatedGeoModel<T> = GeckoGenericModel.armor(MOD_ID, itemID),
         ): MutableList<RegistrySupplier<Item>> where T : GeoArmorItem, T : IAnimatable {
             val myList: MutableList<RegistrySupplier<Item>> = mutableListOf()
@@ -167,12 +151,24 @@ object GeckoUtils {
          * @param blockEntityType the blockEntityType registrySupplier
          * @param model the Block Entity Model
          */
-        fun register(
+        fun <T> register(
             blockEntityType: RegistrySupplier<out BlockEntityType<out BlockEntity>>,
-            model: AnimatedGeoModel<out AnimatableBlockEntity> =
-                GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path),
-        ) {
+            model: AnimatedGeoModel<T>,
+        ) where T : BlockEntity, T : IAnimatable {
             geckoEntryList.add(Entry(GeckoType.Block, blockEntityType, model))
+        }
+
+        /**
+         * Registers a gecko Block Entity renderer for the [blockEntityType] with [model]
+         *
+         * @param blockEntityType the blockEntityType registrySupplier
+         */
+        fun register(
+            blockEntityType: RegistrySupplier<out BlockEntityType<out BlockEntity>>
+        ) {
+            geckoEntryList.add(Entry(GeckoType.Block, blockEntityType,
+                GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path)
+            ))
         }
     }
 

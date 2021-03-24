@@ -18,6 +18,7 @@ import software.bernie.geckolib3.core.manager.AnimationFactory
 import yummyloop.common.integration.gecko.AnimationPredicate
 import yummyloop.common.integration.gecko.SoundListener
 import yummyloop.common.integration.gecko.isCurrentAnimation
+import yummyloop.common.integration.gecko.setLoopingAnimation
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
@@ -25,6 +26,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     var isOpen = -1
     private var first = true
     protected var playedSound = 0
+    private var firstDouble = true
     protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
 
     override fun getFactory(): AnimationFactory = this.animationFactory
@@ -33,95 +35,56 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
     protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
         val animationBuilder = AnimationBuilder()
         val world = event.animatable.world
-        val pos = event.animatable.pos
-        var isDoubleChest = 0
 
         if (world != null) {
-            val state = world.getBlockState(pos)
+            val state = world.getBlockState(event.animatable.pos)
             try {
-                when (state.get(DoubleChestBlock.CHEST_TYPE)) {
-                    ChestType.RIGHT -> isDoubleChest = 2
-                    ChestType.LEFT -> isDoubleChest = 1
-                    else -> isDoubleChest = 0
+                if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.RIGHT) {
+                    /*if (firstDouble) {
+                        firstDouble = false
+                        //event.controller.clearAnimationCache()
+
+                    }*/
+                    event.setLoopingAnimation("idle")
+                    return PlayState.STOP
+                } else if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.LEFT) {
+                    /*if (firstDouble) {
+                        firstDouble = false
+                        //event.controller.clearAnimationCache()
+                        event.controller.markNeedsReload()
+                    }*/
+                } else {
+                    /*if (!firstDouble) {
+                        firstDouble = true
+                        //event.controller.clearAnimationCache()
+                        event.controller.markNeedsReload()
+                    }*/
                 }
             } catch (e: Exception) {
                 //...
             }
         }
 
-        if (!first) event.controller.transitionLengthTicks = 2.0 else first=false
+        if (!first) event.controller.transitionLengthTicks = 2.0 else first = false
 
-        when (isDoubleChest) {
-            2 -> when {
-                isOpen >= 2 -> {
-                    animationBuilder
-                        .addAnimation("double_idle_open_right", true)
-                }
-                isOpen == 1 -> {
-                    animationBuilder
-                        .addAnimation("double_open_right", false)
-                        .addAnimation("double_idle_open_right", true)
-                }
-                isOpen == 0 -> {
-                    animationBuilder
-                        .addAnimation("double_close_right", false)
-                        .addAnimation("double_idle_right", true)
-                    if (event.isCurrentAnimation("double_idle_right")) {
-                        isOpen = -1
-                    }
-                }
-                else -> {
-                    animationBuilder.addAnimation("double_idle_right", true)
+        when {
+            isOpen >= 1 -> {
+                animationBuilder
+                    .addAnimation("open", false)
+                    .addAnimation("idle_open", true)
+            }
+            isOpen == 0 -> {
+                animationBuilder
+                    .addAnimation("close", false)
+                    .addAnimation("idle", true)
+                if (event.isCurrentAnimation("idle")) {
+                    isOpen = -1
                 }
             }
-
-            1 -> when {
-                isOpen >= 2 -> {
-                    animationBuilder
-                        .addAnimation("double_idle_open_left", true)
-                }
-                isOpen == 1 -> {
-                    animationBuilder
-                        .addAnimation("double_open_left", false)
-                        .addAnimation("double_idle_open_left", true)
-                }
-                isOpen == 0 -> {
-                    animationBuilder
-                        .addAnimation("double_close_left", false)
-                        .addAnimation("double_idle_left", true)
-                    if (event.isCurrentAnimation("double_idle_left")) {
-                        isOpen = -1
-                    }
-                }
-                else -> {
-                    animationBuilder.addAnimation("double_idle_left", true)
-                }
-            }
-
-            else -> when {
-                isOpen >= 2 -> {
-                    animationBuilder
-                        .addAnimation("idle_open", true)
-                }
-                isOpen == 1 -> {
-                    animationBuilder
-                        .addAnimation("open", false)
-                        .addAnimation("idle_open", true)
-                }
-                isOpen == 0 -> {
-                    animationBuilder
-                        .addAnimation("close", false)
-                        .addAnimation("idle", true)
-                    if (event.isCurrentAnimation("idle")) {
-                        isOpen = -1
-                    }
-                }
-                else -> animationBuilder.addAnimation("idle", true)
-            }
+            else -> animationBuilder.addAnimation("idle", true)
         }
 
 
-        //event.controller.clearAnimationCache()
         event.controller.setAnimation(animationBuilder)
 
         return PlayState.CONTINUE
