@@ -26,57 +26,60 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
     )
 
     override fun getModelLocation(obj: DoubleChestEntity): Identifier {
-        val world = obj.world
-        if (world != null) {
-            val state = world.getBlockState(obj.pos)
-            try {
+        try {
+            val world = obj.world
+            if (world != null) {
+                val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
                     ChestType.RIGHT -> return Identifier(modId, empty.first)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.first)
                     else -> {
                     }
                 }
-            } catch (e: Exception) {
-                //...
             }
+        } catch (e: Exception) {
+            //...
         }
+
         return Identifier(modId, singleChest.first)
     }
 
     override fun getTextureLocation(obj: DoubleChestEntity): Identifier {
-        val world = obj.world
-        if (world != null) {
-            val state = world.getBlockState(obj.pos)
-            try {
+        try {
+            val world = obj.world
+            if (world != null) {
+                val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
                     ChestType.RIGHT -> return Identifier(modId, empty.second)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.second)
                     else -> {
                     }
                 }
-            } catch (e: Exception) {
-                //...
             }
+        } catch (e: Exception) {
+            //...
         }
+
         return Identifier(modId, singleChest.second)
     }
 
 
     override fun getAnimationFileLocation(obj: DoubleChestEntity): Identifier {
-        val world = obj.world
-        if (world != null) {
-            val state = world.getBlockState(obj.pos)
-            try {
+        try {
+            val world = obj.world
+            if (world != null) {
+                val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
                     ChestType.RIGHT -> return Identifier(modId, empty.third)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.third)
                     else -> {
                     }
                 }
-            } catch (e: Exception) {
-                //...
             }
+        } catch (e: Exception) {
+            //...
         }
+
         return Identifier(modId, singleChest.third)
     }
 }
