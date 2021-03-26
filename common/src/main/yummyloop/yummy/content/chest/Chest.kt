@@ -17,16 +17,24 @@ object Chest {
     init {
         //var chestItem = GeckoUtils.Items.register("chest2", ::ChestItem, Ytem.Settings())
 
-        val ironChest = GeckoUtils.Items.registerBlockItem("iron_chest", {
-            IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque())
-        }, ::ChestItem, ChestItemModel())
+        val ironChest =
+            GeckoUtils.Items.registerBlockItem(
+                "iron_chest",
+                { IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque()) },
+                ::ChestItem,
+                ChestItemModel()
+            )
         IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
         GeckoUtils.Blocks.register(IronChestEntity.rType!!, ChestModel())
 
 
-        chestBlock = GeckoUtils.Items.registerBlockItem("chest", {
-            DoubleChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque())
-        }, ::ChestItem, ChestItemModel())
+        chestBlock =
+            GeckoUtils.Items.registerBlockItem(
+                "chest",
+                { DoubleChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque()) },
+                ::ChestItem,
+                ChestItemModel()
+            )
         DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
         GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel())
 

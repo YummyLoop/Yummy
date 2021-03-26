@@ -35,8 +35,7 @@ import yummyloop.common.inventory.MergedInventory
 import yummyloop.common.network.packets.add
 
 open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable, InventoryProvider {
-    open val columns = 9
-    open val rows = 3
+    open val size = 27
 
     companion object {
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
@@ -179,7 +178,7 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         }
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity = DoubleChestEntity(columns, rows)
+    override fun createBlockEntity(world: BlockView?): BlockEntity = DoubleChestEntity(size)
 
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
 
@@ -217,9 +216,9 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
                 if (state.get(CHEST_TYPE) == ChestType.LEFT) {
-                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, 2 * rows) }
+                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(2 * size) }
                 } else {
-                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
+                    MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(size) }
                 }
             }
 

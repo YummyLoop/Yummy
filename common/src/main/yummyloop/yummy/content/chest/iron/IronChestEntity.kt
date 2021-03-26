@@ -6,8 +6,8 @@ import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import yummyloop.yummy.content.chest.singleChest.SingleChestEntity
 
-class IronChestEntity(columns: Int, rows: Int) : SingleChestEntity(rType!!.get(), columns, rows) {
-    constructor() : this(9, 6)
+class IronChestEntity(size: Int) : SingleChestEntity(rType!!.get(), size) {
+    constructor() : this(54)
 
     companion object {
         var rType: RegistrySupplier<BlockEntityType<IronChestEntity>>? = null

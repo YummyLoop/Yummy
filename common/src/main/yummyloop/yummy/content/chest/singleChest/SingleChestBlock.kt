@@ -30,8 +30,7 @@ import yummyloop.common.block.entity.LootableContainerBlockEntityImpl
 import yummyloop.common.network.packets.add
 
 open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable {
-    open val columns = 9
-    open val rows = 3
+    open val size = 27
 
     companion object {
         val FACING: DirectionProperty = HorizontalFacingBlock.FACING
@@ -120,7 +119,7 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         }
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity = SingleChestEntity(columns, rows)
+    override fun createBlockEntity(world: BlockView?): BlockEntity = SingleChestEntity(size)
 
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
 
@@ -138,7 +137,7 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             // return the blockEntity of this block casted to namedScreenHandlerFactory
             val screenHandlerFactory = state.createScreenHandlerFactory(world, pos)
             if (player is ServerPlayerEntity) {
-                MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(columns, rows) }
+                MenuRegistry.openExtendedMenu(player, screenHandlerFactory) { it.add(size) }
             }
 
             ActionResult.CONSUME

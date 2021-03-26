@@ -10,10 +10,9 @@ import yummyloop.common.screen.handler.ContainerScreenHandler
 
 class ChestScreenHandler(
     syncId: Int, playerInventory: PlayerInventory, buf: PacketByteBuf,
-    columns: Int = buf.readInt(),
-    rows: Int = buf.readInt(),
-    inventory: Inventory = SimpleInventory(columns * rows),
-) : ContainerScreenHandler(rType?.get()!!, syncId, playerInventory, buf, columns, rows, inventory) {
+    size: Int = buf.readInt(),
+    inventory: Inventory = SimpleInventory(size),
+) : ContainerScreenHandler(rType?.get()!!, syncId, playerInventory, buf, size, inventory) {
     
     companion object {
         var rType: RegistrySupplier<ScreenHandlerType<out ChestScreenHandler>>? = null

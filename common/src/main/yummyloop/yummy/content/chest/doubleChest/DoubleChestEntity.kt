@@ -7,22 +7,19 @@ import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.math.Direction
-import yummyloop.common.block.entity.AnimatableChestContainerBlockEntity
-import yummyloop.common.network.packets.PacketBuffer
-import yummyloop.common.network.packets.add
-import yummyloop.yummy.content.chest.ChestScreenHandler
 import yummyloop.common.inventory.MergedInventory
+import yummyloop.common.network.packets.PacketBuffer
+import yummyloop.yummy.content.chest.ChestScreenHandler
+import yummyloop.yummy.content.chest.singleChest.SingleChestEntity
 
 
-open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var rows: Int) :
-    AnimatableChestContainerBlockEntity(type, columns * rows), SidedInventory {
-    constructor(columns: Int, rows: Int) : this(rType!!.get(), columns, rows)
-    constructor() : this(9, 3)
+open class DoubleChestEntity(type: BlockEntityType<*>, size: Int) : SingleChestEntity(type, size), SidedInventory {
+    constructor(size: Int) : this(rType!!.get(), size)
+    constructor() : this(27)
 
     companion object {
         var rType: RegistrySupplier<BlockEntityType<DoubleChestEntity>>? = null
@@ -39,13 +36,12 @@ open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var row
             val doubleChestPos = pos!!.offset(DoubleChestBlock.getDoubleChestDirection(state))
             val mergedInventory = MergedInventory(this, world?.getBlockEntity(doubleChestPos) as Inventory)
             return ChestScreenHandler(syncId, playerInventory, PacketBuffer(),
-                columns,
-                2 * rows,
+                size * 2,
                 mergedInventory
             )
         }
 
-        return ChestScreenHandler(syncId, playerInventory, PacketBuffer(), columns, rows, this)
+        return super.createScreenHandler(syncId, playerInventory)
     }
 
     override fun getContainerName(): Text = TranslatableText(rType!!.id.toString())
@@ -54,7 +50,7 @@ open class DoubleChestEntity(type: BlockEntityType<*>, var columns: Int, var row
      * Gets the available slot positions that are reachable from a given side.
      */
     override fun getAvailableSlots(side: Direction?): IntArray {
-        return IntArray(this.size()){it}
+        return IntArray(this.size()) { it }
     }
 
     /**

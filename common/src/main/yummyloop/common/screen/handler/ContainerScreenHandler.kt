@@ -14,11 +14,11 @@ import yummyloop.common.screen.defaultTransferSlot
 abstract class ContainerScreenHandler(
     type: ScreenHandlerType<*>,
     syncId: Int, val playerInventory: PlayerInventory, buf: PacketByteBuf,
-    val columns: Int = buf.readInt(),
-    val rows: Int = buf.readInt(),
-    var inventory: Inventory = SimpleInventory(columns * rows),
+    val size: Int = buf.readInt(),
+    var inventory: Inventory = SimpleInventory(size),
 ) : ScreenHandler(type, syncId) {
-    protected val invSize: Int = columns * rows
+    val columns = 9
+    val rows = size / columns
     protected val slotSize: Int = 18
     protected val offsetY: Int = this.rows * slotSize
 
