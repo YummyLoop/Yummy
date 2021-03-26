@@ -14,6 +14,7 @@ import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
 import yummyloop.common.entity.AnimatableLivingEntity
+import yummyloop.common.integration.gecko.GeckoGenericModel
 import yummyloop.common.item.AnimatableBlockItem
 import yummyloop.common.item.AnimatableItem
 import yummyloop.yummy.ExampleMod
@@ -164,7 +165,7 @@ object GeckoUtils {
          * @param blockEntityType the blockEntityType registrySupplier
          */
         fun register(
-            blockEntityType: RegistrySupplier<out BlockEntityType<out BlockEntity>>
+            blockEntityType: RegistrySupplier<out BlockEntityType<out BlockEntity>>,
         ) {
             geckoEntryList.add(Entry(GeckoType.Block, blockEntityType,
                 GeckoGenericModel.block(blockEntityType.id.namespace, blockEntityType.id.path)

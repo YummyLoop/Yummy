@@ -4,59 +4,8 @@
 		"idle": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_right": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					},
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"clbottom": {
+				"DoubleChest": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -66,138 +15,13 @@
 		"idle_open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
 						"vector": [-90, 0, 0]
 					}
 				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"crtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"crbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_open_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"crtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"crbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			}
-		},
-		"double_idle_open_right": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"vector": [-90, 0, 0]
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					},
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"clbottom": {
+				"DoubleChest": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -207,7 +31,6 @@
 		"open": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -216,125 +39,11 @@
 						},
 						"1.0": {
 							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
+							"easing": "easeInElastic"
 						}
 					}
 				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "open_sound"
-				}
-			}
-		},
-		"double_open_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"crtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"crbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "open_sound"
-				}
-			}
-		},
-		"double_open_right": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [0, 0, 0]
-						},
-						"1.0": {
-							"vector": [-90, 0, 0],
-							"easing": "easeOutBack"
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					},
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"clbottom": {
+				"DoubleChest": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -349,7 +58,6 @@
 		"close": {
 			"loop": "hold_on_last_frame",
 			"animation_length": 1,
-			"override_previous_animation": true,
 			"bones": {
 				"Top": {
 					"rotation": {
@@ -363,22 +71,7 @@
 						}
 					}
 				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
+				"DoubleChest": {
 					"scale": {
 						"vector": [0, 0, 0]
 					}
@@ -387,118 +80,6 @@
 			"sound_effects": {
 				"0.0": {
 					"effect": "close_sound"
-				}
-			}
-		},
-		"double_close_left": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [-90, 0, 0]
-						},
-						"1.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeInBounce",
-							"easingArgs": [0.1]
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					}
-				},
-				"crtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"crbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drtop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"drbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "close_sound"
-				}
-			}
-		},
-		"double_close_right": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 1,
-			"override_previous_animation": true,
-			"bones": {
-				"Top": {
-					"rotation": {
-						"0.0": {
-							"vector": [-90, 0, 0]
-						},
-						"1.0": {
-							"vector": [0, 0, 0],
-							"easing": "easeInBounce",
-							"easingArgs": [0.1]
-						}
-					}
-				},
-				"Lock": {
-					"position": {
-						"vector": [8, 0, 0]
-					},
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"dlbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"cltop": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				},
-				"clbottom": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
-				}
-			},
-			"sound_effects": {
-				"0.0": {
-					"effect": "close_sound"
-				}
-			}
-		},
-		"vanish": {
-			"loop": "hold_on_last_frame",
-			"override_previous_animation": true,
-			"bones": {
-				"Chest": {
-					"scale": {
-						"vector": [0, 0, 0]
-					}
 				}
 			}
 		}

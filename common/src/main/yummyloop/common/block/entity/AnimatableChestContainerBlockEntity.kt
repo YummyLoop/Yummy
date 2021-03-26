@@ -24,9 +24,7 @@ import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
     LootableContainerBlockEntityImpl(type, size) {
     var isOpen = -1
-    private var first = true
     protected var playedSound = 0
-    private var firstDouble = true
     protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
 
     override fun getFactory(): AnimationFactory = this.animationFactory
@@ -40,39 +38,26 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             val state = world.getBlockState(event.animatable.pos)
             try {
                 if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.RIGHT) {
-                    /*if (firstDouble) {
-                        firstDouble = false
-                        //event.controller.clearAnimationCache()
-
-                    }*/
                     event.setLoopingAnimation("idle")
                     return PlayState.STOP
-                } else if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.LEFT) {
-                    /*if (firstDouble) {
-                        firstDouble = false
-                        //event.controller.clearAnimationCache()
-                        event.controller.markNeedsReload()
-                    }*/
-                } else {
-                    /*if (!firstDouble) {
-                        firstDouble = true
-                        //event.controller.clearAnimationCache()
-                        event.controller.markNeedsReload()
-                    }*/
                 }
             } catch (e: Exception) {
                 //...
             }
         }
 
-        if (!first) event.controller.transitionLengthTicks = 2.0 else first = false
-
         when {
             isOpen >= 1 -> {
-                animationBuilder
-                    .addAnimation("open", false)
-                    .addAnimation("idle_open", true)
+                if (event.isCurrentAnimation("idle_open")) {
+                    animationBuilder
+                        .addAnimation("idle_open", true)
+                } else {
+                    animationBuilder
+                        .addAnimation("open", false)
+                        .addAnimation("idle_open", true)
+                }
             }
+
             isOpen == 0 -> {
                 animationBuilder
                     .addAnimation("close", false)
@@ -103,23 +88,23 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             } catch (e: Exception) {
                 //...
             }
-        }
 
-        when (isOpen) {
-            1 -> {
-                if (playedSound != 1) player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
-                    0.5F,
-                    0.9F + 0.1F * this.world!!.random.nextFloat())
-                playedSound = 1
-            }
-            0 -> {
-                if (playedSound != 2) player.playSound(SoundEvents.BLOCK_CHEST_CLOSE,
-                    0.5F,
-                    0.9F + 0.1F * this.world!!.random.nextFloat())
-                playedSound = 2
-            }
-            else -> {
-                playedSound = 0
+            when (isOpen) {
+                1 -> {
+                    if (playedSound != 1) player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
+                        0.5F,
+                        0.9F + 0.1F * world.random.nextFloat())
+                    playedSound = 1
+                }
+                0 -> {
+                    if (playedSound != 2) player.playSound(SoundEvents.BLOCK_CHEST_CLOSE,
+                        0.5F,
+                        0.9F + 0.1F * world.random.nextFloat())
+                    playedSound = 2
+                }
+                else -> {
+                    playedSound = 0
+                }
             }
         }
     }
@@ -134,7 +119,7 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
         )
         animationController.registerSoundListener(SoundListener(::soundListener))
         data.addAnimationController(animationController)
-        animationController.markNeedsReload()
+        //animationController.markNeedsReload()
     }
 
     /** On Inventory Open*/

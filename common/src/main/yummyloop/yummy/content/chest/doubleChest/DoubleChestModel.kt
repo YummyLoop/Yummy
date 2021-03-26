@@ -2,27 +2,21 @@ package yummyloop.yummy.content.chest.doubleChest
 
 import net.minecraft.block.enums.ChestType
 import net.minecraft.util.Identifier
-import software.bernie.geckolib3.model.AnimatedGeoModel
-import yummyloop.yummy.ExampleMod
 
-class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
-    private val modId = ExampleMod.MOD_ID
-    private val singleChest = Triple(
-        "geo/single_chest.geo.json",
-        "textures/block/single_chest.png",
-        "animations/single_chest.animation.json"
-    )
+class DoubleChestModel(textureName: String = "chest") : AbstractChestModel<DoubleChestEntity>(textureName) {
+
+    companion object {
+        private val placebo = Triple(
+            "geo/placebo.geo.json",
+            "textures/block/placebo.png",
+            "animations/placebo.animation.json"
+        )
+    }
 
     private val doubleChest = Triple(
-        "geo/double_chest.geo.json",
-        "textures/block/double_chest.png",
-        "animations/double_chest.animation.json"
-    )
-
-    private val empty = Triple(
-        "geo/empty.geo.json",
-        "textures/block/empty.png",
-        "animations/empty.animation.json"
+        "geo/chest_double.geo.json",
+        "textures/block/${textureName}_double.png",
+        "animations/chest_double.animation.json"
     )
 
     override fun getModelLocation(obj: DoubleChestEntity): Identifier {
@@ -31,7 +25,7 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             if (world != null) {
                 val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
-                    ChestType.RIGHT -> return Identifier(modId, empty.first)
+                    ChestType.RIGHT -> return Identifier(modId, placebo.first)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.first)
                     else -> {
                     }
@@ -41,7 +35,7 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             //...
         }
 
-        return Identifier(modId, singleChest.first)
+        return super.getModelLocation(obj)
     }
 
     override fun getTextureLocation(obj: DoubleChestEntity): Identifier {
@@ -50,7 +44,7 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             if (world != null) {
                 val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
-                    ChestType.RIGHT -> return Identifier(modId, empty.second)
+                    ChestType.RIGHT -> return Identifier(modId, placebo.second)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.second)
                     else -> {
                     }
@@ -60,7 +54,7 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             //...
         }
 
-        return Identifier(modId, singleChest.second)
+        return super.getTextureLocation(obj)
     }
 
 
@@ -70,7 +64,7 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             if (world != null) {
                 val state = world.getBlockState(obj.pos)
                 when (state.get(DoubleChestBlock.CHEST_TYPE)) {
-                    ChestType.RIGHT -> return Identifier(modId, empty.third)
+                    ChestType.RIGHT -> return Identifier(modId, placebo.third)
                     ChestType.LEFT -> return Identifier(modId, doubleChest.third)
                     else -> {
                     }
@@ -80,6 +74,6 @@ class DoubleChestModel : AnimatedGeoModel<DoubleChestEntity>() {
             //...
         }
 
-        return Identifier(modId, singleChest.third)
+        return super.getAnimationFileLocation(obj)
     }
 }

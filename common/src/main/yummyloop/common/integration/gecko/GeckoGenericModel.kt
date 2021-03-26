@@ -1,4 +1,4 @@
-package yummyloop.yummy.integration.geckolib
+package yummyloop.common.integration.gecko
 
 import net.minecraft.util.Identifier
 import software.bernie.geckolib3.core.IAnimatable

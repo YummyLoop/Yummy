@@ -20,6 +20,7 @@ import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import yummyloop.common.client.screen.addWidget
+import yummyloop.common.integration.gecko.GeckoGenericModel
 import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.test.event.Eve
 import yummyloop.test.geckolib.GeoExampleEntity2
@@ -30,7 +31,6 @@ import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.ExampleMod.Register
 import yummyloop.yummy.client.ToolTipPreview
 import yummyloop.yummy.content.chest.Chest
-import yummyloop.yummy.integration.geckolib.GeckoGenericModel
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.item.Ytem
 import yummyloop.yummy.item.YtemGroup
