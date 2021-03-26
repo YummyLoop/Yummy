@@ -3,7 +3,7 @@ package yummyloop.yummy.content.chest.doubleChest
 import net.minecraft.block.enums.ChestType
 import net.minecraft.util.Identifier
 
-class DoubleChestModel(textureName: String = "chest") : AbstractChestModel<DoubleChestEntity>(textureName) {
+class DoubleChestModel(textureName: String) : AbstractChestModel<DoubleChestEntity>(textureName) {
 
     companion object {
         private val placebo = Triple(
@@ -11,6 +11,8 @@ class DoubleChestModel(textureName: String = "chest") : AbstractChestModel<Doubl
             "textures/block/placebo.png",
             "animations/placebo.animation.json"
         )
+
+        val DEFAULT by lazy { DoubleChestModel("chest") }
     }
 
     private val doubleChest = Triple(

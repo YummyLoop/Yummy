@@ -25,7 +25,7 @@ object Chest {
                 ChestItemModel()
             )
         IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
-        GeckoUtils.Blocks.register(IronChestEntity.rType!!, ChestModel())
+        GeckoUtils.Blocks.register(IronChestEntity.rType!!, ChestModel.DEFAULT)
 
 
         chestBlock =
@@ -36,7 +36,7 @@ object Chest {
                 ChestItemModel()
             )
         DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
-        GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel())
+        GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel.DEFAULT)
 
         // Screen stuff
         ChestScreenHandler.rType =
