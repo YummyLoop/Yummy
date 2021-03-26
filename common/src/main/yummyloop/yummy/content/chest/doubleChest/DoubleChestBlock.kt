@@ -66,16 +66,21 @@ open class DoubleChestBlock(settings: Settings) : SingleChestBlock(settings), In
         if (ctx.shouldCancelInteraction()) {
             //if Player is placing the block while point to the side of a block
             if (sideDirection.axis.isHorizontal) {
-                val neighborChestDirection: Direction? = this.getNeighborChestDirection(ctx, sideDirection.opposite)
+                val neighborChestFacingDirection: Direction? =
+                    this.getNeighborChestDirection(ctx, sideDirection.opposite)
                 // if there a chest in the pointing direction
-                if (neighborChestDirection != null) {
+                if (neighborChestFacingDirection != null) {
                     // if the block is not facing or against the player/pointing direction (is sideways)
-                    if (neighborChestDirection.axis !== sideDirection.axis) {
-                        facingDirection = neighborChestDirection
-                        if (neighborChestDirection.rotateYCounterclockwise() == sideDirection.opposite) {
-                            chestType = ChestType.LEFT
-                        } else {
-                            chestType = ChestType.RIGHT
+                    if (neighborChestFacingDirection.axis !== sideDirection.axis) {
+                        facingDirection = neighborChestFacingDirection
+                        val neighborState = ctx.world.getBlockState(ctx.blockPos.offset(sideDirection.opposite))
+                        // if the neighbor chest is of type single
+                        if (neighborState.get(CHEST_TYPE) == ChestType.SINGLE) {
+                            if (neighborChestFacingDirection.rotateYCounterclockwise() == sideDirection.opposite) {
+                                chestType = ChestType.LEFT
+                            } else {
+                                chestType = ChestType.RIGHT
+                            }
                         }
                     }
                 }
@@ -83,13 +88,21 @@ open class DoubleChestBlock(settings: Settings) : SingleChestBlock(settings), In
         } else {
             if (chestType == ChestType.SINGLE) {
                 // if the chest at the left is facing the same direction
-                if (facingDirection == this.getNeighborChestDirection(ctx, facingDirection.rotateYClockwise())) {
-                    chestType = ChestType.RIGHT
-                } else {
-                    // if the chest at the right is facing the same direction
-                    if (facingDirection == this.getNeighborChestDirection(ctx,
-                            facingDirection.rotateYCounterclockwise())
-                    ) {
+                var neighborFacingDirection = this.getNeighborChestDirection(ctx, facingDirection.rotateYClockwise())
+                if (facingDirection == neighborFacingDirection) {
+                    val neighborState = ctx.world.getBlockState(ctx.blockPos.offset(facingDirection.rotateYClockwise()))
+                    // if the neighbor chest is of type single
+                    if (neighborState.get(CHEST_TYPE) == ChestType.SINGLE) {
+                        chestType = ChestType.RIGHT
+                    }
+                }
+                // if the chest at the right is facing the same direction
+                neighborFacingDirection = this.getNeighborChestDirection(ctx, facingDirection.rotateYCounterclockwise())
+                if (facingDirection == neighborFacingDirection) {
+                    val neighborState =
+                        ctx.world.getBlockState(ctx.blockPos.offset(facingDirection.rotateYCounterclockwise()))
+                    // if the neighbor chest is of type single
+                    if (neighborState.get(CHEST_TYPE) == ChestType.SINGLE) {
                         chestType = ChestType.LEFT
                     }
                 }

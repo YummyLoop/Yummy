@@ -13,6 +13,8 @@ class DoubleChestModel private constructor(textureName: String) : AbstractChestM
         )
 
         val DEFAULT by lazy { DoubleChestModel("chest") }
+        val STONE by lazy { DoubleChestModel("chest_stone") }
+        val IRON by lazy { DoubleChestModel("chest_iron") }
     }
 
     private val doubleChest = Triple(
