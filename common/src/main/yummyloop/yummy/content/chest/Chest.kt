@@ -22,7 +22,7 @@ object Chest {
                 "iron_chest",
                 { IronChest(BlockProperties.of(Material.METAL).strength(1F).nonOpaque()) },
                 ::ChestItem,
-                ChestItemModel()
+                ChestItemModel.DEFAULT
             )
         IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
         GeckoUtils.Blocks.register(IronChestEntity.rType!!, ChestModel.DEFAULT)
@@ -33,7 +33,7 @@ object Chest {
                 "chest",
                 { DoubleChestBlock(BlockProperties.of(Material.STONE).strength(1F).nonOpaque()) },
                 ::ChestItem,
-                ChestItemModel()
+                ChestItemModel.DEFAULT
             )
         DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
         GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel.DEFAULT)
