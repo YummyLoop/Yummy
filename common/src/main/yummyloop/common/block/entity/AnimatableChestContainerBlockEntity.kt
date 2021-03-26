@@ -4,7 +4,6 @@ import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.enums.ChestType
 import net.minecraft.client.MinecraftClient
-import net.minecraft.client.network.ClientPlayerEntity
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundEvents
 import software.bernie.geckolib3.core.IAnimatable
@@ -20,23 +19,25 @@ import yummyloop.common.integration.gecko.SoundListener
 import yummyloop.common.integration.gecko.isCurrentAnimation
 import yummyloop.common.integration.gecko.setLoopingAnimation
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
+import yummyloop.yummy.content.chest.doubleChest.DoubleChestEntity
 
 abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
     LootableContainerBlockEntityImpl(type, size) {
     var isOpen = -1
-    protected var playedSound = 0
+    private var playedSound = 0
     protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }
 
     override fun getFactory(): AnimationFactory = this.animationFactory
 
     /** Gecko animation predicate */
-    protected fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
-        val animationBuilder = AnimationBuilder()
+    private fun <P> openPredicate(event: AnimationEvent<P>): PlayState where P : AnimatableChestContainerBlockEntity {
         val world = event.animatable.world
 
         if (world != null) {
+            val animationBuilder = AnimationBuilder()
             val state = world.getBlockState(event.animatable.pos)
-            try {
+
+            if (event.animatable is DoubleChestEntity) try {
                 if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.RIGHT) {
                     event.setLoopingAnimation("idle")
                     return PlayState.STOP
@@ -44,67 +45,52 @@ abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, siz
             } catch (e: Exception) {
                 //...
             }
-        }
 
-        when {
-            isOpen >= 1 -> {
-                if (event.isCurrentAnimation("idle_open")) {
-                    animationBuilder
-                        .addAnimation("idle_open", true)
-                } else {
-                    animationBuilder
-                        .addAnimation("open", false)
-                        .addAnimation("idle_open", true)
+            when {
+                isOpen >= 1 -> {
+                    if (event.isCurrentAnimation("idle_open")) {
+                        animationBuilder
+                            .addAnimation("idle_open", true)
+                    } else {
+                        animationBuilder
+                            .addAnimation("open", false)
+                            .addAnimation("idle_open", true)
+                    }
                 }
+
+                isOpen == 0 -> {
+                    animationBuilder
+                        .addAnimation("close", false)
+                        .addAnimation("idle", true)
+                    if (event.isCurrentAnimation("idle")) {
+                        isOpen = -1
+                    }
+                }
+                else -> animationBuilder.addAnimation("idle", true)
             }
 
-            isOpen == 0 -> {
-                animationBuilder
-                    .addAnimation("close", false)
-                    .addAnimation("idle", true)
-                if (event.isCurrentAnimation("idle")) {
-                    isOpen = -1
-                }
-            }
-            else -> animationBuilder.addAnimation("idle", true)
+            event.controller.setAnimation(animationBuilder)
         }
-
-
-        event.controller.setAnimation(animationBuilder)
 
         return PlayState.CONTINUE
     }
 
     /** Gecko sound event listener */
-    protected fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : AnimatableChestContainerBlockEntity {
-        val player: ClientPlayerEntity = MinecraftClient.getInstance().player!!
+    private fun <E> soundListener(event: SoundKeyframeEvent<E>) where E : AnimatableChestContainerBlockEntity {
+        val player = MinecraftClient.getInstance().player
         val world = event.entity.world
 
-        if (world != null) {
-            val pos = event.entity.pos
-            val state = world.getBlockState(pos)
-            try {
-                if (state.get(DoubleChestBlock.CHEST_TYPE) == ChestType.RIGHT) return
-            } catch (e: Exception) {
-                //...
-            }
-
-            when (isOpen) {
-                1 -> {
-                    if (playedSound != 1) player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
-                        0.5F,
-                        0.9F + 0.1F * world.random.nextFloat())
-                    playedSound = 1
-                }
-                0 -> {
-                    if (playedSound != 2) player.playSound(SoundEvents.BLOCK_CHEST_CLOSE,
-                        0.5F,
-                        0.9F + 0.1F * world.random.nextFloat())
-                    playedSound = 2
-                }
-                else -> {
-                    playedSound = 0
-                }
+        if (world != null && player != null) {
+            if (event.sound == "open_sound" && playedSound != 1) {
+                player.playSound(SoundEvents.BLOCK_CHEST_OPEN,
+                    0.5F,
+                    0.9F + 0.1F * world.random.nextFloat())
+                playedSound = 1
+            } else if (event.sound == "close_sound" && playedSound != 2) {
+                player.playSound(SoundEvents.BLOCK_CHEST_CLOSE,
+                    0.5F,
+                    0.9F + 0.1F * world.random.nextFloat())
+                playedSound = 2
             }
         }
     }

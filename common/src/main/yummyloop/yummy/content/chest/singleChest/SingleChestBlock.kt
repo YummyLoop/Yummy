@@ -72,7 +72,7 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             .with(WATERLOGGED, fluidState.fluid == Fluids.WATER)
     }
 
-    private fun getNeighborChestDirection(ctx: ItemPlacementContext, dir: Direction): Direction? {
+    protected fun getNeighborChestDirection(ctx: ItemPlacementContext, dir: Direction): Direction? {
         val sideBlockState = ctx.world.getBlockState(ctx.blockPos.offset(dir))
 
         if (sideBlockState.isOf(this)) {
@@ -109,7 +109,7 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         return if (state.get(WATERLOGGED) as Boolean) Fluids.WATER.getStill(false) else super.getFluidState(state)
     }
 
-    override fun getOutlineShape(state: BlockState, view: BlockView?, pos: BlockPos?, ctx: ShapeContext?): VoxelShape {
+    override fun getOutlineShape(state: BlockState, view: BlockView, pos: BlockPos, ctx: ShapeContext): VoxelShape {
         return when (state[FACING]) {
             Direction.NORTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
             Direction.SOUTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
@@ -164,8 +164,8 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
 
     override fun hasComparatorOutput(state: BlockState?): Boolean = true
 
-    override fun getComparatorOutput(state: BlockState?, world: World?, pos: BlockPos?): Int {
-        val blockEntity = world!!.getBlockEntity(pos)
+    override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
+        val blockEntity = world.getBlockEntity(pos)
         return if (blockEntity is Inventory) {
             ScreenHandler.calculateComparatorOutput(blockEntity as Inventory)
         } else ScreenHandler.calculateComparatorOutput(null as Inventory?)

@@ -5,7 +5,7 @@ import net.minecraft.inventory.SimpleInventory
 
 open class MergedInventory(vararg inventories: Inventory) : IMergedInventory {
 
-    override val inventoryList = inventories.toMutableList()
+    final override val inventoryList = inventories.toMutableList()
 
     init {
         if (inventoryList.isEmpty()) inventoryList.add(SimpleInventory(1))

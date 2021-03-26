@@ -1,13 +1,13 @@
 package yummyloop.yummy.content.chest.doubleChest
 
 import me.shedaniel.architectury.registry.MenuRegistry
-import net.minecraft.block.*
+import net.minecraft.block.Block
+import net.minecraft.block.BlockState
+import net.minecraft.block.InventoryProvider
+import net.minecraft.block.ShapeContext
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.enums.ChestType
-import net.minecraft.entity.LivingEntity
-import net.minecraft.entity.ai.pathing.NavigationType
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.fluid.FluidState
 import net.minecraft.fluid.Fluids
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SidedInventory
@@ -16,11 +16,10 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.state.StateManager
-import net.minecraft.state.property.BooleanProperty
-import net.minecraft.state.property.DirectionProperty
 import net.minecraft.state.property.EnumProperty
 import net.minecraft.state.property.Properties
-import net.minecraft.util.*
+import net.minecraft.util.ActionResult
+import net.minecraft.util.Hand
 import net.minecraft.util.hit.BlockHitResult
 import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
@@ -30,16 +29,14 @@ import net.minecraft.util.shape.VoxelShapes
 import net.minecraft.world.BlockView
 import net.minecraft.world.World
 import net.minecraft.world.WorldAccess
-import yummyloop.common.block.entity.LootableContainerBlockEntityImpl
 import yummyloop.common.inventory.MergedInventory
 import yummyloop.common.network.packets.add
+import yummyloop.yummy.content.chest.singleChest.SingleChestBlock
 
-open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Waterloggable, InventoryProvider {
-    open val size = 27
+open class DoubleChestBlock(settings: Settings) : SingleChestBlock(settings), InventoryProvider {
+    override val size = 27
 
     companion object {
-        val FACING: DirectionProperty = HorizontalFacingBlock.FACING
-        val WATERLOGGED: BooleanProperty = Properties.WATERLOGGED
         var CHEST_TYPE: EnumProperty<ChestType> = Properties.CHEST_TYPE
 
         fun getDoubleChestDirection(state: BlockState): Direction {
@@ -105,17 +102,6 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             .with(CHEST_TYPE, chestType)
     }
 
-    private fun getNeighborChestDirection(ctx: ItemPlacementContext, dir: Direction): Direction? {
-        val sideBlockState = ctx.world.getBlockState(ctx.blockPos.offset(dir))
-
-        if (sideBlockState.isOf(this)) {
-            if (sideBlockState.get(CHEST_TYPE) == ChestType.SINGLE) {
-                return sideBlockState.get(FACING)
-            }
-        }
-        return null
-    }
-
     /** Update this block when the neighbor changes*/
     override fun getStateForNeighborUpdate(
         state: BlockState,
@@ -156,18 +142,6 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         return super.getStateForNeighborUpdate(state, direction, neighborState, world, pos, posFrom)
     }
 
-    override fun rotate(state: BlockState, rotation: BlockRotation): BlockState? {
-        return state.with(FACING, rotation.rotate(state.get(FACING) as Direction)) as BlockState
-    }
-
-    override fun mirror(state: BlockState, mirror: BlockMirror): BlockState? {
-        return state.rotate(mirror.getRotation(state.get(FACING) as Direction))
-    }
-
-    override fun getFluidState(state: BlockState): FluidState? {
-        return if (state.get(WATERLOGGED) as Boolean) Fluids.WATER.getStill(false) else super.getFluidState(state)
-    }
-
     override fun getOutlineShape(state: BlockState, view: BlockView, pos: BlockPos, ctx: ShapeContext): VoxelShape {
         return when (state[FACING]) {
             Direction.NORTH -> Block.createCuboidShape(1.0, 0.0, 1.0, 15.0, 14.0, 15.0)
@@ -179,9 +153,6 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
     }
 
     override fun createBlockEntity(world: BlockView?): BlockEntity = DoubleChestEntity(size)
-
-    override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
-
 
     override fun onUse(
         state: BlockState,
@@ -226,26 +197,6 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
         }
     }
 
-    /** On break, replace, ... */
-    override fun onStateReplaced(
-        state: BlockState,
-        world: World,
-        pos: BlockPos?,
-        newState: BlockState,
-        moved: Boolean,
-    ) {
-        if (!state.isOf(newState.block)) {
-            val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is Inventory) {
-                ItemScatterer.spawn(world, pos, blockEntity)
-                world.updateComparators(pos, this)
-            }
-            super.onStateReplaced(state, world, pos, newState, moved)
-        }
-    }
-
-    override fun hasComparatorOutput(state: BlockState?): Boolean = true
-
     override fun getComparatorOutput(state: BlockState, world: World, pos: BlockPos): Int {
         val chestType = state.get(CHEST_TYPE)
         if (chestType == ChestType.LEFT || chestType == ChestType.RIGHT) {
@@ -255,28 +206,6 @@ open class DoubleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             )
         } else {
             return ScreenHandler.calculateComparatorOutput(world.getBlockEntity(pos) as Inventory)
-        }
-    }
-
-    override fun canPathfindThrough(
-        state: BlockState?,
-        world: BlockView?,
-        pos: BlockPos?,
-        type: NavigationType?,
-    ): Boolean {
-        return false
-    }
-
-    override fun onPlaced(
-        world: World,
-        pos: BlockPos?,
-        state: BlockState?,
-        placer: LivingEntity?,
-        itemStack: ItemStack,
-    ) {
-        if (itemStack.hasCustomName()) {
-            val blockEntity = world.getBlockEntity(pos)
-            if (blockEntity is LootableContainerBlockEntityImpl) blockEntity.customName = itemStack.name
         }
     }
 
