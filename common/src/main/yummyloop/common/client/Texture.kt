@@ -8,5 +8,7 @@ data class Texture(
     val xSize: Int = 256,
     val ySize: Int = 256,
 ) {
+    constructor(namespace: String, path: String, size: Int) : this(namespace, path, size, size)
+
     fun get() = Identifier(namespace, path)
 }

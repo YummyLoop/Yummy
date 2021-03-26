@@ -68,7 +68,7 @@ object ToolTipPreview {
         private var invSize: Int = 1
         private var itemToolTipFilter: Regex = Regex("shulker_box")
         private var toolTipFilter: Regex = Regex("minecraft|shulkerBox")
-        private var backgroundTexture: Texture = Texture("yummy", "textures/gui/grid.png", 300, 300)
+        private var backgroundTexture: Texture = Texture("yummy", "textures/gui/grid.png", 512)
         private var tooltipOffsetX = 0
         private var tooltipOffsetY = 0
         private var enderInventoryTag = CompoundTag()

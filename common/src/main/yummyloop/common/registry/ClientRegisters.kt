@@ -67,7 +67,7 @@ class ClientRegisters(private val modId: String) {
 
     /**
      * Registers a texture,
-     * the location is of the format: "textures/$path.png"
+     * the location is of the format: "textures/${path}.png"
      *
      * @param path The path to the texture
      * @param xSize texture x axis size
@@ -82,6 +82,19 @@ class ClientRegisters(private val modId: String) {
             }
         }
         return Texture(modId, "textures/$path.png", xSize, ySize)
+    }
+
+    /**
+     * Registers a texture,
+     * the location is of the format: "textures/${path}.png"
+     *
+     * @param path The path to the texture
+     * @param size texture x & y axis size
+     * @return returns a Texture data class
+     * @see Texture
+     */
+    fun texture(path: String, size: Int): Texture {
+        return texture(path, size, size)
     }
 
     /**

@@ -45,7 +45,7 @@ object ModContent {
     var ba = Register.item("ba") { Ba() }
 
     init {
-        Register.client.texture("gui/grid")
+        Register.client.texture("gui/grid", 512)
         Register.client.texture("gui/9x9")
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler) { ::BaScreen }
