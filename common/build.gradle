@@ -1,10 +1,11 @@
 dependencies {
     // Remove the next line if you don't want to depend on the API
-    modCompile "me.shedaniel:architectury:${rootProject.architectury_version}"
+    modApi "me.shedaniel:architectury:${rootProject.architectury_version}"
+    //modApi "dev.architectury:architectury:${rootProject.architectury_version}"
     compileOnly "com.google.code.findbugs:jsr305:3.+"
     // We depend on fabric loader here to use the fabric @Environment annotations
     // Do NOT use other classes from fabric loader
-    modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
 
     // Extra dependencies
     modImplementation "me.shedaniel.cloth:cloth-config:${rootProject.cloth_config_version}"
@@ -14,4 +15,10 @@ dependencies {
 
 }
 
-architectury { common() }
+architectury {
+    common(true) //forgeEnabled
+}
+
+java {
+    withSourcesJar()
+}

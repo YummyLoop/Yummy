@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin"
-    id "forgified-fabric-loom" apply false
+    id "dev.architectury.loom" apply false
     id "org.jetbrains.kotlin.jvm"
     id "org.jetbrains.kotlin.plugin.serialization"
     id "com.github.johnrengelman.shadow"
@@ -11,19 +11,25 @@ architectury {
 }
 
 subprojects {
-    apply plugin: "forgified-fabric-loom"
+    apply plugin: "dev.architectury.loom"
     apply plugin: "org.jetbrains.kotlin.jvm"
     apply plugin: "org.jetbrains.kotlin.plugin.serialization"
-    apply plugin: "com.github.johnrengelman.shadow"
+    apply from: "${rootDir}/repositories.gradle"
 
     //libsDirName = "../out" // Output location of jar instead of default build/libs
+
+    // Source files location, currently makes the source location for java and kotlin the same
+    sourceSets {
+        main.kotlin.srcDirs += 'src/main'
+        main.java.srcDirs += 'src/main'
+    }
+    //compileKotlin { kotlinOptions { jvmTarget = "1.16" } }
 
     loom {
         silentMojangMappingsLicense()
         mixinConfigs = ["mixin.examplemod.json"]
     }
 
-    apply from: "${rootDir}/repositories.gradle"
     dependencies {
         minecraft "com.mojang:minecraft:${rootProject.minecraft_version}"
         // The following line declares the mojmap mappings, you may use other mappings as well
@@ -33,13 +39,6 @@ subprojects {
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${rootProject.kotlinx_coroutines_core_version}"
         implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:${rootProject.kotlinx_serialization_json_version}"
     }
-
-    // Source files location, currently makes the source location for java and kotlin the same
-    sourceSets {
-        main.kotlin.srcDirs += 'src/main'
-        main.java.srcDirs += 'src/main'
-    }
-    compileKotlin { kotlinOptions { jvmTarget = "1.8" } }
 }
 
 allprojects {
@@ -52,14 +51,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-
-        // The Minecraft launcher currently installs Java 8 for users, so your mod probably wants to target Java 8 too
-        // JDK 9 introduced a new way of specifying this that will make sure no newer classes or methods are used.
-        // We'll use that if it's available, but otherwise we'll use the older option.
-        def targetVersion = 8
-        if (JavaVersion.current().isJava9Compatible()) {
-            options.release = targetVersion
-        }
+        options.release = 8
     }
 
     java {

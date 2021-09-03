@@ -1,4 +1,11 @@
-configurations { shadow }
+plugins {
+    id "com.github.johnrengelman.shadow"
+}
+
+configurations {
+    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+}
+
 architectury {
     platformSetupLoomIde()
     fabric()
@@ -9,10 +16,11 @@ loom{
 }
 
 dependencies {
-    modCompile "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
-    modCompile "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
+    modImplementation "net.fabricmc:fabric-loader:${rootProject.fabric_loader_version}"
+    modApi "net.fabricmc.fabric-api:fabric-api:${rootProject.fabric_api_version}"
     // Remove the next line if you don't want to depend on the API
-    modCompile "me.shedaniel:architectury-fabric:${rootProject.architectury_version}"
+    modApi "me.shedaniel:architectury-fabric:${rootProject.architectury_version}"
+    //modApi "dev.architectury:architectury-fabric:${rootProject.architectury_version}"
 
     // Extra dependencies
     modImplementation "net.fabricmc:fabric-language-kotlin:${rootProject.fabric_kotlin_version}"
@@ -22,32 +30,39 @@ dependencies {
     modImplementation "me.shedaniel.cloth:cloth-config-fabric:${rootProject.cloth_config_version}"
     modImplementation "software.bernie.geckolib:geckolib-fabric-${rootProject.fabric_geckolib_version}:dev"
 
-    implementation(project(path: ":common")) {
-        transitive = false
-    }
-    developmentFabric(project(path: ":common")) {
-        transitive = false
-    }
-    shadow(project(path: ":common", configuration: "transformProductionFabric")) {
-        transitive = false
-    }
+    implementation(project(path: ":common")) { transitive = false }
+    developmentFabric(project(path: ":common")) { transitive = false }
+    shadowCommon(project(path: ":common", configuration: "transformProductionFabric")) { transitive = false }
 }
 
 processResources {
-    inputs.property "version", project.version
-
     filesMatching("fabric.mod.json") {
         expand "version": project.version
     }
+    inputs.property "version", project.version
 }
 
 shadowJar {
-    configurations = [project.configurations.shadow]
-    classifier "shadow"
+    configurations = [project.configurations.shadowCommon]
+    classifier "dev-shadow"
 }
 
 remapJar {
-    dependsOn(shadowJar)
-    input.set(shadowJar.archivePath)
+    input.set shadowJar.archiveFile
+    dependsOn shadowJar
     classifier "fabric"
+}
+
+jar {
+    classifier "dev"
+}
+
+java {
+    withSourcesJar()
+}
+
+sourcesJar {
+    def commonSources = project(":common").sourcesJar
+    dependsOn commonSources
+    from commonSources.archiveFile.map { zipTree(it) }
 }

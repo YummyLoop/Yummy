@@ -13,6 +13,7 @@ gradlew.bat
 /out/
 /run/
 /logs/
+/.architectury-transformer/
 
 # idea
 .idea/
