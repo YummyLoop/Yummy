@@ -6,7 +6,7 @@ import me.shedaniel.architectury.networking.NetworkManager
 import me.shedaniel.architectury.platform.Platform
 import net.fabricmc.api.EnvType
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
@@ -33,7 +33,7 @@ class PacketBuffer() : PacketByteBuf(Unpooled.buffer()) {
                     is ByteBuf -> obj.writeBytes(i)
                     is ByteBuffer -> obj.writeBytes(i)
                     is Char -> obj.writeChar(i.toInt())
-                    is CompoundTag -> obj.writeCompoundTag(i)
+                    is NbtCompound -> obj.writeNbt(i)
                     is Date -> obj.writeDate(i)
                     is Double -> obj.writeDouble(i)
                     is Enum<*> -> obj.writeEnumConstant(i)

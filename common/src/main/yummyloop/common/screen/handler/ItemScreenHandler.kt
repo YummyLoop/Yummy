@@ -102,7 +102,7 @@ abstract class ItemScreenHandler(
 
     private fun fromTag(): Inventory {
         val itemStackList = DefaultedList.ofSize(invSize, ItemStack.EMPTY)
-        Inventories.fromTag(this.itemStack.orCreateTag, itemStackList)
+        Inventories.readNbt(this.itemStack.orCreateTag, itemStackList)
         return SimpleInventory(*itemStackList.toTypedArray())
     }
 
@@ -111,7 +111,7 @@ abstract class ItemScreenHandler(
         for (i in 0 until invSize) {
             myList[i] = localInventory.getStack(i)
         }
-        Inventories.toTag(this.itemStack.orCreateTag, myList)
+        Inventories.writeNbt(this.itemStack.orCreateTag, myList)
     }
 
     // Shift + Player Inv Slot

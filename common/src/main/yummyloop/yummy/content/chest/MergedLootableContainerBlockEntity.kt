@@ -8,7 +8,7 @@ import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SidedInventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.collection.DefaultedList
 import net.minecraft.util.math.Direction
 import yummyloop.common.inventory.IMergedInventory
@@ -78,14 +78,14 @@ abstract class MergedLootableContainerBlockEntity(blockEntityType: BlockEntityTy
     }
 
     /** Load blockEntity from tag */
-    override fun fromTag(state: BlockState, tag: CompoundTag) {
+    override fun fromTag(state: BlockState, tag: NbtCompound) {
         super.fromTag(state, tag)
         if (!deserializeLootTable(tag)) internalInventory.fromTag(tag)
     }
 
     /** Save blockEntity to tag */
-    override fun toTag(tag: CompoundTag): CompoundTag {
-        super.toTag(tag)
+    override fun writeNbt(tag: NbtCompound): NbtCompound {
+        super.writeNbt(tag)
         if (!serializeLootTable(tag)) internalInventory.toTag(tag)
         return tag
     }

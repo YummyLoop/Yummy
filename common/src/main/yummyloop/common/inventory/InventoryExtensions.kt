@@ -4,7 +4,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.collection.DefaultedList
 
 fun Inventory.getCompressedInventory(): Inventory {
@@ -34,15 +34,15 @@ fun Inventory.getSortedInventory(): Inventory {
     return SimpleInventory(*list.toTypedArray())
 }
 
-fun Inventory.toTag(tag : CompoundTag) : CompoundTag {
+fun Inventory.toTag(tag : NbtCompound) : NbtCompound {
     val list = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
     for (i in 0 until this.size()) list[i] = this.getStack(i)
-    Inventories.toTag(tag, list)
+    Inventories.writeNbt(tag, list)
     return tag
 }
 
-fun Inventory.fromTag(tag : CompoundTag){
+fun Inventory.fromTag(tag : NbtCompound){
     val list = DefaultedList.ofSize(this.size(), ItemStack.EMPTY)
-    Inventories.fromTag(tag, list)
+    Inventories.readNbt(tag, list)
     for (i in 0 until this.size()) this.setStack(i, list[i])
 }

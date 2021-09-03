@@ -16,7 +16,7 @@ import net.minecraft.inventory.Inventories
 import net.minecraft.inventory.Inventory
 import net.minecraft.item.ItemStack
 import net.minecraft.item.Items
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.Text
@@ -50,8 +50,8 @@ object ToolTipPreview {
                 val list = DefaultedList.ofSize(enderInventory.size(), ItemStack.EMPTY)
                 list.forEachIndexed { index, _ -> list[index] = enderInventory.getStack(index) }
 
-                val tag = CompoundTag()
-                Inventories.toTag(tag, list)
+                val tag = NbtCompound()
+                Inventories.writeNbt(tag, list)
 
                 PacketBuffer(tag).sendToPlayer(player, Identifier("yummy", "packet_tooltip_s2c"))
             }
@@ -71,7 +71,7 @@ object ToolTipPreview {
         private var backgroundTexture: Texture = Texture("yummy", "textures/gui/grid.png", 512)
         private var tooltipOffsetX = 0
         private var tooltipOffsetY = 0
-        private var enderInventoryTag = CompoundTag()
+        private var enderInventoryTag = NbtCompound()
 
         init {
             captureTooltip()
@@ -85,7 +85,7 @@ object ToolTipPreview {
             { packetByteBuf: PacketByteBuf, packetContext: NetworkManager.PacketContext ->
                 // Client Side
                 try {
-                    enderInventoryTag = packetByteBuf.readCompoundTag()!!
+                    enderInventoryTag = packetByteBuf.readNbt()!!
                 } catch (e: Exception) {
                     LOG.warn("Received malformed packet: packet_tooltip_s2c !")
                 }
@@ -170,7 +170,7 @@ object ToolTipPreview {
 
         fun getInventoryFromStack(itemStack: ItemStack): Inventory? {
             if (itemStack != ItemStack.EMPTY) {
-                var tag: CompoundTag? = itemStack.tag
+                var tag: NbtCompound? = itemStack.tag
                 if (itemStack.item == Items.ENDER_CHEST) {
                     PacketBuffer().sendToServer(Identifier("yummy", "packet_tooltip_c2s"))
                     tag = enderInventoryTag

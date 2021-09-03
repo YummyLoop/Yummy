@@ -6,7 +6,7 @@ import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.entity.LootableContainerBlockEntity
 import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
-import net.minecraft.nbt.CompoundTag
+import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.collection.DefaultedList
 
 abstract class LootableContainerBlockEntityImpl(type: BlockEntityType<*>, size: Int) :
@@ -16,19 +16,19 @@ abstract class LootableContainerBlockEntityImpl(type: BlockEntityType<*>, size: 
     override fun size(): Int = this.items.size
 
     /** Load blockEntity from tag */
-    override fun fromTag(state: BlockState?, tag: CompoundTag?) {
+    override fun fromTag(state: BlockState?, tag: NbtCompound?) {
         super.fromTag(state, tag)
         this.items = DefaultedList.ofSize(size(), ItemStack.EMPTY)
         if (!deserializeLootTable(tag)) {
-            Inventories.fromTag(tag, this.items)
+            Inventories.readNbt(tag, this.items)
         }
     }
 
     /** Save blockEntity to tag */
-    override fun toTag(tag: CompoundTag?): CompoundTag? {
-        super.toTag(tag)
+    override fun writeNbt(tag: NbtCompound?): NbtCompound? {
+        super.writeNbt(tag)
         if (!serializeLootTable(tag)) {
-            Inventories.toTag(tag, this.items)
+            Inventories.readNbt(tag, this.items)
         }
 
         return tag
