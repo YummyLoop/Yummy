@@ -3,7 +3,7 @@ plugins {
 }
 
 configurations {
-    shadowCommon // Don't use shadow from the shadow plugin because we don't want IDEA to index this.
+    shadowCommon
 }
 
 architectury {
