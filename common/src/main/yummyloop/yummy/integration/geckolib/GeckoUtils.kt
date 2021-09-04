@@ -1,8 +1,8 @@
 package yummyloop.yummy.integration.geckolib
 
+import dev.architectury.registry.block.BlockProperties
+import dev.architectury.registry.registries.RegistrySupplier
 import me.shedaniel.architectury.annotations.ExpectPlatform
-import me.shedaniel.architectury.registry.BlockProperties
-import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity

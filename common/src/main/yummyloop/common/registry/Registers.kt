@@ -1,10 +1,10 @@
 package yummyloop.common.registry
 
-import me.shedaniel.architectury.networking.NetworkManager
-import me.shedaniel.architectury.registry.BlockProperties
-import me.shedaniel.architectury.registry.DeferredRegister
-import me.shedaniel.architectury.registry.MenuRegistry
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.networking.NetworkManager
+import dev.architectury.registry.block.BlockProperties
+import dev.architectury.registry.menu.MenuRegistry
+import dev.architectury.registry.registries.DeferredRegister
+import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.block.entity.BlockEntity
@@ -146,6 +146,8 @@ class Registers(private val modId: String) {
      * @param blocks The blocks to be associated with the block entity type
      * @return A RegistrySupplier for the block entity type
      */
+    // Todo : Fix this ?
+    /**
     fun <T> blockEntityType(
         blockEntityTypeId: String,
         vararg blocks: RegistrySupplier<Block>,
@@ -157,7 +159,7 @@ class Registers(private val modId: String) {
                 *blocks.map { it.get() }.toTypedArray()
             ).build(null)
         }
-    }
+    }*/
 
     /**
      * Registers an EntityType

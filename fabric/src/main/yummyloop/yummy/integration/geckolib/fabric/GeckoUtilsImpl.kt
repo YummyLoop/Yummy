@@ -1,17 +1,17 @@
 package yummyloop.yummy.integration.geckolib.fabric
 
-import me.shedaniel.architectury.registry.BlockEntityRenderers
-import me.shedaniel.architectury.registry.RegistrySupplier
-import me.shedaniel.architectury.registry.entity.EntityRenderers
+import dev.architectury.registry.client.rendering.BlockEntityRendererRegistry
+import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.block.entity.BlockEntityType
+import net.minecraft.client.render.entity.EntityRenderers
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.item.Item
 import software.bernie.geckolib3.item.GeoArmorItem
 import software.bernie.geckolib3.model.AnimatedGeoModel
-import software.bernie.geckolib3.renderer.geo.GeoArmorRenderer
-import software.bernie.geckolib3.renderer.geo.GeoItemRenderer
+import software.bernie.geckolib3.renderers.geo.GeoArmorRenderer
+import software.bernie.geckolib3.renderers.geo.GeoItemRenderer
 import yummyloop.common.item.AnimatableArmor
 import yummyloop.common.block.entity.AnimatableBlockEntity
 import yummyloop.common.item.AnimatableItem
@@ -27,9 +27,9 @@ internal object GeckoUtilsImpl {
         for (i in GeckoUtils.geckoEntryList) {
             when (i.type) {
                 GeckoUtils.GeckoType.Item -> Items.registerItemRenderer(i)
-                GeckoUtils.GeckoType.Armor -> Items.registerArmorRenderer(i)
-                GeckoUtils.GeckoType.Block -> Blocks.registerBlockRenderer(i)
-                GeckoUtils.GeckoType.Entity -> Entities.registerEntityRenderer(i)
+                //GeckoUtils.GeckoType.Armor -> Items.registerArmorRenderer(i)
+                //GeckoUtils.GeckoType.Block -> Blocks.registerBlockRenderer(i)
+                //GeckoUtils.GeckoType.Entity -> Entities.registerEntityRenderer(i)
                 else -> continue
             }
         }
@@ -50,23 +50,23 @@ internal object GeckoUtilsImpl {
 
         /**
          * Registers a Armor Renderer
-         */
+         *//**
         @Suppress("UNCHECKED_CAST")
         fun registerArmorRenderer(i: GeckoUtils.Entry) {
             GeoArmorRenderer.registerArmorRenderer(
                 ((i.obj as RegistrySupplier<Item>).get() as GeoArmorItem).javaClass,
                 GeckoGenericArmorRendererImpl(i.model as AnimatedGeoModel<AnimatableArmor>)
             )
-        }
+        }*/
     }
-
+/*
     object Blocks {
         /**
          * Registers a Block Entity Renderer
          */
         @Suppress("UNCHECKED_CAST")
         fun registerBlockRenderer(i: GeckoUtils.Entry) {
-            BlockEntityRenderers.registerRenderer(
+            BlockEntityRendererRegistry.register(
                 (i.obj as RegistrySupplier<BlockEntityType<BlockEntity>>).get()) {
                 GeckoGenericBlockRenderImpl(it, i.model as AnimatedGeoModel<AnimatableBlockEntity>)
             }
@@ -85,7 +85,7 @@ internal object GeckoUtilsImpl {
             }
         }
     }
-
+*/
     /**
      *  Returns a item supplier,
      *  needs to exist due to the forge implementation

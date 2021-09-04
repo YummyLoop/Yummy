@@ -1,8 +1,9 @@
 package yummyloop.yummy.client
 
-import me.shedaniel.architectury.event.events.TooltipEvent
-import me.shedaniel.architectury.event.events.client.ClientScreenInputEvent
-import me.shedaniel.architectury.networking.NetworkManager
+import dev.architectury.event.EventResult
+import dev.architectury.networking.NetworkManager
+import dev.architectury.event.events.client.ClientTooltipEvent
+import dev.architectury.event.events.client.ClientScreenInputEvent
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.MinecraftClient
@@ -92,12 +93,12 @@ object ToolTipPreview {
             }
         }
 
-        fun captureTooltip() = TooltipEvent.ITEM.register(this@Client::onAppendTooltip)
+        fun captureTooltip() = ClientTooltipEvent.ITEM.register(this@Client::onAppendTooltip)
         fun captureRender() {
-            TooltipEvent.RENDER_VANILLA_PRE.register { matrices, lines, x, y ->
+            ClientTooltipEvent.RENDER_VANILLA_PRE.register { matrices, lines, x, y ->
                 this@Client.onRenderTooltip(matrices, lines.size, x, y)
             }
-            TooltipEvent.RENDER_FORGE_PRE.register { matrices, lines, x, y ->
+            ClientTooltipEvent.RENDER_FORGE_PRE.register { matrices, lines, x, y ->
                 this@Client.onRenderTooltip(matrices, lines.size, x, y)
             }
         }
@@ -126,7 +127,7 @@ object ToolTipPreview {
             }
         }
 
-        fun onRenderTooltip(matrices: MatrixStack, lines: Int, x: Int, y: Int): ActionResult {
+        fun onRenderTooltip(matrices: MatrixStack, lines: Int, x: Int, y: Int): EventResult {
             if (client.world != null && isKeyPressed) {
                 val inv = getInventoryFromStack(hoveredStack)
                 if (inv != null) {
@@ -141,7 +142,7 @@ object ToolTipPreview {
                 }
             }
             hoveredStack = ItemStack.EMPTY
-            return ActionResult.SUCCESS
+            return EventResult.pass()
         }
 
         @Suppress("UNUSED_PARAMETER")
@@ -151,9 +152,9 @@ object ToolTipPreview {
             keyCode: Int,
             scanCode: Int,
             modifiers: Int,
-        ): ActionResult {
+        ): EventResult {
             if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = true
-            return ActionResult.PASS
+            return EventResult.pass()
         }
 
         @Suppress("UNUSED_PARAMETER")
@@ -163,14 +164,14 @@ object ToolTipPreview {
             keyCode: Int,
             scanCode: Int,
             modifiers: Int,
-        ): ActionResult {
+        ): EventResult {
             if (InputUtil.fromTranslationKey(pressedKeyCode).code == keyCode) isKeyPressed = false
-            return ActionResult.PASS
+            return EventResult.pass()
         }
 
         fun getInventoryFromStack(itemStack: ItemStack): Inventory? {
             if (itemStack != ItemStack.EMPTY) {
-                var tag: NbtCompound? = itemStack.tag
+                var tag: NbtCompound? = itemStack.nbt
                 if (itemStack.item == Items.ENDER_CHEST) {
                     PacketBuffer().sendToServer(Identifier("yummy", "packet_tooltip_c2s"))
                     tag = enderInventoryTag

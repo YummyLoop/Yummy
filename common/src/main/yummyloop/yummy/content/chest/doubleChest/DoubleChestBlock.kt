@@ -1,6 +1,6 @@
 package yummyloop.yummy.content.chest.doubleChest
 
-import me.shedaniel.architectury.registry.MenuRegistry
+import dev.architectury.registry.menu.MenuRegistry
 import net.minecraft.block.Block
 import net.minecraft.block.BlockState
 import net.minecraft.block.InventoryProvider
@@ -165,7 +165,7 @@ open class DoubleChestBlock(settings: Settings) : SingleChestBlock(settings), In
         }
     }
 
-    override fun createBlockEntity(world: BlockView?): BlockEntity = DoubleChestEntity(size)
+    override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity? = DoubleChestEntity(size, pos, state)
 
     override fun onUse(
         state: BlockState,

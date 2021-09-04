@@ -1,6 +1,6 @@
 package yummyloop.yummy.item.baa
 
-import me.shedaniel.architectury.registry.MenuRegistry
+import dev.architectury.registry.menu.MenuRegistry
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.ItemStack
 import net.minecraft.server.network.ServerPlayerEntity
@@ -18,8 +18,8 @@ class Ba(settings: Settings = Settings()) : Ytem(settings.maxCount(1)) {
 
         user.itemCooldownManager[this] = 5
 
-        if (!itemStack.orCreateTag.containsUuid("uuid")) {
-            itemStack.orCreateTag.putUuid("uuid", UUID.randomUUID())
+        if (!itemStack.orCreateNbt.containsUuid("uuid")) {
+            itemStack.orCreateNbt.putUuid("uuid", UUID.randomUUID())
         }
 
         if (user is ServerPlayerEntity) {

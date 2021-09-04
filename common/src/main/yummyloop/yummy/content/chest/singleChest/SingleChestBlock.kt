@@ -1,6 +1,6 @@
 package yummyloop.yummy.content.chest.singleChest
 
-import me.shedaniel.architectury.registry.MenuRegistry
+import dev.architectury.registry.menu.MenuRegistry
 import net.minecraft.block.*
 import net.minecraft.block.entity.BlockEntity
 import net.minecraft.entity.LivingEntity
@@ -40,6 +40,8 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
     override fun appendProperties(builder: StateManager.Builder<Block?, BlockState?>) {
         builder.add(FACING, WATERLOGGED)
     }
+
+    override fun createBlockEntity(pos: BlockPos?, state: BlockState?): BlockEntity? = SingleChestEntity(size, pos, state)
 
     init {
         defaultState = this.stateManager.defaultState
@@ -118,8 +120,6 @@ open class SingleChestBlock(settings: Settings) : BlockWithEntity(settings), Wat
             else -> VoxelShapes.fullCube()
         }
     }
-
-    override fun createBlockEntity(world: BlockView?): BlockEntity = SingleChestEntity(size)
 
     override fun getRenderType(state: BlockState?): BlockRenderType = BlockRenderType.ENTITYBLOCK_ANIMATED
 

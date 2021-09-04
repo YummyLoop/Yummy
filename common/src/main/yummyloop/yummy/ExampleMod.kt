@@ -1,6 +1,6 @@
 package yummyloop.yummy
 
-import me.shedaniel.architectury.platform.Platform
+import dev.architectury.platform.Platform
 import net.fabricmc.api.EnvType
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -16,14 +16,14 @@ object ExampleMod {
     val Register by lazy { Registers(MOD_ID) }
 
     fun onInitialize() {
-        GeckoLib.initialize()
-        ModContent
+        //GeckoLib.initialize()
+        //ModContent
         if (Platform.isDevelopmentEnvironment() || modConfig.dev) dev()
-        Register.register()
+        //Register.register()
     }
 
     fun onInitializeClient() {
-        Register.client.register()
+        //Register.client.register()
     }
 
     private fun dev() {
@@ -38,6 +38,6 @@ object ExampleMod {
             LOG.info("Its client")
         }
 
-        ModContent.Dev
+        //ModContent.Dev
     }
 }

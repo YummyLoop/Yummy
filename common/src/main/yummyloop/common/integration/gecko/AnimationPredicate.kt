@@ -9,8 +9,8 @@ import software.bernie.geckolib3.core.event.predicate.AnimationEvent
 class AnimationPredicate<I>(private val predicate: (AnimationEvent<I>) -> PlayState) :
     AnimationController.IAnimationPredicate<I> where I : IAnimatable {
 
-    override fun <P> test(event: AnimationEvent<P>): PlayState where P : IAnimatable {
-        return (predicate as (AnimationEvent<P>) -> PlayState).invoke(event)
+    override fun test(p0: AnimationEvent<I>): PlayState {
+        return (predicate).invoke(p0)
     }
-    
+
 }

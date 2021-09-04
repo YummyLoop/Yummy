@@ -1,10 +1,10 @@
 package yummyloop.common.registry
 
-import me.shedaniel.architectury.event.events.TextureStitchEvent
-import me.shedaniel.architectury.networking.NetworkManager
-import me.shedaniel.architectury.platform.Platform
-import me.shedaniel.architectury.registry.MenuRegistry
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.networking.NetworkManager
+import dev.architectury.platform.Platform
+import dev.architectury.registry.menu.MenuRegistry
+import dev.architectury.registry.registries.RegistrySupplier
+import dev.architectury.event.events.client.ClientTextureStitchEvent
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.screen.Screen
@@ -77,7 +77,7 @@ class ClientRegisters(private val modId: String) {
      */
     fun texture(path: String, xSize: Int = 256, ySize: Int = 256): Texture {
         this {
-            TextureStitchEvent.PRE.register { spriteAtlasTexture: SpriteAtlasTexture, consumer: Consumer<Identifier> ->
+            ClientTextureStitchEvent.PRE.register { spriteAtlasTexture: SpriteAtlasTexture, consumer: Consumer<Identifier> ->
                 consumer.accept(Identifier(modId, path))
             }
         }

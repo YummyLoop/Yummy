@@ -26,9 +26,8 @@ class PotatoArmor2(
     }
 
     override fun registerControllers(data: AnimationData) {
-        val animationPredicate = object : AnimationController.IAnimationPredicate<IAnimatable> {
-            override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState = predicate(event)
-        }
+        val animationPredicate =
+            AnimationController.IAnimationPredicate<IAnimatable> { p0 -> predicate(p0) }
         data.addAnimationController(
             AnimationController(
                 this,

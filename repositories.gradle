@@ -5,7 +5,6 @@ repositories {
     maven { url "https://maven.terraformersmc.com/releases" }
     maven { url "https://thedarkcolour.github.io/KotlinForForge/" }
     maven { url "https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/" }
-    maven { url 'https://repo.repsy.io/mvn/gandiber/geckolib' }
     maven { url 'https://repo.repsy.io/mvn/fadookie/particleman' }
     maven { url 'https://maven.blamejared.com' }
     maven { url "https://dvs1.progwml6.com/files/maven/" }

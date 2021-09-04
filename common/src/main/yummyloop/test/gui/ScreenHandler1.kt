@@ -1,6 +1,6 @@
 package yummyloop.test.gui
 
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.screen.CraftingScreenHandler
 import net.minecraft.screen.ScreenHandlerType

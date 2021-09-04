@@ -17,6 +17,6 @@ pluginManagement {
 
 include("common")
 include("fabric")
-include("forge")
+//include("forge")
 
 rootProject.name = archives_base_name

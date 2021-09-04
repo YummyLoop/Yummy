@@ -1,11 +1,13 @@
 package yummyloop.common.block.entity
 
+import net.minecraft.block.BlockState
 import net.minecraft.block.BlockWithEntity
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.enums.ChestType
 import net.minecraft.client.MinecraftClient
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.sound.SoundEvents
+import net.minecraft.util.math.BlockPos
 import software.bernie.geckolib3.core.IAnimatable
 import software.bernie.geckolib3.core.PlayState
 import software.bernie.geckolib3.core.builder.AnimationBuilder
@@ -21,8 +23,10 @@ import yummyloop.common.integration.gecko.setLoopingAnimation
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestBlock
 import yummyloop.yummy.content.chest.doubleChest.DoubleChestEntity
 
-abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int) : IAnimatable,
-    LootableContainerBlockEntityImpl(type, size) {
+abstract class AnimatableChestContainerBlockEntity(type: BlockEntityType<*>, size: Int, blockPos: BlockPos?,
+                                                   blockState: BlockState?
+) : IAnimatable,
+    LootableContainerBlockEntityImpl(type, size, blockPos, blockState) {
     var isOpen = -1
     private var playedSound = 0
     protected open val animationFactory: AnimationFactory by lazy { AnimationFactory(this) }

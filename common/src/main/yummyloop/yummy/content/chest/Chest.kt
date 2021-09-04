@@ -1,7 +1,7 @@
 package yummyloop.yummy.content.chest
 
-import me.shedaniel.architectury.registry.BlockProperties
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.registry.block.BlockProperties
+import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.item.Item
@@ -24,7 +24,7 @@ object Chest {
                 ::ChestItem,
                 ChestItemModel.IRON
             )
-        IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() }
+        //IronChestEntity.rType = Register.blockEntityType("iron_chest", ironChest.first) { IronChestEntity() } // Todo : Fix
         GeckoUtils.Blocks.register(IronChestEntity.rType!!, ChestModel.IRON)
 
 
@@ -35,7 +35,7 @@ object Chest {
                 ::ChestItem,
                 ChestItemModel.STONE
             )
-        DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() }
+        //DoubleChestEntity.rType = Register.blockEntityType("chest", chestBlock.first) { DoubleChestEntity() } // Todo : Fix
         GeckoUtils.Blocks.register(DoubleChestEntity.rType!!, DoubleChestModel.STONE)
 
         // Screen stuff

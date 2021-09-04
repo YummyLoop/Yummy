@@ -2,8 +2,8 @@
 
 package yummyloop.api.archi.entity.attribute
 
+import dev.architectury.registry.registries.RegistrySupplier
 import me.shedaniel.architectury.annotations.ExpectPlatform
-import me.shedaniel.architectury.registry.RegistrySupplier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.LivingEntity
 import net.minecraft.entity.attribute.DefaultAttributeContainer

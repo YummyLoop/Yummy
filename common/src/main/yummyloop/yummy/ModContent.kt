@@ -1,9 +1,9 @@
 package yummyloop.yummy
 
-import me.shedaniel.architectury.event.events.GuiEvent
-import me.shedaniel.architectury.event.events.PlayerEvent
-import me.shedaniel.architectury.networking.NetworkManager
-import me.shedaniel.architectury.registry.BlockProperties
+import dev.architectury.event.events.common.PlayerEvent
+import dev.architectury.networking.NetworkManager
+import dev.architectury.registry.block.BlockProperties
+import dev.architectury.event.events.client.ClientGuiEvent
 import net.minecraft.block.Block
 import net.minecraft.block.Material
 import net.minecraft.client.MinecraftClient
@@ -19,17 +19,17 @@ import net.minecraft.network.PacketByteBuf
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
-import yummyloop.common.client.screen.addWidget
+//import yummyloop.common.client.screen.addWidget
 import yummyloop.common.integration.gecko.GeckoGenericModel
 import yummyloop.common.network.packets.PacketBuffer
 import yummyloop.test.event.Eve
 import yummyloop.test.geckolib.GeoExampleEntity2
 import yummyloop.test.geckolib.PotatoArmor2
 import yummyloop.test.gui.Factory1
-import yummyloop.test.gui.Screen1
+//import yummyloop.test.gui.Screen1
 import yummyloop.test.gui.ScreenHandler1
 import yummyloop.yummy.ExampleMod.Register
-import yummyloop.yummy.client.ToolTipPreview
+//import yummyloop.yummy.client.ToolTipPreview
 import yummyloop.yummy.content.chest.Chest
 import yummyloop.yummy.integration.geckolib.GeckoUtils
 import yummyloop.yummy.item.Ytem
@@ -50,12 +50,12 @@ object ModContent {
 
         BaHandler.rType = Register.screenHandlerTypeExtended("side_screen", ::BaHandler) { ::BaScreen }
 
-        ToolTipPreview // Initialize tooltip
+        //ToolTipPreview // Initialize tooltip
 
         Chest
     }
 
-    /** Dev content */
+    /** Dev content *//*
     internal object Dev {
         init {
             //G1
@@ -77,7 +77,7 @@ object ModContent {
             init {
                 Register.client {
                     val client = MinecraftClient.getInstance()
-                    GuiEvent.INIT_POST.register { screen, widgets, children ->
+                    ClientGuiEvent.INIT_POST.register { screen, widgets, children ->
                         if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
                             LOG.info("This is message from a GUI init post event")
                             LOG.info(screen.javaClass.toGenericString())
@@ -117,7 +117,7 @@ object ModContent {
 
                 Register.client {
                     val client = MinecraftClient.getInstance()
-                    GuiEvent.INIT_POST.register { screen, widgets, children ->
+                    ClientGuiEvent.INIT_POST.register { screen, widgets, children ->
                         if (screen is InventoryScreen && !client.interactionManager!!.hasCreativeInventory()) {
                             LOG.info("This is message from a GUI init post event")
                             LOG.info(screen.javaClass.toGenericString())
@@ -137,7 +137,7 @@ object ModContent {
                     LOG.info("This is message from a Player open menu event")
                 }
                 Register.client {
-                    GuiEvent.INIT_PRE.register { screen, widgets, children ->
+                    ClientGuiEvent.INIT_PRE.register { screen, widgets, children ->
                         LOG.info("This is message from a GUI init pre event")
                         return@register ActionResult.SUCCESS
                     }
@@ -190,5 +190,6 @@ object ModContent {
             }
         }
     }
+*/
 }
 

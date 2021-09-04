@@ -21,7 +21,7 @@ fun Inventory.getSortedInventory(): Inventory {
     for (i in 0 until this.size()) {
         if (this.getStack(i) != ItemStack.EMPTY) {
             val stack = list.find {
-                ItemStack.areItemsEqual(it, this.getStack(i)) && ItemStack.areTagsEqual(it, this.getStack(i))
+                ItemStack.areItemsEqual(it, this.getStack(i)) && ItemStack.areNbtEqual(it, this.getStack(i))
             }
             if (stack != null) {
                 stack.count += this.getStack(i).count

@@ -1,6 +1,6 @@
 package yummyloop.test.geckolib
 
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.registry.registries.RegistrySupplier
 import net.minecraft.entity.EntityType
 import net.minecraft.entity.attribute.DefaultAttributeContainer
 import net.minecraft.entity.attribute.EntityAttributes
@@ -37,9 +37,8 @@ class GeoExampleEntity2(
     }
 
     override fun registerControllers(data: AnimationData) {
-        val animationPredicate = object : AnimationController.IAnimationPredicate<IAnimatable> {
-            override fun <P : IAnimatable> test(event: AnimationEvent<P>): PlayState = predicate(event)
-        }
+        val animationPredicate =
+            AnimationController.IAnimationPredicate<IAnimatable> { p0 -> predicate(p0) }
         data.addAnimationController(
             AnimationController(
                 this,

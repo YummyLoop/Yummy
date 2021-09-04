@@ -1,6 +1,6 @@
 package yummyloop.common.client.screen
 
-import me.shedaniel.architectury.hooks.ScreenHooks
+import dev.architectury.hooks.client.screen.ScreenHooks
 import net.fabricmc.api.EnvType
 import net.fabricmc.api.Environment
 import net.minecraft.client.gui.Element
@@ -20,7 +20,7 @@ fun Screen.getButtons(): List<ClickableWidget?>? {
 
 @Environment(EnvType.CLIENT)
 fun <T : ClickableWidget> Screen.addWidget(buttonWidget: T): T {
-    return ScreenHooks.addButton(this, buttonWidget)
+    return ScreenHooks.addWidget(this, buttonWidget)
 }
 
 @Environment(EnvType.CLIENT)

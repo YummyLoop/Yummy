@@ -1,9 +1,9 @@
 package yummyloop.common.network.packets
 
+import dev.architectury.networking.NetworkManager
+import dev.architectury.platform.Platform
 import io.netty.buffer.ByteBuf
 import io.netty.buffer.Unpooled
-import me.shedaniel.architectury.networking.NetworkManager
-import me.shedaniel.architectury.platform.Platform
 import net.fabricmc.api.EnvType
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound

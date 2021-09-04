@@ -40,7 +40,7 @@ abstract class ItemScreenHandler(
 
     fun init() {
         // If the itemStack does not contain UUID, somehow it happens the first try from the Offhand, seems fixed?
-        if (!itemStack.orCreateTag.contains("uuid")) close(playerInventory.player)
+        if (!itemStack.orCreateNbt.contains("uuid")) close(playerInventory.player)
 
 
         // The Inventory
@@ -67,10 +67,10 @@ abstract class ItemScreenHandler(
         }
     }
 
-    override fun onSlotClick(i: Int, j: Int, actionType: SlotActionType?, playerEntity: PlayerEntity?): ItemStack {
+    override fun onSlotClick(i: Int, j: Int, actionType: SlotActionType?, playerEntity: PlayerEntity?) {
         saveTag()
         if (isOffHand && actionType == SlotActionType.SWAP) {
-            return ItemStack.EMPTY
+            //return ItemStack.EMPTY
         }
         return super.onSlotClick(i, j, actionType, playerEntity)
     }
@@ -86,12 +86,12 @@ abstract class ItemScreenHandler(
             if (isOffHand) playerInventory.player.offHandStack else playerInventory.player.mainHandStack
 
         if (!handStack.isItemEqual(this.itemStack)
-            || !handStack.orCreateTag.contains("uuid")
-            || !itemStack.orCreateTag.contains("uuid")
+            || !handStack.orCreateNbt.contains("uuid")
+            || !itemStack.orCreateNbt.contains("uuid")
         ) return false
 
-        val handStackUuid = handStack.orCreateTag.getUuid("uuid")
-        val stackUuid = itemStack.orCreateTag.getUuid("uuid")
+        val handStackUuid = handStack.orCreateNbt.getUuid("uuid")
+        val stackUuid = itemStack.orCreateNbt.getUuid("uuid")
         return handStackUuid.compareTo(stackUuid) == 0
     }
 
@@ -102,7 +102,7 @@ abstract class ItemScreenHandler(
 
     private fun fromTag(): Inventory {
         val itemStackList = DefaultedList.ofSize(invSize, ItemStack.EMPTY)
-        Inventories.readNbt(this.itemStack.orCreateTag, itemStackList)
+        Inventories.readNbt(this.itemStack.orCreateNbt, itemStackList)
         return SimpleInventory(*itemStackList.toTypedArray())
     }
 
@@ -111,7 +111,7 @@ abstract class ItemScreenHandler(
         for (i in 0 until invSize) {
             myList[i] = localInventory.getStack(i)
         }
-        Inventories.writeNbt(this.itemStack.orCreateTag, myList)
+        Inventories.writeNbt(this.itemStack.orCreateNbt, myList)
     }
 
     // Shift + Player Inv Slot

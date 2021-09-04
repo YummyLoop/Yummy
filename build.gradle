@@ -23,7 +23,7 @@ subprojects {
         main.kotlin.srcDirs += 'src/main'
         main.java.srcDirs += 'src/main'
     }
-    //compileKotlin { kotlinOptions { jvmTarget = "1.16" } }
+    compileKotlin { kotlinOptions { jvmTarget = "16" } }
 
     loom {
         silentMojangMappingsLicense()
@@ -51,7 +51,7 @@ allprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = "UTF-8"
-        options.release = 8
+        options.release = 16
     }
 
     java {

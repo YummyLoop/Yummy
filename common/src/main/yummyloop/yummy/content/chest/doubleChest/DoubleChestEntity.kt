@@ -1,6 +1,7 @@
 package yummyloop.yummy.content.chest.doubleChest
 
-import me.shedaniel.architectury.registry.RegistrySupplier
+import dev.architectury.registry.registries.RegistrySupplier
+import net.minecraft.block.BlockState
 import net.minecraft.block.entity.BlockEntityType
 import net.minecraft.block.enums.ChestType
 import net.minecraft.entity.player.PlayerInventory
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack
 import net.minecraft.screen.ScreenHandler
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import yummyloop.common.inventory.MergedInventory
 import yummyloop.common.network.packets.PacketBuffer
@@ -17,9 +19,9 @@ import yummyloop.yummy.content.chest.ChestScreenHandler
 import yummyloop.yummy.content.chest.singleChest.SingleChestEntity
 
 
-open class DoubleChestEntity(type: BlockEntityType<*>, size: Int) : SingleChestEntity(type, size), SidedInventory {
-    constructor(size: Int) : this(rType!!.get(), size)
-    constructor() : this(27)
+open class DoubleChestEntity(type: BlockEntityType<*>, size: Int, blockPos: BlockPos?, blockState: BlockState?) : SingleChestEntity(type, size, blockPos, blockState), SidedInventory {
+    constructor(size: Int, blockPos: BlockPos?, blockState: BlockState?) : this(rType!!.get(), size, blockPos, blockState)
+    constructor(blockPos: BlockPos, blockState: BlockState) : this(27, blockPos, blockState)
 
     companion object {
         var rType: RegistrySupplier<BlockEntityType<DoubleChestEntity>>? = null

@@ -10,13 +10,16 @@ import net.minecraft.inventory.SimpleInventory
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.NbtCompound
 import net.minecraft.util.collection.DefaultedList
+import net.minecraft.util.math.BlockPos
 import net.minecraft.util.math.Direction
 import yummyloop.common.inventory.IMergedInventory
 import yummyloop.common.inventory.fromTag
 import yummyloop.common.inventory.toTag
 
-abstract class MergedLootableContainerBlockEntity(blockEntityType: BlockEntityType<*>) :
-    LootableContainerBlockEntity(blockEntityType), SidedInventory, IMergedInventory {
+abstract class MergedLootableContainerBlockEntity(blockEntityType: BlockEntityType<*>, blockPos: BlockPos?,
+                                                  blockState: BlockState?
+) :
+    LootableContainerBlockEntity(blockEntityType, blockPos, blockState), SidedInventory, IMergedInventory {
 
     override val inventoryList = mutableListOf<Inventory>()
     abstract val internalInventory: Inventory
@@ -78,8 +81,8 @@ abstract class MergedLootableContainerBlockEntity(blockEntityType: BlockEntityTy
     }
 
     /** Load blockEntity from tag */
-    override fun fromTag(state: BlockState, tag: NbtCompound) {
-        super.fromTag(state, tag)
+    override fun readNbt(tag: NbtCompound) {
+        super.readNbt(tag)
         if (!deserializeLootTable(tag)) internalInventory.fromTag(tag)
     }
 

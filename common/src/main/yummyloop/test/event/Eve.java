@@ -1,7 +1,7 @@
 package yummyloop.test.event;
 
-import me.shedaniel.architectury.event.Event;
-import me.shedaniel.architectury.event.EventFactory;
+import dev.architectury.event.Event;
+import dev.architectury.event.EventFactory;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
 

@@ -1,6 +1,6 @@
 package yummyloop.yummy.item.baa
 
-import me.shedaniel.architectury.registry.menu.ExtendedMenuProvider
+import dev.architectury.registry.menu.ExtendedMenuProvider
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.entity.player.PlayerInventory
 import net.minecraft.item.ItemStack

@@ -5,12 +5,9 @@
   "package": "yummyloop.yummy.mixin",
   "plugin": "yummyloop.yummy.mixin.plugin.YummyMixinPlugin",
   "mixins": [
-    "common.PlayerScreenHandlerMixin",
-    "common.SlotMixin"
   ],
   "client": [
-    "client.ExampleMixin",
-    "client.InventoryScreenMixin"
+    "client.ExampleMixin"
   ],
   "injectors": {
     "defaultRequire": 1
